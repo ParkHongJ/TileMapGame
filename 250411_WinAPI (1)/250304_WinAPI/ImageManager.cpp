@@ -37,6 +37,9 @@ Image* ImageManager::AddImage(string key,
 		imageManager->Release();
 		delete imageManager;
 
+		return nullptr;
+	}
+
 	mapImages.insert(make_pair(key, imageManager));
 	return imageManager;
 }
@@ -81,11 +84,11 @@ void ImageManager::DeleteImage(string key)
 
 Image* ImageManager::FindImage(string key)
 {
-	/*map<string, Image*>::iterator iter;
+	map<string, Image*>::iterator iter;
 	iter = mapImages.find(key);
 
 	if (iter == mapImages.end()) return nullptr;
 
-	return iter->second;*/
+	return iter->second;
 
 }
