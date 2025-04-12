@@ -44,7 +44,7 @@ private:
 public:
 	virtual HRESULT Init(int posX, int posY);
 	virtual void Release() override;
-	virtual void Update() override;
+	virtual void Update(float TimeDelta) override;
 	virtual void Render(HDC hdc) override;
 
 	//void SetFunction(ButtonFunc func, GameObject* obj)

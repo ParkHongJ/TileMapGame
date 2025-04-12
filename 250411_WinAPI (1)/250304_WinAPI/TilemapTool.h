@@ -20,7 +20,7 @@ typedef struct tagTile
 
 class Image;
 class Button;
-class TilemapTool : public GameObject
+class TilemapTool
 {
 private:
 	Image* sampleTile;
@@ -34,10 +34,10 @@ private:
 	Button* saveButton;
 
 public:
-	virtual HRESULT Init() override;
-	virtual void Release() override;
-	virtual void Update() override;
-	virtual void Render(HDC hdc) override;
+	HRESULT Init();
+	void Release();
+	void Update(float TimeDelta);
+	void Render(HDC hdc);
 
 	void Save();
 	void Load();

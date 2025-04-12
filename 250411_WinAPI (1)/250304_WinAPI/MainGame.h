@@ -1,11 +1,9 @@
 #pragma once
-#include "GameObject.h"
-
+#include "config.h"
 class Timer;
 class Image;
-class EnemyManager;
 class TilemapTool;
-class MainGame : public GameObject
+class MainGame
 {
 private:
 	HDC hdc;
@@ -19,9 +17,9 @@ private:
 	Timer* timer;
 
 public:
-	virtual HRESULT Init() override;
-	virtual void Release() override;
-	virtual void Update() override;
+	HRESULT Init();
+	void Release();
+	void Update();
 	void Render();
 
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);

@@ -7,6 +7,12 @@
 #include "AstarScene.h"
 #include "LoadingScene.h"
 
+#include "HongScene.h"
+#include "HyoScene.h"
+#include "TaeScene.h"
+#include "JinScene.h"
+#include "YongScene.h"
+
 HRESULT MainGame::Init()
 {
 	ImageManager::GetInstance()->Init();
@@ -15,7 +21,13 @@ HRESULT MainGame::Init()
 
 	SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
 	SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
-	SceneManager::GetInstance()->AddScene("타일맵툴", new TilemapTool());
+	
+	SceneManager::GetInstance()->AddScene("홍준", new HongScene());
+	SceneManager::GetInstance()->AddScene("효진", new HyoScene());
+	SceneManager::GetInstance()->AddScene("진석", new JinScene());
+	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
+	SceneManager::GetInstance()->AddScene("준용", new YongScene());
+
 	SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 	SceneManager::GetInstance()->ChangeScene("A*알고리즘");
 
@@ -50,8 +62,8 @@ void MainGame::Release()
 
 void MainGame::Update()
 {
-	SceneManager::GetInstance()->Update();
-	InvalidateRect(g_hWnd, NULL, false);
+	TimerManager::GetInstance()->Update(L"60Frame");
+	SceneManager::GetInstance()->Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
 }
 
 void MainGame::Render()
@@ -80,7 +92,7 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			SceneManager::GetInstance()->ChangeScene("전투씬_1");
 			break;
 		case 'd': case 'D':
-			SceneManager::GetInstance()->ChangeScene("타일맵툴");
+			SceneManager::GetInstance()->ChangeScene("홍준");
 			break;
 		}
 		break;

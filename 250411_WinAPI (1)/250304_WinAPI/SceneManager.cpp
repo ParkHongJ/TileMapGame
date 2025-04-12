@@ -1,9 +1,9 @@
 #include "SceneManager.h"
-#include "GameObject.h"
+#include "Scene.h"
 
-GameObject* SceneManager::currentScene = nullptr;
-GameObject* SceneManager::loadingScene = nullptr;
-GameObject* SceneManager::nextScene = nullptr;
+Scene* SceneManager::currentScene = nullptr;
+Scene* SceneManager::loadingScene = nullptr;
+Scene* SceneManager::nextScene = nullptr;
 
 DWORD CALLBACK LoadingThread(LPVOID pvParam)
 {
@@ -24,7 +24,7 @@ void SceneManager::Init()
 
 void SceneManager::Release()
 {
-	map<string, GameObject*>::iterator iter;
+	map<string, Scene*>::iterator iter;
 	for (iter = mapScenes.begin(); iter != mapScenes.end(); iter++)
 	{
 		if (iter->second)
@@ -38,11 +38,11 @@ void SceneManager::Release()
 	ReleaseInstance();
 }
 
-void SceneManager::Update()
+void SceneManager::Update(float TimeDelta)
 {
 	if (currentScene)
 	{
-		currentScene->Update();
+		currentScene->Update(TimeDelta);
 	}
 }
 
@@ -93,7 +93,7 @@ HRESULT SceneManager::ChangeScene(string key, string loadingKey)
 	}
 
 	// ·Îµù ¾À Ã£±â
-	map<string, GameObject*>::iterator iterLoading;
+	map<string, Scene*>::iterator iterLoading;
 	iterLoading = mapLoadingScenes.find(loadingKey);
 	if (iterLoading == mapLoadingScenes.end())
 	{
@@ -127,7 +127,7 @@ HRESULT SceneManager::ChangeScene(string key, string loadingKey)
 	return E_FAIL;
 }
 
-GameObject* SceneManager::AddScene(string key, GameObject* scene)
+Scene* SceneManager::AddScene(string key, Scene* scene)
 {
 	if (scene == nullptr)
 	{
@@ -145,7 +145,7 @@ GameObject* SceneManager::AddScene(string key, GameObject* scene)
     return scene;
 }
 
-GameObject* SceneManager::AddLoadingScene(string key, GameObject* scene)
+Scene* SceneManager::AddLoadingScene(string key, Scene* scene)
 {
 	if (scene == nullptr)
 	{

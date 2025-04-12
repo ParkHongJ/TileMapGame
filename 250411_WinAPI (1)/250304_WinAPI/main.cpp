@@ -8,6 +8,7 @@ HWND g_hWnd;
 LPCWSTR g_lpszClassName = (LPCWSTR)TEXT("윈도우 API 사용하기");
 MainGame g_mainGame;
 POINT g_ptMouse;	// 마우스 좌표
+float g_fFrameLimit = 60.f;
 
 // Init
 
@@ -85,6 +86,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	TimerManager::GetInstance()->Init();
 	g_mainGame.Init();
 
+	float fTimeAcc = 0.f;
+
 	MSG message;
 	while (true)
 	{
@@ -99,9 +102,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 		else
 		{
-			TimerManager::GetInstance()->Update();
+			/*TimerManager::GetInstance()->Update();
+			g_mainGame.Update();
+			g_mainGame.Render();*/
+		}
+
+		TimerManager::GetInstance()->Update(L"Default");
+		fTimeAcc += TimerManager::GetInstance()->GetDeltaTime(L"Default");
+
+		float fNextFrame = g_fFrameLimit <= 0.f ? 0.f : (1.f / g_fFrameLimit);
+
+		if (fTimeAcc >= fNextFrame)
+		{
 			g_mainGame.Update();
 			g_mainGame.Render();
+
+			fTimeAcc = 0.f;
 		}
 	}
 

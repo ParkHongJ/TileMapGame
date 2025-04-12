@@ -1,6 +1,5 @@
 #include "BattleScene.h"
 #include "Image.h"
-#include "EnemyManager.h"
 #include "CommonFunction.h"
 
 HRESULT BattleScene::Init()
@@ -15,9 +14,6 @@ HRESULT BattleScene::Init()
 		return E_FAIL;
 	}
 
-	enemyManager = new EnemyManager();
-	enemyManager->Init();
-
 	Sleep(3000);
 
 
@@ -26,12 +22,6 @@ HRESULT BattleScene::Init()
 
 void BattleScene::Release()
 {
-	if (enemyManager)
-	{
-		enemyManager->Release();
-		delete enemyManager;
-		enemyManager = nullptr;
-	}
 
 	if (backGround)
 	{
@@ -41,13 +31,11 @@ void BattleScene::Release()
 	}
 }
 
-void BattleScene::Update()
+void BattleScene::Update(float TimeDelta)
 {
-	enemyManager->Update();
 }
 
 void BattleScene::Render(HDC hdc)
 {
 	backGround->Render(hdc);
-	enemyManager->Render(hdc);
 }

@@ -63,7 +63,7 @@ void TilemapTool::Release()
 	}
 }
 
-void TilemapTool::Update()
+void TilemapTool::Update(float TimeDelta)
 {
 	if (PtInRect(&rcSampleTile, g_ptMouse))
 	{
@@ -88,7 +88,7 @@ void TilemapTool::Update()
 		}
 	}
 
-	if (saveButton)	saveButton->Update();
+	if (saveButton)	saveButton->Update(TimeDelta);
 }
 
 void TilemapTool::Render(HDC hdc)

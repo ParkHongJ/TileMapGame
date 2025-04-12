@@ -32,7 +32,7 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
-250304_WinAPI/Image/*
+# 250304_WinAPI/Image/*
 250304_WinAPI/x64/*
 # Visual Studio 2015/2017 cache/options directory
 .vs/

@@ -1,18 +1,17 @@
 #pragma once
-#include "GameObject.h"
+#include "Scene.h"
 
 class Image;
 class EnemyManager;
-class BattleScene : public GameObject
+class BattleScene : public Scene
 {
 private:
 	Image* backGround;
-	EnemyManager* enemyManager;
 
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
-	virtual void Update() override;
+	virtual void Update(float TimeDelta) override;
 	virtual void Render(HDC hdc) override;
 
 	BattleScene() {};
