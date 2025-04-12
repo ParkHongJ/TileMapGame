@@ -22,15 +22,14 @@ public:
 	void Update();
 	void Render();
 
-	// 충돌내긔
-
-	// 뜌어어어
-	
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 	MainGame();
 	~MainGame();
 
-	///
+	//
+
+	// 엔터만쳐도 충돌이 났었는데.. 
+	/// 이상하다.. 
 };
 
