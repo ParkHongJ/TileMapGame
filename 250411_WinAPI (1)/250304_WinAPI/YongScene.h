@@ -1,5 +1,7 @@
 #pragma once
 #include "Scene.h"
+class TestAnimationObject;
+
 class YongScene : public Scene
 {
 public:
@@ -10,5 +12,8 @@ public:
 
 	YongScene() {};
 	virtual ~YongScene() {};
+
+private:
+	TestAnimationObject* Test;
 };
 

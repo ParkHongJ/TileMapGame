@@ -127,6 +127,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -144,12 +146,15 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TaeScene.cpp" />
+    <ClCompile Include="TestAnimationObject.cpp" />
     <ClCompile Include="TilemapTool.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="YongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Button.h" />
@@ -169,6 +174,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TaeScene.h" />
+    <ClInclude Include="TestAnimationObject.h" />
     <ClInclude Include="TilemapTool.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
