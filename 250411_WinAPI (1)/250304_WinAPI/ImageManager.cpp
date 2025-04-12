@@ -30,22 +30,24 @@ Image* ImageManager::AddImage(string key,
 	imager = FindImage(key);
 	if (imager)	return imager;
 
-	Image* imager = nullptr;
-	imager = FindImage(key);
-	if (imager)	return imager;
+	Image* imageManager = nullptr;
+	imageManager = FindImage(key);
+	if (imageManager)	return imageManager;
 
-	imager = new Image();
-	if (FAILED(imager->Init(filePath, width, height,
+	imageManager = new Image();
+	if (FAILED(imageManager->Init(filePath, width, height,
 		isTransparent, transColor)))
 	{
-		imager->Release();
-		delete imager;
+		imageManager->Release();
+		delete imageManager;
 
 		return nullptr;
 	}
 	mapImages.insert(make_pair(key, imager));
 	return imager;
 
+	mapImages.insert(make_pair(key, imageManager));
+	return imageManager;
 }
 
 Image* ImageManager::AddImage(string key, 
