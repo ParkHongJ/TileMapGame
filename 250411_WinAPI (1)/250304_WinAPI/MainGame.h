@@ -1,7 +1,7 @@
 #pragma once
 #include "config.h"
 class Timer;
-
+class Image;
 class TilemapTool;
 class MainGame
 {
@@ -11,10 +11,7 @@ private:
 	HDC hdc;
 
 	wchar_t szText[128];
-
-	//Image* backBuffer;
-
-
+	Image* backBuffer;
 
 	TilemapTool* tilemapTool;
 
