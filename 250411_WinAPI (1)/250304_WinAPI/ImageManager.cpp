@@ -28,22 +28,22 @@ Image* ImageManager::AddImage(string key,
 {
 	// 충돌을 내다 
 
-	Image* imager = nullptr;
-	imager = FindImage(key);
-	if (imager)	return imager;
+	Image* image = nullptr;
+	image = FindImage(key);
+	if (image)	return image;
 
-	imager = new Image();
-	if (FAILED(imager->Init(filePath, width, height,
+	image = new Image();
+	if (FAILED(image->Init(filePath, width, height,
 		isTransparent, transColor)))
 	{
-		imager->Release();
-		delete imager;
+		image->Release();
+		delete image;
 
 		return nullptr;
 	}
 
-	mapImages.insert(make_pair(key, imager));
-	return imager;
+	mapImages.insert(make_pair(key, image));
+	return image;
 }
 
 Image* ImageManager::AddImage(string key, 
