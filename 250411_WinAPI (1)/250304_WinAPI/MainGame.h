@@ -6,8 +6,10 @@ class TilemapTool;
 class MainGame
 {
 private:
-	HDC hdc;
 	PAINTSTRUCT ps;
+	// ³»..
+	HDC hdc;
+
 	wchar_t szText[128];
 
 	//Image* backBuffer;
