@@ -145,7 +145,7 @@ Scene* SceneManager::AddScene(string key, Scene* scene)
 	}
 
 	auto iter = mapScenes.find(key);
-	if (iter != mapScenes.begin())
+	if (iter != mapScenes.end())
 	{
 		return iter->second;
 	}
