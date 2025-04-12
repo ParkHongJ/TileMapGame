@@ -23,6 +23,8 @@ public:
 	void Render();
 
 	// 충돌내긔
+
+	// 뜌어어어
 	
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
