@@ -26,28 +26,22 @@ Image* ImageManager::AddImage(string key,
 	const wchar_t* filePath, int width, int height, 
 	bool isTransparent, COLORREF transColor)
 {
-	Image* imager = nullptr;
-	imager = FindImage(key);
-	if (imager)	return imager;
+	Image* image = nullptr;
+	image = FindImage(key);
+	if (image)	return image;
 
-	Image* imageManager = nullptr;
-	imageManager = FindImage(key);
-	if (imageManager)	return imageManager;
-
-	imageManager = new Image();
-	if (FAILED(imageManager->Init(filePath, width, height,
+	image = new Image();
+	if (FAILED(image->Init(filePath, width, height,
 		isTransparent, transColor)))
 	{
-		imageManager->Release();
-		delete imageManager;
+		image->Release();
+		delete image;
 
 		return nullptr;
 	}
-	mapImages.insert(make_pair(key, imager));
-	return imager;
 
-	mapImages.insert(make_pair(key, imageManager));
-	return imageManager;
+	mapImages.insert(make_pair(key, image));
+	return image;
 }
 
 Image* ImageManager::AddImage(string key, 
