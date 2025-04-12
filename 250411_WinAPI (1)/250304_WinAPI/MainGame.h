@@ -6,9 +6,9 @@ class TilemapTool;
 class MainGame
 {
 public:
-	HRESULT Init();
+	HRESULT Init() override;
 	
-	void Update();
+	void Update() override;
 	void Render();
 	void Release();
 
