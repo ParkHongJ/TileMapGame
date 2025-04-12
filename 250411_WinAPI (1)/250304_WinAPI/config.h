@@ -2,7 +2,7 @@
 
 #pragma once
 #pragma comment(lib, "Winmm.lib")
-
+#pragma warning(disable : 4996)
 #include <Windows.h>
 #include <string>
 #include <iostream>

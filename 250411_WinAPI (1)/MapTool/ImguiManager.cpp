@@ -85,17 +85,6 @@ void ImGuiManager::Shutdown()
 
 void ImGuiManager::Begin()
 {
-    /*float clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
-    m_context->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), nullptr);
-    m_context->ClearRenderTargetView(m_renderTargetView.Get(), clearColor);
-
-    m_swapChain->Present(1, 0);
-    if (m_renderTargetView) { m_renderTargetView->Release(); m_renderTargetView = nullptr; }
-
-    m_swapChain->ResizeBuffers(0, g_ResizeWidth, g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
-    g_ResizeWidth = g_ResizeHeight = 0;
-    CreateRenderTarget();*/
-
     if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
     {
         CleanupRenderTarget();
@@ -111,8 +100,6 @@ void ImGuiManager::Begin()
 
 void ImGuiManager::End()
 {
-    
-
     ImGui::Render();
     const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
     ID3D11RenderTargetView* rtv = m_renderTargetView.Get();
@@ -128,7 +115,6 @@ void ImGuiManager::End()
         ImGui::RenderPlatformWindowsDefault();
     }
     m_swapChain->Present(1, 0);
-
 }
 
 void ImGuiManager::DrawUI()
@@ -137,6 +123,6 @@ void ImGuiManager::DrawUI()
     ImGui::Text("hello");
     ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-    tileTool.DrawPaletteUI();
+    tileTool.DrawTileMapTool();
     ImGui::End();
 }

@@ -12,10 +12,15 @@ void ObjectManager::Init()
 	nextId = 0;
 }
 
-void ObjectManager::AddObject(int id, GameObject* obj)
+void ObjectManager::AddObject(GameObject* obj)
 {
-	obj->SetObjectId(nextId++);
-	m_objects.emplace(id, obj);
+	int newId = nextId++;
+	
+	obj->Init();
+	
+	obj->SetObjectId(newId);
+
+	m_objects.emplace(newId, obj);
 }
 
 void ObjectManager::RemoveObject(int id)
