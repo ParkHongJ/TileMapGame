@@ -5,6 +5,25 @@ class Image;
 class TilemapTool;
 class MainGame
 {
+public:
+	HRESULT Init();
+	
+	void Update();
+	void Render();
+	void Release();
+
+	void FrameRender();
+
+	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+
+	MainGame();
+	~MainGame();
+
+	//
+
+	// 엔터만쳐도 충돌이 났었는데.. 
+	/// 이상하다.. 
+
 private:
 	PAINTSTRUCT ps;
 	// 내..
@@ -17,20 +36,5 @@ private:
 
 	Timer* timer;
 
-public:
-	HRESULT Init();
-	void Release();
-	void Update();
-	void Render();
-
-	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-
-	MainGame();
-	~MainGame();
-
-	//
-
-	// 엔터만쳐도 충돌이 났었는데.. 
-	/// 이상하다.. 
 };
 
