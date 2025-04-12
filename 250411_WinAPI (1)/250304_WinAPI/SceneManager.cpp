@@ -20,7 +20,12 @@ DWORD CALLBACK LoadingThread(LPVOID pvParam)
 
 void SceneManager::Init()
 {
+
+
+
 }
+
+// Ãæµ¹
 
 void SceneManager::Release()
 {
@@ -135,7 +140,7 @@ Scene* SceneManager::AddScene(string key, Scene* scene)
 	}
 
 	auto iter = mapScenes.find(key);
-	if (iter != mapScenes.end())
+	if (iter != mapScenes.begin())
 	{
 		return iter->second;
 	}
