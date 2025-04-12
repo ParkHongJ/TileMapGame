@@ -22,9 +22,13 @@ public:
 	void Update();
 	void Render();
 
+	// Ãæµ¹³»±á
+	
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
 	MainGame();
 	~MainGame();
+
+	///
 };
 
