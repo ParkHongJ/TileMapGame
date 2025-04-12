@@ -1,12 +1,12 @@
 #pragma once
 #include "config.h"
 class Timer;
-class Image;
+//class Image;
 class TilemapTool;
 class MainGame
 {
 private:
-	HDC hdc;
+	// HDC hdc;
 	PAINTSTRUCT ps;
 	wchar_t szText[128];
 
