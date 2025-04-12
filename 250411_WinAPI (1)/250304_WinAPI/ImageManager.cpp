@@ -26,22 +26,24 @@ Image* ImageManager::AddImage(string key,
 	const wchar_t* filePath, int width, int height, 
 	bool isTransparent, COLORREF transColor)
 {
-	Image* image = nullptr;
-	image = FindImage(key);
-	if (image)	return image;
+	// 충돌을 내다 
 
-	image = new Image();
-	if (FAILED(image->Init(filePath, width, height,
+	Image* imager = nullptr;
+	imager = FindImage(key);
+	if (imager)	return imager;
+
+	imager = new Image();
+	if (FAILED(imager->Init(filePath, width, height,
 		isTransparent, transColor)))
 	{
-		image->Release();
-		delete image;
+		imager->Release();
+		delete imager;
 
 		return nullptr;
 	}
 
-	mapImages.insert(make_pair(key, image));
-	return image;
+	mapImages.insert(make_pair(key, imager));
+	return imager;
 }
 
 Image* ImageManager::AddImage(string key, 
