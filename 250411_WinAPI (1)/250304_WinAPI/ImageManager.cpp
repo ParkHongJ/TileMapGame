@@ -37,9 +37,6 @@ Image* ImageManager::AddImage(string key,
 		imageManager->Release();
 		delete imageManager;
 
-		return nullptr;
-	}
-
 	mapImages.insert(make_pair(key, imageManager));
 	return imageManager;
 }
