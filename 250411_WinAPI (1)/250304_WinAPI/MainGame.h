@@ -2,6 +2,7 @@
 #include "config.h"
 class Timer;
 class Image;
+class ImageManager;
 class TilemapTool;
 class MainGame
 {
@@ -11,10 +12,9 @@ public:
 	void Update() override;
 	void Render();
 	void Release();
-
-	void FrameRender();
-
+	
 	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+	void FrameRender();
 
 	MainGame();
 	~MainGame();
