@@ -1,7 +1,7 @@
 #pragma once
 #include "config.h"
 class Timer;
-
+class Image;
 class TilemapTool;
 class MainGame
 {
