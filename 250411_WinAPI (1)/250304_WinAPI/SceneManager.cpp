@@ -29,6 +29,7 @@ void SceneManager::Init()
 
 void SceneManager::Release()
 {
+	//¡÷ºÆ
 	map<string, Scene*>::iterator iter;
 	for (iter = mapScenes.begin(); iter != mapScenes.end(); iter++)
 	{
@@ -59,17 +60,12 @@ void SceneManager::Render(HDC hdc)
 	}
 }
 
-HRESULT SceneManager::ChangeScene(string key)
+HRESULT SceneManager::ChangeScene(string akey)
 {
-	auto iter = mapScenes.find(key);	// nextScene
+	auto iter = mapScenes.find(akey);	// nextScene
 	if (iter == mapScenes.end())
 	{
 		return E_FAIL;
-	}
-
-	if (iter->second == currentScene)
-	{
-		return S_OK;
 	}
 
 	if (SUCCEEDED(iter->second->Init()))
@@ -81,6 +77,13 @@ HRESULT SceneManager::ChangeScene(string key)
 		currentScene = iter->second;
 		return S_OK;
 	}
+
+	if (iter->second == currentScene)
+	{
+		return S_OK;
+	}
+
+	
 	return E_FAIL;
 }
 
@@ -108,6 +111,8 @@ HRESULT SceneManager::ChangeScene(string key, string loadingKey)
 
 	if (SUCCEEDED(iterLoading->second->Init()))
 	{
+
+
 		if (currentScene)
 		{
 			currentScene->Release();

@@ -19,7 +19,7 @@ public:
 	void Update(float TimeDelta);
 	void Render(HDC hdc);
 
-	HRESULT ChangeScene(string key);
+	HRESULT ChangeScene(string akey);
 	HRESULT ChangeScene(string key, string loadingKey);
 
 	Scene* AddScene(string key, Scene* scene);
