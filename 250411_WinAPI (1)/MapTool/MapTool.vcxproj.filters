@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\Imgui">
       <UniqueIdentifier>{5630401e-f5bd-4e21-a7ff-d5d68bf6527e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Tool">
+      <UniqueIdentifier>{f3d6a449-4732-4183-bd45-a7c18ae8c1ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="..\250304_WinAPI\ThirdParty\Imgui\imstb_truetype.h">
       <Filter>소스 파일\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="TileMapTool.h">
+      <Filter>소스 파일\Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapTool.cpp">
@@ -88,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="..\250304_WinAPI\ThirdParty\Imgui\imgui_widgets.cpp">
       <Filter>소스 파일\Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapTool.cpp">
+      <Filter>소스 파일\Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

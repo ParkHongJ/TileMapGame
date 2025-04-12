@@ -146,6 +146,7 @@
     <ClInclude Include="MapTool.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileMapTool.h" />
     <ClInclude Include="ToolConfig.h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClCompile Include="..\250304_WinAPI\ThirdParty\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="ImguiManager.cpp" />
     <ClCompile Include="MapTool.cpp" />
+    <ClCompile Include="TileMapTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MapTool.rc" />

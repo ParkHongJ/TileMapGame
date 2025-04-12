@@ -1,6 +1,7 @@
 #pragma once
 #include "config.h"
 #include "ToolConfig.h"
+#include "TileMapTool.h" // 반드시 포함
 class ImGuiManager
 {
 public:
@@ -10,7 +11,6 @@ public:
     void Begin();
     void End();
 
-    void RenderDockspace();
     void DrawUI();
 
 private:
@@ -28,4 +28,7 @@ private:
     bool InitD3D(HWND hwnd, UINT width, UINT height);
     void CleanupRenderTarget();
     bool CreateRenderTarget();
+
+
+    TileMapTool tileTool;
 };

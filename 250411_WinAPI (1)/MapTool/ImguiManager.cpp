@@ -28,6 +28,8 @@ bool ImGuiManager::Init(HWND hwnd, UINT width, UINT height)
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(m_device.Get(), m_context.Get());
 
+    tileTool.Init(m_device.Get());
+
     return true;
 }
 
@@ -109,8 +111,7 @@ void ImGuiManager::Begin()
 
 void ImGuiManager::End()
 {
-    ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
+    
 
     ImGui::Render();
     const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
@@ -130,18 +131,12 @@ void ImGuiManager::End()
 
 }
 
-void ImGuiManager::RenderDockspace()
-{
-    /*ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-    ImGui::Begin("DockSpace Window", nullptr, window_flags);
-    ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f));
-    ImGui::End();*/
-}
-
 void ImGuiManager::DrawUI()
 {
     ImGui::Begin("Map Tool");
     ImGui::Text("hello");
+    ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+    tileTool.DrawPaletteUI();
     ImGui::End();
 }

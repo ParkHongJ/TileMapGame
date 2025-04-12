@@ -60,7 +60,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         {
             // 여기서 매 프레임 렌더링
             g_Imgui.Begin();
-            g_Imgui.RenderDockspace();
             g_Imgui.DrawUI();
             g_Imgui.End();
         }
