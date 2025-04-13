@@ -111,6 +111,9 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>2D Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>MainGame\Scene\Tae</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>2D Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>MainGame\Scene\Tae</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

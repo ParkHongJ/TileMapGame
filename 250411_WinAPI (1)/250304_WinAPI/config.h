@@ -28,6 +28,10 @@ using namespace std;
 #define DEG_TO_RAD(degree) ((3.14 / 180.0) * degree)
 #define RAD_TO_DEG(radian) ((180.0 / 3.14) * radian)
 
+#define ANIMATION_FRAME_TIME 0.1f
+
+
+
 typedef struct tagFPOINT
 {
 	float x;
@@ -41,3 +45,18 @@ typedef struct tagFPOINT
 extern HWND g_hWnd;
 extern HINSTANCE g_hInstance;
 extern POINT g_ptMouse;
+
+
+enum class PlayerState {
+	IDLE,
+	MOVE,
+	JUMP,
+};
+
+typedef struct tagCurrFrameInfo
+{
+	POINT startFrame;
+	POINT endFrame;
+
+
+} CurrFrameInfo;
