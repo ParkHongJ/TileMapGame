@@ -168,11 +168,11 @@ void TileMapTool::DrawPaletteUI()
 
     if (ImGui::Button("Save TileMap"))
     {
-        SaveTileMapToFile("map1.tilemap");
+        //SaveTileMapToFile("map1.tilemap");
     }
     if (ImGui::Button("Load TileMap"))
     {
-        LoadTileMapFromFile("map1.tilemap");
+        //LoadTileMapFromFile("map1.tilemap");
     }
 
     ImGui::End();
@@ -191,7 +191,6 @@ void TileMapTool::DrawTileMap()
         cameraOffset.x += io.MouseDelta.x;
         cameraOffset.y += io.MouseDelta.y;
     }
-    float zoomSpeed = 0.1f;
     if (ImGui::IsWindowHovered()) {
         if (io.MouseWheel > 0) zoom += zoomSpeed;
         if (io.MouseWheel < 0) zoom -= zoomSpeed;
@@ -269,4 +268,46 @@ void TileMapTool::LoadTileMapFromFile(const char* path)
 
     fread(&tileMap[0][0], sizeof(Tile), mapWidth * mapHeight, fp);
     fclose(fp);
+}
+
+void TileMapTool::UpdateTileDecos()
+{
+    for (int y = 0; y < mapHeight; ++y)
+    {
+        for (int x = 0; x < mapWidth; ++x)
+        {
+            Tile& tile = tileMap[y][x];
+            tile.decos.clear();
+
+            if (!tile.valid) continue;
+
+            // 위쪽 없음 → A 데코
+            if (y > 0 && !tileMap[y - 1][x].valid)
+                tile.decos.push_back({ DecoType::A });
+
+            // 아래쪽 없음 → B 데코
+            if (y < mapHeight - 1 && !tileMap[y + 1][x].valid)
+                tile.decos.push_back({ DecoType::B });
+
+            // 왼쪽 있음
+            if (x > 0 && tileMap[y][x - 1].valid)
+            {
+                bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
+                if (upperEmpty)
+                    tile.decos.push_back({ DecoType::C });
+                else
+                    tile.decos.push_back({ DecoType::D });
+            }
+
+            // 오른쪽 있음
+            if (x < mapWidth - 1 && tileMap[y][x + 1].valid)
+            {
+                bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
+                if (upperEmpty)
+                    tile.decos.push_back({ DecoType::C, true }); // flip horizontal
+                else
+                    tile.decos.push_back({ DecoType::D, true }); // flip horizontal
+            }
+        }
+    }
 }
