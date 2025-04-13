@@ -48,15 +48,26 @@ extern POINT g_ptMouse;
 
 
 enum class PlayerState {
-	IDLE,
-	MOVE,
-	JUMP,
+    IDLE,       // 가만히 서 있음
+    MOVE,       // 좌우 이동
+    LOOKUP,     // 위 보기
+    LOOKDOWN,   // 아래 보기
+    JUMP,       // 점프 중
+    FALL,       // 낙하 중
+    CLIMB,      // 사다리/벽 오르기
+    ATTACK,     // 근접 or 투척 공격 (채찍 등)
+    CROUCH,     // 앉기
+    HANG,       // 발판에 매달림
+    HURT,       // 데미지 입고 무적 상태
+    DIE,        // 사망
+    THROW,      // 아이템/NPC 던지기
+    HOLD,       // 아이템/적 들고 있는 상태
+    PUSH,       // 상자나 블록 밀기
+    EXIT,       // 스테이지 출구 도달
 };
 
 typedef struct tagCurrFrameInfo
 {
 	POINT startFrame;
 	POINT endFrame;
-
-
 } CurrFrameInfo;
