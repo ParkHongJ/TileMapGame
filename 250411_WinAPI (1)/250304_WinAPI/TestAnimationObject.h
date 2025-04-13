@@ -5,7 +5,7 @@ class AnimationManager;
 class TestAnimationObject : public GameObject
 {
 public:
-	TestAnimationObject() {};
+	TestAnimationObject() : AnimManager(nullptr) {};
 	virtual ~TestAnimationObject() {};
 
 	virtual HRESULT Init() override;
@@ -13,11 +13,14 @@ public:
 	virtual void Render(HDC hdc) override;
 	virtual void Release() override;
 
+private:
 	void Attack(int _Test);
 	void Guard();
 	void Hit();
 
 private:
 	AnimationManager* AnimManager;
+
+	int Count;
 };
 

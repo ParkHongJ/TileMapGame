@@ -1,63 +1,89 @@
 #pragma once
+#include "GameObject.h"
 #include <functional>
 
 using CallbackType = std::function<void()>;
 
 class Image;
-class GameObject;
 
-class Animation
+enum class AnimationDir { DIR_ORIGINAL, DIR_REVERSE };
+
+class Animation : public GameObject
 {
 public:
-	Animation() {};
+	Animation();
 
-	Animation(CallbackType&& _Callback) : Callback(_Callback)
+	virtual HRESULT Init() override;
+	virtual void Update(float TimeDelta) override;
+	virtual void Render(HDC hdc) override;
+	virtual void Release() override;
+
+	Animation(string _Key, CallbackType&& _Callback)
 	{
+		Events[_Key] = _Callback;
+	};
+
+	template<typename T, typename Ret, typename... Args>
+	Animation(string _Key, T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
+	{
+		Events[_Key] = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
 	}
 
 	template<typename T, typename Ret, typename... Args>
-	Animation(T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
+	inline bool RegisterEvent(string _Key, T* _Owner, Ret(T::*_MemFunc)(Args...), Args&&... _Args)
 	{
-		Callback = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+		bool IsExist = Events.end() != Events.find(_Key);
+		if (false == IsExist)
+		{
+			Events[_Key] = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+		}
+		return !IsExist;
 	}
 
 	template<typename T, typename Ret, typename... Args>
-	inline void RegisterEvent(T* _Owner, Ret(T::*_MemFunc)(Args...), Args&&... _Args)
+	inline bool ChangeEvent(string _Key, T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
 	{
-		Callback = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+		bool IsExist = Events.end() != Events.find(_Key);
+		if (true == IsExist)
+		{
+			Events[_Key] = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+		}
+		return IsExist;
 	}
 
-	void Action()
-	{
-		Callback();
-	}
+	bool PlayEvent();
+	bool PlayEvent(string _Key);
 
-	//Animation() = default;
-	virtual ~Animation() {};
-
-	inline Image* GetImage() const { return Image; };
-	inline void const SetImage(Image* _Image) { Image = _Image; };
-private:
-	Image* Image;
-	CallbackType Callback;
-
-	// 애니메이션 관련
-	int maxFrameX;
-	int maxFrameY;
-	int frameWidth;
-	int frameHeight;
-	int currFrameX;
-	int currFrameY;
+	void ResetAnimation();
 
 public:
+	inline void SetImage(Image* _Image) { image = _Image; };
+	inline Image* GetImage() const { return image; };
 
-
-
-
-
+	virtual ~Animation() {};
 
 private:
-	
+	Image* image;
+	map<string, CallbackType> Events;
 
+	// 애니메이션 관련
+
+	int MaxFrameX;
+	int MaxFrameY;
+	int FrameWidth;
+	int FrameHeight;
+
+	int CurFrame;
+	int CurFrameX;
+	int CurFrameY;
+
+	float FrameSpeed;
+	float ElapseTime;
+
+	bool IsFlip;
+	bool IsEndAnimation;
+	bool IsStayMaxFrame;
+
+	AnimationDir AnimDir;
 };
 

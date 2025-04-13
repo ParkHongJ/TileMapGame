@@ -1,32 +1,43 @@
 #include "AnimationManager.h"
 #include "Animation.h"
 
+AnimationManager::AnimationManager()
+{
+}
+
 HRESULT AnimationManager::Init()
 {
-	//Animation Temp = new Animation()
-	//Animations.emplace()
 	return S_OK;
 }
 
 void AnimationManager::Update(float TimeDelta)
 {
+	Animations[CurAnimKey]->Update(TimeDelta);
+
 	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
 	{
-		Animations["Å×½ºÆ®"]->Action();
+		Animations[CurAnimKey]->PlayEvent();
 	}
+
 }
 
 void AnimationManager::Render(HDC hdc)
 {
+	Animations[CurAnimKey]->Render(hdc);
 }
 
 void AnimationManager::Release()
 {
 }
 
-void AnimationManager::RegisterAnimation(string _Key, Animation* _Anim)
+void AnimationManager::RegisterAnimation(string _Key, Animation* _Anim, bool _IsDefault)
 {
 	Animations.emplace(_Key, _Anim);
+
+	if (true == _IsDefault)
+	{
+		CurAnimKey = DefaultAnimKey =  _Key;
+	}
 }
 
 

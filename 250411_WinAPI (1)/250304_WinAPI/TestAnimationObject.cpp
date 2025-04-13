@@ -3,13 +3,13 @@
 
 HRESULT TestAnimationObject::Init()
 {
-	Animation* Test = new Animation();
-	//Animation* Test = new Animation(this, &TestAnimationObject::Attack, 5);
+	Animation* Anim = new Animation();
 	AnimManager = new AnimationManager();
 
-	AnimManager->RegisterAnimation("테스트", Test);
-	int i = 5;
-	AnimManager->RegisterAnimationEvent("테스트", this, &TestAnimationObject::Guard);
+	AnimManager->RegisterAnimation("테스트", Anim, true);
+	AnimManager->RegisterAnimationEvent("테스트", "Guard", this, &TestAnimationObject::Guard);
+
+	Count = 0;
 	return S_OK;
 }
 
@@ -20,6 +20,7 @@ void TestAnimationObject::Update(float TimeDelta)
 
 void TestAnimationObject::Render(HDC hdc)
 {
+	AnimManager->Render(hdc);
 }
 
 void TestAnimationObject::Release()
@@ -39,7 +40,7 @@ void TestAnimationObject::Attack(int _Test)
 
 void TestAnimationObject::Guard()
 {
-	int i = 5;
+	++Count;
 }
 
 void TestAnimationObject::Hit()
