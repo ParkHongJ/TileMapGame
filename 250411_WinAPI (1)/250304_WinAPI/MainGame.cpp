@@ -19,24 +19,25 @@ HRESULT MainGame::Init()
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init();
 
-	SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
-	SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
-	
+	//SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
+	//SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
+
 	SceneManager::GetInstance()->AddScene("홍준", new HongScene());
 	SceneManager::GetInstance()->AddScene("효진", new HyoScene());
 	SceneManager::GetInstance()->AddScene("진석", new JinScene());
 	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 
-	SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
-	SceneManager::GetInstance()->ChangeScene("A*알고리즘");
+	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
+	//SceneManager::GetInstance()->ChangeScene("A*알고리즘");
+	SceneManager::GetInstance()->ChangeScene("태관");
 
 	hdc = GetDC(g_hWnd);
 
 	backBuffer = new Image();
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
 	{
-		MessageBox(g_hWnd, 
+		MessageBox(g_hWnd,
 			TEXT("백버퍼 생성 실패"), TEXT("경고"), MB_OK);
 		return E_FAIL;
 	}
@@ -89,10 +90,9 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		switch (wParam)
 		{
 		case 'a': case 'A':
-			SceneManager::GetInstance()->ChangeScene("전투씬_1");
+			//SceneManager::GetInstance()->ChangeScene("전투씬_1");
 			break;
 		case 'd': case 'D':
-			SceneManager::GetInstance()->ChangeScene("홍준");
 			break;
 		}
 		break;
