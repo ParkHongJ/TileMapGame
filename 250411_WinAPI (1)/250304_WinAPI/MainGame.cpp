@@ -31,7 +31,11 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 	SceneManager::GetInstance()->ChangeScene("A*알고리즘");
 
-	hdc = GetDC(g_hWnd);
+	//Legacy
+	//hdc = GetDC(g_hWnd);
+
+	if (FAILED(InitD2D()))
+		return E_FAIL;
 
 	backBuffer = new Image();
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
@@ -53,7 +57,12 @@ void MainGame::Release()
 		backBuffer = nullptr;
 	}
 
-	ReleaseDC(g_hWnd, hdc);
+	//Legacy
+	//ReleaseDC(g_hWnd, hdc);
+
+	m_pBrush.Reset();
+	m_pRenderTarget.Reset();
+	m_pFactory.Reset();
 
 	SceneManager::GetInstance()->Release();
 	KeyManager::GetInstance()->Release();
@@ -68,17 +77,12 @@ void MainGame::Update()
 
 void MainGame::Render()
 {
-	// 백버퍼에 먼저 복사
-	HDC hBackBufferDC = backBuffer->GetMemDC();
+	BeginDraw();
 
-	SceneManager::GetInstance()->Render(hBackBufferDC);
+	Draw();
 
-	TimerManager::GetInstance()->Render(hBackBufferDC);
-	wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
-	TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
-
-	// 백버퍼에 있는 내용을 메인 hdc에 복사
-	backBuffer->Render(hdc);
+	EndDraw();
+	
 }
 
 LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -121,4 +125,73 @@ MainGame::MainGame()
 
 MainGame::~MainGame()
 {
+}
+
+HRESULT MainGame::InitD2D()
+{
+	// Factory 생성
+	HRESULT hr = D2D1CreateFactory(
+		D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		__uuidof(ID2D1Factory),
+		nullptr,
+		reinterpret_cast<void**>(m_pFactory.GetAddressOf())
+	);
+
+	if (FAILED(hr))
+		return E_FAIL;
+
+	// RenderTarget 설정
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+
+	D2D1_RENDER_TARGET_PROPERTIES rtProps = D2D1::RenderTargetProperties();
+	D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRTProps =
+		D2D1::HwndRenderTargetProperties(g_hWnd, D2D1::SizeU(rc.right - rc.left, rc.bottom - rc.top));
+
+	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
+
+	// 브러시 (예: 기본 색)
+	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pBrush);
+
+	return S_OK;
+}
+
+void MainGame::BeginDraw()
+{
+	m_pRenderTarget->BeginDraw();
+
+	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
+}
+
+void MainGame::Draw()
+{
+	// 예: 직사각형 하나 그리기
+	m_pRenderTarget->FillRectangle(
+		D2D1::RectF(100, 100, 200, 200),
+		m_pBrush.Get()
+	);
+
+	// Legacy
+	//// 백버퍼에 먼저 복사
+	//HDC hBackBufferDC = backBuffer->GetMemDC();
+
+	//SceneManager::GetInstance()->Render(hBackBufferDC);
+
+	//TimerManager::GetInstance()->Render(hBackBufferDC);
+	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
+	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
+
+	//// 백버퍼에 있는 내용을 메인 hdc에 복사
+	//backBuffer->Render(hdc);
+}
+
+void MainGame::EndDraw()
+{
+	HRESULT hr = m_pRenderTarget->EndDraw();
+
+	if (hr == D2DERR_RECREATE_TARGET)
+	{
+		m_pRenderTarget.Reset();
+		Init(); // 다시 생성
+	}
 }

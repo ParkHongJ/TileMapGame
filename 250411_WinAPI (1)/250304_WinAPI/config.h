@@ -9,6 +9,11 @@
 #include <bitset>
 #include <map>
 #include <vector>
+#include <d2d1.h>
+#include <wrl/client.h>
+#pragma comment(lib, "d2d1.lib")
+
+using Microsoft::WRL::ComPtr;
 
 using namespace std;
 
