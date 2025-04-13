@@ -19,12 +19,6 @@
     <Filter Include="2D Framework">
       <UniqueIdentifier>{18f2c5ba-c6f2-4ac2-a4b6-7d870f746713}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Enemy">
-      <UniqueIdentifier>{c4133e5e-cf55-4621-9d31-d82d707d7d16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MainGame\Missile">
-      <UniqueIdentifier>{70574d2a-5972-4b7e-bc94-9460b7ad3888}</UniqueIdentifier>
-    </Filter>
     <Filter Include="2D Framework\Timer">
       <UniqueIdentifier>{30f93bd0-8426-46a5-8a65-4d84027ae64f}</UniqueIdentifier>
     </Filter>
@@ -37,8 +31,20 @@
     <Filter Include="2D Framework\UI\Button">
       <UniqueIdentifier>{57de70b7-daba-4081-817d-3bfdbbe06bf9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainGame\Missile\KOF_Character">
-      <UniqueIdentifier>{1ad804d6-38d1-4cbd-a326-7d9dbb62c05b}</UniqueIdentifier>
+    <Filter Include="MainGame\Scene\Hong">
+      <UniqueIdentifier>{8f3022c9-2f3b-42a4-9a20-328d6190558f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Tae">
+      <UniqueIdentifier>{bf96f163-22c1-4d6f-a57e-75b520e0775b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Jin">
+      <UniqueIdentifier>{1f853048-fd6c-4644-8858-48ac72e64cab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Hyo">
+      <UniqueIdentifier>{22d1e101-38e1-46b7-a035-53f87e2822e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Yong">
+      <UniqueIdentifier>{c22b1cf7-56eb-438c-ac2f-a855cd8068e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,29 +57,11 @@
     <ClCompile Include="MainGame.cpp">
       <Filter>MainGame</Filter>
     </ClCompile>
-    <ClCompile Include="Tank.cpp">
-      <Filter>MainGame</Filter>
-    </ClCompile>
     <ClCompile Include="Image.cpp">
       <Filter>2D Framework</Filter>
     </ClCompile>
-    <ClCompile Include="KOF_Iori.cpp">
-      <Filter>MainGame\Missile\KOF_Character</Filter>
-    </ClCompile>
     <ClCompile Include="KeyManager.cpp">
       <Filter>2D Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>MainGame\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
-      <Filter>MainGame\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="MissileManager.cpp">
-      <Filter>MainGame\Missile</Filter>
-    </ClCompile>
-    <ClCompile Include="Missile.cpp">
-      <Filter>MainGame\Missile</Filter>
     </ClCompile>
     <ClCompile Include="ImageManager.cpp">
       <Filter>2D Framework</Filter>
@@ -99,11 +87,29 @@
     <ClCompile Include="AstarScene.cpp">
       <Filter>MainGame\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="AStarScene2.cpp">
-      <Filter>MainGame\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="LoadingScene.cpp">
       <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="JinScene.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
+    <ClCompile Include="HyoScene.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="YongScene.cpp">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClCompile>
+    <ClCompile Include="TaeScene.cpp">
+      <Filter>MainGame\Scene\Tae</Filter>
+    </ClCompile>
+    <ClCompile Include="HongScene.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>2D Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,32 +125,14 @@
     <ClInclude Include="MainGame.h">
       <Filter>MainGame</Filter>
     </ClInclude>
-    <ClInclude Include="Tank.h">
-      <Filter>MainGame</Filter>
-    </ClInclude>
     <ClInclude Include="Image.h">
       <Filter>2D Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="KOF_Iori.h">
-      <Filter>MainGame\Missile\KOF_Character</Filter>
     </ClInclude>
     <ClInclude Include="KeyManager.h">
       <Filter>2D Framework</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>2D Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>MainGame\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyManager.h">
-      <Filter>MainGame\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="MissileManager.h">
-      <Filter>MainGame\Missile</Filter>
-    </ClInclude>
-    <ClInclude Include="Missile.h">
-      <Filter>MainGame\Missile</Filter>
     </ClInclude>
     <ClInclude Include="ImageManager.h">
       <Filter>2D Framework</Filter>
@@ -172,6 +160,27 @@
     </ClInclude>
     <ClInclude Include="LoadingScene.h">
       <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="JinScene.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoScene.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="YongScene.h">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClInclude>
+    <ClInclude Include="TaeScene.h">
+      <Filter>MainGame\Scene\Tae</Filter>
+    </ClInclude>
+    <ClInclude Include="HongScene.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>2D Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

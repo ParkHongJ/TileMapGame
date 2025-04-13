@@ -48,7 +48,7 @@ void EnemyManager::Release()
 	vecEnemys.clear();	// 원소가 모두 제거되고 capacity는 유지된다.
 }
 
-void EnemyManager::Update()
+void EnemyManager::Update(float TimeDelta)
 {
 	for (int i = 0; i < vecEnemys.size(); i++)
 	{

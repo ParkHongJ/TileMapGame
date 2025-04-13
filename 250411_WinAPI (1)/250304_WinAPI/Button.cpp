@@ -28,7 +28,7 @@ void Button::Release()
 {
 }
 
-void Button::Update()
+void Button::Update(float TimeDelta)
 {
 	if (PtInRect(&rc, g_ptMouse))
 	{

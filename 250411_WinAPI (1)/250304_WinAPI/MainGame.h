@@ -1,32 +1,31 @@
 #pragma once
-#include "GameObject.h"
-
+#include "config.h"
 class Timer;
 class Image;
-class EnemyManager;
 class TilemapTool;
-class MainGame : public GameObject
+class MainGame
 {
-private:
-	HDC hdc;
-	PAINTSTRUCT ps;
-	wchar_t szText[128];
+public:
+	HRESULT Init();
+	void Update();
+	void Render();
+	void Release();
 
+	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
+
+	MainGame();
+	~MainGame();
+
+private:
+	PAINTSTRUCT ps;
+	HDC hdc;
+
+	wchar_t szText[128];
 	Image* backBuffer;
 
 	TilemapTool* tilemapTool;
 
 	Timer* timer;
 
-public:
-	virtual HRESULT Init() override;
-	virtual void Release() override;
-	virtual void Update() override;
-	void Render();
-
-	LRESULT MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
-
-	MainGame();
-	~MainGame();
 };
 

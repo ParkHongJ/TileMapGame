@@ -6,16 +6,16 @@ class Timer;
 class TimerManager : public Singleton<TimerManager>
 {
 private:
-	Timer* timer;
 	wchar_t szText[128];
-
+	map<wstring, Timer*> timers;
 public:
 	void Init();
 	void Release();
 	void Update();
+	void Update(const wstring& timerKey);
 	void Render(HDC hdc);
 
-	float GetDeltaTime();
-
+	float GetDeltaTime(const wstring& timerKey);
+	
 };
 

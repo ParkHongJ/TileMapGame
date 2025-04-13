@@ -12,7 +12,7 @@ void ImageManager::Release()
 	{
 		if (iter->second)
 		{
-			(iter->second)->Release();
+		//	(iter->second)->Release();
 			delete (iter->second);
 			(iter->second) = nullptr;
 		}
@@ -90,4 +90,5 @@ Image* ImageManager::FindImage(string key)
 	if (iter == mapImages.end()) return nullptr;
 
 	return iter->second;
+
 }

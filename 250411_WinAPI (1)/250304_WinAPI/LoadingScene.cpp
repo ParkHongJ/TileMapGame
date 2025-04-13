@@ -12,7 +12,7 @@ void LoadingScene::Release()
 {
 }
 
-void LoadingScene::Update()
+void LoadingScene::Update(float TimeDelta)
 {
 }
 

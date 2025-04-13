@@ -1,6 +1,7 @@
 #pragma once
+//#include "config.h"
 #include "GameObject.h"
-#include "config.h"
+#include "Scene.h"
 
 /*
 	열린 목록 : 탐색할 노드들을 저장, 시작 노드 추가
@@ -64,7 +65,7 @@ public:
 
 };
 
-class AstarScene : public GameObject
+class AstarScene : public Scene
 {
 	// 이차원 배열 맵을 구성
 	AstarTile map[ASTAR_TILE_COUNT][ASTAR_TILE_COUNT];
@@ -78,10 +79,10 @@ class AstarScene : public GameObject
 	vector<AstarTile*> closeList;
 
 public:
-	virtual HRESULT Init();
-	virtual void Release();
-	virtual void Update();
-	virtual void Render(HDC hdc);
+	virtual HRESULT Init() override;
+	virtual void Release() override;
+	virtual void Update(float TimeDelta) override;
+	virtual void Render(HDC hdc) override;
 
 	void FindPath();
 	void AddOpenList(AstarTile* currTile);

@@ -128,26 +128,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AstarScene.cpp" />
-    <ClCompile Include="AStarScene2.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="HongScene.cpp" />
+    <ClCompile Include="HyoScene.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
+    <ClCompile Include="JinScene.cpp" />
     <ClCompile Include="KeyManager.cpp" />
-    <ClCompile Include="KOF_Iori.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
-    <ClCompile Include="Missile.cpp" />
-    <ClCompile Include="MissileManager.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TilemapTool.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="YongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AstarScene.h" />
@@ -155,23 +155,24 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="CommonFunction.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="HongScene.h" />
+    <ClInclude Include="HyoScene.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
+    <ClInclude Include="JinScene.h" />
     <ClInclude Include="KeyManager.h" />
-    <ClInclude Include="KOF_Iori.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainGame.h" />
-    <ClInclude Include="Missile.h" />
-    <ClInclude Include="MissileManager.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="Tank.h" />
+    <ClInclude Include="TaeScene.h" />
     <ClInclude Include="TilemapTool.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
+    <ClInclude Include="YongScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

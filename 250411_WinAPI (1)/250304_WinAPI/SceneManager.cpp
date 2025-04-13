@@ -1,9 +1,9 @@
 #include "SceneManager.h"
-#include "GameObject.h"
+#include "Scene.h"
 
-GameObject* SceneManager::currentScene = nullptr;
-GameObject* SceneManager::loadingScene = nullptr;
-GameObject* SceneManager::nextScene = nullptr;
+Scene* SceneManager::currentScene = nullptr;
+Scene* SceneManager::loadingScene = nullptr;
+Scene* SceneManager::nextScene = nullptr;
 
 DWORD CALLBACK LoadingThread(LPVOID pvParam)
 {
@@ -20,11 +20,17 @@ DWORD CALLBACK LoadingThread(LPVOID pvParam)
 
 void SceneManager::Init()
 {
+
+
+
 }
+
+// 충돌
 
 void SceneManager::Release()
 {
-	map<string, GameObject*>::iterator iter;
+	//주석
+	map<string, Scene*>::iterator iter;
 	for (iter = mapScenes.begin(); iter != mapScenes.end(); iter++)
 	{
 		if (iter->second)
@@ -38,11 +44,11 @@ void SceneManager::Release()
 	ReleaseInstance();
 }
 
-void SceneManager::Update()
+void SceneManager::Update(float TimeDelta)
 {
 	if (currentScene)
 	{
-		currentScene->Update();
+		currentScene->Update(TimeDelta);
 	}
 }
 
@@ -54,17 +60,12 @@ void SceneManager::Render(HDC hdc)
 	}
 }
 
-HRESULT SceneManager::ChangeScene(string key)
+HRESULT SceneManager::ChangeScene(string akey)
 {
-	auto iter = mapScenes.find(key);	// nextScene
+	auto iter = mapScenes.find(akey);	// nextScene
 	if (iter == mapScenes.end())
 	{
 		return E_FAIL;
-	}
-
-	if (iter->second == currentScene)
-	{
-		return S_OK;
 	}
 
 	if (SUCCEEDED(iter->second->Init()))
@@ -76,6 +77,13 @@ HRESULT SceneManager::ChangeScene(string key)
 		currentScene = iter->second;
 		return S_OK;
 	}
+
+	if (iter->second == currentScene)
+	{
+		return S_OK;
+	}
+
+	
 	return E_FAIL;
 }
 
@@ -93,7 +101,7 @@ HRESULT SceneManager::ChangeScene(string key, string loadingKey)
 	}
 
 	// 로딩 씬 찾기
-	map<string, GameObject*>::iterator iterLoading;
+	map<string, Scene*>::iterator iterLoading;
 	iterLoading = mapLoadingScenes.find(loadingKey);
 	if (iterLoading == mapLoadingScenes.end())
 	{
@@ -103,6 +111,8 @@ HRESULT SceneManager::ChangeScene(string key, string loadingKey)
 
 	if (SUCCEEDED(iterLoading->second->Init()))
 	{
+
+
 		if (currentScene)
 		{
 			currentScene->Release();
@@ -127,7 +137,7 @@ HRESULT SceneManager::ChangeScene(string key, string loadingKey)
 	return E_FAIL;
 }
 
-GameObject* SceneManager::AddScene(string key, GameObject* scene)
+Scene* SceneManager::AddScene(string key, Scene* scene)
 {
 	if (scene == nullptr)
 	{
@@ -145,7 +155,7 @@ GameObject* SceneManager::AddScene(string key, GameObject* scene)
     return scene;
 }
 
-GameObject* SceneManager::AddLoadingScene(string key, GameObject* scene)
+Scene* SceneManager::AddLoadingScene(string key, Scene* scene)
 {
 	if (scene == nullptr)
 	{

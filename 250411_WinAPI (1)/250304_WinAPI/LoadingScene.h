@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "Scene.h"
 
 class Image;
-class LoadingScene : public GameObject
+class LoadingScene : public Scene
 {
 private:
 	Image* bg;
@@ -10,7 +10,7 @@ private:
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
-	virtual void Update() override;
+	virtual void Update(float TimeDelta) override;
 	virtual void Render(HDC hdc) override;
 
 	virtual ~LoadingScene() {};

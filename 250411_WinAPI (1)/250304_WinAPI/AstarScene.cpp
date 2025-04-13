@@ -86,7 +86,7 @@ void AstarScene::Release()
 {
 }
 
-void AstarScene::Update()
+void AstarScene::Update(float TimeDelta)
 {
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_RBUTTON))
 	{
