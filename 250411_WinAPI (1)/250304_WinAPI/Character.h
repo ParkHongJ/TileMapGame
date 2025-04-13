@@ -1,21 +1,15 @@
 #pragma once
-#include "Scene.h"
 #include "GameObject.h"
+#include "config.h"
 
-class Image;
-class HyoScene : public Scene
+class Character : public GameObject
 {
-public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(HDC hdc) override;
 
-	HyoScene() {};
-	virtual ~HyoScene() {};
-
-private:
-	Image* background;
-
+	Character() {};
+	virtual ~Character() {};
 };
 
