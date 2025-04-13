@@ -1,6 +1,7 @@
 #pragma once
 #include "Singleton.h"
 #include "config.h"
+#include <wincodec.h>
 
 ///*
 //	배열 : 인덱스 -> 데이터
@@ -16,20 +17,27 @@ class ImageManager : public Singleton<ImageManager>
 private:
 	map<string, Image*> mapImages;
 
+	ComPtr<IWICImagingFactory> wicFactory;
+
 public:
+	IWICImagingFactory* GetWICFactory();
 	void Init();
 	void Release();
 
 	Image* AddImage(string key, const wchar_t* filePath,
+		ID2D1HwndRenderTarget* renderTarget);
+
+	//Legacy
+	/*Image* AddImage(string key, const wchar_t* filePath,
 		int width, int height,
 		bool isTransparent = FALSE,
-		COLORREF transColor = FALSE);
+		COLORREF transColor = FALSE);*/
 
-	Image* AddImage(string key, const wchar_t* filePath, 
+	/*Image* AddImage(string key, const wchar_t* filePath, 
 		int width, int height,
 		int maxFrameX, int maxFrameY,
 		bool isTransparent = FALSE, 
-		COLORREF transColor = FALSE);
+		COLORREF transColor = FALSE);*/
 
 	void DeleteImage(string key);
 	Image* FindImage(string key);

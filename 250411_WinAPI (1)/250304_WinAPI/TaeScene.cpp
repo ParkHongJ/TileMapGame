@@ -13,6 +13,6 @@ void TaeScene::Update(float TimeDelta)
 {
 }
 
-void TaeScene::Render(HDC hdc)
+void TaeScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }

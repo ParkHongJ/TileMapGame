@@ -52,11 +52,11 @@ void SceneManager::Update(float TimeDelta)
 	}
 }
 
-void SceneManager::Render(HDC hdc)
+void SceneManager::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (currentScene)
 	{
-		currentScene->Render(hdc);
+		currentScene->Render(renderTarget);
 	}
 }
 

@@ -42,13 +42,13 @@ void AstarTile::Update()
 {
 }
 
-void AstarTile::Render(HDC hdc)
+void AstarTile::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+	/*hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 	FillRect(hdc, &rc, hBrush);
 	Rectangle(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
-	SelectObject(hdc, hOldBrush);
+	SelectObject(hdc, hOldBrush);*/
 }
 
 void AstarTile::SetColor(COLORREF color)
@@ -121,15 +121,15 @@ void AstarScene::Update(float TimeDelta)
 	}
 }
 
-void AstarScene::Render(HDC hdc)
+void AstarScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	for (int i = 0; i < ASTAR_TILE_COUNT; i++)	// 세로반복 (y)
-	{
-		for (int j = 0; j < ASTAR_TILE_COUNT; j++)	// 가로반복 (x)
-		{
-			map[i][j].Render(hdc);
-		}
-	}
+	//for (int i = 0; i < ASTAR_TILE_COUNT; i++)	// 세로반복 (y)
+	//{
+	//	for (int j = 0; j < ASTAR_TILE_COUNT; j++)	// 가로반복 (x)
+	//	{
+	//		map[i][j].Render(hdc);
+	//	}
+	//}
 }
 
 void AstarScene::FindPath()

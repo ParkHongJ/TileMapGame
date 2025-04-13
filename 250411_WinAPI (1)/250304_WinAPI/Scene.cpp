@@ -13,7 +13,7 @@ void Scene::Update(float TimeDelta)
 {
 }
 
-void Scene::Render(HDC hdc)
+void Scene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }
 

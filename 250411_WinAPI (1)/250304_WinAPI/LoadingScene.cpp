@@ -3,8 +3,8 @@
 
 HRESULT LoadingScene::Init()
 {
-	bg = ImageManager::GetInstance()->AddImage("로딩_1",
-		L"image/loading.bmp", 852, 480);
+	/*bg = ImageManager::GetInstance()->AddImage("로딩_1",
+		L"image/loading.bmp", 852, 480);*/
 	return S_OK;
 }
 
@@ -16,8 +16,8 @@ void LoadingScene::Update(float TimeDelta)
 {
 }
 
-void LoadingScene::Render(HDC hdc)
+void LoadingScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	if (bg)
-		bg->Render(hdc);
+	//if (bg)
+		//bg->Render(hdc);
 }

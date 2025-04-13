@@ -40,6 +40,5 @@ private:
 	TilemapTool* tilemapTool;
 
 	Timer* timer;
-
 };
 

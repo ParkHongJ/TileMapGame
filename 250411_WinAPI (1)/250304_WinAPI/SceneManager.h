@@ -17,7 +17,7 @@ public:
 	void Init();
 	void Release();
 	void Update(float TimeDelta);
-	void Render(HDC hdc);
+	void Render(ID2D1HwndRenderTarget* renderTarget);
 
 	HRESULT ChangeScene(string akey);
 	HRESULT ChangeScene(string key, string loadingKey);

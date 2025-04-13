@@ -13,6 +13,6 @@ void YongScene::Update(float TimeDelta)
 {
 }
 
-void YongScene::Render(HDC hdc)
+void YongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }

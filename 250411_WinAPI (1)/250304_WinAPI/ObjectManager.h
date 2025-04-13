@@ -15,7 +15,7 @@ public:
 
     void RemoveObject(int id);
 
-    void Render(HDC hdc);
+    void Render(ID2D1HwndRenderTarget* renderTarget);
 
     void Update(float TimeDelta);
 

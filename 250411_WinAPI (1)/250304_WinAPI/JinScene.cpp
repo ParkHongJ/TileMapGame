@@ -13,6 +13,6 @@ void JinScene::Update(float TimeDelta)
 {
 }
 
-void JinScene::Render(HDC hdc)
+void JinScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }

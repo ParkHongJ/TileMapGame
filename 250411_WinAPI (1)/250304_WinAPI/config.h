@@ -9,10 +9,10 @@
 #include <bitset>
 #include <map>
 #include <vector>
-#include <d2d1.h>
+#include <d2d1.h>             // 기본 D2D (선택적)
 #include <wrl/client.h>
-#pragma comment(lib, "d2d1.lib")
 
+#pragma comment(lib, "d2d1.lib")
 using Microsoft::WRL::ComPtr;
 
 using namespace std;

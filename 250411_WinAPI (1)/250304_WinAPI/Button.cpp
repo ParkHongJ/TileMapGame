@@ -4,7 +4,7 @@
 HRESULT Button::Init(int posX, int posY)
 {
 	state = ButtonState::None;
-	image = ImageManager::GetInstance()->
+	/*image = ImageManager::GetInstance()->
 		AddImage("¹öÆ°", L"Image/button.bmp", 122, 62, 1, 2);
 	if (image == nullptr)
 	{
@@ -19,7 +19,7 @@ HRESULT Button::Init(int posX, int posY)
 	rc.right = rc.left + image->GetFrameWidth();
 	rc.bottom = rc.top + image->GetFrameHeight();
 
-	buttonFunc = nullptr;
+	buttonFunc = nullptr;*/
 
     return S_OK;
 }
@@ -53,16 +53,16 @@ void Button::Update(float TimeDelta)
 	}
 }
 
-void Button::Render(HDC hdc)
+void Button::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	switch (state)
 	{
 	case ButtonState::None:
 	case ButtonState::Up:
-		image->FrameRender(hdc, pos.x, pos.y, 0, 0);
+		//image->FrameRender(hdc, pos.x, pos.y, 0, 0);
 		break;
 	case ButtonState::Down:
-		image->FrameRender(hdc, pos.x, pos.y, 0, 1);
+		//image->FrameRender(hdc, pos.x, pos.y, 0, 1);
 		break;
 	}
 }

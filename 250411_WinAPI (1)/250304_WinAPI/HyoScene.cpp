@@ -13,6 +13,6 @@ void HyoScene::Update(float TimeDelta)
 {
 }
 
-void HyoScene::Render(HDC hdc)
+void HyoScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }

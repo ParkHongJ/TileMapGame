@@ -22,14 +22,14 @@ void ObjectManager::RemoveObject(int id)
 {
 }
 
-void ObjectManager::Render(HDC hdc)
+void ObjectManager::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	for (auto& obj : m_objects)
 	{
 		if (obj.second->IsActive() == false	||
 			obj.second->IsHidden())
 			continue;
-		obj.second->Render(hdc);
+		obj.second->Render(renderTarget);
 	}
 }
 

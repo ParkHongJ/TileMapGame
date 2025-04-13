@@ -16,7 +16,7 @@ void HongScene::Update(float TimeDelta)
 	ObjectManager::GetInstance()->Update(TimeDelta);
 }
 
-void HongScene::Render(HDC hdc)
+void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	ObjectManager::GetInstance()->Render(hdc);
+	ObjectManager::GetInstance()->Render(renderTarget);
 }

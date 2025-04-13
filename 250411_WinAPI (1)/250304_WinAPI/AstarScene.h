@@ -53,7 +53,7 @@ public:
 	HRESULT Init(int idX, int idY);
 	virtual void Release();
 	virtual void Update();
-	virtual void Render(HDC hdc);
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
 
 	void SetColor(COLORREF color);
 	void SetType(AstarTileType type) { this->type = type; }
@@ -82,7 +82,7 @@ public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
-	virtual void Render(HDC hdc) override;
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 	void FindPath();
 	void AddOpenList(AstarTile* currTile);

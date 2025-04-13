@@ -13,7 +13,7 @@ void GameObject::Update(float TimeDelta)
 {
 }
 
-void GameObject::Render(HDC hdc)
+void GameObject::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }
 

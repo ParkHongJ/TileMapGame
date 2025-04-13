@@ -15,6 +15,9 @@
 
 HRESULT MainGame::Init()
 {
+	if (FAILED(InitD2D()))
+		return E_FAIL;
+
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init();
@@ -34,39 +37,37 @@ HRESULT MainGame::Init()
 	//Legacy
 	//hdc = GetDC(g_hWnd);
 
-	if (FAILED(InitD2D()))
-		return E_FAIL;
 
-	backBuffer = new Image();
+	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Image/char_lemon.png", m_pRenderTarget.Get());
+	/*backBuffer = new Image();
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
 	{
 		MessageBox(g_hWnd, 
 			TEXT("백버퍼 생성 실패"), TEXT("경고"), MB_OK);
 		return E_FAIL;
-	}
+	}*/
 
 	return S_OK;
 }
 
 void MainGame::Release()
 {
-	if (backBuffer)
+	/*if (backBuffer)
 	{
 		backBuffer->Release();
 		delete backBuffer;
 		backBuffer = nullptr;
-	}
+	}*/
 
 	//Legacy
 	//ReleaseDC(g_hWnd, hdc);
 
-	m_pBrush.Reset();
-	m_pRenderTarget.Reset();
-	m_pFactory.Reset();
 
 	SceneManager::GetInstance()->Release();
 	KeyManager::GetInstance()->Release();
 	ImageManager::GetInstance()->Release();
+
+	CoUninitialize(); // 프로그램 종료 시 정리
 }
 
 void MainGame::Update()
@@ -129,6 +130,7 @@ MainGame::~MainGame()
 
 HRESULT MainGame::InitD2D()
 {
+	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 	// Factory 생성
 	HRESULT hr = D2D1CreateFactory(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
@@ -165,11 +167,8 @@ void MainGame::BeginDraw()
 
 void MainGame::Draw()
 {
-	// 예: 직사각형 하나 그리기
-	m_pRenderTarget->FillRectangle(
-		D2D1::RectF(100, 100, 200, 200),
-		m_pBrush.Get()
-	);
+	//이게 맵이라고 생각해
+	backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
 
 	// Legacy
 	//// 백버퍼에 먼저 복사

@@ -8,9 +8,9 @@ HRESULT TilemapTool::Init()
 {
 	SetClientRect(g_hWnd, TILEMAPTOOL_X, TILEMAPTOOL_Y);
 
-	sampleTile = ImageManager::GetInstance()->AddImage(
+	/*sampleTile = ImageManager::GetInstance()->AddImage(
 		"배틀시티_샘플타일", L"Image/mapTiles.bmp", 640, 288,
-		SAMPLE_TILE_X, SAMPLE_TILE_Y);
+		SAMPLE_TILE_X, SAMPLE_TILE_Y);*/
 
 	// 샘플 타일 영역
 	rcSampleTile.left = TILEMAPTOOL_X - sampleTile->GetWidth();
@@ -96,23 +96,23 @@ void TilemapTool::Render(HDC hdc)
 	PatBlt(hdc, 0, 0, TILEMAPTOOL_X, TILEMAPTOOL_Y, WHITENESS);
 
 	// 메인 타일 영역
-	for (int i = 0; i < TILE_X * TILE_Y; ++i)
-	{
-		sampleTile->FrameRender(hdc, tileInfo[i].rc.left,
-			tileInfo[i].rc.top, tileInfo[i].frameX,
-			tileInfo[i].frameY, false, false);
-	}
+	//for (int i = 0; i < TILE_X * TILE_Y; ++i)
+	//{
+	//	sampleTile->FrameRender(hdc, tileInfo[i].rc.left,
+	//		tileInfo[i].rc.top, tileInfo[i].frameX,
+	//		tileInfo[i].frameY, false, false);
+	//}
 
-	// 샘플 타일 영역
-	sampleTile->Render(hdc, TILEMAPTOOL_X - sampleTile->GetWidth(), 0);
+	//// 샘플 타일 영역
+	//sampleTile->Render(hdc, TILEMAPTOOL_X - sampleTile->GetWidth(), 0);
 
-	// 선택된 타일
-	sampleTile->FrameRender(hdc, 
-		TILEMAPTOOL_X - sampleTile->GetWidth(),
-		sampleTile->GetHeight() + 100,
-		selectedTile.x, selectedTile.y, false, false);
+	//// 선택된 타일
+	//sampleTile->FrameRender(hdc, 
+	//	TILEMAPTOOL_X - sampleTile->GetWidth(),
+	//	sampleTile->GetHeight() + 100,
+	//	selectedTile.x, selectedTile.y, false, false);
 
-	if (saveButton) saveButton->Render(hdc);
+	//if (saveButton) saveButton->Render(hdc);
 }
 
 void TilemapTool::Save()
