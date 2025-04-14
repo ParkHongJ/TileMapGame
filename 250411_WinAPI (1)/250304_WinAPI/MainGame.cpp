@@ -43,9 +43,6 @@ HRESULT MainGame::Init()
 		"TestJunyongWalk", L"Image/TestJunyongWalk.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
-		"Character_Iris", L"Image/char_iris.bmp", m_pRenderTarget.Get());
-
-	ImageManager::GetInstance()->AddImage(
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(

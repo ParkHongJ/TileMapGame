@@ -126,6 +126,9 @@
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
     </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Tae</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoCharacter.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

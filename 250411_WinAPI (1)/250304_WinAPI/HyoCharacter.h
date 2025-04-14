@@ -16,10 +16,8 @@ public:
 
 private:
 
-	FPOINT pos; 
 	int dir;
 	Image* playerIris;
-
 	PlayerState state;
 };
 

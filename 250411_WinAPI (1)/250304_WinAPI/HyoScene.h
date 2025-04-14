@@ -1,8 +1,10 @@
 #pragma once
 #include "Scene.h"
 #include "GameObject.h"
+#include "HyoCharacter.h"
 
 class Image;
+class HyoCharacter;
 class HyoScene : public Scene
 {
 public:
@@ -16,6 +18,7 @@ public:
 
 private:
 	Image* background;
+	HyoCharacter* playerIris;
 
 };
 
