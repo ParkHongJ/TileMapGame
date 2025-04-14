@@ -32,6 +32,7 @@ private:
 	bool attackPressed;
 
 	bool isLookUpPaused;
+	bool isLookDownPaused;
 
 
 
@@ -41,6 +42,7 @@ public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
+	void SetAnimationRange(PlayerState state);
 	virtual void Render(HDC hdc) override;
 
 

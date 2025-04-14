@@ -55,9 +55,21 @@ void Character::Update(float TimeDelta)
 
     if (prevState != state)
     {
-        frameTime = 0.0f;
-        //currFrameInd = { 0,0 }; 
+ 
+        bool skipReset =
+            (prevState == PlayerState::LOOKUP_START && state == PlayerState::LOOKUP_RELEASE) ||
+            (prevState == PlayerState::LOOKDOWN_START && state == PlayerState::LOOKDOWN_RELEASE);
+
+        if (!skipReset)
+        {
+          
+            SetAnimationRange(state);
+
+            frameTime = 0.0f;
+            currFrameInd = currFrameInfo.startFrame;
+        }
     }
+
 
     switch (state)
     {
@@ -82,6 +94,34 @@ void Character::Update(float TimeDelta)
         default: break;
     }
 }
+
+void Character::SetAnimationRange(PlayerState state)
+{
+    switch (state)
+    {
+    case PlayerState::IDLE:
+        currFrameInfo = { {0, 0}, {0, 0} };
+        break;
+
+    case PlayerState::MOVE:
+        currFrameInfo = { {1, 0}, {9, 0} };
+        break;
+    case PlayerState::LOOKUP_START:
+    case PlayerState::LOOKUP_RELEASE:
+        currFrameInfo = { {0, 8}, {6, 8} };
+        break;
+
+    case PlayerState::LOOKDOWN_START:
+    case PlayerState::LOOKDOWN_RELEASE:
+        currFrameInfo = { {0, 1}, {4, 1} };
+        break;
+        
+    default:
+        //currFrameInfo = { {0, 0}, {0, 0} };
+        break;
+    }
+}
+
 
 void Character::Render(HDC hdc)
 {
@@ -123,26 +163,7 @@ void Character::HandleInput(float TimeDelta)
         Pos.x += speed * dir.x * TimeDelta;
         hasInput = true;
     }
-    if (km->IsStayKeyDown(VK_UP))
-    {
-        if (state != PlayerState::LOOKUP_RELEASE)
-        {
-            state = PlayerState::LOOKUP_START;
-            hasInput = true;
-        }
-    }
-    if (state == PlayerState::LOOKUP_START && km->IsOnceKeyUp(VK_UP))
-    {
-        state = PlayerState::LOOKUP_RELEASE; 
-        isLookUpPaused = false;
-        return;
-    }
 
-    if (km->IsStayKeyDown(VK_DOWN))
-    {
-        state = PlayerState::LOOKDOWN_START;
-        hasInput = true;
-    }
     if (km->IsOnceKeyDown(VK_SPACE))
     {
         state = PlayerState::JUMP;
@@ -150,7 +171,45 @@ void Character::HandleInput(float TimeDelta)
         hasInput = true;
     }
 
-    if (!hasInput && state != PlayerState::LOOKUP_START && state != PlayerState::LOOKUP_RELEASE)
+    if (state != PlayerState::MOVE)
+    {
+        if (km->IsStayKeyDown(VK_UP))
+        {
+            if (state != PlayerState::LOOKUP_RELEASE)
+            {
+                state = PlayerState::LOOKUP_START;
+                hasInput = true;
+            }
+        }
+        if (state == PlayerState::LOOKUP_START && km->IsOnceKeyUp(VK_UP))
+        {
+            state = PlayerState::LOOKUP_RELEASE;
+            isLookUpPaused = false;
+            return;
+        }
+
+        if (km->IsStayKeyDown(VK_DOWN))
+        {
+            if (state != PlayerState::LOOKUP_RELEASE)
+            {
+                state = PlayerState::LOOKDOWN_START;
+                hasInput = true;
+            }
+        }
+        if (state == PlayerState::LOOKDOWN_START && km->IsOnceKeyUp(VK_DOWN))
+        {
+            state = PlayerState::LOOKDOWN_RELEASE;
+            isLookDownPaused = false;
+            return;
+        }
+    }
+   
+
+    if (!hasInput &&
+        state != PlayerState::LOOKUP_START &&
+        state != PlayerState::LOOKUP_RELEASE &&
+        state != PlayerState::LOOKDOWN_START &&
+        state != PlayerState::LOOKDOWN_RELEASE)
     {
         state = PlayerState::IDLE;
     }
@@ -176,8 +235,8 @@ void Character::UpdateIdle()
 
 void Character::UpdateMove(float TimeDelta)
 {
-    currFrameInfo.startFrame = { 1,0 };
-    currFrameInfo.endFrame = { 9,0 };
+    isLookUpPaused = false;
+    isLookDownPaused = false;
 
     if (dir.x != 0)
     {
@@ -197,10 +256,6 @@ void Character::UpdateMove(float TimeDelta)
 
 void Character::UpdateLookUp(float TimeDelta)
 {
-    currFrameInfo.startFrame = { 0, 8 };
-    currFrameInfo.endFrame = { 6, 8 };
-    currFrameInd.y = currFrameInfo.startFrame.y;
-
     frameTime += TimeDelta;
 
     if (frameTime >= ANIMATION_FRAME_TIME)
@@ -213,10 +268,10 @@ void Character::UpdateLookUp(float TimeDelta)
                 currFrameInd.x++;
 
              if (currFrameInd.x == currFrameInfo.endFrame.x / 2)
-                isLookUpPaused = true;
+                 isLookUpPaused = true;
         }
 
-         else if (state == PlayerState::LOOKUP_RELEASE)
+        if (state == PlayerState::LOOKUP_RELEASE)
         {
             currFrameInd.x++;
 
@@ -229,12 +284,34 @@ void Character::UpdateLookUp(float TimeDelta)
     }
 }
 
-
-
-
-
 void Character::UpdateLookDown(float TimeDelta)
 {
+    frameTime += TimeDelta;
+
+    if (frameTime >= ANIMATION_FRAME_TIME)
+    {
+        frameTime = 0.f;
+
+        if (state == PlayerState::LOOKDOWN_START)
+        {
+            if (!isLookDownPaused)
+                currFrameInd.x++;
+
+            if (currFrameInd.x == currFrameInfo.endFrame.x / 2)
+                isLookDownPaused = true;
+        }
+
+        if (state == PlayerState::LOOKDOWN_RELEASE)
+        {
+            currFrameInd.x++;
+
+            if (currFrameInd.x >= currFrameInfo.endFrame.x)
+            {
+                currFrameInd.x = currFrameInfo.endFrame.x;
+                state = PlayerState::IDLE;
+            }
+        }
+    }
 }
 
 void Character::UpdateJump(float TimeDelta)
