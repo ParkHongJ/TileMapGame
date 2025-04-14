@@ -1,7 +1,12 @@
 #pragma once 
 #include "Scene.h"
+
+class Image;
 class JinScene : public Scene
 {
+private:
+	Image* tempImage;
+	POINT pos;
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;
