@@ -11,7 +11,7 @@ public:
 
     void Init();
 
-    void AddObject(int id, GameObject* obj);
+    void AddObject(GameObject* obj);
 
     void RemoveObject(int id);
 
