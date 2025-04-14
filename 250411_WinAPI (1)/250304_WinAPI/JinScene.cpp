@@ -3,7 +3,7 @@
 
 HRESULT JinScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
-    ImageManager::GetInstance()->AddImage("임시 이미지", TEXT("image/rocket.bmp"), 52, 64, true, RGB(255, 0, 255));
+    ImageManager::GetInstance()->AddImage("임시 이미지", TEXT("image/rocket.bmp"), renderTarget);
     tempImage = ImageManager::GetInstance()->FindImage("임시 이미지");
     if (!tempImage)
         return E_FAIL;
@@ -25,6 +25,6 @@ void JinScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
     if (tempImage)
     {
-        tempImage->Render(hdc, pos.x, pos.y);
+        tempImage->Render(renderTarget, pos.x, pos.y);
     }
 }
