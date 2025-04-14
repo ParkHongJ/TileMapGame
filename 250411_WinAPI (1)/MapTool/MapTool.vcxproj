@@ -148,6 +148,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TileMapTool.h" />
     <ClInclude Include="ToolConfig.h" />
+    <ClInclude Include="EditorTile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\250304_WinAPI\ThirdParty\Imgui\imgui.cpp" />

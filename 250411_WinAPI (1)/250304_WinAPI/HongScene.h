@@ -1,10 +1,13 @@
 #pragma once
 #include "Scene.h"
+class Tile;
 class HongScene : public Scene
 {
 private:
 	Image* backGround;
 
+	Tile* tileMap[16][16];
+	void LoadTile(const char* path);
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;

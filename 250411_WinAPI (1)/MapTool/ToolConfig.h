@@ -18,3 +18,4 @@ using Microsoft::WRL::ComPtr;
 #include "imgui_impl_dx11.h"
 
 static unsigned int g_ResizeWidth = 0, g_ResizeHeight = 0;
+

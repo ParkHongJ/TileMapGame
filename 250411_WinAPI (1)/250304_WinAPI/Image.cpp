@@ -328,6 +328,36 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	);
 }
 
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float anchorX, float anchorY, float srcX, float srcY, float srcW, float srcH)
+{
+	if (!imageInfo->bitmap) return;
+
+	D2D1_SIZE_F bmpSize = imageInfo->bitmap->GetSize();
+
+	// 전체 이미지 크기 사용 시 기본 설정
+	if (srcW <= 0.f) srcW = bmpSize.width;
+	if (srcH <= 0.f) srcH = bmpSize.height;
+
+	D2D1_RECT_F srcRect = D2D1::RectF(
+		srcX,
+		srcY,
+		srcX + srcW,
+		srcY + srcH
+	);
+
+	float destW = srcW * scaleX;
+	float destH = srcH * scaleY;
+
+	D2D1_RECT_F destRect = D2D1::RectF(
+		x - destW * anchorX,
+		y - destH * anchorY,
+		x - destW * anchorX + destW,
+		y - destH * anchorY + destH
+	);
+
+	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+}
+
 void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY)
 {
 	if (!imageInfo || !imageInfo->bitmap) return;

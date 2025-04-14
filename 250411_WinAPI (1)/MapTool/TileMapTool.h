@@ -4,23 +4,7 @@
 #include "imgui.h"
 #include "config.h"
 #include <unordered_map>
-
-enum class DecoType {
-    None, A, B, C, D
-};
-
-struct Deco {
-    DecoType type;
-    bool flipH = false;
-};
-
-struct Tile {
-    int atlasX = -1; // Atlas 내 타일 좌표
-    int atlasY = -1;
-    bool valid = false;
-
-    std::vector<Deco> decos; // 이 타일에 붙는 데코 목록
-};
+#include "EditorTile.h"
 
 constexpr int mapWidth = 16;
 constexpr int mapHeight = 16;
@@ -61,6 +45,6 @@ private:
     ImVec2 cameraOffset = ImVec2(0, 0);
 
     unordered_map<DecoType, ImTextureID> decoTextures;
-    Tile tileMap[mapHeight][mapWidth]; // 2D 타일맵
+    EditorTile tileMap[mapHeight][mapWidth]; // 2D 타일맵
 };
 

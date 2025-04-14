@@ -121,6 +121,9 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case 'w': case 'W':
 			SceneManager::GetInstance()->ChangeScene("СјМЎ");
 			break;
+		case '3':
+			SceneManager::GetInstance()->ChangeScene("ШЋСи");
+			break;
 		}
 		break;
 	case WM_LBUTTONDOWN:

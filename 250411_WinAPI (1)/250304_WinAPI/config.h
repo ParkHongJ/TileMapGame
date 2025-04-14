@@ -29,7 +29,7 @@ using namespace std;
 #define WINSIZE_Y	500
 #define TILEMAPTOOL_X	1420
 #define TILEMAPTOOL_Y	700
-
+#define GAME_TILE_SIZE 64
 #define DEG_TO_RAD(degree) ((3.14 / 180.0) * degree)
 #define RAD_TO_DEG(radian) ((180.0 / 3.14) * radian)
 

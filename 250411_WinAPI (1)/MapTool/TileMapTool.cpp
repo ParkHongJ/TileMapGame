@@ -168,11 +168,11 @@ void TileMapTool::DrawPaletteUI()
 
     if (ImGui::Button("Save TileMap"))
     {
-        //SaveTileMapToFile("map1.tilemap");
+        SaveTileMapToFile("../250304_WinAPI/Data/map1.tilemap");
     }
     if (ImGui::Button("Load TileMap"))
     {
-        //LoadTileMapFromFile("map1.tilemap");
+        LoadTileMapFromFile("../250304_WinAPI/Data/map1.tilemap");
     }
 
     ImGui::End();
@@ -237,7 +237,9 @@ void TileMapTool::DrawTileMap()
     }
 
     // 클릭해서 타일 배치
-    if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+    if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
+        selectedTileX >= 0 && selectedTileY >= 0)
+    {
         ImVec2 mouse = io.MousePos;
         ImVec2 local = (mouse - origin) / zoom;
 
@@ -245,7 +247,7 @@ void TileMapTool::DrawTileMap()
         int ty = (int)floorf(local.y / tileSize);
 
         if (tx >= 0 && tx < mapWidth && ty >= 0 && ty < mapHeight) {
-            tileMap[ty][tx] = { selectedTileX, selectedTileY, true };
+            tileMap[ty][tx] = { selectedTileX, selectedTileY, true, { (float)tx, (float)ty} };
         }
     }
 
@@ -257,7 +259,7 @@ void TileMapTool::SaveTileMapToFile(const char* path)
     FILE* fp = fopen(path, "wb");
     if (!fp) return;
 
-    fwrite(&tileMap[0][0], sizeof(Tile), mapWidth * mapHeight, fp);
+    fwrite(&tileMap[0][0], sizeof(EditorTile), mapWidth * mapHeight, fp);
     fclose(fp);
 }
 
@@ -266,48 +268,48 @@ void TileMapTool::LoadTileMapFromFile(const char* path)
     FILE* fp = fopen(path, "rb");
     if (!fp) return;
 
-    fread(&tileMap[0][0], sizeof(Tile), mapWidth * mapHeight, fp);
+    fread(&tileMap[0][0], sizeof(EditorTile), mapWidth * mapHeight, fp);
     fclose(fp);
 }
 
 void TileMapTool::UpdateTileDecos()
 {
-    for (int y = 0; y < mapHeight; ++y)
-    {
-        for (int x = 0; x < mapWidth; ++x)
-        {
-            Tile& tile = tileMap[y][x];
-            tile.decos.clear();
+    //for (int y = 0; y < mapHeight; ++y)
+    //{
+    //    for (int x = 0; x < mapWidth; ++x)
+    //    {
+    //        Tile& tile = tileMap[y][x];
+    //        tile.decos.clear();
 
-            if (!tile.valid) continue;
+    //        if (!tile.valid) continue;
 
-            // 위쪽 없음 → A 데코
-            if (y > 0 && !tileMap[y - 1][x].valid)
-                tile.decos.push_back({ DecoType::A });
+    //        // 위쪽 없음 → A 데코
+    //        if (y > 0 && !tileMap[y - 1][x].valid)
+    //            tile.decos.push_back({ DecoType::A });
 
-            // 아래쪽 없음 → B 데코
-            if (y < mapHeight - 1 && !tileMap[y + 1][x].valid)
-                tile.decos.push_back({ DecoType::B });
+    //        // 아래쪽 없음 → B 데코
+    //        if (y < mapHeight - 1 && !tileMap[y + 1][x].valid)
+    //            tile.decos.push_back({ DecoType::B });
 
-            // 왼쪽 있음
-            if (x > 0 && tileMap[y][x - 1].valid)
-            {
-                bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
-                if (upperEmpty)
-                    tile.decos.push_back({ DecoType::C });
-                else
-                    tile.decos.push_back({ DecoType::D });
-            }
+    //        // 왼쪽 있음
+    //        if (x > 0 && tileMap[y][x - 1].valid)
+    //        {
+    //            bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
+    //            if (upperEmpty)
+    //                tile.decos.push_back({ DecoType::C });
+    //            else
+    //                tile.decos.push_back({ DecoType::D });
+    //        }
 
-            // 오른쪽 있음
-            if (x < mapWidth - 1 && tileMap[y][x + 1].valid)
-            {
-                bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
-                if (upperEmpty)
-                    tile.decos.push_back({ DecoType::C, true }); // flip horizontal
-                else
-                    tile.decos.push_back({ DecoType::D, true }); // flip horizontal
-            }
-        }
-    }
+    //        // 오른쪽 있음
+    //        if (x < mapWidth - 1 && tileMap[y][x + 1].valid)
+    //        {
+    //            bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
+    //            if (upperEmpty)
+    //                tile.decos.push_back({ DecoType::C, true }); // flip horizontal
+    //            else
+    //                tile.decos.push_back({ DecoType::D, true }); // flip horizontal
+    //        }
+    //    }
+    //}
 }
