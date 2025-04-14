@@ -1,6 +1,7 @@
 #include "HyoScene.h"
 #include "ImageManager.h"
 #include "Image.h"
+#include "CommonFunction.h"
 
 HRESULT HyoScene::Init()
 {
@@ -8,7 +9,7 @@ HRESULT HyoScene::Init()
 
 	background = new Image();
 
-	if (FAILED(backGround->Init(TEXT("Image/bg_cave.bmp"), WINSIZE_X, WINSIZE_Y)))
+	if (FAILED(background->Init(TEXT("Image/bg_cave.bmp"), WINSIZE_X, WINSIZE_Y)))
 	{
 		MessageBox(g_hWnd,
 			TEXT("Image/bg_cave.bmp 생성 실패"), TEXT("경고"), MB_OK);

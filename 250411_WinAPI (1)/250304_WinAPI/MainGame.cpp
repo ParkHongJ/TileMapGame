@@ -29,7 +29,7 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 
 	SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
-	SceneManager::GetInstance()->ChangeScene("A*알고리즘");
+	SceneManager::GetInstance()->ChangeScene("효진");
 
 	hdc = GetDC(g_hWnd);
 
