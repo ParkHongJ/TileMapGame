@@ -2,31 +2,17 @@
 #include "Image.h"
 #include "TestAnimationObject.h"
 
-HRESULT YongScene::Init()
+HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
     Test = new TestAnimationObject();
     Test->Init();
 
-    backGround = new Image();
-    if (FAILED(backGround->Init(TEXT("Image/BackGround.bmp"), WINSIZE_X, WINSIZE_Y)))
-    {
-        MessageBox(g_hWnd,
-            TEXT("Image/backGround.bmp 생성 실패"), TEXT("경고"), MB_OK);
-        return E_FAIL;
-    }
-
+    backGround = ImageManager::GetInstance()->FindImage("BackBuffer");
     return S_OK;
 }
 
 void YongScene::Release()
 {
-    if (backGround)
-    {
-        backGround->Release();
-        delete backGround;
-        backGround = nullptr;
-    }
-
     if (Test)
     {
         Test->Release();
@@ -42,6 +28,6 @@ void YongScene::Update(float TimeDelta)
 
 void YongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-    backGround->Render(hdc);
-    Test->Render(hdc);
+    backGround->Render(renderTarget, 0, 0);
+    Test->Render(renderTarget);
 }

@@ -2,7 +2,7 @@
 #include "Image.h"
 #include "CommonFunction.h"
 
-HRESULT BattleScene::Init()
+HRESULT BattleScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 	SetClientRect(g_hWnd, WINSIZE_X, WINSIZE_Y);
 
@@ -24,12 +24,12 @@ HRESULT BattleScene::Init()
 void BattleScene::Release()
 {
 
-	if (backGround)
+	/*if (backGround)
 	{
 		backGround->Release();
 		delete backGround;
 		backGround = nullptr;
-	}
+	}*/
 }
 
 void BattleScene::Update(float TimeDelta)

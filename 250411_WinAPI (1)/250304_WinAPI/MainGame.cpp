@@ -20,7 +20,7 @@ HRESULT MainGame::Init()
 
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
-	SceneManager::GetInstance()->Init();
+	SceneManager::GetInstance()->Init(m_pRenderTarget.Get());
 
 	SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
 	SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
@@ -31,10 +31,16 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 
-	SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
+	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 
 
-	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Image/char_lemon.png", m_pRenderTarget.Get());
+	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
+	
+	ImageManager::GetInstance()->AddImage(
+		"TestJunYongAttack", L"Image/TestJunYongAttack.bmp", m_pRenderTarget.Get());
+
+	ImageManager::GetInstance()->AddImage(
+		"TestJunyongWalk", L"Image/TestJunyongWalk.bmp", m_pRenderTarget.Get());
 
 	SceneManager::GetInstance()->ChangeScene("전투씬_1");
 
@@ -100,7 +106,7 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			SceneManager::GetInstance()->ChangeScene("전투씬_1");
 			break;
 		case 'd': case 'D':
-			SceneManager::GetInstance()->ChangeScene("홍준");
+			SceneManager::GetInstance()->ChangeScene("준용");
 			break;
 		}
 		break;

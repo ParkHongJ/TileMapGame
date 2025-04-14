@@ -1,6 +1,6 @@
 #include "JinScene.h"
 
-HRESULT JinScene::Init()
+HRESULT JinScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
     return E_NOTIMPL;
 }

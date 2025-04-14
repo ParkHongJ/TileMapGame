@@ -1,6 +1,6 @@
 #include "HongScene.h"
 #include "ObjectManager.h"
-HRESULT HongScene::Init()
+HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 	ObjectManager::GetInstance()->Init();
 	return S_OK;

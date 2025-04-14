@@ -16,7 +16,7 @@ public:
 
 	virtual HRESULT Init();
 	virtual bool Update(float TimeDelta);
-	virtual void Render(HDC hdc);
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
 	virtual void Release();
 
 	Animation(string _Key, CallbackType&& _Callback)

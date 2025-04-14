@@ -13,8 +13,8 @@ Animation::Animation(Image* _Image, bool _IsLoop) :
 	CurFrame(0), CurFrameX(0), CurFrameY(0), FrameSpeed(1.f), CurElapseTime(0.f), PreElapseTime(0.f),
 	IsFlip(false), IsLoop(_IsLoop), IsEndAnimation(false), IsStayMaxFrame(false), AnimDir(AnimationDir::DIR_ORIGINAL), image(_Image)
 {
-	MaxFrameX = _Image->GetMaxFrameX();
-	MaxFrameY = _Image->GetMaxFrameY();
+	//MaxFrameX = _Image->GetMaxFrameX();
+	//MaxFrameY = _Image->GetMaxFrameY();
 	FrameSpeed = 10.f;
 }
 
@@ -90,9 +90,10 @@ void Animation::UpdateEvent()
 	}
 }
 
-void Animation::Render(HDC hdc)
+void Animation::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	image->FrameRender(hdc, 300, 300, CurFrame, CurFrameY, IsFlip);
+	//image->FrameRender(renderTarget, 300, 300, CurFrame, CurFrameY/*, IsFlip*/);
+	image->Render(renderTarget, 300, 300);
 }
 
 void Animation::Release()

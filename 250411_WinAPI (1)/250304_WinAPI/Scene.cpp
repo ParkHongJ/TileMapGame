@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-HRESULT Scene::Init()
+HRESULT Scene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 	return E_NOTIMPL;
 }

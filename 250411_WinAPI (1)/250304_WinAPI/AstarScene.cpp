@@ -59,7 +59,7 @@ void AstarTile::SetColor(COLORREF color)
 	hBrush = CreateSolidBrush(color);
 }
 
-HRESULT AstarScene::Init()
+HRESULT AstarScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 	for (int i = 0; i < ASTAR_TILE_COUNT; i++)	// 세로반복 (y)
 	{
@@ -117,7 +117,7 @@ void AstarScene::Update(float TimeDelta)
 
 	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RETURN))
 	{
-		SceneManager::GetInstance()->ChangeScene("전투씬_1", "로딩_1");
+		SceneManager::GetInstance()->ChangeScene("전투씬_1");
 	}
 }
 

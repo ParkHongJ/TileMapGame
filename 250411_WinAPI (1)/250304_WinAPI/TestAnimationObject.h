@@ -10,7 +10,7 @@ public:
 
 	virtual HRESULT Init() override;
 	virtual void Update(float TimeDelta) override;
-	virtual void Render(HDC hdc) override;
+	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;
 
 private:

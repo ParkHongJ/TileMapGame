@@ -1,6 +1,6 @@
 #include "HyoScene.h"
 
-HRESULT HyoScene::Init()
+HRESULT HyoScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 	return E_NOTIMPL;
 }

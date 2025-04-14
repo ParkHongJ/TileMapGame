@@ -1,6 +1,6 @@
 #include "TaeScene.h"
 
-HRESULT TaeScene::Init()
+HRESULT TaeScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
     return E_NOTIMPL;
 }

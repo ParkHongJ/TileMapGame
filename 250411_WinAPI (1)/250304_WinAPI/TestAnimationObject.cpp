@@ -5,17 +5,16 @@ HRESULT TestAnimationObject::Init()
 {
 	AnimManager = new AnimationManager();
 
-	Image* Temp = ImageManager::GetInstance()->AddImage(
-		"TestJunYongAttack", L"Image/TestJunYongAttack.bmp", 678, 113,
-		6, 1, true, RGB(255, 0, 255));
+	Image* Temp = ImageManager::GetInstance()->FindImage("TestJunYongAttack");
 
 	Animation* Anim = new Animation(Temp, false);
 	AnimManager->RegisterAnimation("공격", Anim);
 	AnimManager->RegisterAnimationEvent("공격", "Attack", 3.f, this, &TestAnimationObject::Attack, 123);
 
-	Temp = ImageManager::GetInstance()->AddImage(
+	Temp = ImageManager::GetInstance()->FindImage("TestJunyongWalk");
+		/*ImageManager::GetInstance()->AddImage(
 		"TestJunyongWalk", L"Image/TestJunyongWalk.bmp", 904, 113,
-		8, 1, true, RGB(255, 0, 255));
+		8, 1, true, RGB(255, 0, 255));*/
 
 	Anim = new Animation(Temp);
 	AnimManager->RegisterAnimation("걷기", Anim, true);
@@ -33,9 +32,9 @@ void TestAnimationObject::Update(float TimeDelta)
 	AnimManager->Update(TimeDelta);
 }
 
-void TestAnimationObject::Render(HDC hdc)
+void TestAnimationObject::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	AnimManager->Render(hdc);
+	AnimManager->Render(renderTarget);
 }
 
 void TestAnimationObject::Release()

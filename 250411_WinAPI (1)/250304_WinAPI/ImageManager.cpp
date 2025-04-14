@@ -28,7 +28,7 @@ void ImageManager::Release()
 	{
 		if (iter->second)
 		{
-		//	(iter->second)->Release();
+			(iter->second)->Release();
 			delete (iter->second);
 			(iter->second) = nullptr;
 		}
