@@ -120,6 +120,9 @@
     <ClCompile Include="AnimationManager.cpp">
       <Filter>MainGame\Scene\Yong</Filter>
     </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="AnimationManager.h">
       <Filter>MainGame\Scene\Yong</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

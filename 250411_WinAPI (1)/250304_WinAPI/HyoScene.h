@@ -1,5 +1,8 @@
 #pragma once
 #include "Scene.h"
+#include "GameObject.h"
+
+class Image;
 class HyoScene : public Scene
 {
 public:
@@ -10,5 +13,9 @@ public:
 
 	HyoScene() {};
 	virtual ~HyoScene() {};
+
+private:
+	Image* background;
+
 };
 

@@ -132,6 +132,7 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="HyoCharacter.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="HongScene.cpp" />
     <ClCompile Include="HyoScene.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="HyoCharacter.h" />
     <ClInclude Include="CommonFunction.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="GameObject.h" />

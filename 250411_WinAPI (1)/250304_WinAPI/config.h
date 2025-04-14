@@ -33,6 +33,14 @@ using namespace std;
 #define DEG_TO_RAD(degree) ((3.14 / 180.0) * degree)
 #define RAD_TO_DEG(radian) ((180.0 / 3.14) * radian)
 
+enum class PlayerState
+{
+	IDLE,
+	WALK,
+	JUMP
+
+};
+
 typedef struct tagFPOINT
 {
 	float x;

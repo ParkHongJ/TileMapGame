@@ -42,7 +42,14 @@ HRESULT MainGame::Init()
 	ImageManager::GetInstance()->AddImage(
 		"TestJunyongWalk", L"Image/TestJunyongWalk.bmp", m_pRenderTarget.Get());
 
-	SceneManager::GetInstance()->ChangeScene("전투씬_1");
+	ImageManager::GetInstance()->AddImage(
+		"Character_Iris", L"Image/char_iris.bmp", m_pRenderTarget.Get());
+
+	ImageManager::GetInstance()->AddImage(
+		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
+
+
+	SceneManager::GetInstance()->ChangeScene("효진");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
