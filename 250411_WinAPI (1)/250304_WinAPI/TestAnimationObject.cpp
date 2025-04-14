@@ -3,18 +3,33 @@
 
 HRESULT TestAnimationObject::Init()
 {
-	Animation* Anim = new Animation();
 	AnimManager = new AnimationManager();
 
-	AnimManager->RegisterAnimation("테스트", Anim, true);
-	AnimManager->RegisterAnimationEvent("테스트", "Guard", this, &TestAnimationObject::Guard);
+	Image* Temp = ImageManager::GetInstance()->AddImage(
+		"TestJunYongAttack", L"Image/TestJunYongAttack.bmp", 678, 113,
+		6, 1, true, RGB(255, 0, 255));
 
+	Animation* Anim = new Animation(Temp, false);
+	AnimManager->RegisterAnimation("공격", Anim);
+	AnimManager->RegisterAnimationEvent("공격", "Attack", 3.f, this, &TestAnimationObject::Attack, 123);
+
+	Temp = ImageManager::GetInstance()->AddImage(
+		"TestJunyongWalk", L"Image/TestJunyongWalk.bmp", 904, 113,
+		8, 1, true, RGB(255, 0, 255));
+
+	Anim = new Animation(Temp);
+	AnimManager->RegisterAnimation("걷기", Anim, true);
 	Count = 0;
 	return S_OK;
 }
 
 void TestAnimationObject::Update(float TimeDelta) 
 {
+	if (KeyManager::GetInstance()->IsOnceKeyDown('G'))
+	{
+		AnimManager->ChangeAnimation("공격");
+	}
+
 	AnimManager->Update(TimeDelta);
 }
 
@@ -35,7 +50,8 @@ void TestAnimationObject::Release()
 
 void TestAnimationObject::Attack(int _Test)
 {
-	int i = 5;
+	int i = _Test;
+	int j = 5;
 }
 
 void TestAnimationObject::Guard()

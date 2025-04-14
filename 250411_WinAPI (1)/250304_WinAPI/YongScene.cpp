@@ -43,4 +43,5 @@ void YongScene::Update(float TimeDelta)
 void YongScene::Render(HDC hdc)
 {
     backGround->Render(hdc);
+    Test->Render(hdc);
 }

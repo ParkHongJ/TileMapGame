@@ -8,15 +8,16 @@ class Image;
 
 enum class AnimationDir { DIR_ORIGINAL, DIR_REVERSE };
 
-class Animation : public GameObject
+class Animation
 {
 public:
 	Animation();
+	Animation(Image* _Image, bool _IsLoop = true);
 
-	virtual HRESULT Init() override;
-	virtual void Update(float TimeDelta) override;
-	virtual void Render(HDC hdc) override;
-	virtual void Release() override;
+	virtual HRESULT Init();
+	virtual bool Update(float TimeDelta);
+	virtual void Render(HDC hdc);
+	virtual void Release();
 
 	Animation(string _Key, CallbackType&& _Callback)
 	{
@@ -24,29 +25,32 @@ public:
 	};
 
 	template<typename T, typename Ret, typename... Args>
-	Animation(string _Key, T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
+	Animation(string _Key, float _Time, T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
 	{
 		Events[_Key] = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+		EventTimes[_Time] = _Key;
 	}
 
 	template<typename T, typename Ret, typename... Args>
-	inline bool RegisterEvent(string _Key, T* _Owner, Ret(T::*_MemFunc)(Args...), Args&&... _Args)
+	inline bool RegisterEvent(string _Key, float _Time, T* _Owner, Ret(T::*_MemFunc)(Args...), Args&&... _Args)
 	{
 		bool IsExist = Events.end() != Events.find(_Key);
 		if (false == IsExist)
 		{
 			Events[_Key] = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+			EventTimes[_Time] = _Key;
 		}
 		return !IsExist;
 	}
 
 	template<typename T, typename Ret, typename... Args>
-	inline bool ChangeEvent(string _Key, T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
+	inline bool ChangeEvent(string _Key, float _Time, T* _Owner, Ret(T::* _MemFunc)(Args...), Args&&... _Args)
 	{
 		bool IsExist = Events.end() != Events.find(_Key);
 		if (true == IsExist)
 		{
 			Events[_Key] = [_Owner, _MemFunc, _Args...]() { (_Owner->*_MemFunc)(_Args...); };
+			EventTimes[_Time] = _Key;
 		}
 		return IsExist;
 	}
@@ -54,7 +58,8 @@ public:
 	bool PlayEvent();
 	bool PlayEvent(string _Key);
 
-	void ResetAnimation();
+	void ResetAnimationState();
+	void UpdateEvent();
 
 public:
 	inline void SetImage(Image* _Image) { image = _Image; };
@@ -65,6 +70,7 @@ public:
 private:
 	Image* image;
 	map<string, CallbackType> Events;
+	map<float, string> EventTimes;
 
 	// 애니메이션 관련
 
@@ -78,9 +84,11 @@ private:
 	int CurFrameY;
 
 	float FrameSpeed;
-	float ElapseTime;
+	float CurElapseTime;
+	float PreElapseTime;
 
 	bool IsFlip;
+	bool IsLoop;
 	bool IsEndAnimation;
 	bool IsStayMaxFrame;
 

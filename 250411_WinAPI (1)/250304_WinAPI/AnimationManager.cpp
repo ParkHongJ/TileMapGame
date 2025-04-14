@@ -12,13 +12,10 @@ HRESULT AnimationManager::Init()
 
 void AnimationManager::Update(float TimeDelta)
 {
-	Animations[CurAnimKey]->Update(TimeDelta);
-
-	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
+	if (true == Animations[CurAnimKey]->Update(TimeDelta))
 	{
-		Animations[CurAnimKey]->PlayEvent();
+		ChangeAnimation(PreAnimKey);
 	}
-
 }
 
 void AnimationManager::Render(HDC hdc)
@@ -28,16 +25,54 @@ void AnimationManager::Render(HDC hdc)
 
 void AnimationManager::Release()
 {
+	for (auto& iter : Animations)
+	{
+		iter.second->Release();
+		delete iter.second;
+		iter.second = nullptr;
+	}
+
+	Animations.clear();
+
+	for (auto& iter : AnimationMontages)
+	{
+		iter.second->Release();
+		delete iter.second;
+		iter.second = nullptr;
+	}
+	
+	AnimationMontages.clear();
 }
 
-void AnimationManager::RegisterAnimation(string _Key, Animation* _Anim, bool _IsDefault)
+bool AnimationManager::RegisterAnimation(string _Key, Animation* _Anim, bool _IsDefault)
 {
-	Animations.emplace(_Key, _Anim);
+	bool IsExist = Animations.end() != Animations.find(_Key);
 
-	if (true == _IsDefault)
+	if (false == IsExist)
 	{
-		CurAnimKey = DefaultAnimKey =  _Key;
+		Animations.emplace(_Key, _Anim);
+
+		if (true == _IsDefault)
+		{
+			CurAnimKey = DefaultAnimKey = _Key;
+		}
 	}
+
+	return IsExist;
+}
+
+bool AnimationManager::ChangeAnimation(string _Key)
+{
+	bool IsSameAnim = _Key == CurAnimKey;
+
+	if (!IsSameAnim)
+	{
+		Animations[_Key]->ResetAnimationState();
+		PreAnimKey = CurAnimKey;
+		CurAnimKey = _Key;
+	}
+	
+	return !IsSameAnim;
 }
 
 
