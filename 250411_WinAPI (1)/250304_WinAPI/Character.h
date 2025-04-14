@@ -46,7 +46,7 @@ public:
 	virtual void Render(HDC hdc) override;
 
 
-	void HandleInput(float TimeDelta);
+	void HandleInput(PlayerState prevState, float TimeDelta);
 	bool PressAnyKey();
 
 
@@ -55,6 +55,8 @@ public:
 	void UpdateMove(float TimeDelta);
 	void UpdateLookUp(float TimeDelta);
 	void UpdateLookDown(float TimeDelta);
+	void UpdateLookDownMove(float TimeDelta);
+	void UpdateLookDownMoveStop(float TimeDelta);
 	void UpdateJump(float TimeDelta);
 	void UpdateFall(float TimeDelta);
 	void UpdateClimb(float TimeDelta);

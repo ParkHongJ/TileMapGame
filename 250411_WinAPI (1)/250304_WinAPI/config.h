@@ -51,9 +51,11 @@ enum class PlayerState {
     IDLE,               // 가만히 서 있음
     MOVE,               // 좌우 이동
     LOOKUP_START,       // 위 보기
-    LOOKUP_RELEASE,
+    LOOKUP_RELEASE,     // 위 보기 종료 시작
     LOOKDOWN_START,     // 아래 보기
-    LOOKDOWN_RELEASE,
+    LOOKDOWN_RELEASE,   // 아래 보기 종료 시작
+    LOOKDOWN_MOVE,      // 아래 본 상태로 이동
+    LOOKDOWN_MOVESTOP,
     JUMP,               // 점프 중
     FALL,               // 낙하 중
     CLIMB,              // 사다리/벽 오르기
@@ -70,6 +72,6 @@ enum class PlayerState {
 
 typedef struct tagCurrFrameInfo
 {
-	POINT startFrame;
+    POINT startFrame;
 	POINT endFrame;
 } CurrFrameInfo;
