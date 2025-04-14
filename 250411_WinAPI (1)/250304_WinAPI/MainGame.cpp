@@ -32,13 +32,16 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 
 	SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
-	SceneManager::GetInstance()->ChangeScene("A*알고리즘");
+
+
+	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Image/char_lemon.png", m_pRenderTarget.Get());
+
+	SceneManager::GetInstance()->ChangeScene("전투씬_1");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
 
 
-	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Image/char_lemon.png", m_pRenderTarget.Get());
 	/*backBuffer = new Image();
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
 	{
@@ -168,8 +171,9 @@ void MainGame::BeginDraw()
 void MainGame::Draw()
 {
 	//이게 맵이라고 생각해
-	backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
+	//backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
 
+	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
 	// Legacy
 	//// 백버퍼에 먼저 복사
 	//HDC hBackBufferDC = backBuffer->GetMemDC();
