@@ -25,7 +25,7 @@ public:
 	inline void Destroy() { bDestroy = true; }
 
 	inline void SetObjectId(int id) { objectId = id; }
-private:
+protected:
 	unsigned int objectId;
 	FPOINT Pos;
 

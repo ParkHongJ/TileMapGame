@@ -2,7 +2,6 @@
 #include "Image.h"
 #include "ImageManager.h"
 #include "CommonFunction.h"
-#include "config.h"
 
 HRESULT HyoCharacter::Init()
 {
@@ -41,7 +40,7 @@ void HyoCharacter::Render(ID2D1HwndRenderTarget* renderTarget)
 		playerIris->Render(renderTarget, pos.x, pos.y);
 		//playerIris->FrameRender(hdc, pos.x, pos.y, 0, 0);
 		break;
-	case PlayerState::WALK:
+	case PlayerState::MOVE:
 		break;
 	case PlayerState::JUMP:
 		break;

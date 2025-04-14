@@ -33,13 +33,7 @@ using namespace std;
 #define DEG_TO_RAD(degree) ((3.14 / 180.0) * degree)
 #define RAD_TO_DEG(radian) ((180.0 / 3.14) * radian)
 
-enum class PlayerState
-{
-	IDLE,
-	WALK,
-	JUMP
-
-};
+#define ANIMATION_FRAME_TIME 0.065f
 
 typedef struct tagFPOINT
 {
@@ -54,3 +48,33 @@ typedef struct tagFPOINT
 extern HWND g_hWnd;
 extern HINSTANCE g_hInstance;
 extern POINT g_ptMouse;
+
+
+enum class PlayerState {
+    IDLE,               // 가만히 서 있음
+    MOVE,               // 좌우 이동
+    LOOKUP_START,       // 위 보기
+    LOOKUP_RELEASE,     // 위 보기 종료 시작
+    LOOKDOWN_START,     // 아래 보기
+    LOOKDOWN_RELEASE,   // 아래 보기 종료 시작
+    LOOKDOWN_MOVE,      // 아래 본 상태로 이동
+    LOOKDOWN_MOVESTOP,
+    JUMP,               // 점프 중
+    FALL,               // 낙하 중
+    CLIMB,              // 사다리/벽 오르기
+    ATTACK,             // 근접 or 투척 공격 (채찍 등)
+    CROUCH,             // 앉기
+    HANG,               // 발판에 매달림
+    HURT,               // 데미지 입고 무적 상태
+    DIE,                // 사망
+    THROW,              // 아이템/NPC 던지기
+    HOLD,               // 아이템/적 들고 있는 상태
+    PUSH,               // 상자나 블록 밀기
+    EXIT,               // 스테이지 출구 도달
+};
+
+typedef struct tagCurrFrameInfo
+{
+    POINT startFrame;
+	POINT endFrame;
+} CurrFrameInfo;
