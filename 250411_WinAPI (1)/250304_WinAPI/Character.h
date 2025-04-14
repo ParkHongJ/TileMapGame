@@ -45,6 +45,9 @@ public:
 
 
 	void HandleInput(float TimeDelta);
+	bool PressAnyKey();
+
+
 
 	void UpdateIdle();
 	void UpdateMove(float TimeDelta);
