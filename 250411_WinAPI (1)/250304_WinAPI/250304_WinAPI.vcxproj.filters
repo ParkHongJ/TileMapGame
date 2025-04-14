@@ -111,6 +111,15 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>2D Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClCompile>
+    <ClCompile Include="TestAnimationObject.cpp">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -181,6 +190,15 @@
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>2D Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAnimationObject.h">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>MainGame\Scene\Yong</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
