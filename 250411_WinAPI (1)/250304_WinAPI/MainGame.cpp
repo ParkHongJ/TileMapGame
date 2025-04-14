@@ -35,12 +35,6 @@ HRESULT MainGame::Init()
 
 
 	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
-	
-	ImageManager::GetInstance()->AddImage(
-		"TestJunYongAttack", L"Image/TestJunYongAttack.bmp", m_pRenderTarget.Get());
-
-	ImageManager::GetInstance()->AddImage(
-		"TestJunyongWalk", L"Image/TestJunyongWalk.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
 		"Character_Iris", L"Image/char_iris.bmp", m_pRenderTarget.Get());
@@ -52,7 +46,9 @@ HRESULT MainGame::Init()
 		"Tae_Player", TEXT("Image/Character/char_yellow.bmp"), m_pRenderTarget.Get());
 
 
-	SceneManager::GetInstance()->ChangeScene("효진");
+	//SceneManager::GetInstance()->ChangeScene("효진");
+	SceneManager::GetInstance()->ChangeScene("준용");
+	//SceneManager::GetInstance()->ChangeScene("홍준");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);

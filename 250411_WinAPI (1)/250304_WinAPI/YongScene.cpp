@@ -4,10 +4,21 @@
 
 HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
+
+    ImageManager::GetInstance()->AddImage(
+        "TestJunYongAttack", L"Image/TestJunYongAttack.bmp", renderTarget);
+
+    ImageManager::GetInstance()->AddImage(
+        "TestJunyongWalk", L"Image/TestJunyongWalk.bmp", renderTarget);
+
+    backGround = ImageManager::GetInstance()->FindImage("BackBuffer");
+
+
     Test = new TestAnimationObject();
     Test->Init();
 
-    backGround = ImageManager::GetInstance()->FindImage("BackBuffer");
+
+   
     return S_OK;
 }
 
