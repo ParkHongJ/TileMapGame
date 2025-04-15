@@ -11,22 +11,27 @@ HRESULT Character::Init()
 
     state = PlayerState::IDLE;
     dir = { 0.0f, 0.0f };
+    velocity = { 0.0f, 0.0f };
 
-    // causally walking & idle
     currFrameInd = { 0,0 };
 
+    frameTime = 0.0f;
     currFrameInfo.startFrame = { 0,0 };
     currFrameInfo.endFrame = { 0,0 };
     currMaxFrameInd = { 9,0 };
-    frameTime = 0.0f;
 
+    jumpFrameInfo = { {0, 9}, {7, 9} };
+    attackFrameInfo = { {10, 12}, {15,12} };
+    ropeFrameInfo = { {0, 12}, {9,12} };
+
+ 
     speed = 200.f;
     attackSpeed = 3.0f;
     attackRate = 0.3f;
 
     isFlip = false;
-    isFalling = false;
-    isAttakcing = false;
+    isInAir = false;
+    isAttacking = false;
 
     jumpPressed = false;
     attackPressed = false;
@@ -55,9 +60,7 @@ void Character::Update(float TimeDelta)
     if (prevState != state)
     {
  
-        bool skipReset =
-            (prevState == PlayerState::LOOKUP_START && state == PlayerState::LOOKUP_RELEASE) ||
-            (prevState == PlayerState::LOOKDOWN_START && state == PlayerState::LOOKDOWN_RELEASE);
+        bool skipReset = ShouldResetAnimation(prevState, state);
 
         if (!skipReset)
         {
@@ -79,12 +82,8 @@ void Character::Update(float TimeDelta)
         case PlayerState::LOOKDOWN_START:       UpdateLookDown(TimeDelta);            break;
         case PlayerState::LOOKDOWN_RELEASE:     UpdateLookDown(TimeDelta);            break;
         case PlayerState::LOOKDOWN_MOVE:        UpdateLookDownMove(TimeDelta);        break;
-        case PlayerState::LOOKDOWN_MOVESTOP:    UpdateLookDownMoveStop(TimeDelta);    break;
-        case PlayerState::JUMP:                 UpdateJump(TimeDelta);                break;
-        case PlayerState::FALL:                 UpdateFall(TimeDelta);                break;
-        case PlayerState::CLIMB:                UpdateClimb(TimeDelta);               break;
+        case PlayerState::LOOKDOWN_IDLE:        UpdateLookDownMoveStop(TimeDelta);    break;
         case PlayerState::ATTACK:               UpdateAttack(TimeDelta);              break;
-        case PlayerState::CROUCH:               UpdateCrouch(TimeDelta);              break;
         case PlayerState::HANG:                 UpdateHang(TimeDelta);                break;
         case PlayerState::HURT:                 UpdateHurt(TimeDelta);                break;
         case PlayerState::DIE:                  UpdateDie(TimeDelta);                 break;
@@ -100,38 +99,43 @@ void Character::SetAnimationRange(PlayerState state)
 {
     switch (state)
     {
-    case PlayerState::IDLE:
-        currFrameInfo = { {0, 0}, {0, 0} };
-        break;
-
-    case PlayerState::MOVE:
-        currFrameInfo = { {1, 0}, {9, 0} };
-        break;
-   
-    case PlayerState::LOOKUP_START:
-    case PlayerState::LOOKUP_RELEASE:
-        currFrameInfo = { {0, 8}, {6, 8} };
-        break;
-
-    case PlayerState::LOOKDOWN_START:
-    case PlayerState::LOOKDOWN_RELEASE:
-        currFrameInfo = { {0, 1}, {4, 1} };
-        break;
-
-    case PlayerState::LOOKDOWN_MOVE:
-        currFrameInfo = { {5, 1}, {11, 1}};
-        break;
-
-
-    case PlayerState::LOOKDOWN_MOVESTOP:
-        currFrameInfo = { {2, 1}, {2, 1} };
-        break;
-
+        case PlayerState::IDLE:                  currFrameInfo = { {0, 0},  {0, 0} };            break;
+        case PlayerState::MOVE:                  currFrameInfo = { {1, 0},  {9, 0} };            break;
+        case PlayerState::LOOKUP_START:
+        case PlayerState::LOOKUP_RELEASE:        currFrameInfo = { {0, 8},  {6, 8} };            break;
+        case PlayerState::LOOKUP_ONTAMEDPET:     currFrameInfo = { {8, 8},  {14, 8} };           break;
+        case PlayerState::LOOKDOWN_START:
+        case PlayerState::LOOKDOWN_RELEASE:      currFrameInfo = { {0, 1},  {4, 1} };            break;
+        case PlayerState::LOOKDOWN_MOVE:         currFrameInfo = { {5, 1},  {11, 1}};            break;
+        case PlayerState::LOOKDOWN_IDLE:         currFrameInfo = { {2, 1},  {2, 1} };            break;
+        case PlayerState::CLIMB_LADDER:          currFrameInfo = { {0, 6},  {5, 7} };            break;
+        case PlayerState::CLIMB_ROPE:            currFrameInfo = { {0, 7},  {9, 7} };            break;
+        case PlayerState::ON_NOTTAMEDPET:        currFrameInfo = { {4, 11}, {9, 11}};            break;
+        case PlayerState::ON_TAMEDPET:           currFrameInfo = { {7, 8},  {7, 8} };            break;
+        case PlayerState::ALMOST_FALL:           currFrameInfo = { {0, 3},  {7, 3} };            break;
+        case PlayerState::ATTACK:                currFrameInfo = { {0, 4},  {5, 4} };            break;
+        case PlayerState::HANG:                  currFrameInfo = { {8, 3},  {11, 3}};            break;
+        case PlayerState::PUSH:                  currFrameInfo = { {6, 6},  {11, 6}};            break;
+        case PlayerState::DIE:                   currFrameInfo = { {9, 0},  {9, 0} };            break;
+        case PlayerState::FALL:                  currFrameInfo = { {0, 2},  {3, 2} };            break;
+        case PlayerState::FALL_STUNEFFECT:       currFrameInfo = { {0, 13}, {11, 13} };          break;
+        case PlayerState::ENTER_TUNNEL:          currFrameInfo = { {0, 5},  {5, 5} };            break;
+        case PlayerState::EXIT_TUNNEL:           currFrameInfo = { {6, 5},  {11, 5}};            break;
+        
         
     default:
         //currFrameInfo = { {0, 0}, {0, 0} };
         break;
     }
+}
+
+bool Character::ShouldResetAnimation(PlayerState prevState, PlayerState newState)
+{
+    if ((prevState == PlayerState::LOOKUP_START && state == PlayerState::LOOKUP_RELEASE) ||
+        (prevState == PlayerState::LOOKDOWN_START && state == PlayerState::LOOKDOWN_RELEASE))
+        return true;
+    else return false;
+
 }
 
 
@@ -148,7 +152,7 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
         TextOut(hdc, 20, 120, buf, wcslen(buf));
     }*/
 
-    //playerImage->FrameRender(hdc, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y, isFlip, true);
+    //playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y);//, isFlip, true);
     playerImage->Render(renderTarget, Pos.x, Pos.y);
 }
 
@@ -205,15 +209,15 @@ void Character::HandleInput(PlayerState prevState, float TimeDelta)
         switch (prevState)
         {
         case PlayerState::LOOKDOWN_MOVE:
-            state = PlayerState::LOOKDOWN_MOVESTOP;
+            state = PlayerState::LOOKDOWN_IDLE;
             break;
         }
-        return;
+      //  return;
     }
 
-    if (km->IsStayKeyDown(VK_DOWN) && state == PlayerState::LOOKDOWN_MOVESTOP)
+    if (km->IsStayKeyDown(VK_DOWN) && state == PlayerState::LOOKDOWN_IDLE)
     {
-        return;
+        
     }
   
 
@@ -224,7 +228,6 @@ void Character::HandleInput(PlayerState prevState, float TimeDelta)
 
     if (km->IsOnceKeyDown(VK_SPACE))
     {
-        state = PlayerState::JUMP;
         jumpPressed = true;
         hasInput = true;
     }
@@ -269,7 +272,7 @@ void Character::HandleInput(PlayerState prevState, float TimeDelta)
             switch (prevState)
             {
             case PlayerState::LOOKDOWN_MOVE:
-            case PlayerState::LOOKDOWN_MOVESTOP:
+            case PlayerState::LOOKDOWN_IDLE:
                 state = PlayerState::LOOKDOWN_RELEASE;
                 break;
             }
@@ -430,14 +433,6 @@ void Character::UpdateLookDownMoveStop(float TimeDelta)
         currFrameInd = currFrameInfo.startFrame;
 }
 
-void Character::UpdateJump(float TimeDelta)
-{
-
-}
-
-void Character::UpdateFall(float TimeDelta)
-{
-}
 
 void Character::UpdateClimb(float TimeDelta)
 {
@@ -447,15 +442,10 @@ void Character::UpdateAttack(float TimeDelta)
 {
 }
 
-void Character::UpdateCrouch(float TimeDelta)
-{
-}
 
 void Character::UpdateHang(float TimeDelta)
 {
 }
-
-
 
 void Character::UpdateHurt(float TimeDelta)
 {
@@ -478,7 +468,7 @@ void Character::UpdatePush(float TimeDelta)
 }
 
 void Character::UpdateExit(float TimeDelta)
-{
+{   
 }
 
 // for debug
@@ -494,12 +484,9 @@ const TCHAR* Character::PlayerStateToString(PlayerState state)
         case PlayerState::LOOKDOWN_START:     return TEXT("LOOKDOWN_START");
         case PlayerState::LOOKDOWN_RELEASE:   return TEXT("LOOKDOWN_RELEASE");
         case PlayerState::LOOKDOWN_MOVE:      return TEXT("LOOKDOWN_MOVE");
-        case PlayerState::LOOKDOWN_MOVESTOP:  return TEXT("LOOKDOWN_MOVESTOP");
-        case PlayerState::JUMP:               return TEXT("JUMP");
-        case PlayerState::FALL:               return TEXT("FALL");
+        case PlayerState::LOOKDOWN_IDLE:      return TEXT("LOOKDOWN_MOVESTOP");
         case PlayerState::CLIMB:              return TEXT("CLIMB");
         case PlayerState::ATTACK:             return TEXT("ATTACK");
-        case PlayerState::CROUCH:             return TEXT("CROUCH");
         case PlayerState::HANG:               return TEXT("HANG");
         case PlayerState::HURT:               return TEXT("HURT");
         case PlayerState::DIE:                return TEXT("DIE");

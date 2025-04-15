@@ -6,33 +6,33 @@ class Character : public GameObject
 
 private:
 
-	PlayerState state;
+	PlayerState					state;
 
-	Image* playerImage;
-	//Image* weaponImage;
+	Image*				  playerImage;
 
-	FPOINT	dir;
+	FPOINT						  dir;
+	FPOINT				     velocity;
 
-	POINT currFrameInd;
+	float					frameTime;
+	POINT				 currFrameInd;
+	POINT			  currMaxFrameInd;
+	FrameInfo		    currFrameInfo;
+	FrameInfo           jumpFrameInfo;
+	FrameInfo		  attackFrameInfo;
 
-	CurrFrameInfo currFrameInfo;
+	float						speed;
+	float				  attackSpeed;
+	float				   attackRate;
 
-	POINT currMaxFrameInd;
-	float frameTime;
+	bool					   isFlip;
+	bool                      isInAir;
+	bool                  isAttacking;
+		               
+	bool                  jumpPressed;
+	bool                attackPressed;
 
-	float speed;
-	float attackSpeed;
-	float attackRate;
-
-	bool isFlip;
-	bool isFalling;
-	bool isAttakcing;
-
-	bool jumpPressed;
-	bool attackPressed;
-
-	bool isLookUpPaused;
-	bool isLookDownPaused;
+	bool			   isLookUpPaused;
+	bool			 isLookDownPaused;
 
 
 
@@ -43,13 +43,12 @@ public:
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	void SetAnimationRange(PlayerState state);
+	bool ShouldResetAnimation(PlayerState prevState, PlayerState newState);
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 
 	void HandleInput(PlayerState prevState, float TimeDelta);
 	bool PressAnyKey();
-
-
 
 	void UpdateIdle();
 	void UpdateMove(float TimeDelta);
@@ -57,11 +56,8 @@ public:
 	void UpdateLookDown(float TimeDelta);
 	void UpdateLookDownMove(float TimeDelta);
 	void UpdateLookDownMoveStop(float TimeDelta);
-	void UpdateJump(float TimeDelta);
-	void UpdateFall(float TimeDelta);
 	void UpdateClimb(float TimeDelta);
 	void UpdateAttack(float TimeDelta);
-	void UpdateCrouch(float TimeDelta);
 	void UpdateHang(float TimeDelta);
 	void UpdateHurt(float TimeDelta);
 	void UpdateDie(float TimeDelta);

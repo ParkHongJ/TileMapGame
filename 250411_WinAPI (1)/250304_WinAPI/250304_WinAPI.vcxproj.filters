@@ -46,6 +46,9 @@
     <Filter Include="MainGame\Scene\Yong">
       <UniqueIdentifier>{c22b1cf7-56eb-438c-ac2f-a855cd8068e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Tae\State">
+      <UniqueIdentifier>{2a8b99f6-b807-4ce4-ae35-684fc3f20459}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -125,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
+    </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Tae</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoCharacter.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
