@@ -46,6 +46,18 @@
     <Filter Include="MainGame\Scene\Yong">
       <UniqueIdentifier>{c22b1cf7-56eb-438c-ac2f-a855cd8068e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Animation">
+      <UniqueIdentifier>{b0a17ee1-0274-47a0-9628-a3b8520c7b44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Yong\Render">
+      <UniqueIdentifier>{7fda847f-1b80-4348-9e81-960e621ae7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Yong\Status">
+      <UniqueIdentifier>{c9e43ae6-4171-4d46-822b-2eb2b1e07d92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Yong\Item">
+      <UniqueIdentifier>{19e23dd8-7c3f-422d-99c0-174b84c96d95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -111,15 +123,6 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>2D Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>MainGame\Scene\Yong</Filter>
-    </ClCompile>
-    <ClCompile Include="TestAnimationObject.cpp">
-      <Filter>MainGame\Scene\Yong</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationManager.cpp">
-      <Filter>MainGame\Scene\Yong</Filter>
-    </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
@@ -129,11 +132,23 @@
     <ClCompile Include="HyoCharacter.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="TestAnimationObject.cpp">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="TestRenderSort.cpp">
-      <Filter>MainGame\Scene\Yong</Filter>
+      <Filter>MainGame\Scene\Yong\Render</Filter>
     </ClCompile>
     <ClCompile Include="TestYongSceneBackGround.cpp">
-      <Filter>MainGame\Scene\Yong</Filter>
+      <Filter>MainGame\Scene\Yong\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStatus.cpp">
+      <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,15 +221,6 @@
     <ClInclude Include="ObjectManager.h">
       <Filter>2D Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>MainGame\Scene\Yong</Filter>
-    </ClInclude>
-    <ClInclude Include="TestAnimationObject.h">
-      <Filter>MainGame\Scene\Yong</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationManager.h">
-      <Filter>MainGame\Scene\Yong</Filter>
-    </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
@@ -224,11 +230,23 @@
     <ClInclude Include="HyoCharacter.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAnimationObject.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="TestRenderSort.h">
-      <Filter>MainGame\Scene\Yong</Filter>
+      <Filter>MainGame\Scene\Yong\Render</Filter>
     </ClInclude>
     <ClInclude Include="TestYongSceneBackGround.h">
-      <Filter>MainGame\Scene\Yong</Filter>
+      <Filter>MainGame\Scene\Yong\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
