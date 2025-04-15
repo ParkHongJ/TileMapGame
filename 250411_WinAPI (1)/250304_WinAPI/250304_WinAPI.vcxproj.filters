@@ -132,6 +132,21 @@
     <ClCompile Include="HyoCharacter.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterState.cpp">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
+    <ClCompile Include="IdleState.cpp">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveState.cpp">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackState.cpp">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractionState.cpp">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -220,6 +235,21 @@
     </ClInclude>
     <ClInclude Include="HyoCharacter.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

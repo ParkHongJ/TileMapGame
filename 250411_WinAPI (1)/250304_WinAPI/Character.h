@@ -1,12 +1,18 @@
 #pragma once
 #include "config.h"
 #include "GameObject.h"
+
+
+class CharacterState;
+
+
+
 class Character : public GameObject
 {
 
 private:
 
-	PlayerState					state;
+	CharacterState*				state;
 
 	Image*				  playerImage;
 
@@ -19,6 +25,7 @@ private:
 	FrameInfo		    currFrameInfo;
 	FrameInfo           jumpFrameInfo;
 	FrameInfo		  attackFrameInfo;
+	FrameInfo			ropeFrameInfo;
 
 	float						speed;
 	float				  attackSpeed;
@@ -42,33 +49,32 @@ public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
-	void SetAnimationRange(PlayerState state);
-	bool ShouldResetAnimation(PlayerState prevState, PlayerState newState);
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
+		
+	void SetAnimationRange(PlayerState state);
+
+	
+
+	void PlayAnimation(unsigned int stateClassNum, unsigned int subState );
+	void ChageState(CharacterState* newState);
+	
+	
+	bool ShouldResetAnimation(PlayerState prevState, PlayerState newState);
+	
 
 	void HandleInput(PlayerState prevState, float TimeDelta);
 	bool PressAnyKey();
 
-	void UpdateIdle();
-	void UpdateMove(float TimeDelta);
-	void UpdateLookUp(float TimeDelta);
-	void UpdateLookDown(float TimeDelta);
-	void UpdateLookDownMove(float TimeDelta);
-	void UpdateLookDownMoveStop(float TimeDelta);
-	void UpdateClimb(float TimeDelta);
-	void UpdateAttack(float TimeDelta);
-	void UpdateHang(float TimeDelta);
-	void UpdateHurt(float TimeDelta);
-	void UpdateDie(float TimeDelta);
-	void UpdateThrow(float TimeDelta);
-	void UpdateHold(float TimeDelta);
-	void UpdatePush(float TimeDelta);
-	void UpdateExit(float TimeDelta);
+
+	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
 
 
 
-	const TCHAR* PlayerStateToString(PlayerState state);
+	
+
+
+
 
 	Character() {};
 	virtual ~Character() {};

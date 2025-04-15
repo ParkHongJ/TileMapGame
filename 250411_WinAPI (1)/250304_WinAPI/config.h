@@ -51,28 +51,46 @@ extern POINT g_ptMouse;
 
 
 enum class PlayerState {
-    IDLE,               // 가만히 서 있음
-    LOOKDOWN_IDLE,      // 엎드린 채로 가만히 있음
+    IDLE,               // 유후 상태
     MOVE,               // 좌우 이동
-    LOOKUP_START,       // 위 보기
+    
+    LOOKUP_START,       // 위 보기 시작
+    LOOKUP_IDLE,        // 위를 최대로 본 유후 상태
     LOOKUP_RELEASE,     // 위 보기 종료 시작
-    LOOKUP_ONTAMEDPET,  // 펫 위
-    LOOKDOWN_START,     // 아래 보기
+ 
+    LOOKDOWN_START,     // 아래 보기 시작
+    LOOKDOWN_IDLE,      // 엎드린 채로 가만히 있음
     LOOKDOWN_RELEASE,   // 아래 보기 종료 시작
     LOOKDOWN_MOVE,      // 아래 본 상태로 이동
+    
     CLIMB_LADDER,       // 사다리 오르기
     CLIMB_ROPE,         // 로프 오르기
-    ON_NOTTAMEDPET,     // 펫 위에서 팔 휘적휘적
-    ON_TAMEDPET,        // 펫 위
-    ALMOST_FALL,        // 타일 모서리 휘적휘적
+    
+    ON_NOTTAMEDPET,     // 펫 위에서  팔 휘적휘적
+    ONPET_IDLE,        // 펫 타고 유후 상태
+    ONPET_MOVE,        // 펫 타고 이동
+    
+    ONPET_LOOKDOWN_IDLE,    // 펫 위에서 아래 보기
+    ONPET_LOOKDOWN_START,    // 펫 위에서 아래 보기
+    ONPET_LOOKDOWN_RELEASE,    // 펫 위에서 아래 보기
+   
+    ONPET_LOOKUP_START,      // 펫 위에서 위 보기
+    ONPET_LOOKUP_RELEASE,      // 펫 위에서 위 보기
+
     ATTACK,             // 근접 or 투척 공격 (채찍 등)
+    
+    ALMOST_FALL,        // 타일 모서리 휘적휘적
     HANG,               // 타일 끝에 매달림
     HURT,               // 데미지 입고 무적 상태
     DIE,                // 사망
+    
     FALL,               // 바닥에 부딫힘 -> 부딫힌 후엔 DIE + 위에 새 둥둥 -> LOOKDOWN_IDLE -> 일어남 
+    FALL_STUNEFFECT,
+    
     THROW,              // 아이템/NPC 던지기
     HOLD,               // 아이템/적 들고 있는 상태
     PUSH,               // 상자나 블록 밀기
+
     ENTER_TUNNEL,       // 터널 진입
     EXIT_TUNNEL,        // 터널 나옴
     EXIT,               // 스테이지 출구 도달
