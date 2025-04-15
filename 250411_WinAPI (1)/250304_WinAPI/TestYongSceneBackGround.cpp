@@ -20,6 +20,7 @@ void TestYongSceneBackGround::Update(float TimeDelta)
 void TestYongSceneBackGround::Render(ID2D1HwndRenderTarget* renderTarget)
 {
     image->Render(renderTarget, 0, 0);
+    //
 }
 
 void TestYongSceneBackGround::Release()
