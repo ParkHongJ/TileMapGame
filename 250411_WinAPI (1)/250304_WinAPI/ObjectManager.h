@@ -5,6 +5,11 @@
 
 class GameObject;
 
+enum RENDERORDER
+{
+    RENDER_BACKGROUND, RENDER_MONSTER, RENDER_ITEM, RENDER_PLAYER, RENDER_HOLD, RENDER_PLAYERCLIMB, RENDER_TILE, RENDER_UI, RENDER_END
+};
+
 class ObjectManager : public Singleton<ObjectManager>
 {
 public:
@@ -26,7 +31,7 @@ public:
 
 private:
     unordered_map<unsigned int, GameObject*> objects;
-    list<GameObject*> renders[RENDER_END];
+    list<GameObject*> renderObjects[RENDER_END];
     unsigned int nextId;
 };
 

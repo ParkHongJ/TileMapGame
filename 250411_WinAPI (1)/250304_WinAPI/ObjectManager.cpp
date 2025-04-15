@@ -22,7 +22,7 @@ void ObjectManager::AddObject(RENDERORDER renderId, GameObject* obj)
 
 	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
 	obj->SetObjectRenderId(renderId);
-	objects.emplace(nextId, obj);
+	objects.emplace(++nextId, obj);
 }
 
 void ObjectManager::AddObject(unsigned int id, RENDERORDER renderId, GameObject* obj)
@@ -77,15 +77,15 @@ GameObject* ObjectManager::FindObject(unsigned int id)
 
 void ObjectManager::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	for (auto& iter : renders)
+	for (auto& iter : renderObjects)
 	{
 		for (auto& iter2 : iter)
 		{
 			iter2->Render(renderTarget);
 		}
-	}
 
-	renders->clear();
+		iter.clear();
+	}
 }
 
 void ObjectManager::Update(float TimeDelta)
@@ -119,7 +119,7 @@ void ObjectManager::LateUpdate(float TimeDelta)
 			
 			if (true == obj->second->IsActive() && false == obj->second->IsHidden())
 			{
-				renders[obj->second->GetObjectRenderId()].emplace_back(obj->second);
+				renderObjects[obj->second->GetObjectRenderId()].emplace_back(obj->second);
 			}
 
 			++obj;
