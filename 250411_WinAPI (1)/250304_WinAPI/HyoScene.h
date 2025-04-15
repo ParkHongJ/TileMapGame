@@ -4,6 +4,7 @@
 #include "HyoCharacter.h"
 
 class Image;
+class Camera;
 class HyoCharacter;
 class HyoScene : public Scene
 {
@@ -18,7 +19,9 @@ public:
 
 private:
 	Image* background;
-	HyoCharacter* playerIris;
+	HyoCharacter* testBackGround;
+	HyoCharacter* testCamera;
+	Camera* camera;
 
 };
 

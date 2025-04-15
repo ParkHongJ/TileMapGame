@@ -129,6 +129,9 @@
     <ClCompile Include="HyoCharacter.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>2D Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="HyoCharacter.h">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>2D Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

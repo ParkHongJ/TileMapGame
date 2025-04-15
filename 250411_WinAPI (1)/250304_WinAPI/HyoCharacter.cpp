@@ -2,10 +2,12 @@
 #include "Image.h"
 #include "ImageManager.h"
 #include "CommonFunction.h"
+#include "KeyManager.h"
 
 HRESULT HyoCharacter::Init()
 {
-	playerIris = ImageManager::GetInstance()->FindImage("Character_Iris");
+	testBackGround = ImageManager::GetInstance()->FindImage("testBackGround");
+	testCamera = ImageManager::GetInstance()->FindImage("testCamera");
 
 	/*playerIris = new Image();
 
@@ -16,13 +18,11 @@ HRESULT HyoCharacter::Init()
 		return E_FAIL;
 	}*/
 
-	
+	SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
 	dir = -1;
 	state = PlayerState::IDLE;
-
-	return S_OK;
-
 	
+	return S_OK;	
 }
 
 void HyoCharacter::Release()
@@ -32,21 +32,46 @@ void HyoCharacter::Release()
 
 void HyoCharacter::Update(float TimeDelta)
 {
-	
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_RIGHT))
+	{
+		Pos.x += 100 * TimeDelta;
+	}
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_UP))
+	{
+		Pos.y -= 100 * TimeDelta;
+	}
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_LEFT))
+	{
+		Pos.x -= 100 * TimeDelta;
+	}
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_DOWN))
+	{
+		Pos.y += 100 * TimeDelta;
+	}
 }
 
 void HyoCharacter::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	switch (state)
-	{
-	case PlayerState::IDLE:
-		playerIris->Render(renderTarget, Pos.x, Pos.y);
-		//playerIris->FrameRender(hdc, pos.x, pos.y, 0, 0);
-		break;
-	case PlayerState::MOVE:
-		break;
-	case PlayerState::JUMP:
-		break;
-	}
+	
+	testCamera->Render(renderTarget, Pos.x, Pos.y);
+	//playerIris->Render(renderTarget, Pos.x, Pos.y);
+
 	//playerIris->Render(hdc);
+}
+
+void HyoCharacter::TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT& cameraPos)
+{
+	if (testBackGround)
+	{
+		//testBackGround->Render(renderTarget, cameraPos.x, cameraPos.y);
+		testBackGround->Render(renderTarget, Pos.x - cameraPos.x, Pos.y - cameraPos.y);
+	}
+	
+	if (testCamera)
+	{
+		//testCamera->Render(renderTarget, cameraPos.x, cameraPos.y);
+		testCamera->Render(renderTarget, Pos.x + cameraPos.x, Pos.y + cameraPos.y);
+	}
+	
+	// testCamera->Render(renderTarget, 0, 0);
 }
