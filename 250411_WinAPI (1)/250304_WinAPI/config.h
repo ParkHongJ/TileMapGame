@@ -21,6 +21,7 @@ using namespace std;
 #include "ImageManager.h"
 #include "TimerManager.h"
 #include "SceneManager.h"
+#include "ObjectManager.h"
 
 /*
 	컴파일러에서 해당 코드를 뒤에 정의된 코드로 변경한다. 
@@ -71,11 +72,6 @@ enum class PlayerState {
     HOLD,               // 아이템/적 들고 있는 상태
     PUSH,               // 상자나 블록 밀기
     EXIT,               // 스테이지 출구 도달
-};
-
-enum RENDERORDER
-{
-    RENDER_BACKGROUND, RENDER_MONSTER, RENDER_ITEM, RENDER_PLAYER, RENDER_HOLD, RENDER_PLAYERCLIMB, RENDER_TILE, RENDER_UI, RENDER_END
 };
 
 typedef struct tagCurrFrameInfo

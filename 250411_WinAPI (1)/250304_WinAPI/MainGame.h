@@ -8,6 +8,7 @@ class MainGame
 public:
 	HRESULT Init();
 	void Update();
+	void LateUpdate();
 	void Render();
 	void Release();
 

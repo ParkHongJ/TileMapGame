@@ -88,7 +88,16 @@ void MainGame::Release()
 void MainGame::Update()
 {
 	TimerManager::GetInstance()->Update(L"60Frame");
-	SceneManager::GetInstance()->Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
+	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+	SceneManager::GetInstance()->Update(deltaTime);
+	ObjectManager::GetInstance()->Update(deltaTime);
+
+}
+
+void MainGame::LateUpdate()
+{
+	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+	ObjectManager::GetInstance()->LateUpdate(deltaTime);
 }
 
 void MainGame::Render()
@@ -189,6 +198,7 @@ void MainGame::Draw()
 	//backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
 
 	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
+	ObjectManager::GetInstance()->Render(m_pRenderTarget.Get());
 	// Legacy
 	//// 백버퍼에 먼저 복사
 	//HDC hBackBufferDC = backBuffer->GetMemDC();

@@ -149,6 +149,8 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TestAnimationObject.cpp" />
+    <ClCompile Include="TestRenderSort.cpp" />
+    <ClCompile Include="TestYongSceneBackGround.cpp" />
     <ClCompile Include="TilemapTool.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
@@ -179,6 +181,8 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TaeScene.h" />
     <ClInclude Include="TestAnimationObject.h" />
+    <ClInclude Include="TestRenderSort.h" />
+    <ClInclude Include="TestYongSceneBackGround.h" />
     <ClInclude Include="TilemapTool.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />

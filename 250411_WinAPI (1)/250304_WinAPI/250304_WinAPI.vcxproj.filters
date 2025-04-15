@@ -126,6 +126,15 @@
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
     </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TestRenderSort.cpp">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClCompile>
+    <ClCompile Include="TestYongSceneBackGround.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -211,6 +220,15 @@
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Tae</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TestRenderSort.h">
+      <Filter>MainGame\Scene\Yong</Filter>
+    </ClInclude>
+    <ClInclude Include="TestYongSceneBackGround.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

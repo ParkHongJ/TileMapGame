@@ -115,6 +115,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		if (fTimeAcc >= fNextFrame)
 		{
 			g_mainGame.Update();
+			g_mainGame.LateUpdate();
 			g_mainGame.Render();
 
 			fTimeAcc = 0.f;

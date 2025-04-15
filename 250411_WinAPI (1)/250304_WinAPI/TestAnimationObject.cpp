@@ -24,10 +24,30 @@ HRESULT TestAnimationObject::Init()
 
 void TestAnimationObject::Update(float TimeDelta) 
 {
-	if (KeyManager::GetInstance()->IsOnceKeyDown('G'))
+	if (KeyManager::GetInstance()->IsOnceKeyDown('Q'))
 	{
-		AnimManager->ChangeAnimation("공격");
+		//AnimManager->ChangeAnimation("공격");
+		objectRenderId = RENDER_HOLD;
 	}
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown('W'))
+	{
+		//AnimManager->ChangeAnimation("공격");
+		objectRenderId = RENDER_BACKGROUND;
+	}
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown('E'))
+	{
+		objectRenderId = RENDER_PLAYER;
+		//AnimManager->ChangeAnimation("공격");
+	}
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown('R'))
+	{
+		objectRenderId = RENDER_PLAYERCLIMB;
+		//AnimManager->ChangeAnimation("공격");
+	}
+
 
 	AnimManager->Update(TimeDelta);
 }
