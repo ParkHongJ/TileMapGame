@@ -126,6 +126,12 @@
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
     </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -211,6 +217,12 @@
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Tae</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,8 +3,8 @@
 
 HRESULT JinScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
-    ImageManager::GetInstance()->AddImage("임시 이미지", TEXT("image/rocket.bmp"), renderTarget);
-    tempImage = ImageManager::GetInstance()->FindImage("임시 이미지");
+    ImageManager::GetInstance()->AddImage("tempRocket", TEXT("image/rocket.bmp"), renderTarget);
+    tempImage = ImageManager::GetInstance()->FindImage("tempRocket");
     if (!tempImage)
         return E_FAIL;
     pos.x = WINSIZE_X * 0.9;
