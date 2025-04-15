@@ -132,6 +132,15 @@
     <ClCompile Include="Tile.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="DummyHongPlayer.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -222,6 +231,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Tile.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyHongPlayer.h">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>

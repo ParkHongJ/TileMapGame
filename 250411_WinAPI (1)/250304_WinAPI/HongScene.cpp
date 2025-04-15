@@ -3,6 +3,8 @@
 #include "Tile.h"
 #include "../MapTool/EditorTile.h"
 #include "CommonFunction.h"
+#include "CollisionManager.h"
+#include "DummyHongPlayer.h"
 void HongScene::LoadTile(const char* path)
 {
 	FILE* fp = fopen(path, "rb");
@@ -43,15 +45,20 @@ void HongScene::LoadTile(const char* path)
 
 HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
+	CollisionManager::GetInstance()->Init();
 	ObjectManager::GetInstance()->Init();
 	ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
 	LoadTile("Data/map1.tilemap");
+
+	player = new DummyHongPlayer;
 	return S_OK;
 }
 
 void HongScene::Release()
 {
+	CollisionManager::GetInstance()->Release();
 	ObjectManager::GetInstance()->Release();
+
 	for (int y = 0; y < 16; y++)
 	{
 		for (int x = 0; x < 16; x++)
@@ -63,15 +70,20 @@ void HongScene::Release()
 			}
 		}
 	}
+	player->Release();
+	delete player;
 }
 
 void HongScene::Update(float TimeDelta)
 {
+	player->Update(TimeDelta);
 	ObjectManager::GetInstance()->Update(TimeDelta);
+	CollisionManager::GetInstance()->Update(TimeDelta);
 }
 
 void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
+	player->Render(renderTarget);
 	ObjectManager::GetInstance()->Render(renderTarget);
 
 	for (int y = 0; y < 16; y++)
@@ -84,6 +96,8 @@ void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 			}
 		}
 	}
+
+	CollisionManager::GetInstance()->DebugRender(renderTarget);
 
 	D2D1_RECT_F rect = { WINSIZE_X - 200, 100, WINSIZE_X - 200 + 100, 200 };
 	DrawD2DText(renderTarget, L"È«ÁØ¾À", rect.left, rect.top);	

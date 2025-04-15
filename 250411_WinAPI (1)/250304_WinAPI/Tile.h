@@ -1,17 +1,21 @@
 #pragma once
 #include "GameObject.h"
 
+class BoxCollider;
+
 enum TileType
 {
 	NONE = 0,
 	BLOCK
 };
+
 struct TileInfo
 {
 	int atlasX = -1; // Atlas 내 타일 좌표
 	int atlasY = -1;
 	bool valid = false;
 };
+
 class Tile : public GameObject
 {
 public:
@@ -26,4 +30,6 @@ private:
 	TileType tileType;
 	TileInfo tileInfo;
 	class Image* tileImage;
+
+	BoxCollider* collider;
 };
