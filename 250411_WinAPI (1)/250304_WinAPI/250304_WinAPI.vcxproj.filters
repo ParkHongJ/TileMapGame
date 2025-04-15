@@ -133,7 +133,7 @@
       <Filter>MainGame\Scene\Yong</Filter>
     </ClCompile>
     <ClCompile Include="TestYongSceneBackGround.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>MainGame\Scene\Yong</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,7 +228,7 @@
       <Filter>MainGame\Scene\Yong</Filter>
     </ClInclude>
     <ClInclude Include="TestYongSceneBackGround.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>MainGame\Scene\Yong</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
