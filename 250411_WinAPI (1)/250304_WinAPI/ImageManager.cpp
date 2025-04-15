@@ -18,7 +18,7 @@ void ImageManager::Init()
 	if (FAILED(hr))
 	{
 		int a = 10;
-	}
+	}	
 }
 
 void ImageManager::Release()

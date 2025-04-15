@@ -73,6 +73,11 @@ enum class PlayerState {
     EXIT,               // 스테이지 출구 도달
 };
 
+enum RENDERSORT
+{
+    RENDER_DROP, RENDER_PLAYER, RENDER_MONSTER, RENDER_TILE, RENDER_END
+};
+
 typedef struct tagCurrFrameInfo
 {
     POINT startFrame;

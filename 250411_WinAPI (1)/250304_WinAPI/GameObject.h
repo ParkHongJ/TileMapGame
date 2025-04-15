@@ -25,8 +25,11 @@ public:
 	inline void Destroy() { bDestroy = true; }
 
 	inline void SetObjectId(int id) { objectId = id; }
+	inline const unsigned int GetObjectId() const { return objectId; };
+
 protected:
 	unsigned int objectId;
+
 	FPOINT Pos;
 
 	//업데이트와 렌더 둘다 막고싶어요
