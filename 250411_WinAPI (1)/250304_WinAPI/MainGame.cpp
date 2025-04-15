@@ -13,6 +13,7 @@
 #include "JinScene.h"
 #include "YongScene.h"
 
+
 HRESULT MainGame::Init()
 {
 	if (FAILED(InitD2D()))
@@ -178,7 +179,32 @@ HRESULT MainGame::InitD2D()
 	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
 
 	// 브러시 (예: 기본 색)
-	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pBrush);
+	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &GBrush);
+
+	if (!GdwriteFactory)
+	{
+		HRESULT hr = DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(IDWriteFactory),
+			reinterpret_cast<IUnknown**>(GdwriteFactory.GetAddressOf())
+		);
+
+		if (FAILED(hr))
+		{
+			MessageBox(nullptr, L"DWriteCreateFactory 실패", L"Error", MB_OK);
+		}
+
+		GdwriteFactory->CreateTextFormat(
+			L"맑은 고딕",                // Font name
+			nullptr,                    // Font collection
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			20.0f,                      // Font size
+			L"ko-kr",                   // Locale
+			&GtextFormat
+		);
+	}
 
 	return S_OK;
 }

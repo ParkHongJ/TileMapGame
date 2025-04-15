@@ -32,7 +32,7 @@ private:
 	// D2D ฐüทร
 	ComPtr<ID2D1Factory> m_pFactory;
 	ComPtr<ID2D1HwndRenderTarget> m_pRenderTarget;
-	ComPtr<ID2D1SolidColorBrush> m_pBrush;
+	
 
 	wchar_t szText[128];
 	Image* backBuffer;

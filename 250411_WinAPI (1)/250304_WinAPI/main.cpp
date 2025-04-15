@@ -10,6 +10,10 @@ MainGame g_mainGame;
 POINT g_ptMouse;	// 마우스 좌표
 float g_fFrameLimit = 60.f;
 
+ComPtr<ID2D1SolidColorBrush> GBrush;
+ComPtr<IDWriteFactory> GdwriteFactory;
+ComPtr<IDWriteTextFormat> GtextFormat;
+
 // Init
 
 RECT GetRect(int left, int top, int width, int height);

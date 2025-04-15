@@ -2,7 +2,7 @@
 #include "ObjectManager.h"
 #include "Tile.h"
 #include "../MapTool/EditorTile.h"
-
+#include "CommonFunction.h"
 void HongScene::LoadTile(const char* path)
 {
 	FILE* fp = fopen(path, "rb");
@@ -84,4 +84,7 @@ void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 			}
 		}
 	}
+
+	D2D1_RECT_F rect = { WINSIZE_X - 200, 100, WINSIZE_X - 200 + 100, 200 };
+	DrawD2DText(renderTarget, L"È«ÁØ¾À", rect.left, rect.top);	
 }

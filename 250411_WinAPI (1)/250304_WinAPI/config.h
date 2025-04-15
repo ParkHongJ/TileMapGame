@@ -3,6 +3,7 @@
 #pragma once
 #pragma comment(lib, "Winmm.lib")
 #pragma warning(disable : 4996)
+#pragma warning(disable : 4244)
 #include <Windows.h>
 #include <string>
 #include <iostream>
@@ -13,6 +14,8 @@
 #include <wrl/client.h>
 
 #pragma comment(lib, "d2d1.lib")
+#include <dwrite.h>
+#pragma comment(lib, "dwrite.lib")
 using Microsoft::WRL::ComPtr;
 
 using namespace std;
@@ -21,6 +24,7 @@ using namespace std;
 #include "ImageManager.h"
 #include "TimerManager.h"
 #include "SceneManager.h"
+
 
 /*
 	컴파일러에서 해당 코드를 뒤에 정의된 코드로 변경한다. 
@@ -49,6 +53,9 @@ extern HWND g_hWnd;
 extern HINSTANCE g_hInstance;
 extern POINT g_ptMouse;
 
+extern ComPtr<ID2D1SolidColorBrush> GBrush; 
+extern ComPtr<IDWriteFactory> GdwriteFactory;
+extern ComPtr<IDWriteTextFormat> GtextFormat;
 
 enum class PlayerState {
     IDLE,               // 가만히 서 있음
