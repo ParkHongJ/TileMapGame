@@ -13,18 +13,19 @@ public:
 
     void Init();
     void Update(float TimeDelta);
+    void LateUpdate(float TimeDelta);
     void Render(ID2D1HwndRenderTarget* renderTarget);
     void Release();
 
-    void AddObject(GameObject* obj);
-    void AddObject(unsigned int id, GameObject* obj);
+    void AddObject(RENDERORDER renderId, GameObject* obj);
+    void AddObject(unsigned int id, RENDERORDER renderId, GameObject* obj);
     void ReplaceObject(unsigned int id, GameObject* obj);
     bool RemoveObject(unsigned int id);
 
     GameObject* FindObject(unsigned int id);
-   
+
 private:
-    unordered_map<unsigned int, GameObject*> m_objects;
+    unordered_map<unsigned int, GameObject*> objects;
     list<GameObject*> renders[RENDER_END];
     unsigned int nextId;
 };
