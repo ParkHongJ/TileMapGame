@@ -170,6 +170,10 @@
     </ClCompile>
     <ClCompile Include="InteractionState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>2D Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +254,10 @@
     </ClInclude>
     <ClInclude Include="HyoCharacter.h">
       <Filter>헤더 파일</Filter>
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>2D Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

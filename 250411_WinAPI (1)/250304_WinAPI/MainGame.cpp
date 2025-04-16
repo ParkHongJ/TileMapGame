@@ -39,9 +39,6 @@ HRESULT MainGame::Init()
 	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
-		"Character_Iris", L"Image/char_iris.bmp", m_pRenderTarget.Get());
-
-	ImageManager::GetInstance()->AddImage(
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(

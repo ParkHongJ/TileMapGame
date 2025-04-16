@@ -1,8 +1,11 @@
 #pragma once
 #include "Scene.h"
 #include "GameObject.h"
+#include "HyoCharacter.h"
 
 class Image;
+class Camera;
+class HyoCharacter;
 class HyoScene : public Scene
 {
 public:
@@ -16,6 +19,12 @@ public:
 
 private:
 	Image* background;
+	HyoCharacter* testBackGround;
+	HyoCharacter* testCamera;
+	Camera* camera;
+
+	float mapSizeHeight;
+	float maptSizeWidth;
 
 };
 
