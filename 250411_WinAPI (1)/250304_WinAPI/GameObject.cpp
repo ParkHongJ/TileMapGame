@@ -11,6 +11,7 @@ void GameObject::Release()
 
 void GameObject::Update(float TimeDelta)
 {
+
 }
 
 void GameObject::LateUpdate(float TimeDelta)

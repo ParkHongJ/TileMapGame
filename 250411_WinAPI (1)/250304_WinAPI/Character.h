@@ -23,7 +23,7 @@ private:
 
 	float					frameTime;
 	POINT				 currFrameInd;
-	POINT			  currMaxFrameInd;
+
 	FrameInfo		    currFrameInfo;
 	FrameInfo           jumpFrameInfo;
 	FrameInfo		  attackFrameInfo;
@@ -36,11 +36,10 @@ private:
 	bool					   isFlip;
 	bool                      isInAir;
 	bool                  isAttacking;
+	bool					  isOnPet;
 
 
-	bool isOnPet;
 	
-		               
 	bool                  jumpPressed;
 	bool                attackPressed;
 
@@ -69,19 +68,16 @@ public:
 	void InitAnimationMap();
 	void SetAnimationRange(PlayerState state);
 
+
+	void SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState);
 	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
-
 	
-
-	void PlayAnimation(unsigned int stateClassNum, unsigned int subState );
+	
+	
+	void PlayAnimation( float TimeDelta);
 	void ChangeState(CharacterState* newState);
-	
-	
-	
 
-	void HandleInput(PlayerState prevState, float TimeDelta);
 	bool PressAnyKey();
-
 
 	float GetVelocitySize();
 	float GetYVelocity();
@@ -89,24 +85,11 @@ public:
 	bool GetIsLookUpPaused();
 	bool GetIsLookDownPaused();
 
-
-
 	void Move(int dirX, float TimeDelta);
 
 	void LookUp(float TimeDelta);
 	void LookDown(float TimeDelta);
 	
-
-
-
-
-
-
-	
-
-
-
-
 	Character() {};
 	virtual ~Character() {};
 
