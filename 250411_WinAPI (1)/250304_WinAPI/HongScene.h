@@ -7,7 +7,8 @@ class HongScene : public Scene
 private:
 	Image* backGround;
 	DummyHongPlayer* player;
-
+	float FrameTime = 0.f;
+	int currentFrame = 0;
 	//나중에 게임매니저로 빼든해야한다.
 	Tile* tileMap[16][16];
 

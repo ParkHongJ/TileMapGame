@@ -5,6 +5,7 @@
 #include "CommonFunction.h"
 #include "CollisionManager.h"
 #include "DummyHongPlayer.h"
+#include "Image.h"
 void HongScene::LoadTile(const char* path)
 {
 	FILE* fp = fopen(path, "rb");
@@ -53,6 +54,8 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
 
+	backGround = ImageManager::GetInstance()->AddImage("Test123123", L"Textures/char_black.png", 16, 16, renderTarget);
+
 	LoadTile("Data/map1.tilemap");
 
 	GenerateDecoTile();
@@ -86,6 +89,20 @@ void HongScene::Update(float TimeDelta)
 	player->Update(TimeDelta);
 	ObjectManager::GetInstance()->Update(TimeDelta);
 	CollisionManager::GetInstance()->Update(TimeDelta);
+
+	float frameDuration = 0.125f; // 한 프레임이 유지되는 시간
+	FrameTime += TimeDelta;
+
+	if (FrameTime >= frameDuration)
+	{
+		FrameTime = 0.f;
+		currentFrame++; // 다음 프레임으로
+	}
+
+	if (currentFrame > 16)
+	{
+		currentFrame = 0;
+	}
 }
 
 void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -103,11 +120,12 @@ void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 			}
 		}
 	}
+	
+	backGround->FrameRender(renderTarget, 100, 100, currentFrame, 0);
 
+#ifdef _DEBUG
 	CollisionManager::GetInstance()->DebugRender(renderTarget);
-
-	
-	
+#endif _DEBUG
 }
 
 void HongScene::GenerateDecoTile()

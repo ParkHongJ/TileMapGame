@@ -33,11 +33,8 @@ public:
 		bool isTransparent = FALSE,
 		COLORREF transColor = FALSE);*/
 
-	/*Image* AddImage(string key, const wchar_t* filePath, 
-		int width, int height,
-		int maxFrameX, int maxFrameY,
-		bool isTransparent = FALSE, 
-		COLORREF transColor = FALSE);*/
+	Image* AddImage(string key, const wchar_t* filePath, 
+		int maxFrameX, int maxFrameY, ID2D1HwndRenderTarget* renderTarget);
 
 	void DeleteImage(string key);
 	Image* FindImage(string key);
