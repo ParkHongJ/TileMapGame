@@ -13,6 +13,7 @@ public:
 
 private:
     SubState currentSubState;
+    Character* character;
 
 public:
     AttackState(SubState initialSubState = SubState::NONE)
@@ -20,8 +21,9 @@ public:
     }
 
     virtual void Enter(Character* character) override;
-    virtual void Update(Character* character, float deltaTime) override;
-    virtual void UpdateAnimation(Character* character) override;
-    virtual void Exit(Character* character) override;
+    virtual void Update( float TimeDelta) override;
+    virtual void UpdateAnimation( float TimeDelta) override;
+    void ChangeSubState(SubState newSubState);
+    virtual void Exit() override;
     virtual const char* GetStateName() const override { return "AttackState"; }
 };

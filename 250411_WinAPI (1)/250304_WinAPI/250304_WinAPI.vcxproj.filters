@@ -57,7 +57,7 @@
     </Filter>
     <Filter Include="MainGame\Scene\Yong\Item">
       <UniqueIdentifier>{19e23dd8-7c3f-422d-99c0-174b84c96d95}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="MainGame\Scene\Tae\State">
       <UniqueIdentifier>{2a8b99f6-b807-4ce4-ae35-684fc3f20459}</UniqueIdentifier>
     </Filter>
@@ -152,10 +152,10 @@
     </ClCompile>
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>MainGame\Scene\Yong\Status</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="InGameUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="CharacterState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
     </ClCompile>
@@ -250,6 +250,42 @@
     </ClInclude>
     <ClInclude Include="HyoCharacter.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAnimationObject.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestRenderSort.h">
+      <Filter>MainGame\Scene\Yong\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>MainGame\Scene\Yong\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="TestYongSceneBackGround.h">
+      <Filter>MainGame\Scene\Yong\Render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
