@@ -3,6 +3,7 @@
 #include "ImageManager.h"
 #include "KeyManager.h"
 #include "Character.h"
+#include "TimerManager.h"
 
 HRESULT TaeScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -45,7 +46,7 @@ void TaeScene::Update(float TimeDelta)
 
 void TaeScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-    backGround->Render(renderTarget, 0, 0);
+    //backGround->Render(renderTarget, 0, 0);
 
     /*HPEN hPen = CreatePen(PS_SOLID, 10, RGB(255, 0, 0));
     HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);

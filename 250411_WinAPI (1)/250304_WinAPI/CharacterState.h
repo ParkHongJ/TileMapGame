@@ -9,7 +9,8 @@ public:
     virtual void Update(float TimeDelta) = 0;
     virtual void UpdateAnimation(float TimeDelta) = 0;
     virtual void Exit() = 0;
-    virtual const char* GetStateName() const = 0;
+    virtual const char* GetSubStateName() const = 0;
+
   
     virtual ~CharacterState() {};
 };

@@ -4,6 +4,8 @@
 void InteractionState::Enter(Character* character)
 {
     this->character = character;
+
+    Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
 }
 
 void InteractionState::Update(float deltaTime)

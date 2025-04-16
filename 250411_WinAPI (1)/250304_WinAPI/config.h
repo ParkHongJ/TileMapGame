@@ -41,7 +41,7 @@ using namespace std;
 #define DEG_TO_RAD(degree) ((3.14 / 180.0) * degree)
 #define RAD_TO_DEG(radian) ((180.0 / 3.14) * radian)
 
-#define ANIMATION_FRAME_TIME 0.065f
+#define ANIMATION_FRAME_TIME 0.1f
 
 #define IDLESTATE 0
 #define MOVESTATE 1

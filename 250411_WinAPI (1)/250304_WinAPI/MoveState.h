@@ -30,5 +30,5 @@ public:
     void ChangeSubState(SubState newSubState);
 
     virtual void Exit() override;
-    virtual const char* GetStateName() const override { return "MoveState"; }
+    virtual const char* GetSubStateName() const override;
 };

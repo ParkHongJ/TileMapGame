@@ -30,6 +30,6 @@ public:
     virtual void UpdateAnimation(float deltaTime) override;
     void ChangeSubState(SubState newSubState);
     virtual void Exit() override;
-    virtual const char* GetStateName() const override { return "InteractionState"; }
+    virtual const char* GetSubStateName() const override { return "InteractionState"; }
 
 };
