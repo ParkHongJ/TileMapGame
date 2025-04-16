@@ -34,6 +34,9 @@ HRESULT HyoScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	camera = new Camera();
 	camera->Init();
 
+	camera->SetMapWidth(testCamera->GetBackGroundWidth());
+	camera->SetMapHeight(testCamera->GetBackGroundHeight());
+
 	return S_OK;
 }
 

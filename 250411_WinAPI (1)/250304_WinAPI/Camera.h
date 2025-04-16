@@ -11,6 +11,8 @@ public:
 
 	const FPOINT GetPos() { return pos; }	// 각각의 오브젝트에게 위치 주기 
 	void SetMapSize(FPOINT mapSize) { this -> mapSize = mapSize; }
+	void SetMapWidth(float mapWidth) { this->mapWidth = mapWidth; }
+	void SetMapHeight(float mapHeight) { this->mapHeight = mapHeight; }
 
 private: 
 	
@@ -19,8 +21,8 @@ private:
 	FPOINT offset;
 	FPOINT mapSize;
 
-	/*float mapHeight;
-	float mapWidth;*/
+	float mapHeight;
+	float mapWidth;
 
 	float moveSpeed;	// 카메라 속도 
 };

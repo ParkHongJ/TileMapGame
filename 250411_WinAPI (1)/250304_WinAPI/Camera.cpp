@@ -8,6 +8,10 @@ HRESULT Camera::Init()
 	target = { 0,0 };	
 	mapSize = { 0,0 };
 	offset = { WINSIZE_X / 2,WINSIZE_Y / 2 };
+
+	mapHeight = 0.0f;
+	mapWidth = 0.0f;
+
 	moveSpeed = 0.0f;
     return S_OK;
 }
@@ -23,6 +27,23 @@ void Camera::Update(const FPOINT& playerPos, float TimeDelta)
 
 	pos.x = -(target.x) + offset.x;
 	pos.y = -(target.y) + offset.y; 
+
+	float x = -(mapWidth - WINSIZE_X);
+	float y = -(mapHeight - WINSIZE_Y);
+
+	if (pos.x < x) pos.x = x;
+	if (pos.x > -x) pos.x = -x;
+	if (pos.y < y) pos.y = y;
+	if (pos.y > -y) pos.y = -y;
+	//if (pos.x > mapWidth) pos.x = mapWidth;
+
+	/*if (mapWidth < pos.x) pos.x = mapWidth;
+	if (mapHeight < pos.y) pos.y = mapHeight;*/
+
+	/*if (pos.x < x) pos.x = x;
+	if (x > 0) pos.x = 0;
+	if (pos.y > y) pos.y = y; 
+	if (y > 0) pos.y = y;*/
 
 	/*pos.x -= (target.x - pos.x) * moveSpeed * TimeDelta;
 	pos.y -= (target.y - pos.y) * moveSpeed * TimeDelta;*/

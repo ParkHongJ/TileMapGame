@@ -192,6 +192,9 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">

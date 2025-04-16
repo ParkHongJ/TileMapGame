@@ -19,8 +19,8 @@ HRESULT HyoCharacter::Init()
 	}*/
 
 	SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
-	/*mapSizeHeight = testBackGround->GetHeight();
-	maptSizeWidth = testBackGround->GetWidth();*/
+	mapSizeHeight = testBackGround->GetHeight();
+	mapSizeWidth = testBackGround->GetWidth();
 	dir = -1;
 	backGroundPos = { WINSIZE_X / 2,WINSIZE_Y / 2 };
 	state = PlayerState::IDLE;
@@ -73,10 +73,16 @@ void HyoCharacter::TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT&
 	}
 	
 	if (testCamera)
-	{
-		//testCamera->Render(renderTarget, cameraPos.x, cameraPos.y);
+	{ 
+		//testCamera->Render(renderTarget, cameraPos.x, cameraPos.y); 
 		testCamera->Render(renderTarget, Pos.x + cameraPos.x, Pos.y + cameraPos.y);
 	}
 	
 	// testCamera->Render(renderTarget, 0, 0);
 }
+
+//void HyoCharacter::GetBackGroundSize(float mapSizeWidth, float mapSizeHeight)
+//{
+//	mapSizeWidth = testBackGround->GetWidth();
+//	mapSizeHeight = testBackGround->GetHeight();
+//}
