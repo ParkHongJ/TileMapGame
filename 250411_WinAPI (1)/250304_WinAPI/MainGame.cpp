@@ -6,6 +6,7 @@
 #include "TilemapTool.h"
 #include "AstarScene.h"
 #include "LoadingScene.h"
+#include "InGameUI.h"
 
 #include "HongScene.h"
 #include "HyoScene.h"
@@ -30,6 +31,7 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("진석", new JinScene());
 	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
+	SceneManager::GetInstance()->AddScene("playerUI", new InGameUI());
 
 	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 
@@ -50,7 +52,6 @@ HRESULT MainGame::Init()
 
 	ImageManager::GetInstance()->AddImage(
 		"Tae_Player", TEXT("Image/Character/char_yellow.bmp"), m_pRenderTarget.Get());
-
 
 	SceneManager::GetInstance()->ChangeScene("효진");
 
@@ -119,7 +120,7 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			SceneManager::GetInstance()->ChangeScene("준용");
 			break;
 		case 'w': case 'W':
-			SceneManager::GetInstance()->ChangeScene("진석");
+			SceneManager::GetInstance()->ChangeScene("playerUI");
 			break;
 		}
 		break;

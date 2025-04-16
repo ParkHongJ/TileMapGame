@@ -2,15 +2,16 @@
 #include "Scene.h"
 
 class Image;
-class UI : public Scene
+class InGameUI : public Scene
 {
 private:
-	Image* lifeImage;
+	Image* playerLifeImage;
+	Image* playerLifeRunsOutImage;
 	Image* bombImage;
 	Image* ropeImage;
 	Image* currencyImage;
 	Image* sandGlassImage;
-	Image* lightBulb;			//스테이지 옆 파란전구
+	Image* lightBulbImage;			//스테이지 옆 파란전구
 	int lifeCount;
 	int bombCount;
 	int ropeCount;
@@ -27,7 +28,12 @@ public:
 	virtual void Update(float TimeDelta);
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
 
-	UI() {};
-	virtual ~UI() {};
+	inline void SetLifeCount(int setValue) { lifeCount = setValue; if (lifeCount <= 0) lifeCount = 0; };
+	inline void SetBombCount(int setValue) { bombCount = setValue; };
+	inline void SetRopeCount(int setValue) { ropeCount = setValue; };
+	inline void SetCurrency(int setValue) { currencyCount = setValue; };
+
+	InGameUI() {};
+	virtual ~InGameUI() {};
 };
 

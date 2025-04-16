@@ -129,7 +129,7 @@
     <ClCompile Include="HyoCharacter.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
+    <ClCompile Include="InGameUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,7 +221,7 @@
     <ClInclude Include="HyoCharacter.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
+    <ClInclude Include="InGameUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
   </ItemGroup>
