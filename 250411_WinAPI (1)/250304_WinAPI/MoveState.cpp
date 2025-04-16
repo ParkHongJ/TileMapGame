@@ -81,14 +81,6 @@ void MoveState::Update(Character* character, float TimeDelta)
         }
     }
 
-    
-
-
-
-
-   
-
-
 
     UpdateAnimation(character);
 }

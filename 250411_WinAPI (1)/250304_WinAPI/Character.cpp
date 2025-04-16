@@ -361,6 +361,16 @@ float Character::GetYVelocity()
     return velocity.y;
 }
 
+bool Character::GetIsLookUpPaused()
+{
+    return isLookUpPaused;
+}
+
+bool Character::GetIsLookDownPaused()
+{
+    return isLookDownPaused;
+}
+
 void Character::Move(int dirX, float timeDelta)
 {
     isFlip = dirX > 0 ? false : true;
@@ -369,7 +379,7 @@ void Character::Move(int dirX, float timeDelta)
 
 void Character::LookUp(float TimeDelta)
 { 
-    // 특정 프레임 도달 시 불리언 변경?
+    // 특정 프레임 도달 시 불리언 변경? 
 }
 
 void Character::LookDown(float TimeDelta)

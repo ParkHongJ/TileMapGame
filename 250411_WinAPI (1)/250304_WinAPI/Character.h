@@ -86,6 +86,9 @@ public:
 	float GetVelocitySize();
 	float GetYVelocity();
 
+	bool GetIsLookUpPaused();
+	bool GetIsLookDownPaused();
+
 
 
 	void Move(int dirX, float TimeDelta);
