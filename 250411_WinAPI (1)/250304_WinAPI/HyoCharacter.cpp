@@ -19,8 +19,8 @@ HRESULT HyoCharacter::Init()
 	}*/
 
 	SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
-	mapSizeHeight = testBackGround->GetHeight();
-	maptSizeWidth = testBackGround->GetWidth();
+	/*mapSizeHeight = testBackGround->GetHeight();
+	maptSizeWidth = testBackGround->GetWidth();*/
 	dir = -1;
 	backGroundPos = { WINSIZE_X / 2,WINSIZE_Y / 2 };
 	state = PlayerState::IDLE;
