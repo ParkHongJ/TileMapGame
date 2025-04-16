@@ -23,9 +23,11 @@ public:
 	//부모의 위치를 기반으로 Offset과 등등을 갱신
 public:
 	virtual void Update(float TimeDelta) = 0;
-	virtual void DebugRender(ID2D1RenderTarget* rt);
+	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const = 0;
 public:
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const = 0;
+private:
+	virtual void DebugRender(ID2D1RenderTarget* rt);
 
 protected:
 	FPOINT Pos;
@@ -44,6 +46,8 @@ public:
 public:
 	virtual void Update(float TimeDelta) override;
 	virtual void DebugRender(ID2D1RenderTarget* rt) override;
+
+	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const override;
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const override;
 	FPOINT Min, Max;
 };
@@ -56,6 +60,9 @@ public:
 
 	virtual void Update(float TimeDelta) override;
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const override;
-	float Radius;
+
+	bool CheckCollisionWithCircle(FPOINT center, float radius) const override;
+
+	float radius;
 
 };

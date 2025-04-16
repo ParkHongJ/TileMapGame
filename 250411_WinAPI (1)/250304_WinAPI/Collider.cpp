@@ -55,6 +55,17 @@ void BoxCollider::DebugRender(ID2D1RenderTarget* rt)
 	DrawCenteredRect(rt, Pos, Scale.x / 2.f, D2D1::ColorF(D2D1::ColorF::Green));
 }
 
+bool BoxCollider::CheckCollisionWithCircle(FPOINT center, float radius) const
+{
+    float closestX = Clamp<float>(center.x, Min.x, Max.x);
+    float closestY = Clamp<float>(center.y, Min.y, Max.y);
+
+    float dx = center.x - closestX;
+    float dy = center.y - closestY;
+
+    return (dx * dx + dy * dy) <= radius * radius;
+}
+
 bool BoxCollider::Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const
 {
     float tmin = 0.0f;
@@ -108,7 +119,7 @@ bool BoxCollider::Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit)
 
 SphereCollider::SphereCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject, float radius)
 	: Collider(_Offset, _Scale, OwnerObject)
-	, Radius(radius)
+	, radius(radius)
 {
 
 }
@@ -120,4 +131,10 @@ void SphereCollider::Update(float TimeDelta)
 bool SphereCollider::Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const
 {
 	return false;
+}
+
+bool SphereCollider::CheckCollisionWithCircle(FPOINT center, float radius) const
+{
+    float totalR = radius + this->radius;
+    return (Pos - center).Length() <= totalR * totalR;
 }
