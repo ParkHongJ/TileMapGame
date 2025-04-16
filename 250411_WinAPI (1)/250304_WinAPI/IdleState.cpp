@@ -4,12 +4,11 @@
 
 void IdleState::Enter(Character* character)
 {
-		UpdateAnimation(character);
+    this->character = character;
 }
 
-void IdleState::Update(Character* character, float TimeDelta)
+void IdleState::Update(float TimeDelta)
 {
-
     // 입력 등을 받아서 서브상태 변경
     KeyManager* km = KeyManager::GetInstance();
 
@@ -19,17 +18,16 @@ void IdleState::Update(Character* character, float TimeDelta)
         return;
     }
 
-
     if (!character->GetIsLookUpPaused())
     {
         if (currentSubState == IdleState::SubState::IDLE_LOOKDOWN_RELEASE)
         {
-            currentSubState = IdleState::SubState::IDLE_ALONE;
+            ChangeSubState(IdleState::SubState::IDLE_ALONE);
         }
 
         if (currentSubState == IdleState::SubState::IDLE_LOOKUP_RELEASE)
         {
-            currentSubState = IdleState::SubState::IDLE_ALONE;
+            ChangeSubState(IdleState::SubState::IDLE_ALONE);
         }
     }
 
@@ -41,12 +39,13 @@ void IdleState::Update(Character* character, float TimeDelta)
         
         if (!character->GetIsLookUpPaused())
         {
-            currentSubState = IdleState::SubState::IDLE_LOOKUP_START;
+            ChangeSubState(IdleState::SubState::IDLE_LOOKUP_START);
             character->LookUp(TimeDelta);
         }
         else
         {
-            currentSubState = IdleState::SubState::IDLE_LOOKUP_STOP;
+            ChangeSubState(IdleState::SubState::IDLE_LOOKUP_STOP);
+
             // 프레임 검사 함수
         }
         
@@ -56,7 +55,8 @@ void IdleState::Update(Character* character, float TimeDelta)
     {
         if (character->GetIsLookUpPaused())
         {
-            currentSubState = IdleState::SubState::IDLE_LOOKUP_RELEASE;
+            ChangeSubState(IdleState::SubState::IDLE_LOOKUP_RELEASE);
+
             //프레임 검사 함수
         }
     }
@@ -65,12 +65,14 @@ void IdleState::Update(Character* character, float TimeDelta)
 
         if (!character->GetIsLookUpPaused())
         {
-            currentSubState = IdleState::SubState::IDLE_LOOKDOWN_START;
+            ChangeSubState(IdleState::SubState::IDLE_LOOKDOWN_START);
             character->LookDown(TimeDelta);
         }
         else
         {
-            currentSubState = IdleState::SubState::IDLE_LOOKDOWN_STOP;
+
+            ChangeSubState( IdleState::SubState::IDLE_LOOKDOWN_STOP);
+            
             // 프레임 검사 함수
         }
 
@@ -79,21 +81,28 @@ void IdleState::Update(Character* character, float TimeDelta)
     {
         if (character->GetIsLookDownPaused())
         {
-            currentSubState = IdleState::SubState::IDLE_LOOKDOWN_RELEASE;
+            ChangeSubState(IdleState::SubState::IDLE_LOOKDOWN_RELEASE);
+
             //프레임 검사 함수
         }
     }
 
-    UpdateAnimation(character);
+    UpdateAnimation(TimeDelta);
     
 }
 
-void IdleState::UpdateAnimation(Character* character)
+void IdleState::UpdateAnimation(float TimeDelta)
 {
-    character->PlayAnimation(IDLESTATE, static_cast<int>(currentSubState));
+    character->PlayAnimation(TimeDelta);
 }
 
-void IdleState::Exit(Character* character)
+void IdleState::ChangeSubState( SubState newSubState)
+{
+    currentSubState = newSubState;
+    character->SetAnimationFrameInfo(IDLESTATE, static_cast<unsigned int>(newSubState));
+}
+
+void IdleState::Exit()
 {
     currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);

@@ -3,21 +3,27 @@
 
 void AttackState::Enter(Character* character)
 {
-    UpdateAnimation(character);
+    this->character = character;
 }
 
-void AttackState::Update(Character* character, float deltaTime)
+void AttackState::Update( float TimeDelta)
 {
     // 공격 중 입력이나 상태 변화 감지 가능
-    UpdateAnimation(character);
+    UpdateAnimation(TimeDelta);
 }
 
-void AttackState::UpdateAnimation(Character* character)
+void AttackState::UpdateAnimation(float TimeDelta)
 {
-    character->PlayAnimation(ATTACKSTATE, static_cast<int>(currentSubState)); // stateId = 3 (Attack)
+    character->PlayAnimation(TimeDelta); 
 }
 
-void AttackState::Exit(Character* character)
+void AttackState::ChangeSubState(SubState newSubState)
+{
+    currentSubState = newSubState;
+    character->SetAnimationFrameInfo(ATTACKSTATE, static_cast<int>(newSubState));
+}
+
+void AttackState::Exit()
 {
     currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);

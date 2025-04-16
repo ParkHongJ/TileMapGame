@@ -3,21 +3,27 @@
 
 void InteractionState::Enter(Character* character)
 {
-    UpdateAnimation(character);
+    this->character = character;
 }
 
-void InteractionState::Update(Character* character, float deltaTime)
+void InteractionState::Update(float deltaTime)
 {
     // 상태 변경 로직이 있다면 여기에
-    UpdateAnimation(character);
+    UpdateAnimation( deltaTime);
 }
 
-void InteractionState::UpdateAnimation(Character* character)
+void InteractionState::UpdateAnimation( float deltaTime)
 {
-    character->PlayAnimation(INTERACTIONSTATE, static_cast<int>(currentSubState)); // stateId = 2 (Interaction)
+    character->PlayAnimation(deltaTime); // stateId = 2 (Interaction)
 }
 
-void InteractionState::Exit(Character* character)
+void InteractionState::ChangeSubState(SubState newSubState)
+{
+    currentSubState = newSubState;
+    character->SetAnimationFrameInfo(INTERACTIONSTATE, static_cast<int>(newSubState));
+}
+
+void InteractionState::Exit()
 {
     currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);

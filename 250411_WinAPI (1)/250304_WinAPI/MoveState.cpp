@@ -3,10 +3,10 @@
 
 void MoveState::Enter(Character* character)
 {
-    UpdateAnimation(character);
+    this->character = character;
 }
 
-void MoveState::Update(Character* character, float TimeDelta)
+void MoveState::Update(float TimeDelta)
 {
     // 예: 입력 받아 서브상태 전환 처리 가능
     // if (character->IsLookingDown()) { currentSubState = SubState::MOVE_LOOKDOWN; }
@@ -26,7 +26,7 @@ void MoveState::Update(Character* character, float TimeDelta)
 
     if (character->GetYVelocity() > 0)
     {
-        currentSubState = SubState::MOVE_ONAIR;
+        ChangeSubState(SubState::MOVE_ONAIR);
 
         if (km->IsStayKeyDown(VK_LEFT)) character->Move(-1, TimeDelta);
         else if (km->IsStayKeyDown(VK_RIGHT)) character->Move(1, TimeDelta);
@@ -37,13 +37,14 @@ void MoveState::Update(Character* character, float TimeDelta)
         {
             if (km->IsStayKeyDown(VK_DOWN))
             {
+                ChangeSubState(SubState::MOVE_LOOKDOWN);
 
-                currentSubState = SubState::MOVE_LOOKDOWN;
-                character->Move(-1, TimeDelta);
+                 character->Move(-1, TimeDelta);
             }
             else
             {
-                currentSubState = SubState::MOVE_ALONE;
+                ChangeSubState(SubState::MOVE_ALONE);
+
                 character->Move(-1, TimeDelta);
             }
         }
@@ -51,14 +52,15 @@ void MoveState::Update(Character* character, float TimeDelta)
         {
             if (km->IsStayKeyDown(VK_DOWN))
             {
+                ChangeSubState(SubState::MOVE_LOOKDOWN);
 
-                currentSubState = SubState::MOVE_LOOKDOWN;
                 character->Move(1, TimeDelta);
             }
             else
             {
-                currentSubState = SubState::MOVE_ALONE;
-                character->Move(1, TimeDelta);
+                ChangeSubState(SubState::MOVE_ALONE);
+
+                 character->Move(1, TimeDelta);
             }
         }
 
@@ -68,13 +70,15 @@ void MoveState::Update(Character* character, float TimeDelta)
         {
             if (km->IsStayKeyDown(VK_LEFT))
             {
-                currentSubState = SubState::MOVE_LOOKDOWN;
+                ChangeSubState(SubState::MOVE_LOOKDOWN);
+
                 character->Move(-1, TimeDelta);
                
             }
             else if (km->IsStayKeyDown(VK_RIGHT))
             {
-                currentSubState = SubState::MOVE_LOOKDOWN;
+                ChangeSubState(SubState::MOVE_LOOKDOWN);
+
                 character->Move(1, TimeDelta);
               
             }
@@ -82,15 +86,21 @@ void MoveState::Update(Character* character, float TimeDelta)
     }
 
 
-    UpdateAnimation(character);
+    UpdateAnimation(TimeDelta);
 }
 
-void MoveState::UpdateAnimation(Character* character)
+void MoveState::UpdateAnimation(float TimeDelta)
 {
-    character->PlayAnimation(MOVESTATE, static_cast<int>(currentSubState)); 
+    character->PlayAnimation(TimeDelta); 
 }
 
-void MoveState::Exit(Character* character)
+void MoveState::ChangeSubState(SubState newSubState)
+{
+    currentSubState = newSubState;
+    character->SetAnimationFrameInfo(MOVESTATE, static_cast<int>(newSubState));
+}
+
+void MoveState::Exit()
 {
     currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);

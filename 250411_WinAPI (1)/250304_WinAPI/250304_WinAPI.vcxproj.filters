@@ -132,9 +132,6 @@
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
     </ClCompile>
-    <ClCompile Include="HyoCharacter.cpp">
-      <Filter>MainGame\Scene\Hyo</Filter>
-    </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>MainGame\Scene\Yong\Animation</Filter>
     </ClCompile>
@@ -168,17 +165,11 @@
     <ClCompile Include="AttackState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>2D Framework</Filter>
-    </ClCompile>
     <ClCompile Include="InteractionState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
     </ClCompile>
-    <ClCompile Include="HyoCharacter.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
-    </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
     <ClCompile Include="Collider.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
@@ -188,6 +179,12 @@
     </ClCompile>
     <ClCompile Include="DummyHongPlayer.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
@@ -272,17 +269,44 @@
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Tae</Filter>
     </ClInclude>
-    <ClInclude Include="HyoCharacter.h">
-      <Filter>MainGame\Scene\Hyo</Filter>
+    <ClInclude Include="CharacterState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAnimationObject.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestRenderSort.h">
+      <Filter>MainGame\Scene\Yong\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>MainGame\Scene\Yong\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="TestYongSceneBackGround.h">
+      <Filter>MainGame\Scene\Yong\Render</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>2D Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="HyoCharacter.h">
       <Filter>MainGame\Scene\Hyo</Filter>
-    </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
     <ClInclude Include="Collider.h">
       <Filter>MainGame\Scene\Hong</Filter>
@@ -292,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="DummyHongPlayer.h">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoCharacter.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>

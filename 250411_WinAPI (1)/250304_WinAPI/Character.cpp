@@ -24,7 +24,6 @@ HRESULT Character::Init()
     frameTime = 0.0f;
     currFrameInfo.startFrame = { 0,0 };
     currFrameInfo.endFrame = { 0,0 };
-    currMaxFrameInd = { 9,0 };
 
     jumpFrameInfo = { {0, 9}, {7, 9} };
     attackFrameInfo = { {10, 12}, {15,12} };
@@ -63,11 +62,12 @@ void Character::Update(float TimeDelta)
 {
 
     if (state) 
-        state->Update(this, TimeDelta);
+        state->Update(TimeDelta);
     
 
-    //HandleInput(prevState, TimeDelta);
+    // velocity 중력 관련 업데이트
 
+    
    
 }
 
@@ -129,189 +129,8 @@ void Character::SetAnimationRange(PlayerState state)
     }
 }
 
-
-//bool Character::ShouldResetAnimation(PlayerState prevState, PlayerState newState)
-//{
-//    if ((prevState == PlayerState::LOOKUP_START && state == PlayerState::LOOKUP_RELEASE) ||
-//        (prevState == PlayerState::LOOKDOWN_START && state == PlayerState::LOOKDOWN_RELEASE))
-//        return true;
-//    else return false;
-//
-//}
-
-
-void Character::Render(ID2D1HwndRenderTarget* renderTarget)
+void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState)
 {
-   /* {
-        TCHAR buf[256];
-        wsprintf(buf, TEXT("Render Frame: %d, %d"), currFrameInd.x, currFrameInd.y);
-        TextOut(renderTarget, 20, 100, buf, wcslen(buf));
-    }
-    {
-        TCHAR buf[256]; 
-        wsprintf(buf, TEXT("PlayerState: %s"), PlayerStateToString(state));
-        TextOut(renderTarget, 20, 120, buf, wcslen(buf));
-    }*/
-
-    if (state)
-    {
-        char debugText[128];
-        sprintf_s(debugText, "CurrentState: %s\n", state->GetStateName());
-        OutputDebugStringA(debugText);  // ANSI 버전
-    }
-
-    //playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y);//, isFlip, true);
-    playerImage->Render(renderTarget, Pos.x, Pos.y);
-}
-
-//
-//void Character::HandleInput(PlayerState prevState, float TimeDelta)
-//{
-//    KeyManager* km = KeyManager::GetInstance();
-//
-//    bool hasInput = false;
-//    dir = { 0.0f , 0.0f };
-//
-//#pragma region MOVESECTION
-//
-//    if (km->IsStayKeyDown(VK_RIGHT))
-//    {
-//        dir.x += 1;
-//        isFlip = false;
-//
-//        if (km->IsStayKeyDown(VK_DOWN))
-//        {
-//            state = PlayerState::LOOKDOWN_MOVE;
-//            speed = 100.f;
-//        }
-//        else
-//        {
-//            state = PlayerState::MOVE;
-//            speed = 200.f;
-//        }
-//
-//        Pos.x += speed * dir.x * TimeDelta;
-//        hasInput = true;
-//    }
-//    else if (km->IsStayKeyDown(VK_LEFT))
-//    {
-//        dir.x += -1;
-//        isFlip = true;
-//
-//        if (km->IsStayKeyDown(VK_DOWN))
-//        {
-//            state = PlayerState::LOOKDOWN_MOVE;
-//            speed = 100.f;
-//        }
-//        else
-//        {
-//            state = PlayerState::MOVE;
-//            speed = 200.f;
-//        }
-//
-//        Pos.x += speed * dir.x * TimeDelta;
-//        hasInput = true;
-//    }
-//    
-//    if ((km->IsOnceKeyUp(VK_LEFT) || km->IsOnceKeyUp(VK_RIGHT)) && km->IsStayKeyDown(VK_DOWN))
-//    {
-//        switch (prevState)
-//        {
-//        case PlayerState::LOOKDOWN_MOVE:
-//            state = PlayerState::LOOKDOWN_IDLE;
-//            break;
-//        }
-//      //  return;
-//    }
-//
-//    if (km->IsStayKeyDown(VK_DOWN) && state == PlayerState::LOOKDOWN_IDLE)
-//    {
-//        
-//    }
-//  
-//
-//
-//#pragma endregion
-//
-//#pragma region JUMP
-//
-//    if (km->IsOnceKeyDown(VK_SPACE))
-//    {
-//        jumpPressed = true;
-//        hasInput = true;
-//    }
-//
-//#pragma endregion
-//
-//#pragma region LOOKUP & LOOKDOWN
-//
-//    if (state != PlayerState::MOVE)
-//    {
-//        // LOOK UP
-//        if (km->IsStayKeyDown(VK_UP))
-//        {
-//            if (state != PlayerState::LOOKUP_START &&
-//                state != PlayerState::LOOKUP_RELEASE)
-//            {
-//                state = PlayerState::LOOKUP_START;
-//                hasInput = true;
-//            }
-//        }
-//
-//        if (state == PlayerState::LOOKUP_START && km->IsOnceKeyUp(VK_UP))
-//        {
-//            state = PlayerState::LOOKUP_RELEASE;
-//            isLookUpPaused = false;
-//        }
-//
-//        // LOOK DOWN
-//        if (km->IsStayKeyDown(VK_DOWN))
-//        {
-//            if (state != PlayerState::LOOKDOWN_START &&
-//                state != PlayerState::LOOKDOWN_RELEASE &&
-//                state != PlayerState::LOOKDOWN_MOVE)
-//            {
-//                state = PlayerState ::LOOKDOWN_START;
-//                hasInput = true;
-//            }
-//        }
-//
-//        if (km->IsOnceKeyUp(VK_DOWN))
-//        {
-//            switch (prevState)
-//            {
-//            case PlayerState::LOOKDOWN_MOVE:
-//            case PlayerState::LOOKDOWN_IDLE:
-//                state = PlayerState::LOOKDOWN_RELEASE;
-//                break;
-//            }
-//        }
-//
-//        if (state == PlayerState::LOOKDOWN_START && km->IsOnceKeyUp(VK_DOWN))
-//        {
-//            state = PlayerState::LOOKDOWN_RELEASE;
-//            isLookDownPaused = false;
-//        }
-//    }
-//
-//#pragma endregion
-//
-//    if (!hasInput &&
-//        state != PlayerState::LOOKUP_START &&
-//        state != PlayerState::LOOKUP_RELEASE &&
-//        state != PlayerState::LOOKDOWN_START &&
-//        state != PlayerState::LOOKDOWN_RELEASE &&
-//        state != PlayerState::LOOKDOWN_MOVE)
-//    {
-//        state = PlayerState::IDLE;
-//    }
-//}
-
-void Character::PlayAnimation(unsigned int stateClassNum, unsigned int subState)
-{
-
-    // map 사용
-
     auto key = std::make_pair(stateClassNum, subState);
     auto it = animationMap.find(key);
     if (it != animationMap.end())
@@ -320,24 +139,47 @@ void Character::PlayAnimation(unsigned int stateClassNum, unsigned int subState)
         currFrameInd = currFrameInfo.startFrame;
         frameTime = 0.0f;
     }
+}
 
 
+void Character::Render(ID2D1HwndRenderTarget* renderTarget)
+{
 
+    if (state)
+    {
+        char debugText[128];
+        sprintf_s(debugText, "CurrentState: %s\n", state->GetStateName());
+        OutputDebugStringA(debugText);  // ANSI 버전
+    }
 
+    //playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y);
+    //playerImage->Render(renderTarget, Pos.x, Pos.y);
+}
 
+void Character::PlayAnimation(float TimeDelta)
+{
+
+    frameTime += TimeDelta;
+    
+    if (frameTime >= ANIMATION_FRAME_TIME)
+    {
+        frameTime = 0.f;
+
+        currFrameInd.x++;
+        if (currFrameInd.x >= currFrameInfo.endFrame.x)
+            currFrameInd.x = currFrameInfo.startFrame.x;
+
+    }
 
 }
 
 void Character::ChangeState(CharacterState* newState)
 {
-    if (state) state->Exit(this);
+    if (state) state->Exit();
     state = newState;
-    if (state) state->Enter(this);
+    if (state) state->Enter(this); 
 
 }
-
-
-
 
 bool Character::PressAnyKey(void)
 {
@@ -379,136 +221,11 @@ void Character::Move(int dirX, float timeDelta)
 
 void Character::LookUp(float TimeDelta)
 { 
-    // 특정 프레임 도달 시 불리언 변경? 
+
 }
 
 void Character::LookDown(float TimeDelta)
 {
-    // 특정 프레임 도다 ㄹ시 불리언 변경 ? 
+
 }
 
-
-//
-//void Character::UpdateIdle()
-//{
-//    currFrameInd.x = 0;
-//    currFrameInd.y = 0;
-//}
-//
-//void Character::UpdateMove(float TimeDelta)
-//{
-//    isLookUpPaused = false;
-//    isLookDownPaused = false;
-//
-//    if (dir.x != 0)
-//    {
-//        frameTime += TimeDelta;
-//
-//        if (frameTime >= ANIMATION_FRAME_TIME)
-//        {
-//            frameTime = 0.f;
-//
-//            currFrameInd.x++;
-//            if (currFrameInd.x >= currFrameInfo.endFrame.x)
-//                currFrameInd.x = currFrameInfo.startFrame.x;
-//        }
-//    }
-//    
-//}
-//
-//void Character::UpdateLookUp(float TimeDelta)
-//{
-//    frameTime += TimeDelta;
-//
-//    if (frameTime >= ANIMATION_FRAME_TIME)
-//    {
-//        frameTime = 0.f;
-//
-//        if (state == PlayerState::LOOKUP_START)
-//        {
-//            if (!isLookUpPaused)
-//                currFrameInd.x++;
-//
-//             if (currFrameInd.x == currFrameInfo.endFrame.x / 2)
-//                 isLookUpPaused = true;
-//        }
-//
-//        if (state == PlayerState::LOOKUP_RELEASE)
-//        {
-//            currFrameInd.x++;
-//
-//            if (currFrameInd.x >= currFrameInfo.endFrame.x)
-//            {
-//                currFrameInd.x = currFrameInfo.endFrame.x;
-//                state = PlayerState::IDLE;
-//            }
-//        }
-//    }
-//}
-//
-//void Character::UpdateLookDown(float TimeDelta)
-//{
-//    frameTime += TimeDelta;
-//
-//
-//    if (frameTime >= ANIMATION_FRAME_TIME)
-//    {
-//        frameTime = 0.f;
-//
-//        if (state == PlayerState::LOOKDOWN_START)
-//        {
-//            if (!isLookDownPaused)
-//                currFrameInd.x++;
-//
-//            if (currFrameInd.x == currFrameInfo.endFrame.x / 2)
-//                isLookDownPaused = true;
-//        }
-//
-//        if (state == PlayerState::LOOKDOWN_RELEASE)
-//        {
-//            
-//            currFrameInd.x++;
-//
-//            if (currFrameInd.x >= currFrameInfo.endFrame.x)
-//            {
-//                currFrameInd.x = currFrameInfo.endFrame.x;
-//                state = PlayerState::IDLE;
-//            }
-//        }
-//    }
-//}
-//
-//void Character::UpdateLookDownMove(float TimeDelta)
-//{
-//    
-//    if (dir.x != 0)
-//    {
-//        frameTime += TimeDelta;
-//
-//        if (frameTime >= ANIMATION_FRAME_TIME)
-//        {
-//            frameTime = 0.f;
-//
-//            currFrameInd.x++;
-//            if (currFrameInd.x >= currFrameInfo.endFrame.x)
-//                currFrameInd.x = currFrameInfo.startFrame.x;
-//        }
-//    }
-//   
-// 
-//  
-//}
-//
-//
-//void Character::UpdateLookDownIdle(float TimeDelta)
-//{
-//    
-//    if (dir.x != 0) 
-//    {
-//        state = PlayerState::LOOKDOWN_MOVE;
-//    }
-//    else
-//        currFrameInd = currFrameInfo.startFrame;
-//}
-//
-//
