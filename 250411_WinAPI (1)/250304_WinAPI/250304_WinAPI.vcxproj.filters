@@ -168,9 +168,6 @@
     <ClCompile Include="InteractionState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>MainGame\Scene\Hyo</Filter>
-    </ClCompile>
     <ClCompile Include="Collider.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
@@ -193,6 +190,9 @@
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
     <ClCompile Include="HyoCharacter.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,9 +308,6 @@
     <ClInclude Include="TestYongSceneBackGround.h">
       <Filter>MainGame\Scene\Yong\Render</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>MainGame\Scene\Hyo</Filter>
-    </ClInclude>
     <ClInclude Include="Collider.h">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
@@ -367,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="InGameUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
