@@ -195,6 +195,15 @@
     <ClCompile Include="CameraManager.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
+    <ClCompile Include="GameOverUI.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_InteractUI.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
+    <ClCompile Include="Npc_InteractUI.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -367,6 +376,21 @@
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>MainGame\Scene\Yong\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_InteractUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="Npc_InteractUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 #include "AstarScene.h"
 #include "LoadingScene.h"
 #include "InGameUI.h"
+#include "GameOverUI.h"
 
 #include "HongScene.h"
 #include "HyoScene.h"
@@ -33,7 +34,8 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 	SceneManager::GetInstance()->AddScene("playerUI", new InGameUI());
-
+	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
+	
 	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 
 
@@ -121,7 +123,7 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			SceneManager::GetInstance()->ChangeScene("준용");
 			break;
 		case 'w': case 'W':
-			SceneManager::GetInstance()->ChangeScene("playerUI");
+			SceneManager::GetInstance()->ChangeScene("GameOverUI");
 			break;
 
 		case '1':
