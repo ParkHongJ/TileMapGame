@@ -139,6 +139,8 @@ void ObjectManager::Release()
 	}
 
 	objects.clear();
+
+	ReleaseInstance();
 }
 
 ObjectManager::~ObjectManager()

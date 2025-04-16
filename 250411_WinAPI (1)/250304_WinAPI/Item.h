@@ -26,6 +26,9 @@ public:
 	virtual void UnEquip(); // 해제
 	virtual void UnEquip(void* info); // 해제했을 때도 갱신 처리
 	virtual void Use(); // 사용
+	virtual void DropMove(float TimeDelta);
+	virtual void DropMoveX(float TimeDelta);
+	virtual void DropMoveY(float TimeDelta);
 
 	void ChangeState(ItemState state); // 해제
 
@@ -43,6 +46,21 @@ protected:
 	bool isHold;
 	unsigned int price;
 
-	Image* image;
+	float RayDis;  // Ray 활용 타일과 튕기기 테스트
+	float gravity; // GameObject에서 처리?
+
+	Image* holdImage;
+	Image* dropImage;
+	FPOINT moveDir;
+	FPOINT moveReverseDir;
+	FPOINT movePower;
+	FPOINT prePos;
+
+	ItemState state;
+
+private:
+	
+
+
 };
 

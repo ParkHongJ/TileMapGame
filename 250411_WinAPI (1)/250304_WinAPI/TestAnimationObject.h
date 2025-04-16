@@ -22,5 +22,6 @@ private:
 	AnimationManager* AnimManager;
 	class PlayerStatus* status;
 	int Count;
+	class Image* image;
 };
 

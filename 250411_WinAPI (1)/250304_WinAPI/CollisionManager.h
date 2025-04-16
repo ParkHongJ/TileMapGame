@@ -46,6 +46,7 @@ public:
 	
 private:
 	void AddDebugRay(FPOINT origin, FPOINT direction, float length, float duration);
+
 private:
 	vector<Collider*> colliders;
 	vector<DebugRay> debugRays;

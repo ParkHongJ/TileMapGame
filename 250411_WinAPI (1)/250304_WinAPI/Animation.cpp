@@ -93,7 +93,8 @@ void Animation::UpdateEvent()
 void Animation::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	//image->FrameRender(renderTarget, 300, 300, CurFrame, CurFrameY/*, IsFlip*/);
-	image->Render(renderTarget, 300, 300);
+	//image->Render(renderTarget, 300, 300);
+	image->FrameRender(renderTarget, 100, 100, 0, 0);
 }
 
 void Animation::Release()

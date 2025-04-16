@@ -7,12 +7,14 @@
 #include "AstarScene.h"
 #include "LoadingScene.h"
 #include "InGameUI.h"
+#include "CollisionManager.h"
 
 #include "HongScene.h"
 #include "HyoScene.h"
 #include "TaeScene.h"
 #include "JinScene.h"
 #include "YongScene.h"
+
 
 
 HRESULT MainGame::Init()
@@ -45,7 +47,8 @@ HRESULT MainGame::Init()
 	ImageManager::GetInstance()->AddImage(
 		"Tae_Player", TEXT("Image/Character/char_yellow_full.png"), m_pRenderTarget.Get());
 
-	SceneManager::GetInstance()->ChangeScene("효진");
+	//SceneManager::GetInstance()->ChangeScene("효진");
+	SceneManager::GetInstance()->ChangeScene("준용");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
@@ -88,6 +91,7 @@ void MainGame::Update()
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	SceneManager::GetInstance()->Update(deltaTime);
 	ObjectManager::GetInstance()->Update(deltaTime);
+	CollisionManager::GetInstance()->Update(deltaTime);
 
 }
 
@@ -233,7 +237,7 @@ void MainGame::Draw()
 	//HDC hBackBufferDC = backBuffer->GetMemDC();
 
 	//SceneManager::GetInstance()->Render(hBackBufferDC);
-
+	CollisionManager::GetInstance()->DebugRender(m_pRenderTarget.Get());
 	TimerManager::GetInstance()->Render(m_pRenderTarget.Get());
 	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
 	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));

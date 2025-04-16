@@ -16,6 +16,9 @@ public:
 	virtual void Equip(void* info) override; // 장착했을 때 플레이어 정보 던져서 갱신
 	virtual void UnEquip() override; // 해제
 	virtual void UnEquip(void* info) override; // 해제했을 때도 갱신 처리
-	virtual void Use() override; // 사용
+	virtual void Use() override;
+	// Item을(를) 통해 상속됨
+	void DropMove(float TimeDelta) override;
+	// 사용
 };
 

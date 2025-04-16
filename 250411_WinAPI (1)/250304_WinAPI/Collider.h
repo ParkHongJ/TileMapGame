@@ -27,6 +27,8 @@ public:
 public:
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const = 0;
 
+	inline void SetScale(FPOINT scale) { Scale = scale; };
+
 protected:
 	FPOINT Pos;
 	FPOINT Offset;
