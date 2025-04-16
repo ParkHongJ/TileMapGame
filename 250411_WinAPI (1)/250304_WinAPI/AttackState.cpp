@@ -4,18 +4,17 @@
 void AttackState::Enter(Character* character)
 {
     this->character = character;
-    Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
 }
 
-void AttackState::Update(float TimeDelta)
+void AttackState::Update()
 {
     // 공격 중 입력이나 상태 변화 감지 가능
-    UpdateAnimation(TimeDelta);
+    UpdateAnimation();
 }
 
-void AttackState::UpdateAnimation(float TimeDelta)
+void AttackState::UpdateAnimation()
 {
-    character->PlayAnimation(TimeDelta); 
+    character->PlayAnimation(); 
 }
 
 void AttackState::ChangeSubState(SubState newSubState)

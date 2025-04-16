@@ -26,8 +26,8 @@ public:
     }
 
     virtual void Enter(Character* character) override;
-    virtual void Update( float deltaTime) override;
-    virtual void UpdateAnimation(float deltaTime) override;
+    virtual void Update() override;
+    virtual void UpdateAnimation() override;
     void ChangeSubState(SubState newSubState);
     virtual void Exit() override;
     virtual const char* GetSubStateName() const override { return "InteractionState"; }

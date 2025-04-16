@@ -25,8 +25,8 @@ public:
     }
 
     virtual void Enter(Character* character) override;
-    virtual void Update(float TimeDelta) override;
-    virtual void UpdateAnimation( float TimeDelta) override;
+    virtual void Update( ) override;
+    virtual void UpdateAnimation() override;
     void ChangeSubState(SubState newSubState);
 
     virtual void Exit() override;

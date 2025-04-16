@@ -72,7 +72,7 @@ public:
 	
 	
 	
-	void PlayAnimation( float TimeDelta);
+	void PlayAnimation();
 	void ChangeState(CharacterState* newState);
 
 	bool PressAnyKey();
@@ -90,10 +90,10 @@ public:
 
 
 
-	void Move(int dirX, float TimeDelta);
+	void Move(int dirX);
 
-	void LookUp(float TimeDelta);
-	void LookDown(float TimeDelta);
+	void LookUp();
+	void LookDown();
 	
 	Character() {};
 	virtual ~Character() {};

@@ -64,7 +64,7 @@ void Character::Update(float TimeDelta)
 {
 
     if (state) 
-        state->Update(TimeDelta);
+        state->Update();
     
 
     // velocity 중력 관련 업데이트
@@ -205,8 +205,9 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 }
 
 
-void Character::PlayAnimation(float TimeDelta)
+void Character::PlayAnimation()
 {
+    float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 
     frameTime += TimeDelta;
     
@@ -284,20 +285,20 @@ FrameInfo Character::GetCurrFrameInfo() const
 }
 
 
-void Character::Move(int dirX, float timeDelta)
+void Character::Move(int dirX)
 {
     isFlip = dirX > 0 ? false : true;
-    Pos.x += speed * dirX * timeDelta;
+    Pos.x += speed * dirX * TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 }
 
-void Character::LookUp(float TimeDelta)
+void Character::LookUp()
 {
     // 위 보기 중단, 아래 보기 중단 flag
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookUpPaused = true;
     else isLookUpPaused = false;
 }
 
-void Character::LookDown(float TimeDelta)
+void Character::LookDown()
 {
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookDownPaused = true;
     else isLookDownPaused = false;

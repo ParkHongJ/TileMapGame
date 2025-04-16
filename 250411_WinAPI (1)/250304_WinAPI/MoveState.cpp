@@ -11,7 +11,7 @@ void MoveState::Enter(Character* character)
 
 }
 
-void MoveState::Update(float TimeDelta)
+void MoveState::Update()
 {
     // 예: 입력 받아 서브상태 전환 처리 가능
     // if (character->IsLookingDown()) { currentSubState = SubState::MOVE_LOOKDOWN; }
@@ -32,8 +32,8 @@ void MoveState::Update(float TimeDelta)
     {
         ChangeSubState(SubState::MOVE_ONAIR);
 
-        if (km->IsStayKeyDown(VK_LEFT)) character->Move(-1, TimeDelta);
-        else if (km->IsStayKeyDown(VK_RIGHT)) character->Move(1, TimeDelta);
+        if (km->IsStayKeyDown(VK_LEFT)) character->Move(-1);
+        else if (km->IsStayKeyDown(VK_RIGHT)) character->Move(1);
     }
     else
     {
@@ -43,13 +43,13 @@ void MoveState::Update(float TimeDelta)
             {
                 ChangeSubState(SubState::MOVE_LOOKDOWN);
 
-                 character->Move(-1, TimeDelta);
+                 character->Move(-1);
             }
             else
             {
                 ChangeSubState(SubState::MOVE_ALONE);
 
-                character->Move(-1, TimeDelta);
+                character->Move(-1);
             }
         }
         else if (km->IsStayKeyDown(VK_RIGHT))
@@ -58,13 +58,13 @@ void MoveState::Update(float TimeDelta)
             {
                 ChangeSubState(SubState::MOVE_LOOKDOWN);
 
-                character->Move(1, TimeDelta);
+                character->Move(1);
             }
             else
             {
                 ChangeSubState(SubState::MOVE_ALONE);
 
-                 character->Move(1, TimeDelta);
+                 character->Move(1);
             }
         }
 
@@ -76,25 +76,25 @@ void MoveState::Update(float TimeDelta)
             {
                 ChangeSubState(SubState::MOVE_LOOKDOWN);
 
-                character->Move(-1, TimeDelta);
+                character->Move(-1);
                
             }
             else if (km->IsStayKeyDown(VK_RIGHT))
             {
                 ChangeSubState(SubState::MOVE_LOOKDOWN);
 
-                character->Move(1, TimeDelta);
+                character->Move(1);
               
             }
         }
     }
 
-    UpdateAnimation(TimeDelta);
+    UpdateAnimation();
 }
 
-void MoveState::UpdateAnimation(float TimeDelta)
+void MoveState::UpdateAnimation()
 {
-    character->PlayAnimation(TimeDelta); 
+    character->PlayAnimation(); 
 }
 
 void MoveState::ChangeSubState(SubState newSubState)

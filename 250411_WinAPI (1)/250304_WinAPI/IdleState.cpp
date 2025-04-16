@@ -11,7 +11,7 @@ void IdleState::Enter(Character* character)
     character->SetFrameTime(0.f);
 }
 
-void IdleState::Update(float TimeDelta)
+void IdleState::Update()
 {
     // 입력 등을 받아서 서브상태 변경
     KeyManager* km = KeyManager::GetInstance();
@@ -37,12 +37,11 @@ void IdleState::Update(float TimeDelta)
             if (currentSubState != SubState::IDLE_LOOKUP_START)
                 ChangeSubState(SubState::IDLE_LOOKUP_START);
 
-            character->LookUp(TimeDelta);
+            character->LookUp();
 
         }
         else
         {
-
             if (currentSubState != SubState::IDLE_LOOKUP_STOP)
                 ChangeSubState(SubState::IDLE_LOOKUP_STOP);
 
@@ -62,12 +61,10 @@ void IdleState::Update(float TimeDelta)
             if (currentSubState != SubState::IDLE_LOOKDOWN_START)
                 ChangeSubState(SubState::IDLE_LOOKDOWN_START);
 
-            character->LookDown(TimeDelta);
-
+            character->LookDown();
         }
         else
         {
-
             if (currentSubState != SubState::IDLE_LOOKDOWN_STOP)
                 ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
 
@@ -81,8 +78,6 @@ void IdleState::Update(float TimeDelta)
        
     }
 
-
-
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
         currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
         character->GetCurrFrameInd().x >= character->GetCurrFrameInfo().endFrame.x)
@@ -92,13 +87,13 @@ void IdleState::Update(float TimeDelta)
 
     // 조건에 따라 엄청난 분기를 할 예정
 
-    UpdateAnimation(TimeDelta);
+    UpdateAnimation();
     
 }
 
-void IdleState::UpdateAnimation(float TimeDelta)
+void IdleState::UpdateAnimation()
 {
-    character->PlayAnimation(TimeDelta);
+    character->PlayAnimation();
 }
 
 void IdleState::ChangeSubState( SubState newSubState)
