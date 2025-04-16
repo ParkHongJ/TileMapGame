@@ -2,11 +2,14 @@
 #include "Tile.h"
 #include "Image.h"
 #include "Collider.h"
+#include "GameManager.h"
 HRESULT Tile::Init()
 {
 	tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
 
 	tileScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
+
+	decos.resize((int)DecoDirection::RIGHT);
 	return S_OK;
 }
 
@@ -17,6 +20,15 @@ void Tile::Release()
 		collider->Release();
 		delete collider;
 	}
+
+	for (int i = 0; i < decos.size(); i++)
+	{
+		if (decos[i] != nullptr)
+		{
+			delete decos[i];
+		}
+	}
+	decos.clear();
 }
 
 void Tile::Update(float TimeDelta)
@@ -37,6 +49,9 @@ void Tile::RenderDeco(ID2D1HwndRenderTarget* renderTarget)
 {
 	for (int i = 0; i < decos.size(); ++i)
 	{
+		if (decos[i] == nullptr)
+			continue;
+
 		DecoDirection dir = decos[i]->dir;
 		
 		switch (dir)
@@ -70,35 +85,48 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos)
 
 void Tile::CreateDecoTile(DecoDirection dir, bool hasTileAbove)
 {
+
 	DecoInfo* decoInfo = new DecoInfo;
 
-	decoInfo->atlasX = 0;
-	decoInfo->atlasY = 0;
-	decoInfo->dir = dir;
+	int decoIndex = (int)dir - 1;
+
+	if (decos[decoIndex] == nullptr)
+	{
+		decoInfo = new DecoInfo;
+
+		decoInfo->atlasX = 0;
+		decoInfo->atlasY = 0;
+		decoInfo->dir = dir;
+
+		decos[decoIndex] = decoInfo;
+	}
+	else
+	{
+		decoInfo = decos[decoIndex];
+	}
 
 	switch (dir)
 	{
 	case DecoDirection::TOP:
-		decoInfo->decoImage = ImageManager::GetInstance()->FindImage("CaveDecoTop");		
+		decoInfo->decoImage = ImageManager::GetInstance()->FindImage("CaveDecoTop");
 		break;
 	case DecoDirection::DOWN:
-		decoInfo->decoImage = ImageManager::GetInstance()->FindImage("CaveDecoDown");		
+		decoInfo->decoImage = ImageManager::GetInstance()->FindImage("CaveDecoDown");
 		break;
 	case DecoDirection::LEFT:
 		decoInfo->decoImage = ImageManager::GetInstance()->FindImage("CaveDecoRight");
-		
+
 		if (hasTileAbove == true)
 			decoInfo->atlasX = 2;
 		break;
 	case DecoDirection::RIGHT:
 		decoInfo->decoImage = ImageManager::GetInstance()->FindImage("CaveDecoRight");
-		
+
 		if (hasTileAbove == true)
 			decoInfo->atlasX = 2;
 		break;
 	}
 
-	decos.push_back(decoInfo);
 }
 
 void Tile::Destruction()
@@ -106,5 +134,8 @@ void Tile::Destruction()
 	if (tileType == TileType::BORDER)
 		return;
 
+	tileInfo.valid = false;
 	SetActive(false);
+
+	GameManager::GetInstance()->GenerateDecoTile();
 }

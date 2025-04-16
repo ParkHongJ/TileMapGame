@@ -24,6 +24,10 @@ public:
 public:
 	virtual void Update(float TimeDelta) = 0;
 	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const = 0;
+
+public:
+	inline const FPOINT& GetWorldPos() { return Pos; } //월드계산 전
+	inline const FPOINT& GetScale() { return Scale; }
 public:
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const = 0;
 private:

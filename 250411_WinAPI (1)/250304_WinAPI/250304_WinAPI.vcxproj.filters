@@ -195,6 +195,12 @@
     <ClCompile Include="HyoCharacter.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="HongParticle.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -367,6 +373,12 @@
     </ClInclude>
     <ClInclude Include="InGameUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="HongParticle.h">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

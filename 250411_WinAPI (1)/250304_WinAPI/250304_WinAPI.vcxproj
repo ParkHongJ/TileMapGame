@@ -139,6 +139,8 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DummyHongPlayer.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="HongParticle.cpp" />
     <ClCompile Include="HyoCharacter.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -183,6 +185,8 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DummyHongPlayer.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="HongParticle.h" />
     <ClInclude Include="HyoCharacter.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CommonFunction.h" />

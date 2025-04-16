@@ -55,6 +55,14 @@ void SceneManager::Update(float TimeDelta)
 	}
 }
 
+void SceneManager::LateUpdate(float TimeDelta)
+{
+	if (currentScene)
+	{
+		currentScene->LateUpdate(TimeDelta);
+	}
+}
+
 void SceneManager::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (currentScene)
