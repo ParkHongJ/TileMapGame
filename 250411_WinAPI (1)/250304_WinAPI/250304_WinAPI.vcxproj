@@ -134,8 +134,8 @@
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CharacterState.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DummyHongPlayer.cpp" />
@@ -178,8 +178,8 @@
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="CharacterState.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DummyHongPlayer.h" />

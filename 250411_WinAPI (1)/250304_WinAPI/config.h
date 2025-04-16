@@ -20,11 +20,13 @@ using Microsoft::WRL::ComPtr;
 
 using namespace std;
 
+//#include "CameraManager.h"
 #include "KeyManager.h"
 #include "ImageManager.h"
 #include "TimerManager.h"
 #include "SceneManager.h"
 #include "ObjectManager.h"
+
 
 
 /*

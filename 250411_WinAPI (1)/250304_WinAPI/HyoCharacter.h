@@ -10,7 +10,7 @@ public:
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
-	virtual void TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT& cameraPos) ;
+	// virtual void TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT& cameraPos) ;
 
 	float GetBackGroundWidth() { return mapSizeWidth; } 
 	float GetBackGroundHeight() { return mapSizeHeight; }

@@ -4,7 +4,7 @@
 #include "HyoCharacter.h"
 
 class Image;
-class Camera;
+//class Camera;
 class HyoCharacter;
 class HyoScene : public Scene
 {
@@ -23,8 +23,9 @@ private:
 	Image* background;
 	HyoCharacter* testBackGround;
 	HyoCharacter* testCamera;
-	Camera* camera;
+	// Camera* camera;
 
+	FPOINT cameraPos;
 	float mapSizeHeight;
 	float maptSizeWidth;
 

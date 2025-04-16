@@ -3,24 +3,18 @@
 #include "ImageManager.h"
 #include "CommonFunction.h"
 #include "KeyManager.h"
+#include "CameraManager.h"
 
 HRESULT HyoCharacter::Init()
 {
 	testBackGround = ImageManager::GetInstance()->FindImage("testBackGround");
 	testCamera = ImageManager::GetInstance()->FindImage("testCamera");
 
-	/*playerIris = new Image();
-
-	if (FAILED(playerIris->Init(TEXT("Image/char_iris.bmp"), WINSIZE_X, WINSIZE_Y)))
-	{
-		MessageBox(g_hWnd,
-			TEXT("Image/char_iris.bmp 생성 실패"), TEXT("경고"), MB_OK);
-		return E_FAIL;
-	}*/
-
 	SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
+
 	mapSizeHeight = testBackGround->GetHeight();
 	mapSizeWidth = testBackGround->GetWidth();
+
 	dir = -1;
 	backGroundPos = { WINSIZE_X / 2,WINSIZE_Y / 2 };
 	state = PlayerState::IDLE;
@@ -57,32 +51,22 @@ void HyoCharacter::Update(float TimeDelta)
 
 void HyoCharacter::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	
-	testCamera->Render(renderTarget, Pos.x, Pos.y);
-	//playerIris->Render(renderTarget, Pos.x, Pos.y);
+	testBackGround->Render(renderTarget, backGroundPos.x + CameraManager::GetInstance()->GetPos().x,
+		backGroundPos.y + CameraManager::GetInstance()->GetPos().y);
 
-	//playerIris->Render(hdc);
+	testCamera->Render(renderTarget, Pos.x + CameraManager::GetInstance()->GetPos().x,
+		Pos.y + CameraManager::GetInstance()->GetPos().y);
 }
 
-void HyoCharacter::TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT& cameraPos)
-{
-	if (testBackGround)
-	{
-		//testBackGround->Render(renderTarget, cameraPos.x, cameraPos.y);
-		testBackGround->Render(renderTarget, backGroundPos.x + cameraPos.x, backGroundPos.y + cameraPos.y);
-	}
-	
-	if (testCamera)
-	{ 
-		//testCamera->Render(renderTarget, cameraPos.x, cameraPos.y); 
-		testCamera->Render(renderTarget, Pos.x + cameraPos.x, Pos.y + cameraPos.y);
-	}
-	
-	// testCamera->Render(renderTarget, 0, 0);
-}
-
-//void HyoCharacter::GetBackGroundSize(float mapSizeWidth, float mapSizeHeight)
+//void HyoCharacter::TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT& cameraPos)
 //{
-//	mapSizeWidth = testBackGround->GetWidth();
-//	mapSizeHeight = testBackGround->GetHeight();
+//	if (testBackGround)
+//	{
+//		testBackGround->Render(renderTarget, backGroundPos.x + CameraManager::GetInstance()->GetPos().x,
+//			backGroundPos.y + CameraManager::GetInstance()->GetPos().y);
+//	}
+//	if (testCamera)
+//	{
+//		testCamera->Render(renderTarget, Pos.x + cameraPos.x, Pos.y + cameraPos.y);
+//	}
 //}
