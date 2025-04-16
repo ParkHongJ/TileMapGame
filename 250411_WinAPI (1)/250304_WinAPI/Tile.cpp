@@ -98,13 +98,13 @@ void Tile::CreateDecoTile(DecoDirection dir, bool hasTileAbove)
 		break;
 	}
 
-	if (decoInfo->decoImage == nullptr)
-	{
-		int a = 10;
-	}
-
-
 	decos.push_back(decoInfo);
-	//deco->SetType(direction); // 혹시 방향 따라 데코 이미지 바꾸려면
-	//decoList.push_back(deco);
+}
+
+void Tile::Destruction()
+{
+	if (tileType == TileType::BORDER)
+		return;
+
+	SetActive(false);
 }

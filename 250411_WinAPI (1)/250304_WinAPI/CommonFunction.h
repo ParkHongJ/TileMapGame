@@ -146,6 +146,14 @@ inline void DrawCenteredRect(ID2D1RenderTarget* rt, FPOINT center, float halfSiz
 	rt->DrawRectangle(rect, tempBrush.Get(), thickness);
 }
 
+template<typename T>
+T Clamp(T value, T min, T max)
+{
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
+
 inline void DrawD2DText(
 	ID2D1RenderTarget* rt,
 	const wchar_t* fmt,

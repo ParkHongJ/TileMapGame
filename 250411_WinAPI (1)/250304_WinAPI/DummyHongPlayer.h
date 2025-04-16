@@ -15,5 +15,9 @@ private:
 	float JUMP_SPEED = -600.0f;
 	float GRAVITY = 2000.0f;
 	float MAX_FALL_SPEED = 1000.0f;
+
+	bool isKnockback = false;
+	FPOINT knockbackVelocity = { 80.f, 10.f };
+	float knockbackTime = 0.7f;
 };
 

@@ -1,5 +1,6 @@
 #include "CollisionManager.h"
 #include "Collider.h"
+#include "GameObject.h"
 void CollisionManager::Init()
 {
 }
@@ -111,6 +112,25 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
     return found;
 }
 
+bool CollisionManager::GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects)
+{
+    std::vector<GameObject*> result;
+
+    float radiusSq = radius * radius;
+
+    for (auto& col : colliders)
+    {
+        if (!col->CheckCollisionWithCircle(center, radius))
+            continue;
+
+        inCircleObjects->push_back(col->Owner);
+    }
+
+    if (inCircleObjects->empty())
+        return false;
+
+    return true;
+}
 void CollisionManager::AddDebugRay(FPOINT origin, FPOINT direction, float length, float duration)
 {
     direction = direction.Normalized();

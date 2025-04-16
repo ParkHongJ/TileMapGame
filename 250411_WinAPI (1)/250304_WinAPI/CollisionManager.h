@@ -3,6 +3,7 @@
 #include "config.h"
 
 class Collider;
+class GameObject;
 
 struct Ray {
 	FPOINT origin;
@@ -35,17 +36,19 @@ public:
 	void Update(float TimeDelta);
 	void DebugRender(ID2D1HwndRenderTarget* renderTarget);
 	void Release();
+
 public:
 	void Register(class Collider* collider);
 	void UnRegister(class Collider* collider);
 
-	
-	void DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length);
-
+public:	
 	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, bool debugDraw = false, float debugTime = 0.0f);
-	
+	bool GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects);
+
 private:
+	void DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length);
 	void AddDebugRay(FPOINT origin, FPOINT direction, float length, float duration);
+
 private:
 	vector<Collider*> colliders;
 	vector<DebugRay> debugRays;

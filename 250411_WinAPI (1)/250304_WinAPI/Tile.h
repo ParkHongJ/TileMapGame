@@ -7,7 +7,8 @@ class Image;
 enum TileType
 {
 	NONE = 0,
-	BLOCK
+	BLOCK,
+	BORDER
 };
 
 struct TileInfo
@@ -34,6 +35,7 @@ struct DecoInfo
 	int atlasX = 0;
 	int atlasY = 0;
 };
+
 class Tile : public GameObject
 {
 public:
@@ -42,6 +44,7 @@ public:
 	virtual void Update(float TimeDelta);		// 프레임 단위로 게임 로직 실행(데이터 계산)
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget);	// 프레임 단위로 출력(이미지, 텍스트 등)
 	void RenderDeco(ID2D1HwndRenderTarget* renderTarget);
+
 public:
 	void InitTile(int atlasX, int atlasY, bool valid, FPOINT pos);
 	
@@ -49,6 +52,10 @@ public:
 	void CreateDecoTile(DecoDirection dir, bool hasTileAbove = false);
 
 	inline bool IsValid() { return tileInfo.valid; }
+
+	//타일이 터져요
+	void Destruction();
+
 private:
 	TileType tileType;
 	TileInfo tileInfo;
