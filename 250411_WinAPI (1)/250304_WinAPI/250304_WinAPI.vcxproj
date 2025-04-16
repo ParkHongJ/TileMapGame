@@ -132,6 +132,7 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="GameOverUI.cpp" />
     <ClCompile Include="HyoCharacter.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -144,7 +145,9 @@
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Npc_InteractUI.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Obj_InteractUI.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -164,6 +167,7 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="GameOverUI.h" />
     <ClInclude Include="HyoCharacter.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CommonFunction.h" />
@@ -177,7 +181,9 @@
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Npc_InteractUI.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Obj_InteractUI.h" />
     <ClInclude Include="PlayerStatus.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />

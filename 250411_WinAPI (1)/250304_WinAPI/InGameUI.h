@@ -11,17 +11,25 @@ private:
 	Image* ropeImage;
 	Image* currencyImage;
 	Image* sandGlassImage;
+	Image* currencyBackgroundImage;
 	Image* lightBulbImage;			//스테이지 옆 파란전구
-	int lifeCount;
-	int bombCount;
-	int ropeCount;
-	int currencyCount;
+
 	FPOINT lifeImagePos;
 	FPOINT bombImagePos;
 	FPOINT ropeImagePos;
 	FPOINT currencyImagePos;
 	FPOINT sandGlassImagePos;
+	FPOINT currencyBackgroundImagePos;
 	FPOINT lightBulbImagePos;
+
+	string currentStage;
+	int lifeCount;
+	int bombCount;
+	int ropeCount;
+	int currencyCount;
+
+	bool shouldDrawPlayerUI;
+
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget);
 	virtual void Release();		
@@ -32,6 +40,7 @@ public:
 	inline void SetBombCount(int setValue) { bombCount = setValue; };
 	inline void SetRopeCount(int setValue) { ropeCount = setValue; };
 	inline void SetCurrency(int setValue) { currencyCount = setValue; };
+	inline void SetDrawPlayerUI(bool setValue) { shouldDrawPlayerUI = setValue; };
 
 	InGameUI() {};
 	virtual ~InGameUI() {};

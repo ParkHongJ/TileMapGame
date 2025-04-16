@@ -21,6 +21,9 @@ HRESULT InGameUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("sandGlassImage", L"Textures/UI/Hud/sandGlass.png", renderTarget);
 	sandGlassImage = ImageManager::GetInstance()->FindImage("sandGlassImage");
 
+	ImageManager::GetInstance()->AddImage("currencyBackground", L"Textures/UI/Hud/currencyBackground.png", renderTarget);
+	currencyBackgroundImage = ImageManager::GetInstance()->FindImage("currencyBackground");
+
 	ImageManager::GetInstance()->AddImage("lightBulb", L"Textures/UI/Hud/lightBulb.png", renderTarget);
 	lightBulbImage = ImageManager::GetInstance()->FindImage("lightBulb");
 
@@ -28,15 +31,19 @@ HRESULT InGameUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	bombCount = 0;
 	ropeCount = 0;
 	currencyCount = 0;
+	currentStage = "";
 
-	float testXpos = 25.0f;
+	shouldDrawPlayerUI = true;
 
-	lifeImagePos = { WINSIZE_X * (1.0f / testXpos), WINSIZE_Y * (1.0f / 12.0f) };
-	bombImagePos = { WINSIZE_X * (3.0f / testXpos), WINSIZE_Y * (1.0f / 12.0f) };
-	ropeImagePos = { WINSIZE_X * (5.0f / testXpos), WINSIZE_Y * (1.0f / 12.0f) };
-	currencyImagePos = { WINSIZE_X * (18.0f / testXpos), WINSIZE_Y * (1.0f / 12.0f) };
-	sandGlassImagePos = { WINSIZE_X * (21.0f / testXpos), WINSIZE_Y * (1.0f / 12.0f) };
-	lightBulbImagePos = { WINSIZE_X * (23.0f / testXpos), WINSIZE_Y * (1.0f / 12.0f) };
+	float x_pos_divide_factor = 25.0f;
+
+	lifeImagePos = { WINSIZE_X * (1.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
+	bombImagePos = { WINSIZE_X * (3.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
+	ropeImagePos = { WINSIZE_X * (5.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
+	currencyImagePos = { WINSIZE_X * (18.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
+	currencyBackgroundImagePos = { WINSIZE_X * (20.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
+	sandGlassImagePos = { WINSIZE_X * (22.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
+	lightBulbImagePos = { WINSIZE_X * (23.5f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
 
 	return S_OK;
 }
@@ -53,21 +60,23 @@ void InGameUI::Update(float TimeDelta)
 
 void InGameUI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	if (playerLifeImage)
+	if(shouldDrawPlayerUI)
 	{
-		playerLifeImage->Render(renderTarget, lifeImagePos.x, lifeImagePos.y);
-
+		if (playerLifeImage)
+			playerLifeImage->Render(renderTarget, lifeImagePos.x, lifeImagePos.y);
+		if (playerLifeImage && lifeCount == 0)
+			playerLifeRunsOutImage->Render(renderTarget, lifeImagePos.x, lifeImagePos.y);
+		if (bombImage)
+			bombImage->Render(renderTarget, bombImagePos.x, bombImagePos.y);
+		if (ropeImage)
+			ropeImage->Render(renderTarget, ropeImagePos.x, ropeImagePos.y);
+		if (currencyImage)
+			currencyImage->Render(renderTarget, currencyImagePos.x, currencyImagePos.y);
+		if (currencyBackgroundImage)
+			currencyBackgroundImage->Render(renderTarget, currencyBackgroundImagePos.x, currencyBackgroundImagePos.y);
+		if (sandGlassImage)
+			sandGlassImage->Render(renderTarget, sandGlassImagePos.x, sandGlassImagePos.y);
+		if (lightBulbImage)
+			lightBulbImage->Render(renderTarget, lightBulbImagePos.x, lightBulbImagePos.y);
 	}
-	if (playerLifeImage && lifeCount == 0)
-		playerLifeRunsOutImage->Render(renderTarget, lifeImagePos.x, lifeImagePos.y);
-	if (bombImage)
-		bombImage->Render(renderTarget, bombImagePos.x, bombImagePos.y);
-	if (ropeImage)
-		ropeImage->Render(renderTarget, ropeImagePos.x, ropeImagePos.y);
-	if (currencyImage)
-		currencyImage->Render(renderTarget, currencyImagePos.x, currencyImagePos.y);
-	if (sandGlassImage)
-		sandGlassImage->Render(renderTarget, sandGlassImagePos.x, sandGlassImagePos.y);
-	if (lightBulbImage)
-		lightBulbImage->Render(renderTarget, lightBulbImagePos.x, lightBulbImagePos.y);
 }
