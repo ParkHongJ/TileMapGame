@@ -25,5 +25,5 @@ public:
     virtual void UpdateAnimation( float TimeDelta) override;
     void ChangeSubState(SubState newSubState);
     virtual void Exit() override;
-    virtual const char* GetStateName() const override { return "AttackState"; }
+    virtual const char* GetSubStateName() const override { return "AttackState"; }
 };

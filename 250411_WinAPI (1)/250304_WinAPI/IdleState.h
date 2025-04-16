@@ -43,7 +43,7 @@ public:
 
 
 
-    virtual const char* GetStateName() const override { return "IdleState"; }
+    virtual const char* GetSubStateName() const override;
 
 
 

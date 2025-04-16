@@ -1,9 +1,10 @@
 #include "Character.h"
 #include "ImageManager.h"
 #include "Image.h"
+#include "CharacterState.h"
 
-IdleState Character::idleState(IdleState::SubState::NONE);
-MoveState Character::moveState(MoveState::SubState::NONE);
+IdleState Character::idleState(IdleState::SubState::IDLE_ALONE);
+MoveState Character::moveState(MoveState::SubState::MOVE_ALONE);
 AttackState Character::attackState(AttackState::SubState::NONE);
 InteractionState Character::interactionState(InteractionState::SubState::NONE);
 
@@ -11,13 +12,14 @@ InteractionState Character::interactionState(InteractionState::SubState::NONE);
 HRESULT Character::Init()
 {
     playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
+    state = &Character::idleState;
+    state->Enter(this);
 
     SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
 
-    state = nullptr;
     dir = { 0.0f, 0.0f };
 
-    velocity = { 0.0f, 0.0f };
+    velocity = { -1.0f,-1.0f };
 
     currFrameInd = { 0,0 };
 
@@ -135,26 +137,38 @@ void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int s
     auto it = animationMap.find(key);
     if (it != animationMap.end())
     {
+        // 프레임 초기화는 진짜로 바뀐 경우에만 하게끔
+        if (currFrameInfo.startFrame.x != it->second.startFrame.x ||
+            currFrameInfo.startFrame.y != it->second.startFrame.y)
+        {
+            currFrameInd = it->second.startFrame;
+            frameTime = 0.f;
+        }
+
         currFrameInfo = it->second;
-        currFrameInd = currFrameInfo.startFrame;
-        frameTime = 0.0f;
     }
 }
 
 
 void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-
     if (state)
     {
-        char debugText[128];
-        sprintf_s(debugText, "CurrentState: %s\n", state->GetStateName());
-        OutputDebugStringA(debugText);  // ANSI 버전
+        char buf[256];
+        sprintf_s(buf,
+            "▶ Render Frame: (%d,%d)\n▶ State: %s\n",
+            currFrameInd.x, currFrameInd.y,
+            state->GetSubStateName());
+
+        OutputDebugStringA(buf);
     }
 
-    //playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y);
-    //playerImage->Render(renderTarget, Pos.x, Pos.y);
+    if (playerImage)
+    {
+        playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y, isFlip);
+    }
 }
+
 
 void Character::PlayAnimation(float TimeDelta)
 {
@@ -216,7 +230,7 @@ bool Character::GetIsLookDownPaused()
 void Character::Move(int dirX, float timeDelta)
 {
     isFlip = dirX > 0 ? false : true;
-    Pos.x += speed * dir.x * timeDelta;
+    Pos.x += speed * dirX * timeDelta;
 }
 
 void Character::LookUp(float TimeDelta)

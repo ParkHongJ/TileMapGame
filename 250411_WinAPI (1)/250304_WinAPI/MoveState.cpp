@@ -4,6 +4,8 @@
 void MoveState::Enter(Character* character)
 {
     this->character = character;
+
+    Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
 }
 
 void MoveState::Update(float TimeDelta)
@@ -14,9 +16,8 @@ void MoveState::Update(float TimeDelta)
     KeyManager* km = KeyManager::GetInstance();
 
 
-    if (!km->IsOnceKeyUp(VK_LEFT)    ||
-        !km->IsOnceKeyUp(VK_RIGHT)   || 
-        character->GetVelocitySize() <= 0)
+    if (km->IsOnceKeyUp(VK_LEFT)    ||
+        km->IsOnceKeyUp(VK_RIGHT)   )
     {
         character->ChangeState(&Character::idleState);
         return;
@@ -85,7 +86,6 @@ void MoveState::Update(float TimeDelta)
         }
     }
 
-
     UpdateAnimation(TimeDelta);
 }
 
@@ -102,7 +102,21 @@ void MoveState::ChangeSubState(SubState newSubState)
 
 void MoveState::Exit()
 {
-    currentSubState = SubState::NONE;
+    //currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
     
+}
+
+const char* MoveState::GetSubStateName() const
+{
+    switch (currentSubState)
+    {
+    case SubState::MOVE_ALONE: return "MOVE_ALONE";
+    case SubState::MOVE_LOOKDOWN: return "MOVE_LOOKDOWN";
+    case SubState::MOVE_ONPET: return "MOVE_ONPET";
+    case SubState::MOVE_ONPET_LOOKDOWN: return "MOVE_ONPET_LOOKDOWN";
+    case SubState::MOVE_ONAIR: return "MOVE_ONAIR";
+    case SubState::MOVE_ONAIR_ONPET: return "MOVE_ONAIR_ONPET";
+    case SubState::NONE: default: return "NONE";
+    }
 }
