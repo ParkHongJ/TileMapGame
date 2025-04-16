@@ -12,6 +12,9 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT& cameraPos) ;
 
+	float GetBackGroundWidth() { return mapSizeWidth; } 
+	float GetBackGroundHeight() { return mapSizeHeight; }
+
 	HyoCharacter() {};
 	virtual ~HyoCharacter() {};
 
@@ -20,6 +23,9 @@ private:
 	FPOINT backGroundPos;
 	FPOINT playerPos;
 	
+	float mapSizeHeight;
+	float mapSizeWidth;
+
 	int dir;
 	// Image* playerIris;
 	Image* testBackGround;

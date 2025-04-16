@@ -14,6 +14,8 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
+
+
 	HyoScene() {};
 	virtual ~HyoScene() {};
 

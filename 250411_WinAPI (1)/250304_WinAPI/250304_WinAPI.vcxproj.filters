@@ -132,9 +132,6 @@
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
     </ClCompile>
-    <ClCompile Include="HyoCharacter.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>MainGame\Scene\Yong\Animation</Filter>
     </ClCompile>
@@ -173,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="InteractionState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
