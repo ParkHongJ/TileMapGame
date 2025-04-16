@@ -29,11 +29,16 @@ void SceneManager::Release()
 {
 	//¡÷ºÆ
 	map<string, Scene*>::iterator iter;
+
+	if (currentScene)
+	{
+		currentScene->Release();
+	}
+
 	for (iter = mapScenes.begin(); iter != mapScenes.end(); iter++)
 	{
 		if (iter->second)
 		{
-			iter->second->Release();
 			delete iter->second;
 			iter->second = nullptr;
 		}

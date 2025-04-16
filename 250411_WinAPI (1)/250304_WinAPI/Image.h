@@ -87,7 +87,7 @@ public:
 		float x, float y,
 		float scaleX, float scaleY,
 		float anchorX, float anchorY, 
-		float srcX, float srcY,
+		float atalasX, float atalasY,
 		float srcW, float srcH);
 
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY);

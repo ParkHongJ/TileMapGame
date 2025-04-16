@@ -48,7 +48,14 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	CollisionManager::GetInstance()->Init();
 	ObjectManager::GetInstance()->Init();
 	ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
+
+	ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
+
 	LoadTile("Data/map1.tilemap");
+
+	GenerateDecoTile();
 
 	player = new DummyHongPlayer;
 	return S_OK;
@@ -99,6 +106,60 @@ void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 
 	CollisionManager::GetInstance()->DebugRender(renderTarget);
 
-	D2D1_RECT_F rect = { WINSIZE_X - 200, 100, WINSIZE_X - 200 + 100, 200 };
-	DrawD2DText(renderTarget, L"홍준씬", rect.left, rect.top);	
+	
+	
+}
+
+void HongScene::GenerateDecoTile()
+{
+	for (int y = 0; y < 16; y++)
+	{
+		for (int x = 0; x < 16; x++)
+		{
+
+			//상 하 좌 우에 인접한 타일이 없다면.
+			//데코타일 추가
+			
+			//순서를 지켜야한다. 좌 우 데코타일은 위쪽 데코타일에 의해 가려져야 하니까.
+			//맵 외곽에 대한 처리도 들어가야한다.
+
+			//좌
+			if (IsTileValid(x - 1, y) == false)
+			{
+				bool hasTileAbove = !IsTileValid(x, y - 1);
+				tileMap[y][x]->CreateDecoTile(DecoDirection::LEFT, hasTileAbove);
+			}
+
+			//우
+			if (IsTileValid(x + 1, y) == false)
+			{
+				bool hasTileAbove = !IsTileValid(x, y - 1);
+				tileMap[y][x]->CreateDecoTile(DecoDirection::RIGHT, hasTileAbove);
+			}
+
+			//상
+			if (IsTileValid(x, y - 1) == false)
+			{
+				tileMap[y][x]->CreateDecoTile(DecoDirection::TOP);
+			}
+
+			//하
+			if (IsTileValid(x, y + 1) == false)
+			{
+				tileMap[y][x]->CreateDecoTile(DecoDirection::DOWN);
+			}
+
+		}
+	}
+}
+
+bool HongScene::IsTileValid(int x, int y)
+{
+	if (x < 0 || x >= 16 || y < 0 || y >= 16)
+		return false;
+	
+	if (tileMap[y][x] == nullptr)
+		return false;
+
+	return tileMap[y][x]->IsValid();
 }

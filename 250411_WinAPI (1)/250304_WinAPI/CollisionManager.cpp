@@ -29,10 +29,10 @@ void CollisionManager::Release()
 void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)
 {
 #ifdef _DEBUG
-	for (auto& collider : colliders)
+	/*for (auto& collider : colliders)
 	{
 		collider->DebugRender(renderTarget);
-	}
+	}*/
 
     // Debug Ray ½Ã°¢È­
     for (const auto& ray : debugRays)

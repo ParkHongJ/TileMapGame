@@ -328,7 +328,7 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	);
 }
 
-void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float anchorX, float anchorY, float srcX, float srcY, float srcW, float srcH)
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float anchorX, float anchorY, float atlasX, float atlasY, float srcW, float srcH)
 {
 	if (!imageInfo->bitmap) return;
 
@@ -337,12 +337,19 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	// 전체 이미지 크기 사용 시 기본 설정
 	if (srcW <= 0.f) srcW = bmpSize.width;
 	if (srcH <= 0.f) srcH = bmpSize.height;
+	
+	bool flipX = scaleX < 0.f;
+
+	float srcLeft = atlasX * srcW;
+	float srcTop = atlasY * srcH;
+	float srcRight = srcLeft + srcW;
+	float srcBottom = srcTop + srcH;
 
 	D2D1_RECT_F srcRect = D2D1::RectF(
-		srcX,
-		srcY,
-		srcX + srcW,
-		srcY + srcH
+		srcLeft,
+		srcTop,
+		srcRight,
+		srcBottom
 	);
 
 	float destW = srcW * scaleX;
@@ -355,7 +362,28 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 		y - destH * anchorY + destH
 	);
 
+	// Transform 적용
+	D2D1::Matrix3x2F originalTransform;
+	renderTarget->GetTransform(&originalTransform);
+
+	if (flipX)
+	{
+		// 중심 기준 좌우반전 행렬
+		D2D1::Matrix3x2F flipMat =
+			D2D1::Matrix3x2F::Translation(-x, -y) *
+			D2D1::Matrix3x2F::Scale(-1.0f, 1.0f) *
+			D2D1::Matrix3x2F::Translation(x, y);
+
+		renderTarget->SetTransform(flipMat * originalTransform);
+	}
+
 	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+
+	// Transform 복원
+	if (flipX)
+	{
+		renderTarget->SetTransform(originalTransform);
+	}
 }
 
 void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY)

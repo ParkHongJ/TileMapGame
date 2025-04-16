@@ -13,7 +13,7 @@ public:
 	void Release();
 	void Update();
 	void Update(const wstring& timerKey);
-	void Render(HDC hdc);
+	void Render(ID2D1HwndRenderTarget* renderTarget);
 
 	float GetDeltaTime(const wstring& timerKey);
 	

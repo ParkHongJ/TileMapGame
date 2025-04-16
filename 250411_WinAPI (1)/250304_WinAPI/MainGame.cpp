@@ -213,7 +213,7 @@ void MainGame::BeginDraw()
 {
 	m_pRenderTarget->BeginDraw();
 
-	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
+	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
 }
 
 void MainGame::Draw()
@@ -228,7 +228,7 @@ void MainGame::Draw()
 
 	//SceneManager::GetInstance()->Render(hBackBufferDC);
 
-	//TimerManager::GetInstance()->Render(hBackBufferDC);
+	TimerManager::GetInstance()->Render(m_pRenderTarget.Get());
 	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
 	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
 

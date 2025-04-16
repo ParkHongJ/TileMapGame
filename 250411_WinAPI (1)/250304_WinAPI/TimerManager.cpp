@@ -1,5 +1,6 @@
 #include "TimerManager.h"
 #include "Timer.h"
+#include "CommonFunction.h"
 void TimerManager::Init()
 {
 	timers.insert(make_pair(L"Default", new Timer()));
@@ -38,13 +39,16 @@ void TimerManager::Update(const wstring& timerKey)
 	}
 }
 
-void TimerManager::Render(HDC hdc)
+void TimerManager::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	map<wstring, Timer*>::iterator iter = timers.find(L"60Frame");
 	if (iter != timers.end())
 	{
-		wsprintf(szText, TEXT("FPS : %d"), iter->second->GetFPS());
-		TextOut(hdc, WINSIZE_X - 130, 20, szText, wcslen(szText));
+		
+		wstring fps = L"FPS : " + to_wstring(iter->second->GetFPS());
+
+		D2D1_RECT_F rect = { WINSIZE_X - 200, 50, WINSIZE_X - 200 + 100, 100 };
+		DrawD2DText(renderTarget, fps.c_str(), rect.left, rect.top);
 	}
 }
 
