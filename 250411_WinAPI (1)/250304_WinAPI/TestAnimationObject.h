@@ -20,7 +20,7 @@ private:
 
 private:
 	AnimationManager* AnimManager;
-
+	class PlayerStatus* status;
 	int Count;
 };
 

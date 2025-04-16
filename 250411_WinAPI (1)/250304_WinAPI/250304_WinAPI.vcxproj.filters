@@ -189,6 +189,12 @@
     <ClCompile Include="DummyHongPlayer.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -272,42 +278,6 @@
     <ClInclude Include="Camera.h">
       <Filter>2D Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="AttackState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="IdleState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="InteractionState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveState.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerStatus.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestAnimationObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestRenderSort.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TestYongSceneBackGround.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="InGameUI.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="HyoCharacter.h">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
@@ -322,6 +292,48 @@
     </ClInclude>
     <ClInclude Include="DummyHongPlayer.h">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStatus.h">
+      <Filter>MainGame\Scene\Yong\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="IdleState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterState.h">
+      <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAnimationObject.h">
+      <Filter>MainGame\Scene\Yong\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TestRenderSort.h">
+      <Filter>MainGame\Scene\Yong\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="TestYongSceneBackGround.h">
+      <Filter>MainGame\Scene\Yong\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

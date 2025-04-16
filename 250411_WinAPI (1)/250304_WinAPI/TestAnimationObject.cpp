@@ -1,5 +1,6 @@
 #include "TestAnimationObject.h"
 #include "AnimationManager.h"
+#include "PlayerStatus.h"
 
 HRESULT TestAnimationObject::Init()
 {
@@ -19,6 +20,9 @@ HRESULT TestAnimationObject::Init()
 	Anim = new Animation(Temp);
 	AnimManager->RegisterAnimation("°È±â", Anim, true);
 	Count = 0;
+
+	status = new PlayerStatus();
+
 	return S_OK;
 }
 
