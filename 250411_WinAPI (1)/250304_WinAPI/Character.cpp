@@ -12,6 +12,7 @@ InteractionState Character::interactionState(InteractionState::SubState::NONE);
 HRESULT Character::Init()
 {
     playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
+
     state = &Character::idleState;
     state->Enter(this);
 
@@ -24,14 +25,15 @@ HRESULT Character::Init()
     currFrameInd = { 0,0 };
 
     frameTime = 0.0f;
-    currFrameInfo.startFrame = { 0,0 };
-    currFrameInfo.endFrame = { 0,0 };
-
-    jumpFrameInfo = { {0, 9}, {7, 9} };
+    currFrameInfo = { { 0,0 }, {0, 0} };
+    
+    /*jumpFrameInfo = { {0, 9}, {7, 9} };
     attackFrameInfo = { {10, 12}, {15,12} };
-    ropeFrameInfo = { {0, 12}, {9,12} };
+    ropeFrameInfo = { {0, 12}, {9,12} };*/
 
- 
+    
+    colliderRect = {-40, -40, 40, 56};
+
     speed = 200.f;
     attackSpeed = 3.0f;
     attackRate = 0.3f;
@@ -202,6 +204,32 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y, isFlip);
     }
+
+
+    // 1. 먼저 사용할 브러시를 생성
+    ID2D1SolidColorBrush* pBrush = nullptr;
+    renderTarget->CreateSolidColorBrush(
+        D2D1::ColorF(D2D1::ColorF::Red), // 색상: 빨간색
+        &pBrush
+    );
+
+    // 2. 사각형 정의
+    D2D1_RECT_F rect = D2D1::RectF(
+        Pos.x + colliderRect.left, Pos.y+colliderRect.top, Pos.x+colliderRect.right, Pos.y+colliderRect.bottom // 좌상단(x, y) ~ 우하단(x, y)
+    );
+
+    // 3. 속이 빈 사각형 그리기 (stroke width: 2.0f)
+    renderTarget->DrawRectangle(
+        &rect,
+        pBrush,
+        2.0f // 선 두께
+    );
+
+    // 4. 브러시 해제
+    if (pBrush)
+        pBrush->Release();
+   
+
 }
 
 
@@ -287,13 +315,13 @@ FrameInfo Character::GetCurrFrameInfo() const
 
 void Character::Move(int dirX)
 {
+    float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
     isFlip = dirX > 0 ? false : true;
-    Pos.x += speed * dirX * TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+    Pos.x += speed * dirX * TimeDelta;
 }
 
 void Character::LookUp()
 {
-    // 위 보기 중단, 아래 보기 중단 flag
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookUpPaused = true;
     else isLookUpPaused = false;
 }
