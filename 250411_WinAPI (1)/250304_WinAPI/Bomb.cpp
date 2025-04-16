@@ -18,7 +18,7 @@ HRESULT Bomb::Init()
 
 	Pos = { 200, 200 };
 
-	//BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
 	return S_OK;
 }
 

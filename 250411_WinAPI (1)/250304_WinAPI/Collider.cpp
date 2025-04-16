@@ -25,6 +25,7 @@ BoxCollider::BoxCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject)
 	, Min({ 0.f, 0.f })
 	, Max({ 0.f, 0.f })
 {
+    Type = ColliderType::BOX;
 }
 
 void BoxCollider::Update(float TimeDelta)
@@ -110,7 +111,7 @@ SphereCollider::SphereCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerO
 	: Collider(_Offset, _Scale, OwnerObject)
 	, Radius(radius)
 {
-
+    Type = ColliderType::SPHERE;
 }
 
 void SphereCollider::Update(float TimeDelta)

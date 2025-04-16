@@ -39,6 +39,9 @@ public:
 	void Register(class Collider* collider);
 	void UnRegister(class Collider* collider);
 
+	bool CollisionAABB(Collider* collider1, Collider* collider2);
+	bool CollisionSphere(Collider* collider1, Collider* collider2);
+	void BoxAll();
 	
 	void DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length);
 

@@ -61,22 +61,22 @@ void TestAnimationObject::Update(float TimeDelta)
 
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_LEFT))
 	{
-		Pos.x -= 50.f * TimeDelta;
+		Pos.x -= 300.f * TimeDelta;
 	}
 
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_RIGHT))
 	{
-		Pos.x += 50.f * TimeDelta;
+		Pos.x += 300.f * TimeDelta;
 	}
 
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_UP))
 	{
-		Pos.y -= 50.f * TimeDelta;
+		Pos.y -= 300.f * TimeDelta;
 	}
 
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_DOWN))
 	{
-		Pos.y += 50.f * TimeDelta;
+		Pos.y += 300.f * TimeDelta;
 	}
 
 

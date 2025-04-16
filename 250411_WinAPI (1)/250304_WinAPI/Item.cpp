@@ -27,7 +27,7 @@ void Item::Update(float TimeDelta)
 {
 	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
 	{
-		movePower = { 100.f, 100.f };
+		movePower = { 500.f, 300.f };
 	}
 
 	if (false == isHold)

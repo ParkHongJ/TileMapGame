@@ -1,5 +1,7 @@
 #include "CollisionManager.h"
 #include "Collider.h"
+#include "CommonFunction.h"
+
 void CollisionManager::Init()
 {
 }
@@ -19,6 +21,8 @@ void CollisionManager::Update(float TimeDelta)
         else
             ++i;
     }
+
+    BoxAll();
 }
 
 void CollisionManager::Release()
@@ -60,6 +64,64 @@ void CollisionManager::Register(Collider* collider)
 void CollisionManager::UnRegister(Collider* collider)
 {
 
+}
+
+bool CollisionManager::CollisionAABB(Collider* collider1, Collider* collider2)
+{
+    FPOINT collider1Pos = collider1->GetWorldPos();
+    FPOINT Collider1HalfSize = { collider1->GetScale().x * 0.5f,collider1->GetScale().y * 0.5f };
+
+    FPOINT collider2Pos = collider2->GetWorldPos();
+    FPOINT Collider2HalfSize = { collider2->GetScale().x * 0.5f,collider2->GetScale().y * 0.5f };
+
+    RECT rc1;
+    rc1.left = LONG(collider1Pos.x - Collider1HalfSize.x);
+    rc1.right = LONG(collider1Pos.x + Collider1HalfSize.x);
+    rc1.top = LONG(collider1Pos.y - Collider1HalfSize.y);
+    rc1.bottom = LONG(collider1Pos.y + Collider1HalfSize.y);
+
+    RECT rc2;
+    rc2.left = LONG(collider2Pos.x - Collider2HalfSize.x);
+    rc2.right = LONG(collider2Pos.x + Collider2HalfSize.x);
+    rc2.top = LONG(collider2Pos.y - Collider2HalfSize.y);
+    rc2.bottom = LONG(collider2Pos.y + Collider2HalfSize.y);
+
+    return RectInRect(rc1, rc2);
+}
+
+bool CollisionManager::CollisionSphere(Collider* collider1, Collider* collider2)
+{
+    float radius = (collider1->GetScale().x + collider2->GetScale().x) * 0.5f;
+    float distance = GetDistance(collider1->GetWorldPos(), collider2->GetWorldPos());
+
+    return distance <= radius;
+}
+
+void CollisionManager::BoxAll()
+{
+    for (auto& iter : colliders)
+    {
+        for (auto& iter2 : colliders)
+        {
+            if (iter == iter2)
+            {
+                continue;
+            }
+
+            if (ColliderType::BOX != iter->GetType() && ColliderType::BOX != iter2->GetType())
+            {
+                continue;
+            }
+
+            bool bCollision = CollisionAABB(iter, iter2);
+
+            if (bCollision)
+            {
+                int i = 5;
+                // Test
+            }
+        }
+    }
 }
 
 void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length)
