@@ -303,12 +303,61 @@ HRESULT Image::Init(ID2D1RenderTarget* renderTarget, const wchar_t* filePath)
 	return S_OK;
 }
 
-void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float anchorX, float anchorY)
+HRESULT Image::Init(ID2D1RenderTarget* renderTarget, const wchar_t* filePath, int maxFrameX, int maxFrameY)
+{
+	IWICImagingFactory* wicFactory = ImageManager::GetInstance()->GetWICFactory();
+
+	HRESULT hr = CoCreateInstance(
+		CLSID_WICImagingFactory, nullptr,
+		CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+	if (FAILED(hr)) return hr;
+
+	ComPtr<IWICBitmapDecoder> decoder;
+	hr = wicFactory->CreateDecoderFromFilename(
+		filePath, nullptr, GENERIC_READ,
+		WICDecodeMetadataCacheOnLoad, &decoder);
+	if (FAILED(hr)) return hr;
+
+	ComPtr<IWICBitmapFrameDecode> frame;
+	hr = decoder->GetFrame(0, &frame);
+	if (FAILED(hr)) return hr;
+
+	ComPtr<IWICFormatConverter> converter;
+	hr = wicFactory->CreateFormatConverter(&converter);
+	if (FAILED(hr)) return hr;
+
+	hr = converter->Initialize(
+		frame.Get(), GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone, nullptr, 0.0f,
+		WICBitmapPaletteTypeMedianCut);
+	if (FAILED(hr)) return hr;
+
+	ComPtr<ID2D1Bitmap> bitmap;
+	hr = renderTarget->CreateBitmapFromWicBitmap(converter.Get(), &bitmap);
+	if (FAILED(hr)) return hr;
+
+	imageInfo = new IMAGE_INFO;
+	imageInfo->bitmap = bitmap;
+	imageInfo->width = bitmap->GetSize().width;
+	imageInfo->height = bitmap->GetSize().height;
+	
+	imageInfo->maxFrameX = maxFrameX;
+    imageInfo->maxFrameY = maxFrameY;
+    imageInfo->frameWidth = imageInfo->width / maxFrameX;
+    imageInfo->frameHeight = imageInfo->height / maxFrameY;
+    imageInfo->currFrameX = imageInfo->currFrameY = 0;
+	return S_OK;
+}
+
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY)
 {
 	if (!imageInfo || !imageInfo->bitmap)
 		return;
 
 	D2D1_SIZE_F size = imageInfo->bitmap->GetSize();
+
+	float anchorX = 0.5f;
+	float anchorY = 0.5f;
 
 	float drawWidth = size.width * scaleX;
 	float drawHeight = size.height * scaleY;
@@ -328,25 +377,116 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	);
 }
 
-void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY)
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float atlasX, float atlasY, float srcW, float srcH)
 {
-	if (!imageInfo || !imageInfo->bitmap) return;
+	if (!imageInfo->bitmap) return;
+
+	D2D1_SIZE_F bmpSize = imageInfo->bitmap->GetSize();
+	
+	float anchorX = 0.5f;
+	float anchorY = 0.5f;
+	// 전체 이미지 크기 사용 시 기본 설정
+	if (srcW <= 0.f) srcW = bmpSize.width;
+	if (srcH <= 0.f) srcH = bmpSize.height;
+	
+	bool flipX = scaleX < 0.f;
+
+	float srcLeft = atlasX * srcW;
+	float srcTop = atlasY * srcH;
+	float srcRight = srcLeft + srcW;
+	float srcBottom = srcTop + srcH;
+
+	D2D1_RECT_F srcRect = D2D1::RectF(
+		srcLeft,
+		srcTop,
+		srcRight,
+		srcBottom
+	);
+
+	float destW = srcW * scaleX;
+	float destH = srcH * scaleY;
+
+	D2D1_RECT_F destRect = D2D1::RectF(
+		x - destW * anchorX,
+		y - destH * anchorY,
+		x - destW * anchorX + destW,
+		y - destH * anchorY + destH
+	);
+
+	// Transform 적용
+	D2D1::Matrix3x2F originalTransform;
+	renderTarget->GetTransform(&originalTransform);
+
+	if (flipX)
+	{
+		// 중심 기준 좌우반전 행렬
+		D2D1::Matrix3x2F flipMat =
+			D2D1::Matrix3x2F::Translation(-x, -y) *
+			D2D1::Matrix3x2F::Scale(-1.0f, 1.0f) *
+			D2D1::Matrix3x2F::Translation(x, y);
+
+		renderTarget->SetTransform(flipMat * originalTransform);
+	}
+
+	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+
+	// Transform 복원
+	if (flipX)
+	{
+		renderTarget->SetTransform(originalTransform);
+	}
+}
+
+void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, bool isFlip)
+{
+	if (!imageInfo->bitmap) return;
 
 	float fw = static_cast<float>(imageInfo->frameWidth);
 	float fh = static_cast<float>(imageInfo->frameHeight);
 
+	D2D1_RECT_F destRect = D2D1::RectF(
+		x - fw / 2.0f,
+		y - fh / 2.0f,
+		x + fw / 2.0f,
+		y + fh / 2.0f
+	);
+
+	D2D1_RECT_F srcRect = D2D1::RectF(
+		frameX * fw,
+		frameY * fh,
+		(frameX + 1) * fw,
+		(frameY + 1) * fh
+	);
+
+	// Transform 저장
+	D2D1::Matrix3x2F originalTransform;
+	renderTarget->GetTransform(&originalTransform);
+
+	if (isFlip)
+	{
+		// 중심 기준 좌우반전 행렬
+		D2D1::Matrix3x2F flip =
+			D2D1::Matrix3x2F::Translation(-x, -y) *
+			D2D1::Matrix3x2F::Scale(-1.0f, 1.0f) *
+			D2D1::Matrix3x2F::Translation(x, y);
+
+		renderTarget->SetTransform(flip * originalTransform);
+	}
+
+	// 실제 그리기
 	renderTarget->DrawBitmap(
 		imageInfo->bitmap.Get(),
-		D2D1::RectF(x, y, x + fw, y + fh),
+		&destRect,
 		1.0f,
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
-		D2D1::RectF(
-			frameX * fw,
-			frameY * fh,
-			(frameX + 1) * fw,
-			(frameY + 1) * fh
-		)
+		&srcRect
 	);
+
+	// Transform 복원
+	if (isFlip)
+	{
+		renderTarget->SetTransform(originalTransform);
+	}
 }
 
 void Image::Release()

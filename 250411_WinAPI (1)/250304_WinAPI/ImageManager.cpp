@@ -108,6 +108,26 @@ Image* ImageManager::AddImage(string key, const wchar_t* filePath, ID2D1HwndRend
 //	return image;
 //}
 
+Image* ImageManager::AddImage(string key, const wchar_t* filePath, int maxFrameX, int maxFrameY, ID2D1HwndRenderTarget* renderTarget)
+{
+	Image* image = nullptr;
+	image = FindImage(key);
+	if (image)	return image;
+
+	image = new Image();
+	if (FAILED(image->Init(renderTarget, filePath, maxFrameX, maxFrameY)))
+	{
+		image->Release();
+		delete image;
+
+		return nullptr;
+	}
+
+	mapImages.insert(make_pair(key, image));
+
+	return image;
+}
+
 void ImageManager::DeleteImage(string key)
 {
 	map<string, Image*>::iterator iter;

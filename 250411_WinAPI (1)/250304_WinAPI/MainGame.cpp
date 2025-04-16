@@ -14,6 +14,7 @@
 #include "JinScene.h"
 #include "YongScene.h"
 
+
 HRESULT MainGame::Init()
 {
 	if (FAILED(InitD2D()))
@@ -126,6 +127,9 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case '1':
 			SceneManager::GetInstance()->ChangeScene("태관");
 			break;
+		case '3':
+			SceneManager::GetInstance()->ChangeScene("홍준");
+			break;
 		}
 		break;
 	case WM_LBUTTONDOWN:
@@ -180,7 +184,32 @@ HRESULT MainGame::InitD2D()
 	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
 
 	// 브러시 (예: 기본 색)
-	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_pBrush);
+	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &GBrush);
+
+	if (!GdwriteFactory)
+	{
+		HRESULT hr = DWriteCreateFactory(
+			DWRITE_FACTORY_TYPE_SHARED,
+			__uuidof(IDWriteFactory),
+			reinterpret_cast<IUnknown**>(GdwriteFactory.GetAddressOf())
+		);
+
+		if (FAILED(hr))
+		{
+			MessageBox(nullptr, L"DWriteCreateFactory 실패", L"Error", MB_OK);
+		}
+
+		GdwriteFactory->CreateTextFormat(
+			L"맑은 고딕",                // Font name
+			nullptr,                    // Font collection
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			20.0f,                      // Font size
+			L"ko-kr",                   // Locale
+			&GtextFormat
+		);
+	}
 
 	return S_OK;
 }
@@ -189,7 +218,7 @@ void MainGame::BeginDraw()
 {
 	m_pRenderTarget->BeginDraw();
 
-	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::White));
+	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
 }
 
 void MainGame::Draw()
@@ -205,7 +234,7 @@ void MainGame::Draw()
 
 	//SceneManager::GetInstance()->Render(hBackBufferDC);
 
-	//TimerManager::GetInstance()->Render(hBackBufferDC);
+	TimerManager::GetInstance()->Render(m_pRenderTarget.Get());
 	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
 	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
 

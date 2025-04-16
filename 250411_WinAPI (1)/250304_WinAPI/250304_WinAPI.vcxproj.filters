@@ -133,7 +133,7 @@
       <Filter>MainGame\Scene\Tae</Filter>
     </ClCompile>
     <ClCompile Include="HyoCharacter.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>MainGame\Scene\Yong\Animation</Filter>
@@ -173,6 +173,21 @@
     </ClCompile>
     <ClCompile Include="InteractionState.cpp">
       <Filter>MainGame\Scene\Tae\State</Filter>
+    </ClCompile>
+    <ClCompile Include="HyoCharacter.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="DummyHongPlayer.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +267,6 @@
       <Filter>MainGame\Scene\Tae</Filter>
     </ClInclude>
     <ClInclude Include="HyoCharacter.h">
-      <Filter>헤더 파일</Filter>
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -293,6 +307,21 @@
     </ClInclude>
     <ClInclude Include="InGameUI.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HyoCharacter.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyHongPlayer.h">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

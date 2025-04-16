@@ -66,6 +66,9 @@
     <ClInclude Include="TileMapTool.h">
       <Filter>소스 파일\Tool</Filter>
     </ClInclude>
+    <ClInclude Include="EditorTile.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapTool.cpp">

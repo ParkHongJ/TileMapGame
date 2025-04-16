@@ -78,8 +78,18 @@ private:
 	D2D1_COLOR_F transColor = D2D1::ColorF(0, 0); // 디폴트 투명색
 public:
 	HRESULT Init(ID2D1RenderTarget* renderTarget, const wchar_t* filePath);
-	void Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX = 1.0f, float scaleY = 1.0f, float anchorX = 0.5f, float anchorY = 0.5f);
-	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY);
+	HRESULT Init(ID2D1RenderTarget* renderTarget, const wchar_t* filePath, int maxFrameX, int maxFrameY);
+	void Render(ID2D1RenderTarget* renderTarget, 
+		float x = 0.f, float y = 0.f, 
+		float scaleX = 1.0f, float scaleY = 1.0f);
+
+	void Render(ID2D1RenderTarget* renderTarget,
+		float x, float y,
+		float scaleX, float scaleY,
+		float atalasX, float atalasY,
+		float srcW, float srcH);
+
+	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, bool isFlip = false);
 	void Release();
 
 	inline ID2D1Bitmap* GetBitmap() const { return imageInfo->bitmap.Get(); }

@@ -133,3 +133,37 @@ inline void SetClientRect(HWND hWnd, int width, int height)
 	SetWindowPos(hWnd, NULL, 0, 0, rc.right - rc.left, 
 		rc.bottom - rc.top, SWP_NOMOVE | SWP_NOZORDER);
 }
+
+inline void DrawCenteredRect(ID2D1RenderTarget* rt, FPOINT center, float halfSize, D2D1::ColorF color, float thickness = 1.0f)
+{
+	ComPtr<ID2D1SolidColorBrush> tempBrush;
+	rt->CreateSolidColorBrush(color, &tempBrush);
+
+	D2D1_RECT_F rect = D2D1::RectF(
+		center.x - halfSize, center.y - halfSize,
+		center.x + halfSize, center.y + halfSize
+	);
+	rt->DrawRectangle(rect, tempBrush.Get(), thickness);
+}
+
+inline void DrawD2DText(
+	ID2D1RenderTarget* rt,
+	const wchar_t* fmt,
+	float x, float y,
+	... // 가변 인자
+)
+{
+	// 1. 문자열 포맷팅
+	wchar_t buffer[256];
+
+	va_list args;
+	va_start(args, fmt);
+	vswprintf(buffer, 256, fmt, args);
+	va_end(args);
+
+	// 2. 출력 영역 (자동 정렬)
+	D2D1_RECT_F rect = D2D1::RectF(x, y, x + 1000, y + 1000); // 가로폭 넉넉히
+
+	// 3. 텍스트 출력
+	rt->DrawText(buffer, (UINT32)wcslen(buffer), GtextFormat.Get(), &rect, GBrush.Get());
+}

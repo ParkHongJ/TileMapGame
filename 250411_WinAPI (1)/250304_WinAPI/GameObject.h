@@ -12,10 +12,12 @@ public:
 
 	virtual void CheckCulling();		// 프레임 단위로 게임 로직 실행(데이터 계산)
 
+public:
 	GameObject();
 	virtual ~GameObject();
 
-	inline const FPOINT& GetPos() const { return Pos; }
+public:
+	inline const FPOINT& GetPos() { return Pos; }
 	inline void SetPos(const FPOINT& newPos) { Pos = newPos; }
 
 	inline void SetActive(bool bActive) { this->bActive = bActive; }
