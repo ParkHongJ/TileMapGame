@@ -47,17 +47,12 @@ void IdleState::Update(float TimeDelta)
                 ChangeSubState(SubState::IDLE_LOOKUP_STOP);
 
         }
-        
-
     }
     else if (km->IsOnceKeyUp(VK_UP))
     {
-        if (character->GetIsLookUpPaused() )
-        {
             ChangeSubState(IdleState::SubState::IDLE_LOOKUP_RELEASE);
             character->SetIsLookUpPaused(false);
 
-        }
     }
     else if (km->IsStayKeyDown(VK_DOWN))
     {
@@ -81,12 +76,9 @@ void IdleState::Update(float TimeDelta)
     }
     else if (km->IsOnceKeyUp(VK_DOWN))
     {
-        if (character->GetIsLookDownPaused())
-        {
             ChangeSubState(IdleState::SubState::IDLE_LOOKDOWN_RELEASE);
             character->SetIsLookDownPaused(false);
-            
-        }
+       
     }
 
 
