@@ -19,7 +19,10 @@ HRESULT HyoCharacter::Init()
 	}*/
 
 	SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
+	mapSizeHeight = testBackGround->GetHeight();
+	maptSizeWidth = testBackGround->GetWidth();
 	dir = -1;
+	backGroundPos = { WINSIZE_X / 2,WINSIZE_Y / 2 };
 	state = PlayerState::IDLE;
 	
 	return S_OK;	
@@ -34,20 +37,22 @@ void HyoCharacter::Update(float TimeDelta)
 {
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_RIGHT))
 	{
-		Pos.x += 100 * TimeDelta;
-	}
-	if (KeyManager::GetInstance()->IsStayKeyDown(VK_UP))
-	{
-		Pos.y -= 100 * TimeDelta;
+		Pos.x += 200 * TimeDelta;
 	}
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_LEFT))
 	{
-		Pos.x -= 100 * TimeDelta;
+		Pos.x -= 200 * TimeDelta;
+	}
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_UP))
+	{
+		Pos.y -= 200 * TimeDelta;
 	}
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_DOWN))
 	{
-		Pos.y += 100 * TimeDelta;
+		Pos.y += 200 * TimeDelta;
 	}
+
+	
 }
 
 void HyoCharacter::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -64,7 +69,7 @@ void HyoCharacter::TestRender(ID2D1HwndRenderTarget* renderTarget, const FPOINT&
 	if (testBackGround)
 	{
 		//testBackGround->Render(renderTarget, cameraPos.x, cameraPos.y);
-		testBackGround->Render(renderTarget, Pos.x - cameraPos.x, Pos.y - cameraPos.y);
+		testBackGround->Render(renderTarget, backGroundPos.x + cameraPos.x, backGroundPos.y + cameraPos.y);
 	}
 	
 	if (testCamera)

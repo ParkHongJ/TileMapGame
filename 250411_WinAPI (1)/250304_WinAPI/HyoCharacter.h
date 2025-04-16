@@ -17,6 +17,9 @@ public:
 
 private:
 
+	FPOINT backGroundPos;
+	FPOINT playerPos;
+	
 	int dir;
 	// Image* playerIris;
 	Image* testBackGround;

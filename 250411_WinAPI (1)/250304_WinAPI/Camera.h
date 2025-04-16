@@ -9,12 +9,19 @@ public:
 	virtual void Update(const FPOINT& playerPos, float TimeDelta);
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
-	const FPOINT GetPos() { return pos; }
+	const FPOINT GetPos() { return pos; }	// 각각의 오브젝트에게 위치 주기 
+	void SetMapSize(FPOINT mapSize) { this -> mapSize = mapSize; }
 
 private: 
 	
 	FPOINT pos;			// 카메라의 위치
 	FPOINT target;		// 플레이어의 위치
+	FPOINT offset;
+	FPOINT mapSize;
+
+	/*float mapHeight;
+	float mapWidth;*/
+
 	float moveSpeed;	// 카메라 속도 
 };
 

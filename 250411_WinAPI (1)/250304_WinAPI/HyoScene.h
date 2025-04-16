@@ -23,5 +23,8 @@ private:
 	HyoCharacter* testCamera;
 	Camera* camera;
 
+	float mapSizeHeight;
+	float maptSizeWidth;
+
 };
 

@@ -45,7 +45,8 @@ void HyoScene::Update(float TimeDelta)
 {
 	testCamera->Update(TimeDelta);
 	camera -> Update(testCamera->GetPos(), TimeDelta);	// 왜 const를 사용해야하는 지
-}
+
+}    
 
 void HyoScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
