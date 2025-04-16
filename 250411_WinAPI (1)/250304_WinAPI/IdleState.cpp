@@ -6,7 +6,9 @@
 void IdleState::Enter(Character* character)
 {
     this->character = character;
-    Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
+    currentSubState = SubState::IDLE_ALONE;
+    character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(currentSubState));
+    character->SetFrameTime(0.f);
 }
 
 void IdleState::Update(float TimeDelta)
@@ -20,18 +22,9 @@ void IdleState::Update(float TimeDelta)
         return;
     }
 
-    if (!character->GetIsLookUpPaused())
-    {
-        if (currentSubState == IdleState::SubState::IDLE_LOOKDOWN_RELEASE)
-        {
-            ChangeSubState(IdleState::SubState::IDLE_ALONE);
-        }
 
-        if (currentSubState == IdleState::SubState::IDLE_LOOKUP_RELEASE)
-        {
-            ChangeSubState(IdleState::SubState::IDLE_ALONE);
-        }
-    }
+
+ 
 
 
     if (km->IsStayKeyDown(VK_UP))
@@ -41,41 +34,48 @@ void IdleState::Update(float TimeDelta)
         
         if (!character->GetIsLookUpPaused())
         {
-            ChangeSubState(IdleState::SubState::IDLE_LOOKUP_START);
+            if (currentSubState != SubState::IDLE_LOOKUP_START)
+                ChangeSubState(SubState::IDLE_LOOKUP_START);
+
             character->LookUp(TimeDelta);
+
         }
         else
         {
-            ChangeSubState(IdleState::SubState::IDLE_LOOKUP_STOP);
 
-            // 프레임 검사 함수
+            if (currentSubState != SubState::IDLE_LOOKUP_STOP)
+                ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+
         }
         
 
     }
     else if (km->IsOnceKeyUp(VK_UP))
     {
-        if (character->GetIsLookUpPaused())
+        if (character->GetIsLookUpPaused() )
         {
             ChangeSubState(IdleState::SubState::IDLE_LOOKUP_RELEASE);
+            character->SetIsLookUpPaused(false);
 
-            //프레임 검사 함수
         }
     }
     else if (km->IsStayKeyDown(VK_DOWN))
     {
 
-        if (!character->GetIsLookUpPaused())
+        if (!character->GetIsLookDownPaused())
         {
-            ChangeSubState(IdleState::SubState::IDLE_LOOKDOWN_START);
+            if (currentSubState != SubState::IDLE_LOOKDOWN_START)
+                ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+
             character->LookDown(TimeDelta);
+
         }
         else
         {
 
-            ChangeSubState( IdleState::SubState::IDLE_LOOKDOWN_STOP);
-            
-            // 프레임 검사 함수
+            if (currentSubState != SubState::IDLE_LOOKDOWN_STOP)
+                ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+
         }
 
     }
@@ -84,15 +84,21 @@ void IdleState::Update(float TimeDelta)
         if (character->GetIsLookDownPaused())
         {
             ChangeSubState(IdleState::SubState::IDLE_LOOKDOWN_RELEASE);
-
-            //프레임 검사 함수
+            character->SetIsLookDownPaused(false);
+            
         }
     }
-    else  ChangeSubState(IdleState::SubState::IDLE_ALONE);      // 검사를 다 탈출하고도 subStateChange 가 없다면
 
-   // 조건에 따라 엄청난 분기를 할 예정
 
-   
+
+    if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
+        currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
+        character->GetCurrFrameInd().x >= character->GetCurrFrameInfo().endFrame.x)
+    {
+        ChangeSubState(SubState::IDLE_ALONE);
+    }
+
+    // 조건에 따라 엄청난 분기를 할 예정
 
     UpdateAnimation(TimeDelta);
     
@@ -105,14 +111,14 @@ void IdleState::UpdateAnimation(float TimeDelta)
 
 void IdleState::ChangeSubState( SubState newSubState)
 {
-    
+    if (currentSubState == newSubState) return;
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(IDLESTATE, static_cast<unsigned int>(newSubState));
 }
 
 void IdleState::Exit()
 {
-    //currentSubState = SubState::NONE;
+    currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
 }
 

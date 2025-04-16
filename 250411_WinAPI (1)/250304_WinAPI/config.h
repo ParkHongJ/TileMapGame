@@ -118,7 +118,8 @@ extern ComPtr<ID2D1SolidColorBrush> GBrush;
 extern ComPtr<IDWriteFactory> GdwriteFactory;
 extern ComPtr<IDWriteTextFormat> GtextFormat;
 
-enum class PlayerState {
+enum class PlayerState 
+{
     IDLE,               // 유후 상태
     MOVE,               // 좌우 이동
     
@@ -164,9 +165,17 @@ enum class PlayerState {
     EXIT,               // 스테이지 출구 도달
 };
 
-typedef struct tagCurrFrameInfo
+enum class AnimationMode 
+{
+    Loop,      // 계속 반복
+    Hold,      // 마지막 프레임에서 멈춤
+    FreezeAtX, // 특정 프레임에서 멈춤 (옵션)
+};
+
+struct FrameInfo 
 {
     POINT startFrame;
-	POINT endFrame;
-    //POINT initFrame = {-1, -1}; maybe don`t need?
-} FrameInfo;
+    POINT endFrame;
+    AnimationMode mode = AnimationMode::Loop; 
+};
+

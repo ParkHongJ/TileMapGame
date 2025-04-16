@@ -7,7 +7,6 @@
 #include "AttackState.h"
 #include "InteractionState.h"
 
-
 class Character : public GameObject
 {
 
@@ -66,7 +65,6 @@ public:
 
 		
 	void InitAnimationMap();
-	void SetAnimationRange(PlayerState state);
 
 
 	void SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState);
@@ -84,6 +82,13 @@ public:
 
 	bool GetIsLookUpPaused();
 	bool GetIsLookDownPaused();
+	POINT GetCurrFrameInd() const;
+	FrameInfo GetCurrFrameInfo() const;
+	void SetIsLookUpPaused(bool isLookUpPaused) { this->isLookUpPaused = isLookUpPaused; }
+	void SetIsLookDownPaused(bool isLookDownPaused) { this->isLookDownPaused = isLookDownPaused; }
+
+
+
 
 	void Move(int dirX, float TimeDelta);
 

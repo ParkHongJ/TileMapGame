@@ -67,6 +67,8 @@ bool KeyManager::IsStayKeyDown(int key)
 {
     if (GetAsyncKeyState(key) & 0x8000)
     {
+        keyDown[key] = true;
+        keyUp[key] = false;
         return true;
     }
     return false;

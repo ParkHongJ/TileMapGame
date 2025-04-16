@@ -4,8 +4,11 @@
 void MoveState::Enter(Character* character)
 {
     this->character = character;
+  
+    currentSubState = SubState::MOVE_ALONE;
+    character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(currentSubState));
+    character->SetFrameTime(0.f);
 
-    Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
 }
 
 void MoveState::Update(float TimeDelta)
@@ -102,7 +105,7 @@ void MoveState::ChangeSubState(SubState newSubState)
 
 void MoveState::Exit()
 {
-    //currentSubState = SubState::NONE;
+    currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
     
 }
