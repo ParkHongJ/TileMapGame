@@ -1,9 +1,13 @@
 #include "PlayerStatus.h"
+#include "config.h"
 
-PlayerStatus::PlayerStatus() : playerHP(0), playerMaxHP(4), bombCount(0), gold(0)
+PlayerStatus::PlayerStatus()
 {
+	memset(&info, 0, sizeof(info));
+	info.playerMaxHP = 4;
 }
 
 PlayerStatus::~PlayerStatus()
 {
+
 }

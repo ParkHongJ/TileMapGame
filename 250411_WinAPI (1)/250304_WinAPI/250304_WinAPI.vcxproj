@@ -131,6 +131,7 @@
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="BattleScene.cpp" />
+    <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="HyoCharacter.cpp" />
     <ClCompile Include="Character.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="HyoScene.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="JinScene.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
@@ -162,6 +164,7 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="BattleScene.h" />
+    <ClInclude Include="Bomb.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="HyoCharacter.h" />
     <ClInclude Include="Character.h" />
@@ -172,6 +175,7 @@
     <ClInclude Include="HyoScene.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="JinScene.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="LoadingScene.h" />

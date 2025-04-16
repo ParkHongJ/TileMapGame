@@ -1,41 +1,44 @@
 #pragma once
 class PlayerStatus
 {
+	struct PlayerStatusInfo
+	{
+		unsigned int playerHP;
+		unsigned int playerMaxHP;
+		unsigned int bombCount;
+		//unsigned int ropeCount;
+		unsigned int gold;
+	}typedef PLAYERSTATUSDESC;
 public:
 	PlayerStatus();
 	virtual ~PlayerStatus();
 
 public:
-	inline const unsigned int GetPlayerHP() const { return playerHP; };
+	inline const unsigned int GetPlayerHP() const { return info.playerHP; };
 	inline void SetPlayerHP(unsigned int hp) 
 	{
-		hp < playerMaxHP ? playerHP = hp : playerHP = playerMaxHP;
+		hp < info.playerMaxHP ? info.playerHP = hp : info.playerHP = info.playerMaxHP;
 	};
 	
 	inline void PlusPlayerHP(unsigned int hp) 
 	{
-		playerHP + hp < playerMaxHP ? playerHP += hp : playerHP = playerMaxHP;
+		info.playerHP + hp < info.playerMaxHP ? info.playerHP += hp : info.playerHP = info.playerMaxHP;
 	};
 
-	inline const unsigned int GetPlayerMaxHP() const { return playerMaxHP; };
-	inline void SetPlayerMaxHP(unsigned int hp) { playerMaxHP = hp; };
+	inline const unsigned int GetPlayerMaxHP() const { return info.playerMaxHP; };
+	inline void SetPlayerMaxHP(unsigned int hp) { info.playerMaxHP = hp; };
 
-	inline const unsigned int GetBombCount() const { return bombCount; };
-	inline void SetBombCount(unsigned int cnt) { bombCount = cnt; };
+	inline const unsigned int GetBombCount() const { return info.bombCount; };
+	inline void SetBombCount(unsigned int cnt) { info.bombCount = cnt; };
 
 	//inline const unsigned int GetRopeCount() const { return ropeCount; };
 	//inline void SetRopeCount(unsigned int cnt) { ropeCount = cnt; };
 
-	inline const unsigned int GetGold() const { return gold; };
-	inline void SetGold(unsigned int gold) { this->gold = gold; };
+	inline const unsigned int GetGold() const { return info.gold; };
+	inline void SetGold(unsigned int gold) { info.gold = gold; };
 
 private:
-	unsigned int playerHP;
-	unsigned int playerMaxHP;
-
-	unsigned int bombCount;
-	//unsigned int ropeCount;
-	unsigned int gold;
+	PLAYERSTATUSDESC info;
 
 };
 

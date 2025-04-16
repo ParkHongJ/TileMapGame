@@ -150,6 +150,12 @@
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -247,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="PlayerStatus.h">
       <Filter>MainGame\Scene\Yong\Status</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
