@@ -42,7 +42,7 @@ void HyoCharacter::Render(ID2D1HwndRenderTarget* renderTarget)
 		break;
 	case PlayerState::MOVE:
 		break;
-	case PlayerState::JUMP:
+	//case PlayerState::JUMP:
 		break;
 	}
 	//playerIris->Render(hdc);

@@ -45,7 +45,7 @@ HRESULT MainGame::Init()
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
-		"Tae_Player", TEXT("Image/Character/char_yellow.bmp"), m_pRenderTarget.Get());
+		"Tae_Player", TEXT("Image/Character/char_yellow_full.png"), m_pRenderTarget.Get());
 
 	SceneManager::GetInstance()->ChangeScene("효진");
 
@@ -124,6 +124,10 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			break;
 		case 'w': case 'W':
 			SceneManager::GetInstance()->ChangeScene("playerUI");
+			break;
+
+		case '1':
+			SceneManager::GetInstance()->ChangeScene("태관");
 			break;
 		}
 		break;
