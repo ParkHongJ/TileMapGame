@@ -35,6 +35,11 @@ using namespace std;
 
 #define ANIMATION_FRAME_TIME 0.065f
 
+#define IDLESTATE 0
+#define MOVESTATE 1
+#define ATTACKSTATE 2
+#define INTERACTIONSTATE 3
+
 typedef struct tagFPOINT
 {
 	float x;

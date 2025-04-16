@@ -6,6 +6,7 @@ class InteractionState : public CharacterState
 {
 public:
     enum class SubState {
+        NONE,
         INTERACTION_CLIMB_LADDER,
         INTERACTION_CLIMB_ROPE,
         INTERACTION_ENTER_TUNNEL,
@@ -19,7 +20,7 @@ private:
     SubState currentSubState;
 
 public:
-    InteractionState(SubState initialSubState = SubState::INTERACTION_CLIMB_LADDER)
+    InteractionState(SubState initialSubState = SubState::NONE)
         : currentSubState(initialSubState) {
     }
 
@@ -27,4 +28,6 @@ public:
     virtual void Update(Character* character, float deltaTime) override;
     virtual void UpdateAnimation(Character* character) override;
     virtual void Exit(Character* character) override;
+    virtual const char* GetStateName() const override { return "InteractionState"; }
+
 };

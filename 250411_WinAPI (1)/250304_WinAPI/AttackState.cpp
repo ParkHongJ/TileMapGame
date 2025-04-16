@@ -14,10 +14,11 @@ void AttackState::Update(Character* character, float deltaTime)
 
 void AttackState::UpdateAnimation(Character* character)
 {
-    character->PlayAnimation(2, static_cast<int>(currentSubState)); // stateId = 3 (Attack)
+    character->PlayAnimation(ATTACKSTATE, static_cast<int>(currentSubState)); // stateId = 3 (Attack)
 }
 
 void AttackState::Exit(Character* character)
 {
+    currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
 }

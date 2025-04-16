@@ -9,6 +9,8 @@ public:
     virtual void Update(Character* character, float deltaTime) = 0;
     virtual void UpdateAnimation(Character* character) = 0;
     virtual void Exit(Character* character) = 0;
+    virtual const char* GetStateName() const = 0;
+  
     virtual ~CharacterState() {};
 };
 

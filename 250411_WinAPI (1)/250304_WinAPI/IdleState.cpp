@@ -7,45 +7,46 @@ void IdleState::Enter(Character* character)
 		UpdateAnimation(character);
 }
 
-void IdleState::Update(Character* character, float deltaTime)
+void IdleState::Update(Character* character, float TimeDelta)
 {
 
     // 입력 등을 받아서 서브상태 변경
-    // 예시: 시선이 아래면 서브상태 변경
     KeyManager* km = KeyManager::GetInstance();
 
     if (km->IsStayKeyDown(VK_RIGHT) ||
-        km->IsStayKeyDown(VK_LEFT) ||
-        km->IsStayKeyDown(VK_UP) ||
-        km->IsStayKeyDown(VK_DOWN) 
+        km->IsStayKeyDown(VK_LEFT) 
         )
     {
-        character->ChageState();
+        character->ChangeState(&Character::moveState);
+        return;
     }
+
+    if (km->IsStayKeyDown(VK_UP))
+    {
+
+        //조건에 따라 상태 분기 ex ) 펫
+        currentSubState = IdleState::SubState::IDLE_LOOKUP;
         
         
-        
+        character->LookUp(TimeDelta);
+    }
+    else if (km->IsStayKeyDown(VK_DOWN))
+    {
+        currentSubState = IdleState::SubState::IDLE_LOOKDOWN;
+        character->LookDown(TimeDelta);
+    }
 
-
-
-        UpdateAnimation(character);
+    UpdateAnimation(character);
     
 }
 
 void IdleState::UpdateAnimation(Character* character)
 {
-    character->PlayAnimation(0,static_cast<int>(currentSubState));
+    character->PlayAnimation(IDLESTATE, static_cast<int>(currentSubState));
 }
 
 void IdleState::Exit(Character* character)
 {
-    // 1. 애니메이션 정리
-    //character->
+    currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
-
-    // 2. 사운드 정리
-    //character->
-
-    // 4. 서브 상태 초기화
-    //currentSubState = SubState::IDLE_ALONE;
 }

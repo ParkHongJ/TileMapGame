@@ -14,11 +14,11 @@ void InteractionState::Update(Character* character, float deltaTime)
 
 void InteractionState::UpdateAnimation(Character* character)
 {
-    character->PlayAnimation(3, static_cast<int>(currentSubState)); // stateId = 2 (Interaction)
+    character->PlayAnimation(INTERACTIONSTATE, static_cast<int>(currentSubState)); // stateId = 2 (Interaction)
 }
 
 void InteractionState::Exit(Character* character)
 {
+    currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
-    currentSubState = SubState::INTERACTION_CLIMB_LADDER;
 }
