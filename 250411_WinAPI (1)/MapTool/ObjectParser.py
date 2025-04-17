@@ -2,12 +2,15 @@
 import re
 import os
 import json
+import sys
 
 def parse_generate_body_headers():
     class_list = []
     
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    header_dir = os.path.abspath(os.path.join(script_dir, "..", "250304_WinAPI"))
+    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+
+    project_root = os.path.abspath(os.path.join(script_dir, "..", "..")) 
+    header_dir = os.path.join(project_root, "250304_WinAPI")
 
     for file in os.listdir(header_dir):
         full_path = os.path.join(header_dir, file)
@@ -49,7 +52,6 @@ def parse_generate_body_headers():
             #             break
 
             if "GENERATE_BODY(" in line:
-                # 클래스 이름 추출
                 class_name = None
                 for j in range(i, -1, -1):
                     match = re.match(r'\s*class\s+(\w+)', content[j])
@@ -57,7 +59,6 @@ def parse_generate_body_headers():
                         class_name = match.group(1)
                         break
 
-                # 매크로 인자 추출
                 body_match = re.search(r'GENERATE_BODY\((.*?)\)', line)
                 if not class_name or not body_match:
                     continue
@@ -88,33 +89,31 @@ classes = parse_generate_body_headers()
 print("Detected classes:", classes)
 
 def save_to_json(data, filename="object_meta.json"):
-
-    script_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 .py 파일 위치
-    output_path = os.path.join(script_dir, filename)
+    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))  
+    project_root = os.path.abspath(os.path.join(script_dir, "..", ".."))
+    output_path = os.path.join(project_root, filename)
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
     print(f"save complete : {output_path}")
 
 def save_register_header(data, filename="ObjectRegister.h"):
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    header_dir = os.path.abspath(os.path.join(script_dir, "..", "250304_WinAPI"))
+    script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    project_root = os.path.abspath(os.path.join(script_dir, "..", "..")) 
+    header_dir = os.path.join(project_root, "250304_WinAPI")
     output_path = os.path.join(header_dir, filename)
 
     with open(output_path, "w", encoding="euc-kr") as f:
         f.write("#pragma once\n")
         f.write("// Auto Generate : DO NOT MODIFY\n\n")
         
-        # ObjectFactory 포함 먼저
         f.write('#include "ObjectFactory.h"\n')
 
-        # 클래스별 헤더 인클루드
         for entry in data:
             f.write(f'#include "{entry["name"]}.h"\n')
 
         f.write("\n")
 
-         # REGISTER_OBJECT() 호출
         for entry in data:
             f.write(f"REGISTER_OBJECT({entry['name']})\n")
     print(f"Saved object registration header to: {output_path}")

@@ -5,8 +5,6 @@
 #include "GameManager.h"
 HRESULT Tile::Init()
 {
-	tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
-
 	tileScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
 
 	decos.resize((int)DecoDirection::RIGHT);
@@ -72,15 +70,20 @@ void Tile::RenderDeco(ID2D1HwndRenderTarget* renderTarget)
 	}
 }
 
-void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos)
+void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType type)
 {
 	tileInfo = { atlasX, atlasY, valid };
 	this->Pos = pos;
 
-	if (valid)
+	if (type != BORDER && valid)
 	{
 		collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, this);
-	}	
+		tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
+	}
+	else
+	{
+		tileImage = ImageManager::GetInstance()->FindImage("Border");
+	}
 }
 
 void Tile::CreateDecoTile(DecoDirection dir, bool hasTileAbove)

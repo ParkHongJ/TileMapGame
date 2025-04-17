@@ -110,6 +110,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -228,6 +230,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Obj_InteractUI.h" />
     <ClInclude Include="ObjectRegister.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="PlayerStatus.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />

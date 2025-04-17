@@ -1,0 +1,10 @@
+[
+    {
+        "name": "DummyHongPlayer",
+        "atlasPath": "Textures/char_lime.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    }
+]

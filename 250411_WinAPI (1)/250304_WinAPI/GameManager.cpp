@@ -38,7 +38,7 @@ void GameManager::LoadTile(const char* path)
 			float renderX = (src.pos.x + 0.5f) * GAME_TILE_SIZE;
 			float renderY = (src.pos.y + 0.5f) * GAME_TILE_SIZE;
 
-			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY });
+			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY }, TileType::BLOCK);
 
 			tileMap[y][x] = tile;
 		}
@@ -90,6 +90,34 @@ void GameManager::LoadObject(const char* path)
 	printf("Loaded objects from: %s\n", path);
 }
 
+void GameManager::GenerateBorderTile()
+{
+	for (int y = 0; y < 36; ++y)
+	{
+		for (int x = 0; x < 44; ++x)
+		{
+			// 중심 영역은 스킵 (2~17)
+			if (x >= 2 && x < 42 && y >= 2 && y < 34)
+				continue;
+
+			Tile* tile = new Tile;
+			ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_TILE, tile);
+
+			// 툴 좌표계 기준으로 변환: 외곽은 -2 ~ 17 까지
+			int toolX = x - 2;
+			int toolY = y - 2;
+
+			float renderX = (toolX + 0.5f) * GAME_TILE_SIZE;
+			float renderY = (toolY + 0.5f) * GAME_TILE_SIZE;
+
+			// 외곽용 atlasX/Y는 -1로 넣거나 외곽 전용 타일 index
+			tile->InitTile(0, 2, true, { renderX, renderY }, TileType::BORDER);
+
+			//tileMap[y][x] = tile;
+		}
+	}
+}
+
 void GameManager::GenerateDecoTile()
 {
 	for (int y = 0; y < 16; y++)
@@ -137,7 +165,7 @@ void GameManager::Init(const char* path)
 {
 	LoadTile(path);
 	GenerateDecoTile();
-	
+	GenerateBorderTile();
 	//TODO 임시
 	LoadObject("Data/map1.json");
 }
