@@ -2,10 +2,12 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "HyoCharacter.h"
+#include "TestHyoBackGround.h"
 
 class Image;
 //class Camera;
 class HyoCharacter;
+class TestHyoBackGround;
 class HyoScene : public Scene
 {
 public:
@@ -13,6 +15,7 @@ public:
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	void TileRender(HDC hdc);
 
 
 
@@ -21,6 +24,7 @@ public:
 
 private:
 	Image* background;
+	TestHyoBackGround testTile[TILE_COUNT][TILE_COUNT];
 	HyoCharacter* testBackGround;
 	HyoCharacter* testCamera;
 	// Camera* camera;
@@ -28,6 +32,6 @@ private:
 	FPOINT cameraPos;
 	float mapSizeHeight;
 	float maptSizeWidth;
-
+	bool canRender;
 };
 
