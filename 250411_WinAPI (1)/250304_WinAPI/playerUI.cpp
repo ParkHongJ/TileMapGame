@@ -1,8 +1,14 @@
-#include "InGameUI.h"
+#include "playerUI.h"
 #include "Image.h"
+#include "JinScene.h"
 
-HRESULT InGameUI::Init(ID2D1HwndRenderTarget* renderTarget)
+//테스트 캐릭터는 Jin필터의 JinScene에 있습니다
+
+HRESULT playerUI::Init(ID2D1HwndRenderTarget* renderTarget)
 {
+	tempChar = new JinScene();
+	tempChar->Init(renderTarget);
+
 	ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
 	playerLifeImage = ImageManager::GetInstance()->FindImage("playerLife");
 
@@ -27,13 +33,13 @@ HRESULT InGameUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("lightBulb", L"Textures/UI/Hud/lightBulb.png", renderTarget);
 	lightBulbImage = ImageManager::GetInstance()->FindImage("lightBulb");
 
-	lifeCount = 3;
-	bombCount = 0;
-	ropeCount = 0;
-	currencyCount = 0;
+	lifeCount = tempChar->GetPlayerLife();
+	bombCount = tempChar->GetPlayerBomb();
+	ropeCount = tempChar->GetPlayerRope();
+	currencyCount = tempChar->GetPlayerCurrency();
 	currentStage = "";
 
-	shouldDrawPlayerUI = true;
+	isAlive = true;
 
 	float x_pos_divide_factor = 25.0f;
 
@@ -48,20 +54,29 @@ HRESULT InGameUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	return S_OK;
 }
 
-void InGameUI::Release()
+void playerUI::Release()
 {
-
-}
-
-void InGameUI::Update(float TimeDelta)
-{
-
-}
-
-void InGameUI::Render(ID2D1HwndRenderTarget* renderTarget)
-{
-	if(shouldDrawPlayerUI)
+	if (tempChar)
 	{
+		tempChar->Release();
+		delete tempChar;
+		tempChar = nullptr;
+
+	}
+}
+
+void playerUI::Update(float TimeDelta)
+{
+	tempChar->Update(TimeDelta);
+	lifeCount = tempChar->GetPlayerLife();
+}
+
+void playerUI::Render(ID2D1HwndRenderTarget* renderTarget)
+{
+	if(isAlive)
+	{
+		if (tempChar)
+			tempChar->Render(renderTarget);
 		if (playerLifeImage)
 			playerLifeImage->Render(renderTarget, lifeImagePos.x, lifeImagePos.y);
 		if (playerLifeImage && lifeCount == 0)

@@ -150,7 +150,7 @@
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClCompile>
-    <ClCompile Include="InGameUI.cpp">
+    <ClCompile Include="playerUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
     <ClCompile Include="CharacterState.cpp">
@@ -221,6 +221,9 @@
     </ClCompile>
     <ClCompile Include="TestHyoBackGround.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Manager.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -395,7 +398,7 @@
     <ClInclude Include="PlayerStatus.h">
       <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClInclude>
-    <ClInclude Include="InGameUI.h">
+    <ClInclude Include="playerUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
     <ClInclude Include="GameOverUI.h">
@@ -432,6 +435,9 @@
     </ClInclude>
     <ClInclude Include="TestHyoBackGround.h">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClInclude Include="UI_Manager.h">
+      <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

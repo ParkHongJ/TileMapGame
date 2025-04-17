@@ -6,8 +6,8 @@
 #include "TilemapTool.h"
 #include "AstarScene.h"
 #include "LoadingScene.h"
-#include "InGameUI.h"
 #include "CollisionManager.h"
+#include "playerUI.h"
 #include "GameOverUI.h"
 
 #include "HongScene.h"
@@ -29,18 +29,18 @@ HRESULT MainGame::Init()
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init(m_pRenderTarget.Get());
 
-	//SceneManager::GetInstance()->AddScene("A*¾Ë°í¸®Áò", new AstarScene());
-	//SceneManager::GetInstance()->AddScene("ÀüÅõ¾À_1", new BattleScene());
+	//SceneManager::GetInstance()->AddScene("A*ï¿½Ë°ï¿½ï¿½ï¿½ï¿½ï¿½", new AstarScene());
+	//SceneManager::GetInstance()->AddScene("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_1", new BattleScene());
 
-	SceneManager::GetInstance()->AddScene("È«ÁØ", new HongScene());
-	SceneManager::GetInstance()->AddScene("È¿Áø", new HyoScene());
-	SceneManager::GetInstance()->AddScene("Áø¼®", new JinScene());
-	SceneManager::GetInstance()->AddScene("ÅÂ°ü", new TaeScene());
-	SceneManager::GetInstance()->AddScene("ÁØ¿ë", new YongScene());
-	SceneManager::GetInstance()->AddScene("playerUI", new InGameUI());
+	SceneManager::GetInstance()->AddScene("È«ï¿½ï¿½", new HongScene());
+	SceneManager::GetInstance()->AddScene("È¿ï¿½ï¿½", new HyoScene());
+	SceneManager::GetInstance()->AddScene("ï¿½ï¿½ï¿½ï¿½", new JinScene());
+	SceneManager::GetInstance()->AddScene("ï¿½Â°ï¿½", new TaeScene());
+	SceneManager::GetInstance()->AddScene("ï¿½Ø¿ï¿½", new YongScene());
+	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
 	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
 	
-	//SceneManager::GetInstance()->AddLoadingScene("·Îµù_1", new LoadingScene());
+	//SceneManager::GetInstance()->AddLoadingScene("ï¿½Îµï¿½_1", new LoadingScene());
 
 
 	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
@@ -51,8 +51,8 @@ HRESULT MainGame::Init()
 	ImageManager::GetInstance()->AddImage(
 		"Tae_Player", TEXT("Textures/char_yellow.png"),16,16, m_pRenderTarget.Get());
 
-	//SceneManager::GetInstance()->ChangeScene("È¿Áø");
-	//SceneManager::GetInstance()->ChangeScene("ÁØ¿ë");
+	//SceneManager::GetInstance()->ChangeScene("È¿ï¿½ï¿½");
+	//SceneManager::GetInstance()->ChangeScene("ï¿½Ø¿ï¿½");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
@@ -62,7 +62,7 @@ HRESULT MainGame::Init()
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
 	{
 		MessageBox(g_hWnd,
-			TEXT("¹é¹öÆÛ »ý¼º ½ÇÆÐ"), TEXT("°æ°í"), MB_OK);
+			TEXT("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"), TEXT("ï¿½ï¿½ï¿½"), MB_OK);
 		return E_FAIL;
 	}*/
 
@@ -86,7 +86,7 @@ void MainGame::Release()
 	KeyManager::GetInstance()->Release();
 	ImageManager::GetInstance()->Release();
 
-	CoUninitialize(); // ÇÁ·Î±×·¥ Á¾·á ½Ã Á¤¸®
+	CoUninitialize(); // ï¿½ï¿½ï¿½Î±×·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 }
 
 void MainGame::Update()
@@ -123,23 +123,23 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		switch (wParam)
 		{
 		case 'a': case 'A':
-			//SceneManager::GetInstance()->ChangeScene("ÀüÅõ¾À_1");
+			//SceneManager::GetInstance()->ChangeScene("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½_1");
 			break;
 		case 'd': case 'D':
-			SceneManager::GetInstance()->ChangeScene("ÁØ¿ë");
+			SceneManager::GetInstance()->ChangeScene("ï¿½Ø¿ï¿½");
 			break;
 		case 'w': case 'W':
 			SceneManager::GetInstance()->ChangeScene("GameOverUI");
 			break;
 
 		case '1':
-			SceneManager::GetInstance()->ChangeScene("ÅÂ°ü");
+			SceneManager::GetInstance()->ChangeScene("ï¿½Â°ï¿½");
 			break;
 		case '3':
-			SceneManager::GetInstance()->ChangeScene("È«ÁØ");
+			SceneManager::GetInstance()->ChangeScene("È«ï¿½ï¿½");
 			break;
 		case '4':
-			SceneManager::GetInstance()->ChangeScene("È¿Áø");
+			SceneManager::GetInstance()->ChangeScene("È¿ï¿½ï¿½");
 			break;
 		}
 	
@@ -174,7 +174,7 @@ MainGame::~MainGame()
 HRESULT MainGame::InitD2D()
 {
 	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-	// Factory »ý¼º
+	// Factory ï¿½ï¿½ï¿½ï¿½
 	HRESULT hr = D2D1CreateFactory(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		__uuidof(ID2D1Factory),
@@ -185,7 +185,7 @@ HRESULT MainGame::InitD2D()
 	if (FAILED(hr))
 		return E_FAIL;
 
-	// RenderTarget ¼³Á¤
+	// RenderTarget ï¿½ï¿½ï¿½ï¿½
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 
@@ -195,7 +195,7 @@ HRESULT MainGame::InitD2D()
 
 	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
 
-	// ºê·¯½Ã (¿¹: ±âº» »ö)
+	// ï¿½ê·¯ï¿½ï¿½ (ï¿½ï¿½: ï¿½âº» ï¿½ï¿½)
 	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &GBrush);
 
 	if (!GdwriteFactory)
@@ -208,11 +208,11 @@ HRESULT MainGame::InitD2D()
 
 		if (FAILED(hr))
 		{
-			MessageBox(nullptr, L"DWriteCreateFactory ½ÇÆÐ", L"Error", MB_OK);
+			MessageBox(nullptr, L"DWriteCreateFactory ï¿½ï¿½ï¿½ï¿½", L"Error", MB_OK);
 		}
 
 		GdwriteFactory->CreateTextFormat(
-			L"¸¼Àº °íµñ",                // Font name
+			L"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½",                // Font name
 			nullptr,                    // Font collection
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
@@ -235,13 +235,13 @@ void MainGame::BeginDraw()
 
 void MainGame::Draw()
 {
-	//ÀÌ°Ô ¸ÊÀÌ¶ó°í »ý°¢ÇØ
+	//ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
 
 	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
 	ObjectManager::GetInstance()->Render(m_pRenderTarget.Get());
 	// Legacy
-	//// ¹é¹öÆÛ¿¡ ¸ÕÀú º¹»ç
+	//// ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//HDC hBackBufferDC = backBuffer->GetMemDC();
 
 	//SceneManager::GetInstance()->Render(hBackBufferDC);
@@ -250,7 +250,7 @@ void MainGame::Draw()
 	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
 	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
 
-	//// ¹é¹öÆÛ¿¡ ÀÖ´Â ³»¿ëÀ» ¸ÞÀÎ hdc¿¡ º¹»ç
+	//// ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ hdcï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//backBuffer->Render(hdc);
 }
 
@@ -261,6 +261,6 @@ void MainGame::EndDraw()
 	if (hr == D2DERR_RECREATE_TARGET)
 	{
 		m_pRenderTarget.Reset();
-		Init(); // ´Ù½Ã »ý¼º
+		Init(); // ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	}
 }
