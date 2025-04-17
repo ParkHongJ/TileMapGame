@@ -67,29 +67,77 @@ void Character::Release()
 
 void Character::Update(float TimeDelta)
 {
-    // HFSM
-    if (state) 
-        state->Update();
-    
-
-    // 충돌 방향 검사
+  
     CheckCollision();
 
-    // Gravity
+
     isInAir = !isTouchingBottom;
-    ApplyGravity(TimeDelta);
-    
-    // Animation
+
+    auto km = KeyManager::GetInstance();
+    if (km->IsOnceKeyDown(VK_SPACE) && isTouchingBottom)
+    {
+        SetYVelocity(-GetJumpPower()); 
+        SetIsInAir(true);
+    }
+
+    char debug[128];
+    sprintf_s(debug, "isTouchingBottom: %d\n", isTouchingBottom);
+    OutputDebugStringA(debug);
+
+    // HFSM
+    if (state)
+        state->Update();
+
+
+    // ---- 변경된 애니메이션 처리 로직 시작 ----
+
+    const int AIR_ANIM_ROW = 9;
+    const auto& frame = currFrameInfo;
+
+    // 점프 중이면
+    if (isInAir)
+    {
+        // 현재 프레임이 공중 프레임이 아닐 경우 (점프 직후)
+        if (frame.startFrame.y != AIR_ANIM_ROW)
+        {
+            if (velocity.y < 0)
+                SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP));
+            else
+                SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN));
+        }
+        // 이미 JUMP_UP 상태에서 낙하로 전환되는 시점
+        else if (frame.startFrame.x == 0 && frame.endFrame.x == 3 && velocity.y >= 0)
+        {
+            SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN));
+        }
+    }
+    else if (frame.startFrame.y == AIR_ANIM_ROW)
+    {
+        // 착지한 경우에만 상태 재진입 (프레임 초기화)
+        if (state)
+            state->Enter(this);
+    }
+
+    // ---- 변경된 애니메이션 처리 로직 끝 ----
+
+
 
     PlayAnimation();
-   
+
+    Move();
+
+    ApplyGravity(TimeDelta);
 }
+
 
 void Character::InitAnimationMap()
 {
      // IDLE
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ALONE)}] =
     { {0, 0}, {0, 0}, AnimationMode::Hold };
+
+    animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ONAIR)}] =
+    { {0, 9}, {7, 9}, AnimationMode::Hold };
 
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_START)}] =
     { {0, 8}, {3, 8}, AnimationMode::FreezeAtX };
@@ -121,11 +169,20 @@ void Character::InitAnimationMap()
 
     animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_RELEASE)}] =
     { {2, 1}, {4, 1}, AnimationMode::Hold };
+    
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_ONAIR)}] =
+    { {0, 9}, {7, 9}, AnimationMode::Hold };
 
     // ATTACK
     animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] =
     { {0, 4}, {5, 4}, AnimationMode::Hold };
 
+
+
+    animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}] =
+    { {0, 9}, {3, 9}, AnimationMode::FreezeAtX }; // 상승 프레임
+    animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}] =
+    { {4, 9}, {7, 9}, AnimationMode::FreezeAtX }; // 하강 프레임
 
 
 }
@@ -211,31 +268,65 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 void Character::PlayAnimation()
 {
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
-
     frameTime += TimeDelta;
-    
-    if (frameTime >= ANIMATION_FRAME_TIME)
+
+    if (frameTime < ANIMATION_FRAME_TIME) return;
+    frameTime = 0.f;
+
+    // 공중 애니메이션일 경우
+    if (currFrameInfo.startFrame.y == 9)
     {
-        frameTime = 0.f;
+        float vel = velocity.y;
 
-        switch (currFrameInfo.mode)
+        // JUMP_UP: 0~3, JUMP_DOWN: 4~7
+        const int JUMP_UP_START = 0;
+        const int JUMP_UP_END = 3;
+        const int JUMP_DOWN_START = 4;
+        const int JUMP_DOWN_END = 7;
+
+        const float MAX_JUMP_VEL = jumpPower;
+
+        float ratio = 0.f;
+
+        if (vel < 0) // 상승 중
         {
-            case AnimationMode::Loop:
-                currFrameInd.x++;
-                if (currFrameInd.x > currFrameInfo.endFrame.x)
-                    currFrameInd.x = currFrameInfo.startFrame.x;
-                break;
+            ratio = -vel / MAX_JUMP_VEL;
+            if (ratio < 0.f) ratio = 0.f;
+            if (ratio > 1.f) ratio = 1.f;
 
-            case AnimationMode::FreezeAtX:
-            case AnimationMode::Hold:
-                if (currFrameInd.x < currFrameInfo.endFrame.x)
-                    currFrameInd.x++;
-                break;
+            int frame = static_cast<int>(JUMP_UP_START + ratio * (JUMP_UP_END - JUMP_UP_START));
+            currFrameInd.x = frame;
+        }
+        else // 하강 중
+        {
+            ratio = vel / MAX_JUMP_VEL;
+            if (ratio < 0.f) ratio = 0.f;
+            if (ratio > 1.f) ratio = 1.f;
+
+            int frame = static_cast<int>(JUMP_DOWN_START + ratio * (JUMP_DOWN_END - JUMP_DOWN_START));
+            currFrameInd.x = frame;
         }
 
+        return;
     }
 
+    // 일반 애니메이션
+    switch (currFrameInfo.mode)
+    {
+    case AnimationMode::Loop:
+        currFrameInd.x++;
+        if (currFrameInd.x > currFrameInfo.endFrame.x)
+            currFrameInd.x = currFrameInfo.startFrame.x;
+        break;
+
+    case AnimationMode::FreezeAtX:
+    case AnimationMode::Hold:
+        if (currFrameInd.x < currFrameInfo.endFrame.x)
+            currFrameInd.x++;
+        break;
+    }
 }
+
 
 void Character::ChangeState(CharacterState* newState)
 {
@@ -296,28 +387,29 @@ void Character::ApplyGravity(float TimeDelta)
 {
     if (isInAir)
     {
+        Pos.y += velocity.y * TimeDelta;
         velocity.y += gravity * TimeDelta;
+
         if (velocity.y > maxFallSpeed)
             velocity.y = maxFallSpeed;
-
-        Pos.y += velocity.y * TimeDelta;
     }
     else
     {
-        velocity.y = 0.f; // 바닥에 있으면 낙하속도 초기화
+        velocity.y = 0.f;
+        isInAir = false;
     }
 }
 
 void Character::CheckCollision()
 {
-    float maxDist = 5.f;
+    float maxDist = 5.0f;
     float debugTime = 3.0f;
 
     // Collider 기준 100x100일 때
     FPOINT leftTop = { Pos.x - 30.f, Pos.y - 30.f };
     FPOINT rightTop = { Pos.x + 30.f, Pos.y - 30.f };
-    FPOINT leftBottom = { Pos.x - 30.f, Pos.y + 30.f };
-    FPOINT rightBottom = { Pos.x + 30.f, Pos.y + 30.f };
+    FPOINT leftBottom = { Pos.x - 30.f, Pos.y + 25.f };
+    FPOINT rightBottom = { Pos.x + 30.f, Pos.y + 25.f };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -336,15 +428,18 @@ void Character::CheckCollision()
         CollisionManager::GetInstance()->RaycastAll({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, true, debugTime);
 }
 
-void Character::Move(int dirX)
+void Character::Move()
 {
     // 이동 방향에 따라 충돌 여부 확인
-    if ((dirX < 0 && isTouchingLeft) || (dirX > 0 && isTouchingRight))
+    if ((dir.x < 0 && isTouchingLeft) || (dir.x > 0 && isTouchingRight))
         return;
 
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 
-    isFlip = dirX > 0 ? false : true;
-    Pos.x += speed * dirX * TimeDelta;
+    if (dir.x > 0)
+        isFlip = false;
+    else if (dir.x < 0)
+        isFlip = true;  
+    Pos.x += speed * dir.x * TimeDelta;
 }
 

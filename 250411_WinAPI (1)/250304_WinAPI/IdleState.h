@@ -8,6 +8,7 @@ public:
     enum class SubState {
         NONE,
         IDLE_ALONE,
+        IDLE_ONAIR,
         IDLE_LOOKUP_START,
         IDLE_LOOKUP_STOP,
         IDLE_LOOKUP_RELEASE,

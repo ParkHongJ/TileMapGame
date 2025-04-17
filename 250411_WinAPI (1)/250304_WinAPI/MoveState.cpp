@@ -13,35 +13,46 @@ void MoveState::Update()
 {
     KeyManager* km = KeyManager::GetInstance();
 
-    if (km->IsOnceKeyUp(VK_LEFT) || km->IsOnceKeyUp(VK_RIGHT))
-    {
-        if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
-            character->SetIsLookDownLocked(true);
+    bool isJump = km->IsOnceKeyDown(VK_SPACE);
+    bool inAir = character->GetIsinAir();
 
-        character->ChangeState(&Character::idleState);
-        return;
-    }
-
-    bool onAir = character->GetYVelocity() > 0;
     bool isLeft = km->IsStayKeyDown(VK_LEFT);
     bool isRight = km->IsStayKeyDown(VK_RIGHT);
     bool isDown = km->IsStayKeyDown(VK_DOWN);
     bool isDownUp = km->IsOnceKeyUp(VK_DOWN);
     bool isShift = km->IsStayKeyDown(VK_SHIFT);
 
-    int dir = 0;
 
-    if (isLeft) dir = -1;
-    else if (isRight) dir = 1;
 
-    if (onAir)
+
+    if (km->IsOnceKeyUp(VK_LEFT) || km->IsOnceKeyUp(VK_RIGHT))
     {
-        ChangeSubState(SubState::MOVE_ONAIR);
-        if (dir != 0) character->Move(dir);
+        if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
+            character->SetIsLookDownLocked(true);
+
+        character->SetDir({ 0,0 });
+        character->ChangeState(&Character::idleState);
+        return;
+    }
+
+
+
+    FPOINT dir = { 0,0 };
+
+    if (isLeft) dir = { -1,0 };
+    else if (isRight) dir = { 1,0 };
+
+
+    if (inAir)
+    {
+        //character->SetYVelocity(-character->GetJumpPower()); // 위로 점프
+        //character->SetIsInAir(true);
+        //ChangeSubState(SubState::MOVE_ONAIR);
+        if (dir.x != 0) character->SetDir(dir);
     }
     else
     {
-        if (dir != 0)
+        if (dir.x != 0)
         {
             if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
             {
@@ -78,7 +89,7 @@ void MoveState::Update()
             if (isShift || isDown) character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
             else character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
 
-            character->Move(dir);
+            character->SetDir(dir);
         }
     }
 
@@ -93,9 +104,17 @@ void MoveState::ChangeSubState(SubState newSubState)
         return;
     }
 
+    // 공중에 있을 땐 상태는 바꾸되 애니메이션은 바꾸지 않는다
+    if (character->GetIsinAir() && character->GetCurrFrameInfo().startFrame.y == 9)
+    {
+        currentSubState = newSubState;
+        return;
+    }
+
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(MOVESTATE, static_cast<int>(newSubState));
 }
+
 
 void MoveState::Exit()
 {

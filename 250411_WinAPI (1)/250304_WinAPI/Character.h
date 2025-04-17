@@ -7,6 +7,14 @@
 #include "AttackState.h"
 #include "InteractionState.h"
 
+#define ANIMSTATE 5
+
+enum class SubAnim {
+	NONE,
+	JUMP_UP,
+	JUMP_DOWN,
+};
+
 class Character : public GameObject
 {
 
@@ -35,8 +43,21 @@ private:
 
 	// Gravity
 	float gravity = 1000.f; // 중력 가속도 (픽셀/sec^2)
-	float maxFallSpeed = 2000.f; // 최대 낙하 속도
+	float maxFallSpeed = 800.f; // 최대 낙하 속도
+	float jumpPower = 500.0f;
 	bool                      isInAir;
+	
+	// 예시: 상승 프레임
+	const int JUMP_UP_START = 0;
+	const int JUMP_UP_END = 3;
+
+	// 예시: 하강 프레임
+	const int JUMP_DOWN_START = 4;
+	const int JUMP_DOWN_END = 7;
+
+	// 최대 속도 (예상치 사용)
+	const float MAX_JUMP_VEL = 500.f;
+
 
 
 
@@ -72,9 +93,19 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
-	void Move(int dirX);
+
+	// Move
 
 
+	void SetDir(FPOINT dir) { this->dir = dir; }
+	void Move();
+	void SetYVelocity(float velocityY) { this->velocity.y = velocityY; }
+	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
+	bool GetIsinAir() { return this->isInAir; }
+	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
+
+	float GetJumpPower() { return this->jumpPower; }
+		
 	// Animation
 
 	void InitAnimationMap();

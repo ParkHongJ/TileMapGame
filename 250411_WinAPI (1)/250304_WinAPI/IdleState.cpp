@@ -31,42 +31,57 @@ void IdleState::Update()
         return;
     }
 
-    if (isUp)
-    {
-        if (!character->GetIsLookUpLocked())
-        {
-            if (currentSubState != SubState::IDLE_LOOKUP_START)
-                ChangeSubState(SubState::IDLE_LOOKUP_START);
+    bool inAir = character->GetIsinAir();
 
-            if (character->GetCurrAnimEnd())
-                character->SetIsLookUpLocked(true);
-        }
-        else ChangeSubState(SubState::IDLE_LOOKUP_STOP);
-   
-    }
-    else if (isUpReleased)
+    if (inAir)
     {
-        character->SetIsLookUpLocked(false);
-        ChangeSubState(SubState::IDLE_LOOKUP_RELEASE);
+        //character->SetYVelocity(-character->GetJumpPower()); // 위로 점프
+        //character->SetIsInAir(true);
+        //ChangeSubState(SubState::IDLE_ONAIR);
     }
-    else if (isDown)
+    else
     {
-        if (!character->GetIsLookDownLocked())
+      
+        if (isUp)
         {
-            if (currentSubState != SubState::IDLE_LOOKDOWN_START)
-                ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+            if (!character->GetIsLookUpLocked())
+            {
+                if (currentSubState != SubState::IDLE_LOOKUP_START)
+                    ChangeSubState(SubState::IDLE_LOOKUP_START);
 
-            if (character->GetCurrAnimEnd())
-                character->SetIsLookDownLocked(true);
+                if (character->GetCurrAnimEnd())
+                    character->SetIsLookUpLocked(true);
+            }
+            else ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+
         }
-        else ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
-        
+        else if (isUpReleased)
+        {
+            character->SetIsLookUpLocked(false);
+            ChangeSubState(SubState::IDLE_LOOKUP_RELEASE);
+        }
+        else if (isDown)
+        {
+            if (!character->GetIsLookDownLocked())
+            {
+                if (currentSubState != SubState::IDLE_LOOKDOWN_START)
+                    ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+
+                if (character->GetCurrAnimEnd())
+                    character->SetIsLookDownLocked(true);
+            }
+            else ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+
+        }
+        else if (isDownReleased)
+        {
+            ChangeSubState(SubState::IDLE_LOOKDOWN_RELEASE);
+            character->SetIsLookDownLocked(false);
+        }
     }
-    else if (isDownReleased)
-    {
-        ChangeSubState(SubState::IDLE_LOOKDOWN_RELEASE);
-        character->SetIsLookDownLocked(false);
-    }
+
+
+    
 
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
         currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
