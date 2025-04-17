@@ -45,7 +45,7 @@ HRESULT Character::Init()
 
     jumpPressed = false;
     attackPressed = false;
-    isLookUpPaused = false;
+    isLookUpLocked = false;
 
     InitAnimationMap();
 
@@ -183,8 +183,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "¢º Render Frame: (%d,%d)\n¢º State: %s  Entered : %d \n LookDownLocked : %d Speed: %f Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(),stateEntered,isLookDownPaused, speed, velocity.x, velocity.y
+            "¢º Render Frame: (%d,%d)\n¢º State: %s  \n LookDownLocked : %d Speed: %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isLookDownLocked, speed, velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);
@@ -257,8 +257,6 @@ void Character::ChangeState(CharacterState* newState)
     if (state) state->Exit();
     state = newState;
     if (state) state->Enter(this);
-        
-    
 }
 
 bool Character::PressAnyKey(void)
@@ -283,14 +281,14 @@ float Character::GetYVelocity()
     return velocity.y;
 }
 
-bool Character::GetIsLookUpPaused()
+bool Character::GetIsLookUpLocked()
 {
-    return isLookUpPaused;
+    return isLookUpLocked;
 }
 
-bool Character::GetIsLookDownPaused()
+bool Character::GetIsLookDownLocked()
 {
-    return isLookDownPaused;
+    return isLookDownLocked;
 }
 
 POINT Character::GetCurrFrameInd() const
@@ -315,17 +313,5 @@ void Character::Move(int dirX)
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
     isFlip = dirX > 0 ? false : true;
     Pos.x += speed * dirX * TimeDelta;
-}
-
-void Character::LookUp()
-{
-    if (currFrameInd.x == currFrameInfo.endFrame.x) isLookUpPaused = true;
-    //else isLookUpPaused = false;
-}
-
-void Character::LookDown()
-{
-    if (currFrameInd.x == currFrameInfo.endFrame.x) isLookDownPaused = true;
-    //else isLookDownPaused = false;
 }
 

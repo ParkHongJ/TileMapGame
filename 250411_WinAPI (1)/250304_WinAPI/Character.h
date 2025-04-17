@@ -37,23 +37,19 @@ private:
 	bool                      isInAir;
 	bool                  isAttacking;
 	bool					  isOnPet;
-
-
 	
 	bool                  jumpPressed;
 	bool                attackPressed;
 
-	bool			   isLookUpPaused;
-	bool			 isLookDownPaused;
-
-
+	bool			   isLookUpLocked;
+	bool			 isLookDownLocked;
 
 
 public:
-	static IdleState idleState;
-	static MoveState moveState;
-	static AttackState attackState;
-	static InteractionState interactionState;
+	static IdleState					idleState;
+	static MoveState					moveState;
+	static AttackState				  attackState;
+	static InteractionState		 interactionState;
 
 	
 
@@ -70,8 +66,8 @@ public:
 
 	void SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState);
 	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
-	void SetIsLookUpPaused(bool isLookUpPaused) { this->isLookUpPaused = isLookUpPaused; }
-	void SetIsLookDownPaused(bool isLookDownPaused) { this->isLookDownPaused = isLookDownPaused; }
+	void SetIsLookUpLocked(bool isLookUpLocked) { this->isLookUpLocked = isLookUpLocked; }
+	void SetIsLookDownLocked(bool isLookDownLocked) { this->isLookDownLocked = isLookDownLocked; }
 	void SetSpeed(float speed) { this->speed = speed; }
 	
 	void PlayAnimation();
@@ -81,16 +77,14 @@ public:
 
 	float GetVelocitySize();
 	float GetYVelocity();
-	bool GetIsLookUpPaused();
-	bool GetIsLookDownPaused();
+	bool GetIsLookUpLocked();
+	bool GetIsLookDownLocked();
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
 	bool GetCurrAnimEnd();
 
 	void Move(int dirX);
-	void LookUp();
-	void LookDown();
-	
+
 	Character() {};
 	virtual ~Character() {};
 

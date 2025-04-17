@@ -5,163 +5,80 @@ void MoveState::Enter(Character* character)
 {
     this->character = character;
  
-    if (character->GetIsLookDownPaused()) ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
+    if (character->GetIsLookDownLocked()) ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
     else ChangeSubState(SubState::MOVE_ALONE);
-
-
 }
 
 void MoveState::Update()
 {
     KeyManager* km = KeyManager::GetInstance();
 
-
-    if (km->IsOnceKeyUp(VK_LEFT)    ||
-        km->IsOnceKeyUp(VK_RIGHT)   )
+    if (km->IsOnceKeyUp(VK_LEFT) || km->IsOnceKeyUp(VK_RIGHT))
     {
-        if(currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
-           character->SetIsLookDownPaused(true);
+        if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
+            character->SetIsLookDownLocked(true);
 
         character->ChangeState(&Character::idleState);
         return;
     }
-    
-    // 공중에 있을 시 -> 점프 모션
-    // 공중에 있어도 shift 누르면 감속 됌
-    if (character->GetYVelocity() > 0)
+
+    bool onAir = character->GetYVelocity() > 0;
+    bool isLeft = km->IsStayKeyDown(VK_LEFT);
+    bool isRight = km->IsStayKeyDown(VK_RIGHT);
+    bool isDown = km->IsStayKeyDown(VK_DOWN);
+    bool isDownUp = km->IsOnceKeyUp(VK_DOWN);
+    bool isShift = km->IsStayKeyDown(VK_SHIFT);
+
+    int dir = 0;
+    if (isLeft) dir = -1;
+    else if (isRight) dir = 1;
+
+    if (onAir)
     {
         ChangeSubState(SubState::MOVE_ONAIR);
-        
-        character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-        
-        // 방향키 먼저
-
-        if (km->IsStayKeyDown(VK_LEFT))
-        {
-            if (km->IsStayKeyDown(VK_SHIFT)) character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);          
-            else character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-         
-            character->Move(-1);
-        }
-        else if (km->IsStayKeyDown(VK_RIGHT)) 
-        {
-            if (km->IsStayKeyDown(VK_SHIFT)) character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
-            else character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-
-            character->Move(1);
-
-        }
-
-        // SHIFT 먼저
-
-        if (km->IsStayKeyDown(VK_SHIFT))
-        {
-            character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
-            if (km->IsStayKeyDown(VK_LEFT)) character->Move(-1);
-            else if (km->IsStayKeyDown(VK_RIGHT)) character->Move(1);
-        }
-
+        character->SetSpeed(isShift ? CHARACTER_MOVE_SLOW_SPEED : CHARACTER_MOVE_DEFAULT_SPEED);
+        if (dir != 0) character->Move(dir);
     }
-    else // 땅에 붙어 있을 시
+    else
     {
-
-        if (km->IsStayKeyDown(VK_LEFT))
+        if (dir != 0)
         {
             if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
             {
-                if (character->GetCurrAnimEnd()) ChangeSubState(SubState::MOVE_ALONE);
-            }
-            else
-            {
-                if (km->IsStayKeyDown(VK_DOWN))
-                {
-
-                    character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
-
-                    if (!character->GetIsLookDownPaused() &&
-                        // currentSubState != SubState::MOVE_LOOKDOWN_START &&
-                        currentSubState != SubState::MOVE_LOOKDOWN_LOOP)
-                    {
-                        ChangeSubState(SubState::MOVE_LOOKDOWN_START);
-                        character->LookDown();
-                    }
-                    else
-                    {
-
-                        character->SetIsLookDownPaused(true);
-                        ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-
-                    }
-
-                }
-                else if (km->IsOnceKeyUp(VK_DOWN))
-                {
-                    ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
-
-                    character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-                    character->SetIsLookDownPaused(false);
-                }
-                else
-                {
+                if (character->GetCurrAnimEnd())
                     ChangeSubState(SubState::MOVE_ALONE);
-
-                    character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-
-                }
-            }
-            
-
-            character->Move(-1);
-
-        }
-        else  if (km->IsStayKeyDown(VK_RIGHT))
-        {
-            if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
-            {
-                if (character->GetCurrAnimEnd()) ChangeSubState(SubState::MOVE_ALONE);
             }
             else
             {
-                if (km->IsStayKeyDown(VK_DOWN))
+                if (isDown)
                 {
-
                     character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
 
-                    if (!character->GetIsLookDownPaused() &&
-                        //currentSubState != SubState::MOVE_LOOKDOWN_START &&
-                        currentSubState != SubState::MOVE_LOOKDOWN_LOOP)
+                    if (!character->GetIsLookDownLocked() && currentSubState != SubState::MOVE_LOOKDOWN_LOOP)
                     {
                         ChangeSubState(SubState::MOVE_LOOKDOWN_START);
-                        character->LookDown();
-                    }
-                    else
-                    {
-                        character->SetIsLookDownPaused(true);
-                        ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-                    }
 
+                        if (character->GetCurrAnimEnd())
+                            character->SetIsLookDownLocked(true);
+                    }
+                    else ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
+                  
                 }
-                else if (km->IsOnceKeyUp(VK_DOWN))
+                else if (isDownUp)
                 {
                     ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
                     character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-                    character->SetIsLookDownPaused(false);
+                    character->SetIsLookDownLocked(false);
                 }
                 else
                 {
                     ChangeSubState(SubState::MOVE_ALONE);
                     character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-
                 }
-
-
             }
 
-            character->Move(1);
-
+            character->Move(dir);
         }
-
-      
     }
 
     UpdateAnimation();
@@ -186,9 +103,7 @@ void MoveState::ChangeSubState(SubState newSubState)
 
 void MoveState::Exit()
 {
-    //currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
-    
 }
 
 const char* MoveState::GetSubStateName() const

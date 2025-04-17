@@ -50,7 +50,7 @@ HRESULT MainGame::Init()
 		"Tae_Player", TEXT("Textures/char_yellow.png"),16,16, m_pRenderTarget.Get());
 
 	//SceneManager::GetInstance()->ChangeScene("효진");
-	SceneManager::GetInstance()->ChangeScene("준용");
+	//SceneManager::GetInstance()->ChangeScene("준용");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);

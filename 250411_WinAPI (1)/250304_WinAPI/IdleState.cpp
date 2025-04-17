@@ -7,79 +7,65 @@ void IdleState::Enter(Character* character)
 {
     this->character = character;
  
-
-
-    if (character->GetIsLookDownPaused()) ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
-    else if (character->GetIsLookUpPaused()) ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+    if (character->GetIsLookDownLocked()) ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+    else if (character->GetIsLookUpLocked()) ChangeSubState(SubState::IDLE_LOOKUP_STOP);
     else ChangeSubState(SubState::IDLE_ALONE);
-
-
 }
 
 void IdleState::Update()
 {
-    // 입력 등을 받아서 서브상태 변경
     KeyManager* km = KeyManager::GetInstance();
 
-    if (km->IsStayKeyDown(VK_RIGHT) || km->IsStayKeyDown(VK_LEFT))
+    bool isLeft = km->IsStayKeyDown(VK_LEFT);
+    bool isRight = km->IsStayKeyDown(VK_RIGHT);
+    bool isUp = km->IsStayKeyDown(VK_UP);
+    bool isDown = km->IsStayKeyDown(VK_DOWN);
+    bool isUpReleased = km->IsOnceKeyUp(VK_UP);
+    bool isDownReleased = km->IsOnceKeyUp(VK_DOWN);
+
+    if (isLeft || isRight)
     {
         character->ChangeState(&Character::moveState);
-        character->SetIsLookUpPaused(false);
-        character->SetIsLookDownPaused(false);
-       
+        character->SetIsLookUpLocked(false);
+        character->SetIsLookDownLocked(false);
         return;
     }
 
-
-    if (km->IsStayKeyDown(VK_UP))
+    if (isUp)
     {
-
-        //조건에 따라 상태 분기  / 펫 아직 구현 안함
-        
-        if (!character->GetIsLookUpPaused())
+        if (!character->GetIsLookUpLocked())
         {
             if (currentSubState != SubState::IDLE_LOOKUP_START)
                 ChangeSubState(SubState::IDLE_LOOKUP_START);
 
-            character->LookUp();
-
+            if (character->GetCurrAnimEnd())
+                character->SetIsLookUpLocked(true);
         }
-        else
-        {
-            character->SetIsLookUpPaused(true);
-            ChangeSubState(SubState::IDLE_LOOKUP_STOP);
-
-        }
+        else ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+   
     }
-    else if (km->IsOnceKeyUp(VK_UP))
+    else if (isUpReleased)
     {
-            ChangeSubState(IdleState::SubState::IDLE_LOOKUP_RELEASE);
-            character->SetIsLookUpPaused(false);
-
+        character->SetIsLookUpLocked(false);
+        ChangeSubState(SubState::IDLE_LOOKUP_RELEASE);
     }
-    else if (km->IsStayKeyDown(VK_DOWN))
+    else if (isDown)
     {
-
-        if (!character->GetIsLookDownPaused())
+        if (!character->GetIsLookDownLocked())
         {
             if (currentSubState != SubState::IDLE_LOOKDOWN_START)
                 ChangeSubState(SubState::IDLE_LOOKDOWN_START);
 
-            character->LookDown();
+            if (character->GetCurrAnimEnd())
+                character->SetIsLookDownLocked(true);
         }
-        else
-        {
-            character->SetIsLookDownPaused(true);
-            ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
-
-        }
-
+        else ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+        
     }
-    else if (km->IsOnceKeyUp(VK_DOWN))
+    else if (isDownReleased)
     {
-            ChangeSubState(IdleState::SubState::IDLE_LOOKDOWN_RELEASE);
-            character->SetIsLookDownPaused(false);
-       
+        ChangeSubState(SubState::IDLE_LOOKDOWN_RELEASE);
+        character->SetIsLookDownLocked(false);
     }
 
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
@@ -90,7 +76,6 @@ void IdleState::Update()
     }
 
     UpdateAnimation();
-    
 }
 
 void IdleState::UpdateAnimation()
@@ -111,11 +96,8 @@ void IdleState::ChangeSubState( SubState newSubState)
 
 void IdleState::Exit()
 {
-    //currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
 }
-
-
 
 const char* IdleState::GetSubStateName() const
 {
