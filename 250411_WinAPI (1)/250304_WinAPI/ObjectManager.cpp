@@ -1,5 +1,6 @@
 #include "ObjectManager.h"
 #include "GameObject.h"
+#include <queue>
 
 ObjectManager::ObjectManager()
 	: nextId(0)
@@ -72,6 +73,32 @@ GameObject* ObjectManager::FindObject(unsigned int id)
 	}
 
 	return nullptr;
+}
+
+GameObject* ObjectManager::FindAbleInteractObject(GameObject* obj)
+{
+	FPOINT pos = obj->GetPos();
+	
+	priority_queue<pair<float, GameObject*>> interactObjects;
+
+	for (auto& obj : objects)
+	{
+		if (false == obj.second->IsActive() || false == obj.second->IsHidden())
+		{
+			continue;
+		}
+
+		FPOINT temp = pos - obj.second->GetPos();
+		float dis = sqrtf((temp.x * temp.x) + (temp.y * temp.y));
+		interactObjects.push({ dis, obj.second });
+	}
+
+	if (interactObjects.empty())
+	{
+		return nullptr;
+	}
+
+	return interactObjects.top().second; // 진짜 가라중에 가라
 }
 
 

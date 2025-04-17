@@ -5,9 +5,9 @@
 
 Item::Item() : isLock(false), isHold(false), 
 price(0), holdImage(nullptr), 
-dropImage(nullptr), moveDir({ 0,1 }), 
-moveReverseDir({ 1,1 }),prePos({ 0,0 }), RayDis(35.f), 
-state(ItemState::STATE_UNEQUIP)
+dropImage(nullptr), moveDir({ 0,1 }), movePower({ 0.f,0.f }),
+moveReverseDir({ 1,1 }),prePos({ 0,0 }), RayDis(35.f), gravity(9.8f),
+state(ItemState::STATE_UNEQUIP), owner(nullptr)
 {
 
 }
@@ -27,10 +27,10 @@ void Item::Update(float TimeDelta)
 {
 	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
 	{
-		movePower = { 500.f, 300.f };
+		movePower = { 500.f, 300.f }; // Test
 	}
 
-	if (false == isHold)
+	if (ItemState::STATE_UNEQUIP == state)
 	{
 		DropMove(TimeDelta);
 	}
@@ -51,7 +51,6 @@ void Item::Release()
 void Item::Equip()
 {
 	ChangeState(ItemState::STATE_EQUIP);
-
 }
 
 void Item::Equip(void* info)
@@ -77,6 +76,14 @@ void Item::Use()
 	}
 
 
+}
+
+void Item::Use(void* info)
+{
+	if (ItemState::STATE_EQUIP == state)
+	{
+		return;
+	}
 }
 
 void Item::DropMove(float TimeDelta)
