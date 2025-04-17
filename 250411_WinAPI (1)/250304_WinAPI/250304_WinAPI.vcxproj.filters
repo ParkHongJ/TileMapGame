@@ -61,6 +61,9 @@
     <Filter Include="MainGame\Scene\Tae\State">
       <UniqueIdentifier>{2a8b99f6-b807-4ce4-ae35-684fc3f20459}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Monster">
+      <UniqueIdentifier>{ea65e594-7dd5-4b97-98b6-e65ba5dc0df9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -206,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="Npc_InteractUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMonster.cpp">
+      <Filter>MainGame\Scene\Yong\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -397,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="InteractObject.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMonster.h">
+      <Filter>MainGame\Scene\Yong\Monster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

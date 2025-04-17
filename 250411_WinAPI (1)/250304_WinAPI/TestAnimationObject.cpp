@@ -2,7 +2,18 @@
 #include "AnimationManager.h"
 #include "PlayerStatus.h"
 #include "Collider.h"
+#include "CollisionManager.h"
+#include "Item.h"
 #include "Image.h"
+
+TestAnimationObject::TestAnimationObject()
+{
+	objectRenderId = RENDER_PLAYER;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
+	string Temp = typeid(TestAnimationObject).name();
+	// GetComponent 활용해서 캐스팅 부담 덜어보기.
+	int i = 5;
+}
 
 HRESULT TestAnimationObject::Init()
 {
@@ -28,8 +39,6 @@ HRESULT TestAnimationObject::Init()
 	status = new PlayerStatus();
 	Pos = { 500, 100 };
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 150,150 }, this);
-
-
 	return S_OK;
 }
 
@@ -79,8 +88,24 @@ void TestAnimationObject::Update(float TimeDelta)
 		Pos.y += 300.f * TimeDelta;
 	}
 
+	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RETURN))
+	{
+		//pair<GameObject*, GameObject*> temp = CollisionManager::GetInstance()->GetInteractObjectPairInCircle(this, 30.f);
+		//if ((temp.first && temp.second))
+		//{
+		//	GameObject* dest = temp.second;
+		//	dest->SetObjectRenderId(RENDER_HOLD);
+		//	dynamic_cast<Item*>(dest)->Equip(this);
+		//}
+	}
 
-//	AnimManager->Update(TimeDelta);
+	testAbleHold = false;
+
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_SPACE))
+	{
+		testAbleHold = true;
+	}
+
 }
 
 void TestAnimationObject::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -98,6 +123,38 @@ void TestAnimationObject::Release()
 		delete AnimManager;
 		AnimManager = nullptr;
 	}
+
+	if (status)
+	{
+		delete status;
+		status = nullptr;
+	}
+}
+
+void TestAnimationObject::Detect(GameObject* obj)
+{
+	if (obj)
+	{
+		if (dynamic_cast<Item*>(obj) && testAbleHold && !testHold)
+		{
+			Item* temp = dynamic_cast<Item*>(obj);
+			switch (temp->GetItemType())
+			{
+			case ItemType::TYPE_ONCE:
+				temp->Equip(status->GetInfo());
+				break;
+			case ItemType::TYPE_LIMIT:
+				temp->Equip(this);
+				break;
+			case ItemType::TYPE_ALWAYS:
+				temp->Equip(this);
+				break;
+			}
+
+			testHold = true;
+		}
+	}
+
 }
 
 void TestAnimationObject::Attack(int _Test)

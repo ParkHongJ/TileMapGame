@@ -19,6 +19,9 @@ public:
 	virtual void Use() override;
 	// Item을(를) 통해 상속됨
 	void DropMove(float TimeDelta) override;
+
+	virtual void Detect(GameObject* obj) override;
+
 	// 사용
 };
 

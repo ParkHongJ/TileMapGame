@@ -77,6 +77,8 @@ GameObject* ObjectManager::FindObject(unsigned int id)
 
 GameObject* ObjectManager::FindAbleInteractObject(GameObject* obj)
 {
+	// Don't use this function
+
 	FPOINT pos = obj->GetPos();
 	
 	priority_queue<pair<float, GameObject*>> interactObjects;
@@ -98,7 +100,7 @@ GameObject* ObjectManager::FindAbleInteractObject(GameObject* obj)
 		return nullptr;
 	}
 
-	return interactObjects.top().second; // 진짜 가라중에 가라
+	return interactObjects.top().second;
 }
 
 

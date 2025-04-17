@@ -1,14 +1,17 @@
 #pragma once
+struct PlayerStatusInfo
+{
+	unsigned int playerHP;
+	unsigned int playerMaxHP;
+	unsigned int bombCount;
+	//unsigned int ropeCount;
+	unsigned int gold;
+}typedef PLAYERSTATUSDESC;
+
 class PlayerStatus
 {
-	struct PlayerStatusInfo
-	{
-		unsigned int playerHP;
-		unsigned int playerMaxHP;
-		unsigned int bombCount;
-		//unsigned int ropeCount;
-		unsigned int gold;
-	}typedef PLAYERSTATUSDESC;
+
+
 public:
 	PlayerStatus();
 	virtual ~PlayerStatus();
@@ -36,6 +39,8 @@ public:
 
 	inline const unsigned int GetGold() const { return info.gold; };
 	inline void SetGold(unsigned int gold) { info.gold = gold; };
+
+	inline PLAYERSTATUSDESC* GetInfo() { return &info; };
 
 private:
 	PLAYERSTATUSDESC info;

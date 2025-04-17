@@ -9,10 +9,24 @@ void CollisionManager::Init()
 
 void CollisionManager::Update(float TimeDelta)
 {
-	for (auto& collider : colliders)
-	{
-		collider->Update(TimeDelta);
-	}
+	//for (auto& collider : colliders)
+	//{
+	//	collider->Update(TimeDelta);
+	//}
+
+    for (auto collider = colliders.begin(); collider != colliders.end();)
+    {
+        if (true == (*collider)->GetOwner()->IsDestroyed())
+        {
+            collider = colliders.erase(collider);
+        }
+
+        else
+        {
+            (*collider)->Update(TimeDelta);
+            ++collider;
+        }
+    }
 
     for (int i = 0; i < debugRays.size(); )
     {
@@ -118,7 +132,8 @@ void CollisionManager::BoxAll()
 
             if (bCollision)
             {
-                int i = 5;
+                iter->GetOwner()->Detect(iter2->GetOwner());
+                iter2->GetOwner()->Detect(iter->GetOwner());
                 // Test
             }
         }
@@ -176,8 +191,8 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
 
 bool CollisionManager::GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects)
 {
-    std::vector<GameObject*> result;
-
+    // std::vector<GameObject*> result; ?
+    
     float radiusSq = radius * radius;
 
     for (auto& col : colliders)
@@ -192,6 +207,76 @@ bool CollisionManager::GetObjectsInCircle(FPOINT center, float radius, vector<Ga
         return false;
 
     return true;
+}
+bool CollisionManager::GetObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects)
+{
+    FPOINT center = owner->GetPos();
+
+    for (auto& col : colliders)
+    {
+        if (owner == (col->GetOwner()))
+        {
+            continue;
+        }
+
+        float distance = 0.f;
+
+        if (!col->CheckCollisionWithCircle(center, radius, distance))
+            continue;
+
+        inCircleObjects.push({ distance, col->Owner });
+    }
+
+    return !inCircleObjects.empty();
+}
+bool CollisionManager::GetInteractObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects)
+{
+    FPOINT center = owner->GetPos();
+
+    for (auto& col : colliders)
+    {
+        if (owner == (col->GetOwner()) || INTERACTSTATE::INTERACT_ABLE != col->GetOwner()->GetObjectInteractState())
+        {
+            continue;
+        }
+
+        float distance = 0.f;
+
+        if (!col->CheckCollisionWithCircle(center, radius, distance))
+            continue;
+
+        inCircleObjects.push({ distance, col->Owner });
+    }
+
+    return !inCircleObjects.empty();
+}
+pair<GameObject*, GameObject*> CollisionManager::GetInteractObjectPairInCircle(GameObject* owner, float radius)
+{
+    FPOINT center = owner->GetPos();
+    priority_queue<pair<float, GameObject*>> inCircleObjects;
+
+    for (auto& col : colliders)
+    {
+        if (owner == (col->GetOwner()) || INTERACTSTATE::INTERACT_ABLE != col->GetOwner()->GetObjectInteractState())
+        {
+            continue;
+        }
+
+        float distance = 0.f;
+
+        if (!col->CheckCollisionWithCircle(center, radius, distance))
+            continue;
+
+        inCircleObjects.push({ distance, col->Owner });
+    }
+    
+    if (!inCircleObjects.empty())
+    {
+        // 우선순위 판단 후 pair 정렬?
+        return { owner, inCircleObjects.top().second };
+    }
+
+    return pair<GameObject*, GameObject*>(nullptr, nullptr);
 }
 void CollisionManager::AddDebugRay(FPOINT origin, FPOINT direction, float length, float duration)
 {

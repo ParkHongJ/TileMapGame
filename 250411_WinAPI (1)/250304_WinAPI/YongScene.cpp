@@ -4,6 +4,7 @@
 #include "TestRenderSort.h"
 #include "TestYongSceneBackGround.h"
 #include "Bomb.h"
+#include "Gun.h"
 
 HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -26,7 +27,8 @@ HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
    // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
    // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Bomb());
-    
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
+
     return S_OK;
 }
 

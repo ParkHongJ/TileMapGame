@@ -140,6 +140,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DummyHongPlayer.cpp" />
     <ClCompile Include="GameOverUI.cpp" />
+    <ClCompile Include="Gun.cpp" />
     <ClCompile Include="HyoCharacter.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TestAnimationObject.cpp" />
+    <ClCompile Include="TestMonster.cpp" />
     <ClCompile Include="TestRenderSort.cpp" />
     <ClCompile Include="TestYongSceneBackGround.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DummyHongPlayer.h" />
     <ClInclude Include="GameOverUI.h" />
+    <ClInclude Include="Gun.h" />
     <ClInclude Include="HyoCharacter.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CommonFunction.h" />
@@ -215,6 +218,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TaeScene.h" />
     <ClInclude Include="TestAnimationObject.h" />
+    <ClInclude Include="TestMonster.h" />
     <ClInclude Include="TestRenderSort.h" />
     <ClInclude Include="TestYongSceneBackGround.h" />
     <ClInclude Include="Tile.h" />

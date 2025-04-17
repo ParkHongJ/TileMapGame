@@ -5,12 +5,21 @@ class GameObject;
 class CollisionManager;
 struct Ray;
 struct RaycastHit;
+
+// WorldObject, Player, Monster, Item, Tile, Effect
+
 enum class ColliderType
 {
 	NONE, 
 	BOX,
 	SPHERE
 };
+
+enum ColliderOwnerType
+{
+	WORLDOBJECT, PLAYER, MONSTER, ITEM, TILE, EFFECT
+};
+
 class Collider
 {
 	friend CollisionManager;
@@ -24,6 +33,8 @@ public:
 public:
 	virtual void Update(float TimeDelta) = 0;
 	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const = 0;
+	virtual bool CheckCollisionWithCircle(FPOINT center, float radius, float& distance) = 0;
+
 public:
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const = 0;
 private:
@@ -35,6 +46,7 @@ public:
 	inline const FPOINT& GetWorldPos() { return Pos; }
 	inline const FPOINT& GetScale() { return Scale; }
 	inline const ColliderType& GetType() { return Type; }
+	inline GameObject* GetOwner() const { return Owner; }
 
 protected:
 	FPOINT Pos;
@@ -42,6 +54,7 @@ protected:
 	FPOINT Scale;
 	GameObject* Owner;
 	ColliderType Type;
+	ColliderOwnerType ownerType;
 };
 
 class BoxCollider : public Collider
@@ -55,6 +68,7 @@ public:
 	virtual void DebugRender(ID2D1RenderTarget* rt) override;
 
 	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const override;
+	virtual bool CheckCollisionWithCircle(FPOINT center, float radius, float& distance) override;
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const override;
 	FPOINT Min, Max;
 };
@@ -68,8 +82,8 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const override;
 
-	bool CheckCollisionWithCircle(FPOINT center, float radius) const override;
+	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const override;
+	virtual bool CheckCollisionWithCircle(FPOINT center, float radius, float& distance) override;
 
 	float radius;
-
 };

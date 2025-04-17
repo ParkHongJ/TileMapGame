@@ -19,20 +19,20 @@ HRESULT Bomb::Init()
 	Pos = { 200, 200 };
 
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
+
+	itemState = ItemState::STATE_UNEQUIP;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
 	return S_OK;
 }
 
 void Bomb::Update(float TimeDelta)
 {
 	__super::Update(TimeDelta);
-	//DropMove(TimeDelta);
-
 }
 
 void Bomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	//__super::Render(renderTarget);
-	if (true == isHold)
+	if (ItemState::STATE_EQUIP == itemState)
 	{
 		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, 0, 5); // ÀÓÀÇ°ª
 	}
@@ -70,10 +70,16 @@ void Bomb::UnEquip(void* info)
 
 void Bomb::Use()
 {
-	Pos = { 1000, 1000 }; // Test
+	//Pos = { 1000, 1000 }; // Test
 }
 
 void Bomb::DropMove(float TimeDelta)
 {
 	__super::DropMove(TimeDelta);
+}
+
+void Bomb::Detect(GameObject* obj)
+{
+
+	//set
 }
