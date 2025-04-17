@@ -14,7 +14,7 @@ HRESULT Character::Init()
 
     state = &Character::idleState;
     state->Enter(this);
-
+  
     SetPos({ WINSIZE_X / 2, WINSIZE_Y / 2 - 10 });
 
     dir = { 0.0f, 0.0f };
@@ -183,8 +183,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "¢º Render Frame: (%d,%d)\n¢º State: %s\n LookDownLocked : %d Speed: %f Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(),isLookDownPaused, speed, velocity.x, velocity.y
+            "¢º Render Frame: (%d,%d)\n¢º State: %s  Entered : %d \n LookDownLocked : %d Speed: %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(),stateEntered,isLookDownPaused, speed, velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);
@@ -256,7 +256,9 @@ void Character::ChangeState(CharacterState* newState)
 {
     if (state) state->Exit();
     state = newState;
-    if (state) state->Enter(this); 
+    if (state) state->Enter(this);
+        
+    
 }
 
 bool Character::PressAnyKey(void)

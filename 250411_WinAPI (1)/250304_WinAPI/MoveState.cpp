@@ -49,6 +49,7 @@ void MoveState::Update()
             else character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
 
             character->Move(1);
+
         }
 
         // SHIFT ¸ÕÀú
@@ -173,6 +174,12 @@ void MoveState::UpdateAnimation()
 
 void MoveState::ChangeSubState(SubState newSubState)
 {
+    if (newSubState == SubState::NONE)
+    {
+        OutputDebugStringA("[Warning] Attempted to change to SubState::NONE!\n");
+        return;
+    }
+
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(MOVESTATE, static_cast<int>(newSubState));
 }
@@ -188,12 +195,16 @@ const char* MoveState::GetSubStateName() const
 {
     switch (currentSubState)
     {
-    case SubState::MOVE_ALONE: return "MOVE_ALONE";
-    case SubState::MOVE_LOOKDOWN_LOOP: return "MOVE_LOOKDOWN";
-    case SubState::MOVE_ONPET: return "MOVE_ONPET";
-    case SubState::MOVE_ONPET_LOOKDOWN: return "MOVE_ONPET_LOOKDOWN";
-    case SubState::MOVE_ONAIR: return "MOVE_ONAIR";
-    case SubState::MOVE_ONAIR_ONPET: return "MOVE_ONAIR_ONPET";
-    case SubState::NONE: default: return "NONE";
+    case SubState::MOVE_ALONE:            return "MOVE_ALONE"; break;
+    case SubState::MOVE_LOOKDOWN_START:   return "MOVE_LOOKDOWN_START"; break;
+    case SubState::MOVE_LOOKDOWN_LOOP:    return "MOVE_LOOKDOWN_LOOP"; break;
+    case SubState::MOVE_LOOKDOWN_RELEASE: return "MOVE_LOOKDOWN_RELEASE"; break;
+    case SubState::MOVE_SLOW:             return "MOVE_SLOW"; break;
+    case SubState::MOVE_ONPET:            return "MOVE_ONPET"; break;
+    case SubState::MOVE_ONPET_LOOKDOWN:   return "MOVE_ONPET_LOOKDOWN"; break;
+    case SubState::MOVE_ONAIR:            return "MOVE_ONAIR"; break;
+    case SubState::MOVE_ONAIR_ONPET:      return "MOVE_ONAIR_ONPET"; break;
+    case SubState::NONE:                  
+    default:                              return "NONE"; break;
     }
 }
