@@ -109,6 +109,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)generate_register.bat"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -125,6 +128,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>call "$(ProjectDir)generate_register.bat"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
@@ -140,6 +146,8 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="DummyHongPlayer.cpp" />
     <ClCompile Include="GameOverUI.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="HongParticle.cpp" />
     <ClCompile Include="HyoCharacter.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -158,6 +166,7 @@
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="MoveState.cpp" />
     <ClCompile Include="Npc_InteractUI.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Obj_InteractUI.cpp" />
     <ClCompile Include="PlayerStatus.cpp" />
@@ -188,6 +197,8 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="DummyHongPlayer.h" />
     <ClInclude Include="GameOverUI.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="HongParticle.h" />
     <ClInclude Include="HyoCharacter.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="CommonFunction.h" />
@@ -207,8 +218,10 @@
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="MoveState.h" />
     <ClInclude Include="Npc_InteractUI.h" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Obj_InteractUI.h" />
+    <ClInclude Include="ObjectRegister.h" />
     <ClInclude Include="PlayerStatus.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
@@ -223,6 +236,9 @@
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="InGameUI.h" />
     <ClInclude Include="YongScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="generate_register.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

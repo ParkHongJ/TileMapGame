@@ -20,7 +20,7 @@ struct TileInfo
 
 enum class DecoDirection
 {
-	NONE,
+	NONE = 0,
 	TOP,
 	DOWN,
 	LEFT,

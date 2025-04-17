@@ -20,6 +20,8 @@
 
 HRESULT MainGame::Init()
 {
+	srand(time(NULL));
+
 	if (FAILED(InitD2D()))
 		return E_FAIL;
 

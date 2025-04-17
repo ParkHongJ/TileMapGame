@@ -17,6 +17,7 @@ public:
 	void Init(ID2D1HwndRenderTarget* renderTarget);
 	void Release();
 	void Update(float TimeDelta);
+	void LateUpdate(float TimeDelta);
 	void Render(ID2D1HwndRenderTarget* renderTarget);
 
 	HRESULT ChangeScene(string akey);
