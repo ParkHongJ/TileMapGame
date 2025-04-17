@@ -9,6 +9,13 @@ void IdleState::Enter(Character* character)
     //currentSubState = SubState::IDLE_ALONE;
     //character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(currentSubState));
     //character->SetFrameTime(0.f);
+
+
+    if (character->GetIsLookDownPaused()) ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+    else if (character->GetIsLookUpPaused()) ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+    else ChangeSubState(SubState::IDLE_ALONE);
+
+
 }
 
 void IdleState::Update()
@@ -21,7 +28,7 @@ void IdleState::Update()
         character->ChangeState(&Character::moveState);
         character->SetIsLookUpPaused(false);
         character->SetIsLookDownPaused(false);
-        
+       
         return;
     }
 
@@ -41,8 +48,9 @@ void IdleState::Update()
         }
         else
         {
-            if (currentSubState != SubState::IDLE_LOOKUP_STOP)
-                ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+            //if (currentSubState != SubState::IDLE_LOOKUP_STOP)
+            character->SetIsLookUpPaused(true);
+            ChangeSubState(SubState::IDLE_LOOKUP_STOP);
 
         }
     }
@@ -64,7 +72,9 @@ void IdleState::Update()
         }
         else
         {
-            if (currentSubState != SubState::IDLE_LOOKDOWN_STOP)
+            //if (currentSubState != SubState::IDLE_LOOKDOWN_STOP)
+            character->SetIsLookDownPaused(true);
+
                 ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
 
         }
@@ -96,14 +106,14 @@ void IdleState::UpdateAnimation()
 
 void IdleState::ChangeSubState( SubState newSubState)
 {
-    if (currentSubState == newSubState) return;
+    //if (currentSubState == newSubState) return;
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(IDLESTATE, static_cast<unsigned int>(newSubState));
 }
 
 void IdleState::Exit()
 {
-    currentSubState = SubState::NONE;
+    //currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
 }
 

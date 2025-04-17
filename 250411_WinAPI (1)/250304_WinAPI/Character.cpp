@@ -111,7 +111,7 @@ void Character::InitAnimationMap()
     { {0, 1}, {2, 1}, AnimationMode::FreezeAtX };
 
     animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_RELEASE)}] =
-    { {4, 8}, {6, 8}, AnimationMode::Hold };
+    { {2, 1}, {4, 1}, AnimationMode::Hold };
 
     // ATTACK
     animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] =
@@ -162,13 +162,17 @@ void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int s
     {
         // 프레임 초기화는 진짜로 바뀐 경우에만 하게끔
         if (currFrameInfo.startFrame.x != it->second.startFrame.x ||
-            currFrameInfo.startFrame.y != it->second.startFrame.y)
+            currFrameInfo.startFrame.y != it->second.startFrame.y ||
+            currFrameInfo.endFrame.x != it->second.endFrame.x ||
+            currFrameInfo.endFrame.y != it->second.endFrame.y ||
+            currFrameInfo.mode != it->second.mode)
         {
             currFrameInd = it->second.startFrame;
             frameTime = 0.f;
+
+            currFrameInfo = it->second;
         }
 
-        currFrameInfo = it->second;
     }
 }
 
@@ -179,8 +183,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s\n Speed: %f Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), speed, velocity.x, velocity.y
+            "▶ Render Frame: (%d,%d)\n▶ State: %s\n LookDownLocked : %d Speed: %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(),isLookDownPaused, speed, velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);
@@ -297,6 +301,12 @@ FrameInfo Character::GetCurrFrameInfo() const
     return currFrameInfo;
 }
 
+bool Character::GetCurrAnimEnd()
+{
+    if (currFrameInd.x == currFrameInfo.endFrame.x) return true;
+    else return false;
+}
+
 
 void Character::Move(int dirX)
 {
@@ -308,12 +318,12 @@ void Character::Move(int dirX)
 void Character::LookUp()
 {
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookUpPaused = true;
-    else isLookUpPaused = false;
+    //else isLookUpPaused = false;
 }
 
 void Character::LookDown()
 {
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookDownPaused = true;
-    else isLookDownPaused = false;
+    //else isLookDownPaused = false;
 }
 

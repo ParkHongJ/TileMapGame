@@ -85,6 +85,7 @@ public:
 	bool GetIsLookDownPaused();
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
+	bool GetCurrAnimEnd();
 
 	void Move(int dirX);
 	void LookUp();
