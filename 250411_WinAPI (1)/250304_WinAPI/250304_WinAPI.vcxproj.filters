@@ -376,7 +376,7 @@
     </ClInclude>
     <ClInclude Include="CameraManager.h">
       <Filter>MainGame\Scene\Hyo</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="PlayerStatus.h">
       <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClInclude>
