@@ -19,6 +19,7 @@ private:
 
 	FPOINT						  dir;
 	FPOINT				     velocity;
+	RECT			     colliderRect;
 
 	float					frameTime;
 	POINT				 currFrameInd;
@@ -69,31 +70,26 @@ public:
 
 	void SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState);
 	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
+	void SetIsLookUpPaused(bool isLookUpPaused) { this->isLookUpPaused = isLookUpPaused; }
+	void SetIsLookDownPaused(bool isLookDownPaused) { this->isLookDownPaused = isLookDownPaused; }
+	void SetSpeed(float speed) { this->speed = speed; }
 	
-	
-	
-	void PlayAnimation( float TimeDelta);
+	void PlayAnimation();
 	void ChangeState(CharacterState* newState);
 
 	bool PressAnyKey();
 
 	float GetVelocitySize();
 	float GetYVelocity();
-
 	bool GetIsLookUpPaused();
 	bool GetIsLookDownPaused();
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
-	void SetIsLookUpPaused(bool isLookUpPaused) { this->isLookUpPaused = isLookUpPaused; }
-	void SetIsLookDownPaused(bool isLookDownPaused) { this->isLookDownPaused = isLookDownPaused; }
+	bool GetCurrAnimEnd();
 
-
-
-
-	void Move(int dirX, float TimeDelta);
-
-	void LookUp(float TimeDelta);
-	void LookDown(float TimeDelta);
+	void Move(int dirX);
+	void LookUp();
+	void LookDown();
 	
 	Character() {};
 	virtual ~Character() {};

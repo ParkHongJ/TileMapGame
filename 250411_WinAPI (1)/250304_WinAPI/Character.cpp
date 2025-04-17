@@ -8,34 +8,37 @@ MoveState Character::moveState(MoveState::SubState::NONE);
 AttackState Character::attackState(AttackState::SubState::NONE);
 InteractionState Character::interactionState(InteractionState::SubState::NONE);
 
-
 HRESULT Character::Init()
 {
     playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
+
     state = &Character::idleState;
     state->Enter(this);
-
-    SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
+  
+    SetPos({ WINSIZE_X / 2, WINSIZE_Y / 2 - 10 });
 
     dir = { 0.0f, 0.0f };
+    velocity = { 0.0f, 0.0f };
 
-    velocity = { -1.0f,-1.0f };
 
-    currFrameInd = { 0,0 };
-
+    
+    // Render
     frameTime = 0.0f;
-    currFrameInfo.startFrame = { 0,0 };
-    currFrameInfo.endFrame = { 0,0 };
-
-    jumpFrameInfo = { {0, 9}, {7, 9} };
+    currFrameInd = { 0,0 };
+    currFrameInfo = { { 0,0 }, {0, 0} };
+    
+    /*jumpFrameInfo = { {0, 9}, {7, 9} };
     attackFrameInfo = { {10, 12}, {15,12} };
-    ropeFrameInfo = { {0, 12}, {9,12} };
+    ropeFrameInfo = { {0, 12}, {9,12} };*/
 
- 
+    colliderRect = {-40, -40, 40, 56};
+
+    // settings
     speed = 200.f;
     attackSpeed = 3.0f;
     attackRate = 0.3f;
 
+    // boolean
     isFlip = false;
     isInAir = false;
     isAttacking = false;
@@ -45,7 +48,6 @@ HRESULT Character::Init()
     isLookUpPaused = false;
 
     InitAnimationMap();
-
 
     return S_OK;
 }
@@ -64,7 +66,7 @@ void Character::Update(float TimeDelta)
 {
 
     if (state) 
-        state->Update(TimeDelta);
+        state->Update();
     
 
     // velocity 중력 관련 업데이트
@@ -76,26 +78,6 @@ void Character::Update(float TimeDelta)
 
 void Character::InitAnimationMap()
 {
-    //// IDLE
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ALONE)}] = { {0, 0}, {0, 0} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_START)}] = { {0, 8}, {3, 8} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_STOP)}] = { {3, 8}, {3, 8} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_RELEASE)}] = { {4, 8}, {6, 8} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_START)}] = { {0, 1}, {2, 1} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_STOP)}] = { {2, 1}, {2, 1} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] = { {2, 1}, {4, 1} };
-
-    //// MOVE
-    //animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_ALONE)}] = { {1, 0}, {9, 0} };
-    //animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN)}] = { {5, 1}, {11, 1} };
-
-    //// ATTACK
-
-    //animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] = { {0, 4}, {5, 4} };
-
-    //// INTERACTION
-
-
      // IDLE
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ALONE)}] =
     { {0, 0}, {0, 0}, AnimationMode::Hold };
@@ -122,8 +104,14 @@ void Character::InitAnimationMap()
     animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_ALONE)}] =
     { {1, 0}, {8, 0}, AnimationMode::Loop };
 
-    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN)}] =
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_LOOP)}] =
     { {5, 1}, {11, 1}, AnimationMode::Loop };
+
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_START)}] =
+    { {0, 1}, {2, 1}, AnimationMode::FreezeAtX };
+
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_RELEASE)}] =
+    { {2, 1}, {4, 1}, AnimationMode::Hold };
 
     // ATTACK
     animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] =
@@ -174,13 +162,17 @@ void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int s
     {
         // 프레임 초기화는 진짜로 바뀐 경우에만 하게끔
         if (currFrameInfo.startFrame.x != it->second.startFrame.x ||
-            currFrameInfo.startFrame.y != it->second.startFrame.y)
+            currFrameInfo.startFrame.y != it->second.startFrame.y ||
+            currFrameInfo.endFrame.x != it->second.endFrame.x ||
+            currFrameInfo.endFrame.y != it->second.endFrame.y ||
+            currFrameInfo.mode != it->second.mode)
         {
             currFrameInd = it->second.startFrame;
             frameTime = 0.f;
+
+            currFrameInfo = it->second;
         }
 
-        currFrameInfo = it->second;
     }
 }
 
@@ -191,9 +183,9 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s\n",
-            currFrameInd.x, currFrameInd.y,
-            state->GetSubStateName());
+            "▶ Render Frame: (%d,%d)\n▶ State: %s  Entered : %d \n LookDownLocked : %d Speed: %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(),stateEntered,isLookDownPaused, speed, velocity.x, velocity.y
+            );
 
         OutputDebugStringA(buf);
     }
@@ -202,11 +194,38 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y, isFlip);
     }
+
+
+    // 1. 먼저 사용할 브러시를 생성
+    ID2D1SolidColorBrush* pBrush = nullptr;
+    renderTarget->CreateSolidColorBrush(
+        D2D1::ColorF(D2D1::ColorF::Red), // 색상: 빨간색
+        &pBrush
+    );
+
+    // 2. 사각형 정의
+    D2D1_RECT_F rect = D2D1::RectF(
+        Pos.x + colliderRect.left, Pos.y+colliderRect.top, Pos.x+colliderRect.right, Pos.y+colliderRect.bottom // 좌상단(x, y) ~ 우하단(x, y)
+    );
+
+    // 3. 속이 빈 사각형 그리기 (stroke width: 2.0f)
+    renderTarget->DrawRectangle(
+        &rect,
+        pBrush,
+        2.0f // 선 두께
+    );
+
+    // 4. 브러시 해제
+    if (pBrush)
+        pBrush->Release();
+   
+
 }
 
 
-void Character::PlayAnimation(float TimeDelta)
+void Character::PlayAnimation()
 {
+    float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 
     frameTime += TimeDelta;
     
@@ -237,8 +256,9 @@ void Character::ChangeState(CharacterState* newState)
 {
     if (state) state->Exit();
     state = newState;
-    if (state) state->Enter(this); 
-
+    if (state) state->Enter(this);
+        
+    
 }
 
 bool Character::PressAnyKey(void)
@@ -283,23 +303,29 @@ FrameInfo Character::GetCurrFrameInfo() const
     return currFrameInfo;
 }
 
-
-void Character::Move(int dirX, float timeDelta)
+bool Character::GetCurrAnimEnd()
 {
+    if (currFrameInd.x == currFrameInfo.endFrame.x) return true;
+    else return false;
+}
+
+
+void Character::Move(int dirX)
+{
+    float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
     isFlip = dirX > 0 ? false : true;
-    Pos.x += speed * dirX * timeDelta;
+    Pos.x += speed * dirX * TimeDelta;
 }
 
-void Character::LookUp(float TimeDelta)
+void Character::LookUp()
 {
-    // 위 보기 중단, 아래 보기 중단 flag
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookUpPaused = true;
-    else isLookUpPaused = false;
+    //else isLookUpPaused = false;
 }
 
-void Character::LookDown(float TimeDelta)
+void Character::LookDown()
 {
     if (currFrameInd.x == currFrameInfo.endFrame.x) isLookDownPaused = true;
-    else isLookDownPaused = false;
+    //else isLookDownPaused = false;
 }
 

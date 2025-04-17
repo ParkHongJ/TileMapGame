@@ -8,7 +8,10 @@ public:
     enum class SubState {
         NONE,
         MOVE_ALONE,
-        MOVE_LOOKDOWN,
+        MOVE_LOOKDOWN_START,
+        MOVE_LOOKDOWN_LOOP,
+        MOVE_LOOKDOWN_RELEASE,
+        MOVE_SLOW,
         MOVE_ONPET,
         MOVE_ONPET_LOOKDOWN,
         MOVE_ONAIR,
@@ -25,8 +28,8 @@ public:
     }
 
     virtual void Enter(Character* character) override;
-    virtual void Update(float TimeDelta) override;
-    virtual void UpdateAnimation( float TimeDelta) override;
+    virtual void Update( ) override;
+    virtual void UpdateAnimation() override;
     void ChangeSubState(SubState newSubState);
 
     virtual void Exit() override;

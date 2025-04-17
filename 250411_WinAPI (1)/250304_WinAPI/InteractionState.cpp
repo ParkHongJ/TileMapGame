@@ -4,19 +4,17 @@
 void InteractionState::Enter(Character* character)
 {
     this->character = character;
-
-    Update(TimerManager::GetInstance()->GetDeltaTime(L"60Frame"));
 }
 
-void InteractionState::Update(float deltaTime)
+void InteractionState::Update()
 {
     // 상태 변경 로직이 있다면 여기에
-    UpdateAnimation( deltaTime);
+    UpdateAnimation();
 }
 
-void InteractionState::UpdateAnimation( float deltaTime)
+void InteractionState::UpdateAnimation()
 {
-    character->PlayAnimation(deltaTime); // stateId = 2 (Interaction)
+    character->PlayAnimation(); // stateId = 2 (Interaction)
 }
 
 void InteractionState::ChangeSubState(SubState newSubState)

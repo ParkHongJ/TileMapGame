@@ -17,8 +17,7 @@ HRESULT HyoCharacter::Init()
 
 	dir = -1;
 	backGroundPos = { WINSIZE_X / 2,WINSIZE_Y / 2 };
-	state = PlayerState::IDLE;
-	
+
 	return S_OK;	
 }
 
