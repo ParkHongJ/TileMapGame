@@ -138,7 +138,11 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case '3':
 			SceneManager::GetInstance()->ChangeScene("È«ÁØ");
 			break;
+		case '4':
+			SceneManager::GetInstance()->ChangeScene("È¿Áø");
+			break;
 		}
+	
 		break;
 	case WM_LBUTTONDOWN:
 		g_ptMouse.x = LOWORD(lParam);
