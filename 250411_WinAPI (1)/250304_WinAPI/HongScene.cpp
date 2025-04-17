@@ -9,7 +9,7 @@
 HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 	CollisionManager::GetInstance()->Init();
-	ObjectManager::GetInstance()->Init();
+	//ObjectManager::GetInstance()->Init();
 
 	ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
@@ -31,18 +31,18 @@ void HongScene::Release()
 
 void HongScene::Update(float TimeDelta)
 {
-	ObjectManager::GetInstance()->Update(TimeDelta);
+	//ObjectManager::GetInstance()->Update(TimeDelta);
 	CollisionManager::GetInstance()->Update(TimeDelta);
 }
 
 void HongScene::LateUpdate(float TimeDelta)
 {
-	ObjectManager::GetInstance()->LateUpdate(TimeDelta);
+	//ObjectManager::GetInstance()->LateUpdate(TimeDelta);
 }
 
 void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	ObjectManager::GetInstance()->Render(renderTarget);
+	//ObjectManager::GetInstance()->Render(renderTarget);
 	
 #ifdef _DEBUG
 	CollisionManager::GetInstance()->DebugRender(renderTarget);

@@ -13,11 +13,11 @@ public:
 	FPOINT acceleration = { 0, 0 };  // 가속도
 
 	float mass = 1.0f;
-	FPOINT gravity = { 0, 9.8f };  // 중력
+	FPOINT gravity = { 0, 98.0f };  // 중력
 	bool useGravity = false;
 	bool bPhysics = false;
 	FPOINT totalForce = { 0, 0 };
-	float bounciness = 0.5f;
+	float bounciness = 0.4f;
 
 	float RandomRange(float min, float max)
 	{

@@ -56,7 +56,7 @@ void DummyHongPlayer::Update(float TimeDelta)
 		//totalForce = { 0.f,0.f };
 
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			GameObject* obj = new HongParticle;
 			ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_MONSTER, obj);
@@ -188,10 +188,32 @@ void DummyHongPlayer::Update(float TimeDelta)
 			float xRatio = toHit.x / (colliderScale.x * 0.5f);
 			float yRatio = toHit.y / (colliderScale.y * 0.5f);
 
-			if (fabs(xRatio) > fabs(yRatio))
+			/*if (fabs(xRatio) > fabs(yRatio))
+			{
 				hitNormal = { (xRatio < 0 ? -1.f : 1.f), 0.f };
+			}
 			else
+			{
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
+			}*/
+
+			float threshold = 0.1f;
+
+			if (fabs(fabs(xRatio) - fabs(yRatio)) < threshold)
+			{
+				// 모서리로 간주 → 반사 없이 멈추거나, 대각선 튕김 (드물게)
+				hitNormal = { xRatio, yRatio }; // 반사도 대각선
+				hitNormal.Normalize();
+			}
+			else
+			{
+				// 기존 방식 유지
+				if (fabs(xRatio) > fabs(yRatio))
+					hitNormal = { (xRatio < 0 ? -1.f : 1.f), 0.f };
+				else
+					hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
+			}
+
 						
 			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-30.f, 30.f));
 			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
@@ -212,7 +234,7 @@ void DummyHongPlayer::Update(float TimeDelta)
 
 			ClampVector(velocity, 350.f);
 
-			if (velocity.Length() < 130.f)
+			if (velocity.Length() < 130.f && hitNormal.y <= -0.99f)
 			{
 				velocity = { 0.f, 0.f };
 				useGravity = false;

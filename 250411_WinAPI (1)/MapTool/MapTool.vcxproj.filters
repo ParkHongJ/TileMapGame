@@ -19,6 +19,15 @@
     <Filter Include="소스 파일\Tool">
       <UniqueIdentifier>{f3d6a449-4732-4183-bd45-a7c18ae8c1ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\GameObjects">
+      <UniqueIdentifier>{6e1a2def-f4a5-4618-bc51-9a768984cb32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Registry">
+      <UniqueIdentifier>{ceaef992-27a8-42f3-828e-f1d11668b7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\json">
+      <UniqueIdentifier>{14f7df98-ed47-4e54-a0ae-90c074aad4c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -69,6 +78,12 @@
     <ClInclude Include="EditorTile.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectRegistry.h">
+      <Filter>소스 파일\Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectMeta.h">
+      <Filter>소스 파일\Registry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapTool.cpp">
@@ -100,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="TileMapTool.cpp">
       <Filter>소스 파일\Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectRegistry.cpp">
+      <Filter>소스 파일\Registry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

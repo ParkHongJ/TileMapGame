@@ -124,5 +124,6 @@ void ImGuiManager::DrawUI()
     ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
     tileTool.DrawTileMapTool();
+    tileTool.DrawObjectPalette();
     ImGui::End();
 }

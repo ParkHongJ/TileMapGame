@@ -201,6 +201,9 @@
     <ClCompile Include="HongParticle.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectFactory.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -380,5 +383,16 @@
     <ClInclude Include="HongParticle.h">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectFactory.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectRegister.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="generate_register.bat">
+      <Filter>MainGame</Filter>
+    </None>
   </ItemGroup>
 </Project>

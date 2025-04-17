@@ -19,6 +19,12 @@ TileMapTool::~TileMapTool()
 
 	shaderViews.clear();
 	tileTextures.clear();
+
+    for (auto& iter : metaAtlasTexture)
+    {
+        iter.second->Release();
+    }
+    metaAtlasTexture.clear();
 }
 
 void TileMapTool::Init(ID3D11Device* device)
@@ -41,6 +47,12 @@ void TileMapTool::Init(ID3D11Device* device)
 
     tileTextures.push_back(tex);
     shaderViews.push_back(srv);
+
+    if (ObjectMetaLoader::LoadFromJson("object_meta.json"))
+    {
+        int a = 10;
+        LoadAtlasTexturesFromRegistry(device);
+    }
 }
 
 void TileMapTool::DrawTileMapTool()
@@ -185,6 +197,32 @@ void TileMapTool::DrawTileMap()
     // 그리드 크기
     ImVec2 mapOrigin = ImGui::GetCursorScreenPos();
 
+    float scaledTileSize = tileSize * zoom;
+    ImGui::InvisibleButton("MapDropZone", ImVec2(16 * scaledTileSize, 16 * scaledTileSize));
+    ImVec2 screenMouse = ImGui::GetMousePos();
+
+    ImGui::SetCursorScreenPos(mapOrigin);
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("OBJECT_TYPE"))
+        {
+            const char* droppedName = static_cast<const char*>(payload->Data);
+
+            // 1. 맵 좌표로 변환 (너 구현에 맞게!)
+            FPOINT mapPos = ConvertScreenToMap(screenMouse);  // 너만의 좌표계로!
+
+            // 2. 메타 정보 찾아서 배치
+            const ObjectMeta* meta = ObjectRegistry::Get().Find(droppedName);
+            if (meta)
+            {
+                CreateObjectOnMap(meta->name, mapPos);  // 너의 배치 함수!
+                printf("[%s] placed at %.1f, %.1f\n", droppedName, mapPos.x, mapPos.y);
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
+
     // 스크롤 / 드래그 처리
     ImGuiIO& io = ImGui::GetIO();
     if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
@@ -237,7 +275,7 @@ void TileMapTool::DrawTileMap()
     }
 
     // 클릭해서 타일 배치
-    if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
+    if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
         selectedTileX >= 0 && selectedTileY >= 0)
     {
         ImVec2 mouse = io.MousePos;
@@ -248,6 +286,74 @@ void TileMapTool::DrawTileMap()
 
         if (tx >= 0 && tx < mapWidth && ty >= 0 && ty < mapHeight) {
             tileMap[ty][tx] = { selectedTileX, selectedTileY, true, { (float)tx, (float)ty} };
+        }
+    }
+
+    int objId = 0;
+    for (ToolGameObject* obj : g_PlacedObjects)
+    {
+        ID3D11ShaderResourceView* texture = metaAtlasTexture[obj->atlas];  // or meta.atlasPath
+        if (!texture) continue;
+
+        ImVec2 screenPos = origin + ImVec2(obj->pos.x, obj->pos.y) * zoom;
+
+        // 이미지의 반 크기
+        ImVec2 halfSize = ImVec2(obj->width, obj->height) * 0.5f * zoom;
+
+        ImVec2 min = screenPos - halfSize;
+        ImVec2 max = screenPos + halfSize;
+
+        // [1] 버튼을 오브젝트 위치에 동적으로 깐다!
+        ImVec2 cursorBackup = ImGui::GetCursorScreenPos();  // 커서 위치 저장
+
+        ImGui::SetCursorScreenPos(min);
+        std::string id = "##obj_" + std::to_string(objId); // 고유 ID
+        ImGui::InvisibleButton(id.c_str(), max - min);
+        ImGui::SetCursorScreenPos(cursorBackup);
+
+        // [2] 클릭 판정 → 오브젝트와 연결
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) 
+            && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+        {
+            draggingObject = obj;
+            isDragging = true;
+            dragOffset = io.MousePos - screenPos;
+        }
+
+        ImVec2 atlas = GetTextureSize(texture);
+
+        // UV 계산 (아틀라스)
+        float atlasW = atlas.x; // 너가 texture에서 얻어온 크기
+        float atlasH = atlas.y;
+
+        ImVec2 uv0 = ImVec2(
+            (float)(0 * obj->width) / atlasW,
+            (float)(0 * obj->height) / atlasH
+        );
+        ImVec2 uv1 = ImVec2(
+            (float)((0 + 1) * obj->width) / atlasW,
+            (float)((0 + 1) * obj->height) / atlasH
+        );
+
+        drawList->AddImage((ImTextureID)(uintptr_t)texture, min, max, uv0, uv1);
+        
+        objId++;
+    }
+
+    if (isDragging && draggingObject)
+    {
+        ImVec2 mouse = io.MousePos;
+
+        // 드래그할 때는 마우스 - dragOffset = 오브젝트 중심 좌표
+        ImVec2 center = (mouse - dragOffset - origin) / zoom;
+
+        draggingObject->pos.x = center.x;
+        draggingObject->pos.y = center.y;
+
+        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+        {
+            isDragging = false;
+            draggingObject = nullptr;
         }
     }
 
@@ -272,44 +378,119 @@ void TileMapTool::LoadTileMapFromFile(const char* path)
     fclose(fp);
 }
 
-void TileMapTool::UpdateTileDecos()
+void TileMapTool::LoadAtlasTexturesFromRegistry(ID3D11Device* device)
 {
-    //for (int y = 0; y < mapHeight; ++y)
-    //{
-    //    for (int x = 0; x < mapWidth; ++x)
-    //    {
-    //        Tile& tile = tileMap[y][x];
-    //        tile.decos.clear();
+    for (const auto& pair : ObjectRegistry::Get().GetAll())
+    {
+        const ObjectMeta& meta = pair.second;
+        
+        if (metaAtlasTexture.find(meta.atlasPath) != metaAtlasTexture.end())
+            continue;
 
-    //        if (!tile.valid) continue;
+        ID3D11ShaderResourceView* srv = nullptr;
 
-    //        // 위쪽 없음 → A 데코
-    //        if (y > 0 && !tileMap[y - 1][x].valid)
-    //            tile.decos.push_back({ DecoType::A });
+        wstring atlasPath = L"../250304_WinAPI/" + meta.atlasPath;
+        LoadTextureFromFile_WIC(atlasPath.c_str(), device, &srv);
+        metaAtlasTexture[meta.atlasPath] = srv;
+    }
+}
 
-    //        // 아래쪽 없음 → B 데코
-    //        if (y < mapHeight - 1 && !tileMap[y + 1][x].valid)
-    //            tile.decos.push_back({ DecoType::B });
+ImVec2 TileMapTool::GetTextureSize(ID3D11ShaderResourceView* srv)
+{
+    ID3D11Resource* resource = nullptr;
+    srv->GetResource(&resource);
 
-    //        // 왼쪽 있음
-    //        if (x > 0 && tileMap[y][x - 1].valid)
-    //        {
-    //            bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
-    //            if (upperEmpty)
-    //                tile.decos.push_back({ DecoType::C });
-    //            else
-    //                tile.decos.push_back({ DecoType::D });
-    //        }
+    ID3D11Texture2D* texture = nullptr;
+    HRESULT hr = resource->QueryInterface(__uuidof(ID3D11Texture2D), (void**)&texture);
 
-    //        // 오른쪽 있음
-    //        if (x < mapWidth - 1 && tileMap[y][x + 1].valid)
-    //        {
-    //            bool upperEmpty = (y > 0 && !tileMap[y - 1][x].valid);
-    //            if (upperEmpty)
-    //                tile.decos.push_back({ DecoType::C, true }); // flip horizontal
-    //            else
-    //                tile.decos.push_back({ DecoType::D, true }); // flip horizontal
-    //        }
-    //    }
-    //}
+    ImVec2 size = ImVec2(1, 1); // fallback
+
+    if (SUCCEEDED(hr) && texture)
+    {
+        D3D11_TEXTURE2D_DESC desc;
+        texture->GetDesc(&desc);
+        size = ImVec2((float)desc.Width, (float)desc.Height);
+        texture->Release();
+    }
+
+    resource->Release();
+    return size;
+}
+
+FPOINT TileMapTool::ConvertScreenToMap(ImVec2 screenPos)
+{
+    //ImVec2 canvasTopLeft = ImGui::GetCursorScreenPos();  // 맵 그리는 영역의 좌상단
+    //float tileSize = 64.0f; // 또는 meta->cellSize.x
+
+    //float mapX = (screenPos.x - canvasTopLeft.x);
+    //float mapY = (screenPos.y - canvasTopLeft.y);
+
+    //return FPOINT{ mapX, mapY };
+
+    ImVec2 topLeft = ImGui::GetCursorScreenPos();
+    ImVec2 relative = (screenPos - topLeft) / zoom;
+    relative.x -= cameraOffset.x;
+    relative.y -= cameraOffset.y;
+    return FPOINT{ relative.x, relative.y };
+}
+
+void TileMapTool::CreateObjectOnMap(const std::string& name, FPOINT pos)
+{
+    const ObjectMeta* meta = ObjectRegistry::Get().Find(name);
+    if (!meta) return;
+
+    ToolGameObject* obj = new ToolGameObject();
+    obj->name = ObjectMetaLoader::Utf8ToWstring(name);
+    obj->pos = pos;
+    obj->width = meta->cellWidth;
+    obj->height = meta->cellHeight;
+    obj->atlas = meta->atlasPath;
+
+    g_PlacedObjects.push_back(obj);
+}
+
+void TileMapTool::DrawObjectPalette()
+{
+    const auto& metas = ObjectRegistry::Get().GetAll();
+
+    ImGui::Begin("Object Palette");
+
+    for (const auto& pair : ObjectRegistry::Get().GetAll())
+    {
+        const std::string& name = pair.first;
+        const ObjectMeta& meta = pair.second;
+
+        ID3D11ShaderResourceView* texture = metaAtlasTexture[meta.atlasPath];
+        if (!texture)
+            continue;
+
+        ImVec2 atlasSize = GetTextureSize(texture); // ← atlas 텍스처의 실제 크기
+
+        // UV 좌표 전체 텍스처 기준 (0~1)
+        ImVec2 uv0 = ImVec2(0.0f, 0.0f);
+        ImVec2 uv1 = ImVec2((float)meta.cellWidth / atlasSize.x, (float)meta.cellHeight / atlasSize.y); // ← 2048 고정 해상도 기준
+
+        ImGui::BeginGroup();
+
+        ImTextureID textureId = reinterpret_cast<uintptr_t>(texture);
+        if(ImGui::ImageButton(name.c_str(), textureId, ImVec2(64, 64), uv0, uv1))
+        {
+            selectedObjectName = name;
+        }
+
+        // 드래그 시작
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+        {
+            ImGui::SetDragDropPayload("OBJECT_TYPE", name.c_str(), name.length() + 1);
+            ImGui::Text("%s", name.c_str());
+            ImGui::EndDragDropSource();
+        }
+
+        ImGui::Text("%s", name.c_str());
+
+        ImGui::EndGroup();
+
+        ImGui::SameLine();
+    }
+    ImGui::End();
 }

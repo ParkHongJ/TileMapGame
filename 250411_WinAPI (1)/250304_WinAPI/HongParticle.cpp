@@ -5,7 +5,7 @@
 HRESULT HongParticle::Init()
 {
 	float angleRad = RandomRange(0.0f, 2.0f * 3.141592f); // 0 ~ 360도 (라디안)
-	float speed = RandomRange(100.0f, 300.0f);            // 속도도 랜덤
+	float speed = RandomRange(250.0f, 450.0f);            // 속도도 랜덤
 
 	velocity =
 	{
@@ -72,7 +72,7 @@ void HongParticle::Update(float TimeDelta)
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
 			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
-			velocity = Reflect(velocity, perturbedNormal.Normalized()/*hitNormal.Normalized()*/);
+			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
 
 			velocity *= bounciness;
 
@@ -105,9 +105,6 @@ void HongParticle::Update(float TimeDelta)
 		{
 			Pos = nextPos;
 		}
-
-		// force 초기화
-		//totalForce = { 0.f, 0.f };
 	}
 }
 

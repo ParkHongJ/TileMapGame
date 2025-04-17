@@ -2,6 +2,7 @@
 #include "GameObject.h"
 class DummyHongPlayer : public GameObject
 {
+	GENERATE_BODY(Textures/char_lime.png, 128, 128)
 public:
 	virtual HRESULT Init();		// 멤버 변수의 초기화, 메모리 할당
 	virtual void Release();		// 메모리 해제
