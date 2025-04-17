@@ -28,16 +28,16 @@ HRESULT Character::Init()
     currFrameInd = { 0,0 };
     currFrameInfo = { { 0,0 }, {0, 0} };
     
-    /*jumpFrameInfo = { {0, 9}, {7, 9} };
+    jumpFrameInfo = { {0, 9}, {7, 9} };
     attackFrameInfo = { {10, 12}, {15,12} };
-    ropeFrameInfo = { {0, 12}, {9,12} };*/
+    ropeFrameInfo = { {0, 12}, {9,12} };
 
     //colliderRect = {-40, -40, 40, 40};
     //colliderRect = {-10, -10, 10, 10};
     //colliderRect = { -10, -20, 10, 20 }; // width: 20, height: 40
 
     // settings
-    speed = 200.f;
+    speed = 200.f;--
     attackSpeed = 3.0f;
     attackRate = 0.3f;
 
@@ -91,14 +91,14 @@ void Character::Update(float TimeDelta)
 
     // ---- 변경된 애니메이션 처리 로직 시작 ----
 
-    const int AIR_ANIM_ROW = 9;
+    const int AIR_ANIM_ROW = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
     const auto& frame = currFrameInfo;
 
     // 점프 중이면
     if (isInAir)
     {
         // 현재 프레임이 공중 프레임이 아닐 경우 (점프 직후)
-        if (frame.startFrame.y != AIR_ANIM_ROW)
+        if (frame.startFrame.y != animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y)
         {
             if (velocity.y < 0)
                 SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP));
@@ -106,7 +106,9 @@ void Character::Update(float TimeDelta)
                 SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN));
         }
         // 이미 JUMP_UP 상태에서 낙하로 전환되는 시점
-        else if (frame.startFrame.x == 0 && frame.endFrame.x == 3 && velocity.y >= 0)
+        else if (frame.startFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x && 
+                 frame.endFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y && 
+                 velocity.y >= 0)
         {
             SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN));
         }
@@ -268,9 +270,11 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 void Character::PlayAnimation()
 {
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+
     frameTime += TimeDelta;
 
     if (frameTime < ANIMATION_FRAME_TIME) return;
+   
     frameTime = 0.f;
 
     // 공중 애니메이션일 경우
@@ -278,11 +282,10 @@ void Character::PlayAnimation()
     {
         float vel = velocity.y;
 
-        // JUMP_UP: 0~3, JUMP_DOWN: 4~7
-        const int JUMP_UP_START = 0;
-        const int JUMP_UP_END = 3;
-        const int JUMP_DOWN_START = 4;
-        const int JUMP_DOWN_END = 7;
+        const int JUMP_UP_START = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x;
+        const int JUMP_UP_END = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].endFrame.x;
+        const int JUMP_DOWN_START = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame.x;
+        const int JUMP_DOWN_END = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].endFrame.x;
 
         const float MAX_JUMP_VEL = jumpPower;
 
@@ -313,16 +316,16 @@ void Character::PlayAnimation()
     // 일반 애니메이션
     switch (currFrameInfo.mode)
     {
-    case AnimationMode::Loop:
-        currFrameInd.x++;
-        if (currFrameInd.x > currFrameInfo.endFrame.x)
-            currFrameInd.x = currFrameInfo.startFrame.x;
-        break;
-
-    case AnimationMode::FreezeAtX:
-    case AnimationMode::Hold:
-        if (currFrameInd.x < currFrameInfo.endFrame.x)
+        case AnimationMode::Loop:
             currFrameInd.x++;
+            if (currFrameInd.x > currFrameInfo.endFrame.x)
+                currFrameInd.x = currFrameInfo.startFrame.x;
+            break;
+
+        case AnimationMode::FreezeAtX:
+        case AnimationMode::Hold:
+            if (currFrameInd.x < currFrameInfo.endFrame.x)
+                currFrameInd.x++;
         break;
     }
 }
@@ -402,7 +405,7 @@ void Character::ApplyGravity(float TimeDelta)
 
 void Character::CheckCollision()
 {
-    float maxDist = 5.0f;
+    float maxDist = 10.0f;
     float debugTime = 3.0f;
 
     // Collider 기준 100x100일 때
@@ -431,15 +434,15 @@ void Character::CheckCollision()
 void Character::Move()
 {
     // 이동 방향에 따라 충돌 여부 확인
-    if ((dir.x < 0 && isTouchingLeft) || (dir.x > 0 && isTouchingRight))
+    if ((velocity.x < 0 && isTouchingLeft) || (velocity.x > 0 && isTouchingRight))
         return;
 
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 
-    if (dir.x > 0)
+    if (velocity.x > 0)
         isFlip = false;
-    else if (dir.x < 0)
-        isFlip = true;  
-    Pos.x += speed * dir.x * TimeDelta;
-}
+    else if (velocity.x < 0)
+        isFlip = true;
 
+    Pos.x += velocity.x * TimeDelta;
+}

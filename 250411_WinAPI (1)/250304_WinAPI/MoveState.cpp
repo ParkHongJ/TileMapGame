@@ -22,38 +22,34 @@ void MoveState::Update()
     bool isDownUp = km->IsOnceKeyUp(VK_DOWN);
     bool isShift = km->IsStayKeyDown(VK_SHIFT);
 
-
-
-
+    // 좌우 키에서 손을 뗐을 때
     if (km->IsOnceKeyUp(VK_LEFT) || km->IsOnceKeyUp(VK_RIGHT))
     {
         if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
             character->SetIsLookDownLocked(true);
 
-        character->SetDir({ 0,0 });
+        character->SetXVelocity(0.0f); // dir 제거 → velocity.x = 0
         character->ChangeState(&Character::idleState);
         return;
     }
 
+    float speed = character->GetSpeed();
+    float vx = 0.f;
 
+    if (isLeft)  vx = -speed;
+    if (isRight) vx = speed;
 
-    FPOINT dir = { 0,0 };
-
-    if (isLeft) dir = { -1,0 };
-    else if (isRight) dir = { 1,0 };
-
-
+    // 공중 상태일 때
     if (inAir)
     {
-        //character->SetYVelocity(-character->GetJumpPower()); // 위로 점프
-        //character->SetIsInAir(true);
-        //ChangeSubState(SubState::MOVE_ONAIR);
-        if (dir.x != 0) character->SetDir(dir);
+        if (vx != 0.f)
+            character->SetXVelocity(vx);
     }
     else
     {
-        if (dir.x != 0)
+        if (vx != 0.f)
         {
+            // 하강 애니메이션이 끝나면 ALONE 상태로 복귀
             if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
             {
                 if (character->GetCurrAnimEnd())
@@ -62,21 +58,19 @@ void MoveState::Update()
             else
             {
                 if (isDown)
-                {     
+                {
                     if (!character->GetIsLookDownLocked() && currentSubState != SubState::MOVE_LOOKDOWN_LOOP)
                     {
                         ChangeSubState(SubState::MOVE_LOOKDOWN_START);
-
                         if (character->GetCurrAnimEnd())
                             character->SetIsLookDownLocked(true);
                     }
                     else ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-                  
                 }
                 else if (isDownUp)
                 {
                     ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
-                     character->SetIsLookDownLocked(false);
+                    character->SetIsLookDownLocked(false);
                 }
                 else
                 {
@@ -84,16 +78,15 @@ void MoveState::Update()
                 }
             }
 
-            // Set Dir & Speed
-            
+            // 속도 조정
             if (isShift || isDown) character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
-            else character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
+            else                   character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
 
-            character->SetDir(dir);
+            character->SetXVelocity(vx); // 방향 → 속도 적용
         }
     }
-
 }
+
 
 
 void MoveState::ChangeSubState(SubState newSubState)

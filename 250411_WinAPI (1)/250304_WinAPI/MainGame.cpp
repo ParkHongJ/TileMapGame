@@ -29,18 +29,18 @@ HRESULT MainGame::Init()
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init(m_pRenderTarget.Get());
 
-	//SceneManager::GetInstance()->AddScene("A*�˰�����", new AstarScene());
-	//SceneManager::GetInstance()->AddScene("������_1", new BattleScene());
+	//SceneManager::GetInstance()->AddScene("A*???????", new AstarScene());
+	//SceneManager::GetInstance()->AddScene("??????_1", new BattleScene());
 
-	SceneManager::GetInstance()->AddScene("ȫ��", new HongScene());
-	SceneManager::GetInstance()->AddScene("ȿ��", new HyoScene());
-	SceneManager::GetInstance()->AddScene("����", new JinScene());
-	SceneManager::GetInstance()->AddScene("�°�", new TaeScene());
-	SceneManager::GetInstance()->AddScene("�ؿ�", new YongScene());
+	SceneManager::GetInstance()->AddScene("???", new HongScene());
+	SceneManager::GetInstance()->AddScene("???", new HyoScene());
+	SceneManager::GetInstance()->AddScene("????", new JinScene());
+	SceneManager::GetInstance()->AddScene("?��?", new TaeScene());
+	SceneManager::GetInstance()->AddScene("???", new YongScene());
 	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
 	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
 	
-	//SceneManager::GetInstance()->AddLoadingScene("�ε�_1", new LoadingScene());
+	//SceneManager::GetInstance()->AddLoadingScene("?��?_1", new LoadingScene());
 
 
 	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
@@ -51,8 +51,8 @@ HRESULT MainGame::Init()
 	ImageManager::GetInstance()->AddImage(
 		"Tae_Player", TEXT("Textures/char_yellow.png"),16,16, m_pRenderTarget.Get());
 
-	//SceneManager::GetInstance()->ChangeScene("ȿ��");
-	//SceneManager::GetInstance()->ChangeScene("�ؿ�");
+	//SceneManager::GetInstance()->ChangeScene("???");
+	//SceneManager::GetInstance()->ChangeScene("???");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
@@ -62,7 +62,7 @@ HRESULT MainGame::Init()
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
 	{
 		MessageBox(g_hWnd,
-			TEXT("����� ���� ����"), TEXT("���"), MB_OK);
+			TEXT("????? ???? ????"), TEXT("???"), MB_OK);
 		return E_FAIL;
 	}*/
 
@@ -86,7 +86,7 @@ void MainGame::Release()
 	KeyManager::GetInstance()->Release();
 	ImageManager::GetInstance()->Release();
 
-	CoUninitialize(); // ���α׷� ���� �� ����
+	CoUninitialize(); // ???��?? ???? ?? ????
 }
 
 void MainGame::Update()
@@ -123,23 +123,23 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		switch (wParam)
 		{
 		case 'a': case 'A':
-			//SceneManager::GetInstance()->ChangeScene("������_1");
+			//SceneManager::GetInstance()->ChangeScene("??????_1");
 			break;
 		case 'd': case 'D':
-			SceneManager::GetInstance()->ChangeScene("�ؿ�");
+			SceneManager::GetInstance()->ChangeScene("???");
 			break;
 		case 'w': case 'W':
 			SceneManager::GetInstance()->ChangeScene("GameOverUI");
 			break;
 
 		case '1':
-			SceneManager::GetInstance()->ChangeScene("�°�");
+			SceneManager::GetInstance()->ChangeScene("?��?");
 			break;
 		case '3':
-			SceneManager::GetInstance()->ChangeScene("ȫ��");
+			SceneManager::GetInstance()->ChangeScene("???");
 			break;
 		case '4':
-			SceneManager::GetInstance()->ChangeScene("ȿ��");
+			SceneManager::GetInstance()->ChangeScene("???");
 			break;
 		}
 	
@@ -174,7 +174,7 @@ MainGame::~MainGame()
 HRESULT MainGame::InitD2D()
 {
 	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-	// Factory ����
+	// Factory ????
 	HRESULT hr = D2D1CreateFactory(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		__uuidof(ID2D1Factory),
@@ -185,7 +185,7 @@ HRESULT MainGame::InitD2D()
 	if (FAILED(hr))
 		return E_FAIL;
 
-	// RenderTarget ����
+	// RenderTarget ????
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 
@@ -195,7 +195,7 @@ HRESULT MainGame::InitD2D()
 
 	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
 
-	// �귯�� (��: �⺻ ��)
+	// ???? (??: ?? ??)
 	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &GBrush);
 
 	if (!GdwriteFactory)
@@ -208,11 +208,11 @@ HRESULT MainGame::InitD2D()
 
 		if (FAILED(hr))
 		{
-			MessageBox(nullptr, L"DWriteCreateFactory ����", L"Error", MB_OK);
+			MessageBox(nullptr, L"DWriteCreateFactory ????", L"Error", MB_OK);
 		}
 
 		GdwriteFactory->CreateTextFormat(
-			L"���� ����",                // Font name
+			L"???? ????",                // Font name
 			nullptr,                    // Font collection
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
@@ -235,13 +235,13 @@ void MainGame::BeginDraw()
 
 void MainGame::Draw()
 {
-	//�̰� ���̶�� ������
+	//??? ?????? ??????
 	//backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
 
 	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
 	ObjectManager::GetInstance()->Render(m_pRenderTarget.Get());
 	// Legacy
-	//// ����ۿ� ���� ����
+	//// ?????? ???? ????
 	//HDC hBackBufferDC = backBuffer->GetMemDC();
 
 	//SceneManager::GetInstance()->Render(hBackBufferDC);
@@ -250,7 +250,7 @@ void MainGame::Draw()
 	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
 	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
 
-	//// ����ۿ� �ִ� ������ ���� hdc�� ����
+	//// ?????? ??? ?????? ???? hdc?? ????
 	//backBuffer->Render(hdc);
 }
 
@@ -261,6 +261,6 @@ void MainGame::EndDraw()
 	if (hr == D2DERR_RECREATE_TARGET)
 	{
 		m_pRenderTarget.Reset();
-		Init(); // �ٽ� ����
+		Init(); // ??? ????
 	}
 }
