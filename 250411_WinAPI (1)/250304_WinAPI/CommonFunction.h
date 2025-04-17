@@ -14,6 +14,7 @@
 #pragma once
 #include "config.h"
 
+#include <codecvt>
 inline RECT GetRect(int left, int top, int width, int height)
 {
 	RECT rc{ left, top, left + width, top + height };
@@ -174,4 +175,21 @@ inline void DrawD2DText(
 
 	// 3. 텍스트 출력
 	rt->DrawText(buffer, (UINT32)wcslen(buffer), GtextFormat.Get(), &rect, GBrush.Get());
+}
+
+
+static std::wstring Utf8ToWstring(const std::string& str)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
+	return conv.from_bytes(str);
+}
+static std::string WStringToString(const std::wstring& wstr)
+{
+	if (wstr.empty()) return {};
+
+	int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	std::string result(size_needed - 1, 0); // 마지막 널문자 제외
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &result[0], size_needed, nullptr, nullptr);
+
+	return result;
 }

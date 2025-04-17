@@ -1,6 +1,9 @@
 #include "TileMapTool.h"
 #include <wincodec.h> 
+#include <nlohmann/json.hpp>
 #pragma comment(lib, "windowscodecs.lib")
+
+using json = nlohmann::json;
 
 TileMapTool::TileMapTool()
 {
@@ -25,6 +28,8 @@ TileMapTool::~TileMapTool()
         iter.second->Release();
     }
     metaAtlasTexture.clear();
+
+    ReleaseObjects();
 }
 
 void TileMapTool::Init(ID3D11Device* device)
@@ -132,6 +137,16 @@ ImTextureID TileMapTool::LoadTextureFromFile_WIC(const wchar_t* filename, ID3D11
     return (ImTextureID)srv;
 }
 
+void TileMapTool::ReleaseObjects()
+{
+    for (auto& iter : g_PlacedObjects)
+    {
+        if (iter)
+            delete iter;
+    }
+    g_PlacedObjects.clear();
+}
+
 void TileMapTool::DrawPaletteUI()
 {
     ImGui::Begin("Tile Palette");
@@ -181,10 +196,12 @@ void TileMapTool::DrawPaletteUI()
     if (ImGui::Button("Save TileMap"))
     {
         SaveTileMapToFile("../250304_WinAPI/Data/map1.tilemap");
+        SavePlacedObjectToJson("../250304_WinAPI/Data/map1.json");
     }
     if (ImGui::Button("Load TileMap"))
     {
         LoadTileMapFromFile("../250304_WinAPI/Data/map1.tilemap");
+        LoadPlacedObjectsFromJson("../250304_WinAPI/Data/map1.json");
     }
 
     ImGui::End();
@@ -376,6 +393,63 @@ void TileMapTool::LoadTileMapFromFile(const char* path)
 
     fread(&tileMap[0][0], sizeof(EditorTile), mapWidth * mapHeight, fp);
     fclose(fp);
+}
+
+void TileMapTool::SavePlacedObjectToJson(const char* path)
+{
+    json j = json::array();
+
+    for (auto& obj : g_PlacedObjects)
+    {
+        string nameStr = ObjectMetaLoader::WStringToString(obj->name);
+        string atlasStr = ObjectMetaLoader::WStringToString(obj->atlas);
+        j.push_back({
+            { "name", nameStr },
+            { "x", obj->pos.x },
+            { "y", obj->pos.y },
+            { "width", obj->width },
+            { "height", obj->height },
+            { "atlas", atlasStr }
+            });
+    }
+
+    std::ofstream out(path);
+    out << j.dump(4);
+    out.close();
+
+    printf("Saved objects to: %s\n", path);
+}
+
+void TileMapTool::LoadPlacedObjectsFromJson(const char* path)
+{
+    std::ifstream in(path);
+    if (!in.is_open())
+    {
+        printf("Failed to open: %s\n", path);
+        return;
+    }
+
+    nlohmann::json j;
+    in >> j;
+    in.close();
+
+    ReleaseObjects();
+
+    for (const auto& item : j)
+    {
+        ToolGameObject* obj = new ToolGameObject();
+
+        obj->name = ObjectMetaLoader::Utf8ToWstring(item.value("name", ""));
+        obj->pos.x = item.value("x", 0.0f);
+        obj->pos.y = item.value("y", 0.0f);
+        obj->width = item.value("width", 0.0f);
+        obj->height = item.value("height", 0.0f);
+        obj->atlas = ObjectMetaLoader::Utf8ToWstring(item.value("atlas", ""));;
+
+        g_PlacedObjects.push_back(obj);
+    }
+
+    printf("Loaded %zu objects from: %s\n", g_PlacedObjects.size(), path);
 }
 
 void TileMapTool::LoadAtlasTexturesFromRegistry(ID3D11Device* device)

@@ -1,6 +1,7 @@
 #include "ObjectRegistry.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <Windows.h>
 
 using json = nlohmann::json;
 
@@ -44,4 +45,15 @@ bool ObjectMetaLoader::LoadFromJson(const char* filePath)
     }
 
     return true;
+}
+
+std::string ObjectMetaLoader::WStringToString(const std::wstring& wstr)
+{
+    if (wstr.empty()) return {};
+
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    std::string result(size_needed - 1, 0); // 마지막 널문자 제외
+    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &result[0], size_needed, nullptr, nullptr);
+
+    return result;
 }

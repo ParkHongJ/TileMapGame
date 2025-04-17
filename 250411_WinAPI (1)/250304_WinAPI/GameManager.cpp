@@ -1,7 +1,12 @@
 #include "GameManager.h"
-
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include "../MapTool/EditorTile.h"
 #include "Tile.h"
+#include "ObjectManager.h"
+#include "ObjectFactory.h"
+
+using json = nlohmann::json;
 
 void GameManager::Release()
 {
@@ -38,6 +43,51 @@ void GameManager::LoadTile(const char* path)
 			tileMap[y][x] = tile;
 		}
 	}
+}
+
+void GameManager::LoadObject(const char* path)
+{
+	std::ifstream in(path);
+	if (!in.is_open())
+	{
+		printf("Failed to open: %s\n", path);
+		return;
+	}
+
+	json j;
+	in >> j;
+	in.close();
+
+	for (const auto& item : j)
+	{
+		std::string name = item.value("name", "");
+		float x = item.value("x", 0.0f);
+		float y = item.value("y", 0.0f);
+		float w = item.value("width", 0.0f);
+		float h = item.value("height", 0.0f);
+
+		// 생성
+		GameObject* obj = ObjectFactory::Get().Create(name);
+		if (!obj)
+		{
+			int a = 10;
+			continue;
+		}
+
+		const float tileSize = 128.f; // 툴과 동일한 타일 단위
+		float gx = x / tileSize;
+		float gy = y / tileSize;
+
+		float gameTileSize = 64.f;
+		// 게임 좌표계로 변환 (필요시 다시 픽셀로 곱하거나 절대 좌표 계산)
+		FPOINT worldPos = { gx * gameTileSize, gy * gameTileSize };
+		obj->SetPos(worldPos);
+
+		// 월드에 추가
+		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, obj);
+	}
+
+	printf("Loaded objects from: %s\n", path);
 }
 
 void GameManager::GenerateDecoTile()
@@ -87,6 +137,9 @@ void GameManager::Init(const char* path)
 {
 	LoadTile(path);
 	GenerateDecoTile();
+	
+	//TODO 임시
+	LoadObject("Data/map1.json");
 }
 
 bool GameManager::IsTileValid(int x, int y)

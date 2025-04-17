@@ -12,6 +12,8 @@ public:
 
 
 	void LoadTile(const char* path);
+	void LoadObject(const char* path);
+
 	void GenerateDecoTile();
 
 	void Init(const char* path);

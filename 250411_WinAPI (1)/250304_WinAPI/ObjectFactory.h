@@ -1,18 +1,21 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+
+class GameObject;
+
 class IObjectCreator
 {
 public:
     virtual ~IObjectCreator() {}
-    virtual void* Create() const = 0;
+    virtual GameObject* Create() const = 0;
 };
 
 template<typename T>
 class ObjectCreator : public IObjectCreator
 {
 public:
-    void* Create() const override
+    GameObject* Create() const override
     {
         return new T(); // ÇÙ½É
     }
@@ -25,7 +28,7 @@ public:
 
     void Register(const std::string& name, IObjectCreator* creator);
 
-    void* Create(const std::string& name);
+    GameObject* Create(const std::string& name);
 
     ~ObjectFactory();
 

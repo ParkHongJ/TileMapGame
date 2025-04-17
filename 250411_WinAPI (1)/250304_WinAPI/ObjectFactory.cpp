@@ -12,7 +12,7 @@ void ObjectFactory::Register(const std::string& name, IObjectCreator* creator)
 }
 
 
-void* ObjectFactory::Create(const std::string& name)
+GameObject* ObjectFactory::Create(const std::string& name)
 {
     auto it = creators.find(name);
     if (it != creators.end())

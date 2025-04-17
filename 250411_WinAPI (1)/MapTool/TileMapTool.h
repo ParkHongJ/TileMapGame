@@ -31,11 +31,15 @@ public:
     ImTextureID LoadTextureFromFile_WIC(const wchar_t* filename, ID3D11Device* device, ID3D11ShaderResourceView** out_srv);
 
 private:
+    void ReleaseObjects();
     void DrawPaletteUI();
     void DrawTileMap();
 
     void SaveTileMapToFile(const char* path);
     void LoadTileMapFromFile(const char* path);
+    void SavePlacedObjectToJson(const char* path);
+    void LoadPlacedObjectsFromJson(const char* path);
+
     void LoadAtlasTexturesFromRegistry(ID3D11Device* device);
     ImVec2 GetTextureSize(ID3D11ShaderResourceView* srv);
     FPOINT ConvertScreenToMap(ImVec2 screenPos);

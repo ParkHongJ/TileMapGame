@@ -18,7 +18,7 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
 	GameManager::GetInstance()->Init("Data/map1.tilemap");
 
-	ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
+	//ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
 
 	return S_OK;
 }
