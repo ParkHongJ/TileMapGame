@@ -150,7 +150,7 @@
     <ClCompile Include="PlayerStatus.cpp">
       <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClCompile>
-    <ClCompile Include="InGameUI.cpp">
+    <ClCompile Include="playerUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
     <ClCompile Include="GameOverUI.cpp">
@@ -160,6 +160,9 @@
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
     <ClCompile Include="Npc_InteractUI.cpp">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Manager.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,7 +263,7 @@
     <ClInclude Include="PlayerStatus.h">
       <Filter>MainGame\Scene\Yong\Status</Filter>
     </ClInclude>
-    <ClInclude Include="InGameUI.h">
+    <ClInclude Include="playerUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
     <ClInclude Include="GameOverUI.h">
@@ -270,6 +273,9 @@
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
     <ClInclude Include="Npc_InteractUI.h">
+      <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Manager.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,12 @@
 #pragma once
 #include "Scene.h"
 
+class JinScene;
 class Image;
-class InGameUI : public Scene
+class playerUI : public Scene
 {
 private:
+	JinScene* tempChar;
 	Image* playerLifeImage;
 	Image* playerLifeRunsOutImage;
 	Image* bombImage;
@@ -28,7 +30,7 @@ private:
 	int ropeCount;
 	int currencyCount;
 
-	bool shouldDrawPlayerUI;
+	bool isAlive;
 
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget);
@@ -40,9 +42,9 @@ public:
 	inline void SetBombCount(int setValue) { bombCount = setValue; };
 	inline void SetRopeCount(int setValue) { ropeCount = setValue; };
 	inline void SetCurrency(int setValue) { currencyCount = setValue; };
-	inline void SetDrawPlayerUI(bool setValue) { shouldDrawPlayerUI = setValue; };
+	inline void SetDrawPlayerUI(bool setValue) { isAlive = setValue; };
 
-	InGameUI() {};
-	virtual ~InGameUI() {};
+	playerUI() {};
+	virtual ~playerUI() {};
 };
 

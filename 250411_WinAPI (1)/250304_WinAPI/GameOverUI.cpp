@@ -1,8 +1,12 @@
 #include "GameOverUI.h"
 #include "Image.h"
+#include "JinScene.h"
 
 HRESULT GameOverUI::Init(ID2D1HwndRenderTarget* renderTarget)
 {
+	tempChar = new JinScene();
+	tempChar->Init(renderTarget);
+
 	ImageManager::GetInstance()->AddImage("GameOver_journalRear", L"Textures/UI/Journal/journal_back.png", renderTarget);
 	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("GameOver_journalRear");
 	
@@ -25,6 +29,8 @@ HRESULT GameOverUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	stageIndex_Outer = 0;
 	stageIndex_Inner = 0;
 	isGameOver = true;
+	selectBoxIndex = 1;
+	selectBoxSpeed = 40.0f;
 
 	imageRatio = ResolutionRatio(*GameOver_journalRearImage);
 

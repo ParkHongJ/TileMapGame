@@ -158,7 +158,8 @@
     <ClCompile Include="TilemapTool.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
-    <ClCompile Include="InGameUI.cpp" />
+    <ClCompile Include="playerUI.cpp" />
+    <ClCompile Include="UI_Manager.cpp" />
     <ClCompile Include="YongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +196,8 @@
     <ClInclude Include="TilemapTool.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
-    <ClInclude Include="InGameUI.h" />
+    <ClInclude Include="playerUI.h" />
+    <ClInclude Include="UI_Manager.h" />
     <ClInclude Include="YongScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

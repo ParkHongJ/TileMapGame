@@ -1,10 +1,12 @@
 #pragma once
 #include "Scene.h"
 
+class JinScene;
 class Image;
 class GameOverUI : public Scene
 {
 private:
+	JinScene* tempChar;
 	Image* GameOver_journalRearImage;
 	Image* GameOver_journalFrontImage;
 	Image* GameOver_journalSelectBox;
@@ -25,6 +27,8 @@ private:
 	int stageIndex_Outer;
 	int stageIndex_Inner;
 	bool isGameOver;
+	int selectBoxIndex;
+	float selectBoxSpeed;
 
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
@@ -34,5 +38,6 @@ public:
 
 	inline void SetDrawGameOverUI(bool setValue) { isGameOver = setValue; };
 	FPOINT ResolutionRatio(Image image);
+
 };
 

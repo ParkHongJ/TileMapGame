@@ -6,7 +6,7 @@
 #include "TilemapTool.h"
 #include "AstarScene.h"
 #include "LoadingScene.h"
-#include "InGameUI.h"
+#include "playerUI.h"
 #include "GameOverUI.h"
 
 #include "HongScene.h"
@@ -32,7 +32,7 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("진석", new JinScene());
 	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
-	SceneManager::GetInstance()->AddScene("playerUI", new InGameUI());
+	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
 	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
 	
 	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());

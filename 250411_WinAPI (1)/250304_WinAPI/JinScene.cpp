@@ -1,14 +1,21 @@
 #include "JinScene.h"
 #include "Image.h"
 
+//테스트용 캐릭터 Colin
 HRESULT JinScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
-    ImageManager::GetInstance()->AddImage("tempRocket", TEXT("image/rocket.bmp"), renderTarget);
-    tempImage = ImageManager::GetInstance()->FindImage("tempRocket");
+    ImageManager::GetInstance()->AddImage("tempColin", TEXT("image/character/char_Colin/Colin.png"), renderTarget);
+    tempImage = ImageManager::GetInstance()->FindImage("tempColin");
     if (!tempImage)
         return E_FAIL;
     pos.x = WINSIZE_X * 0.9;
     pos.y = WINSIZE_Y * 0.5;
+
+    life = 1;
+    bomb = 3;
+    rope = 2;
+    currency = 3000;
+    isAlive = true;
 
     return S_OK;
 }
@@ -19,6 +26,8 @@ void JinScene::Release()
 
 void JinScene::Update(float TimeDelta)
 {
+    if (KeyManager::GetInstance()->IsOnceKeyDown('T'))
+        life--;
 }
 
 void JinScene::Render(ID2D1HwndRenderTarget* renderTarget)
