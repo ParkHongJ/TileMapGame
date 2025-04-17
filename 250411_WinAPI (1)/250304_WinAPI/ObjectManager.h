@@ -3,6 +3,7 @@
 #include "config.h"
 #include <unordered_map>
 
+
 class GameObject;
 
 enum RENDERORDER
@@ -28,6 +29,7 @@ public:
     bool RemoveObject(unsigned int id);
 
     GameObject* FindObject(unsigned int id);
+    GameObject* FindAbleInteractObject(GameObject* obj);
 
 private:
     unordered_map<unsigned int, GameObject*> objects;

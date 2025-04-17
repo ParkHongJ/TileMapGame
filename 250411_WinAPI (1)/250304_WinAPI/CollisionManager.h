@@ -41,7 +41,10 @@ public:
 	void Register(class Collider* collider);
 	void UnRegister(class Collider* collider);
 
-public:	
+	bool CollisionAABB(Collider* collider1, Collider* collider2);
+	bool CollisionSphere(Collider* collider1, Collider* collider2);
+	void BoxAll();
+	
 	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, bool debugDraw = false, float debugTime = 0.0f);
 	bool GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects);
 

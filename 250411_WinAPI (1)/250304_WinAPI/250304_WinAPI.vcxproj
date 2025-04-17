@@ -149,6 +149,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="InteractionState.cpp" />
+    <ClCompile Include="InteractObject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="JinScene.cpp" />
     <ClCompile Include="KeyManager.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="IdleState.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
+    <ClInclude Include="InteractObject.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="InteractionState.h" />
     <ClInclude Include="JinScene.h" />

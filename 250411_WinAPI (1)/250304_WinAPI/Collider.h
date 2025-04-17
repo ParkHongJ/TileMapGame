@@ -29,6 +29,13 @@ public:
 private:
 	virtual void DebugRender(ID2D1RenderTarget* rt);
 
+	inline void SetScale(FPOINT scale) { Scale = scale; };
+
+public:
+	inline const FPOINT& GetWorldPos() { return Pos; }
+	inline const FPOINT& GetScale() { return Scale; }
+	inline const ColliderType& GetType() { return Type; }
+
 protected:
 	FPOINT Pos;
 	FPOINT Offset;

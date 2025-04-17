@@ -11,7 +11,7 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget);	// 프레임 단위로 출력(이미지, 텍스트 등)
 
 	virtual void CheckCulling();		// 프레임 단위로 게임 로직 실행(데이터 계산)
-
+	
 public:
 	GameObject();
 	virtual ~GameObject();

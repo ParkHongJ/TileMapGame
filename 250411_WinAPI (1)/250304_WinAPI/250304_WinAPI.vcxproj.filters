@@ -189,6 +189,9 @@
     <ClCompile Include="Bomb.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
+    <ClCompile Include="InteractObject.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
     <ClCompile Include="HyoCharacter.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
@@ -391,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="Npc_InteractUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractObject.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
