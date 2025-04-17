@@ -8,7 +8,6 @@ MoveState Character::moveState(MoveState::SubState::NONE);
 AttackState Character::attackState(AttackState::SubState::NONE);
 InteractionState Character::interactionState(InteractionState::SubState::NONE);
 
-
 HRESULT Character::Init()
 {
     playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
@@ -16,28 +15,30 @@ HRESULT Character::Init()
     state = &Character::idleState;
     state->Enter(this);
 
-    SetPos({ WINSIZE_X / 2,WINSIZE_Y / 2 - 10 });
+    SetPos({ WINSIZE_X / 2, WINSIZE_Y / 2 - 10 });
 
     dir = { 0.0f, 0.0f };
+    velocity = { 0.0f, 0.0f };
 
-    velocity = { -1.0f,-1.0f };
 
-    currFrameInd = { 0,0 };
-
+    
+    // Render
     frameTime = 0.0f;
+    currFrameInd = { 0,0 };
     currFrameInfo = { { 0,0 }, {0, 0} };
     
     /*jumpFrameInfo = { {0, 9}, {7, 9} };
     attackFrameInfo = { {10, 12}, {15,12} };
     ropeFrameInfo = { {0, 12}, {9,12} };*/
 
-    
     colliderRect = {-40, -40, 40, 56};
 
+    // settings
     speed = 200.f;
     attackSpeed = 3.0f;
     attackRate = 0.3f;
 
+    // boolean
     isFlip = false;
     isInAir = false;
     isAttacking = false;
@@ -47,7 +48,6 @@ HRESULT Character::Init()
     isLookUpPaused = false;
 
     InitAnimationMap();
-
 
     return S_OK;
 }
@@ -78,26 +78,6 @@ void Character::Update(float TimeDelta)
 
 void Character::InitAnimationMap()
 {
-    //// IDLE
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ALONE)}] = { {0, 0}, {0, 0} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_START)}] = { {0, 8}, {3, 8} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_STOP)}] = { {3, 8}, {3, 8} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKUP_RELEASE)}] = { {4, 8}, {6, 8} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_START)}] = { {0, 1}, {2, 1} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_STOP)}] = { {2, 1}, {2, 1} };
-    //animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] = { {2, 1}, {4, 1} };
-
-    //// MOVE
-    //animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_ALONE)}] = { {1, 0}, {9, 0} };
-    //animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN)}] = { {5, 1}, {11, 1} };
-
-    //// ATTACK
-
-    //animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] = { {0, 4}, {5, 4} };
-
-    //// INTERACTION
-
-
      // IDLE
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ALONE)}] =
     { {0, 0}, {0, 0}, AnimationMode::Hold };
@@ -124,8 +104,14 @@ void Character::InitAnimationMap()
     animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_ALONE)}] =
     { {1, 0}, {8, 0}, AnimationMode::Loop };
 
-    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN)}] =
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_LOOP)}] =
     { {5, 1}, {11, 1}, AnimationMode::Loop };
+
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_START)}] =
+    { {0, 1}, {2, 1}, AnimationMode::FreezeAtX };
+
+    animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_LOOKDOWN_RELEASE)}] =
+    { {4, 8}, {6, 8}, AnimationMode::Hold };
 
     // ATTACK
     animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] =
@@ -193,9 +179,9 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "¢º Render Frame: (%d,%d)\n¢º State: %s\n",
-            currFrameInd.x, currFrameInd.y,
-            state->GetSubStateName());
+            "¢º Render Frame: (%d,%d)\n¢º State: %s\n Speed: %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), speed, velocity.x, velocity.y
+            );
 
         OutputDebugStringA(buf);
     }
@@ -267,7 +253,6 @@ void Character::ChangeState(CharacterState* newState)
     if (state) state->Exit();
     state = newState;
     if (state) state->Enter(this); 
-
 }
 
 bool Character::PressAnyKey(void)

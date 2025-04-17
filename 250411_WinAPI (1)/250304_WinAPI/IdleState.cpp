@@ -6,9 +6,9 @@
 void IdleState::Enter(Character* character)
 {
     this->character = character;
-    currentSubState = SubState::IDLE_ALONE;
-    character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(currentSubState));
-    character->SetFrameTime(0.f);
+    //currentSubState = SubState::IDLE_ALONE;
+    //character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(currentSubState));
+    //character->SetFrameTime(0.f);
 }
 
 void IdleState::Update()
@@ -19,12 +19,11 @@ void IdleState::Update()
     if (km->IsStayKeyDown(VK_RIGHT) || km->IsStayKeyDown(VK_LEFT))
     {
         character->ChangeState(&Character::moveState);
+        character->SetIsLookUpPaused(false);
+        character->SetIsLookDownPaused(false);
+        
         return;
     }
-
-
-
- 
 
 
     if (km->IsStayKeyDown(VK_UP))
@@ -84,7 +83,6 @@ void IdleState::Update()
     {
         ChangeSubState(SubState::IDLE_ALONE);
     }
-
     // 조건에 따라 엄청난 분기를 할 예정
 
     UpdateAnimation();

@@ -72,7 +72,7 @@ public:
 	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
 	void SetIsLookUpPaused(bool isLookUpPaused) { this->isLookUpPaused = isLookUpPaused; }
 	void SetIsLookDownPaused(bool isLookDownPaused) { this->isLookDownPaused = isLookDownPaused; }
-	
+	void SetSpeed(float speed) { this->speed = speed; }
 	
 	void PlayAnimation();
 	void ChangeState(CharacterState* newState);

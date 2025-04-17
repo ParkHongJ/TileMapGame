@@ -30,6 +30,5 @@ private:
 	// Image* playerIris;
 	Image* testBackGround;
 	Image* testCamera;
-	PlayerState state;
 };
 
