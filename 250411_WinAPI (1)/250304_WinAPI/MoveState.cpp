@@ -37,15 +37,12 @@ void MoveState::Update()
     if (onAir)
     {
         ChangeSubState(SubState::MOVE_ONAIR);
-        //character->SetSpeed(isShift ? CHARACTER_MOVE_SLOW_SPEED : CHARACTER_MOVE_DEFAULT_SPEED);
         if (dir != 0) character->Move(dir);
     }
     else
     {
         if (dir != 0)
         {
-
-
             if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
             {
                 if (character->GetCurrAnimEnd())

@@ -6,11 +6,13 @@
 #include "TimerManager.h"
 #include "CollisionManager.h"
 #include "Collider.h"
+#include "GameManager.h"
+#include "ObjectManager.h"
+
 
 HRESULT TaeScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
-    backGround = ImageManager::GetInstance()->AddImage("Tae_Background", TEXT("Image/Character/background.bmp"), renderTarget);
-
+  
     /*backGround = new Image();
     if (FAILED(backGround->Init(TEXT("Image/Character/background.bmp"), 2048, 2048)))
     {
@@ -29,23 +31,21 @@ HRESULT TaeScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
      yellowCollider = new BoxCollider(
         { 0.0f , 0.0f },     // Offset
-        {80.f, 80.0f},  // 
+        {50.0f, 50.0f},  // 
         yellow           
     );
     
 
     yellowCollider->Update(0.f);             // 초기 업데이트로 Min/Max 계산
 
-    ground = new GameObject();
-    ground->SetPos({ WINSIZE_X / 2.f, WINSIZE_Y - 30.f }); 
 
-    groundCollider = new BoxCollider(
-        { 0.f, 0.f },      
-        { 1200.f, 20.f },   
-        ground            
-    );
+    ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
 
-    groundCollider->Update(0.f);
+
+    GameManager::GetInstance()->Init("Data/map1.tilemap");
 
 
 
@@ -69,10 +69,6 @@ void TaeScene::Update(float TimeDelta)
     if (yellow)
         yellow->Update(TimeDelta);
 
-
-
-
-
 }
 
 void TaeScene::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -86,8 +82,6 @@ void TaeScene::Render(ID2D1HwndRenderTarget* renderTarget)
         yellowCollider->DebugRender(renderTarget);
 
 
-    if (groundCollider)
-        groundCollider->DebugRender(renderTarget);
 }
 
 

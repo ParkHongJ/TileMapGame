@@ -6,5 +6,13 @@
             "x": 128,
             "y": 128
         }
+    },
+    {
+        "name": "TaeScene",
+        "atlasPath": "Textures/char_yellow.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
     }
 ]

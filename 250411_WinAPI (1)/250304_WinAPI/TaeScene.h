@@ -8,20 +8,12 @@ class BoxCollider;
 
 class TaeScene : public Scene
 {
+	GENERATE_BODY(Textures/char_yellow.png, 128, 128)
+
 private:
 
-	Image* backGround;
-
-
-
-	GameObject* ground = nullptr;
-	FPOINT groundPos = {};
-
 	Character* yellow;
-
-
 	BoxCollider* yellowCollider = nullptr;
-	BoxCollider* groundCollider = nullptr;
 
 
 public:

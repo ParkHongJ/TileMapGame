@@ -51,6 +51,12 @@ private:
 	bool			 isLookDownLocked;
 
 
+	bool isTouchingLeft = false;
+	bool isTouchingRight = false;
+	bool isTouchingTop = false;
+	bool isTouchingBottom = false;
+
+
 public:
 	static IdleState					idleState;
 	static MoveState					moveState;
@@ -90,7 +96,7 @@ public:
 	
 	void ApplyGravity(float TimeDelta);
 	
-	bool CheckGround();
+	void CheckCollision();
 
 	
 	float GetVelocitySize();
