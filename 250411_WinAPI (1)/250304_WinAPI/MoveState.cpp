@@ -30,19 +30,22 @@ void MoveState::Update()
     bool isShift = km->IsStayKeyDown(VK_SHIFT);
 
     int dir = 0;
+
     if (isLeft) dir = -1;
     else if (isRight) dir = 1;
 
     if (onAir)
     {
         ChangeSubState(SubState::MOVE_ONAIR);
-        character->SetSpeed(isShift ? CHARACTER_MOVE_SLOW_SPEED : CHARACTER_MOVE_DEFAULT_SPEED);
+        //character->SetSpeed(isShift ? CHARACTER_MOVE_SLOW_SPEED : CHARACTER_MOVE_DEFAULT_SPEED);
         if (dir != 0) character->Move(dir);
     }
     else
     {
         if (dir != 0)
         {
+
+
             if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
             {
                 if (character->GetCurrAnimEnd())
@@ -51,9 +54,7 @@ void MoveState::Update()
             else
             {
                 if (isDown)
-                {
-                    character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
-
+                {     
                     if (!character->GetIsLookDownLocked() && currentSubState != SubState::MOVE_LOOKDOWN_LOOP)
                     {
                         ChangeSubState(SubState::MOVE_LOOKDOWN_START);
@@ -67,27 +68,25 @@ void MoveState::Update()
                 else if (isDownUp)
                 {
                     ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
-                    character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-                    character->SetIsLookDownLocked(false);
+                     character->SetIsLookDownLocked(false);
                 }
                 else
                 {
                     ChangeSubState(SubState::MOVE_ALONE);
-                    character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
                 }
             }
+
+            // Set Dir & Speed
+            
+            if (isShift || isDown) character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
+            else character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
 
             character->Move(dir);
         }
     }
 
-    UpdateAnimation();
 }
 
-void MoveState::UpdateAnimation()
-{
-    character->PlayAnimation(); 
-}
 
 void MoveState::ChangeSubState(SubState newSubState)
 {

@@ -35,8 +35,7 @@ public:
 
     virtual void Update() override;
 
-    virtual void UpdateAnimation() override;
-
+  
     void ChangeSubState(SubState newSubState);
 
     virtual void Exit() override;

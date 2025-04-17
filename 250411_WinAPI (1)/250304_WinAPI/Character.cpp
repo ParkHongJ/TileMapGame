@@ -1,7 +1,9 @@
 #include "Character.h"
 #include "ImageManager.h"
+#include "CollisionManager.h"
 #include "Image.h"
 #include "CharacterState.h"
+
 
 IdleState Character::idleState(IdleState::SubState::NONE);
 MoveState Character::moveState(MoveState::SubState::NONE);
@@ -64,15 +66,20 @@ void Character::Release()
 
 void Character::Update(float TimeDelta)
 {
-
+    // HFSM
     if (state) 
         state->Update();
     
 
-    // velocity 중력 관련 업데이트
+    // Gravity
 
+    isInAir = !CheckGround();
+
+    ApplyGravity(TimeDelta);
     
+    // Animation
 
+    PlayAnimation();
    
 }
 
@@ -196,28 +203,6 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     }
 
 
-    // 1. 먼저 사용할 브러시를 생성
-    ID2D1SolidColorBrush* pBrush = nullptr;
-    renderTarget->CreateSolidColorBrush(
-        D2D1::ColorF(D2D1::ColorF::Red), // 색상: 빨간색
-        &pBrush
-    );
-
-    // 2. 사각형 정의
-    D2D1_RECT_F rect = D2D1::RectF(
-        Pos.x + colliderRect.left, Pos.y+colliderRect.top, Pos.x+colliderRect.right, Pos.y+colliderRect.bottom // 좌상단(x, y) ~ 우하단(x, y)
-    );
-
-    // 3. 속이 빈 사각형 그리기 (stroke width: 2.0f)
-    renderTarget->DrawRectangle(
-        &rect,
-        pBrush,
-        2.0f // 선 두께
-    );
-
-    // 4. 브러시 해제
-    if (pBrush)
-        pBrush->Release();
    
 
 }
@@ -305,6 +290,38 @@ bool Character::GetCurrAnimEnd()
 {
     if (currFrameInd.x == currFrameInfo.endFrame.x) return true;
     else return false;
+}
+
+void Character::ApplyGravity(float TimeDelta)
+{
+    if (isInAir)
+    {
+        velocity.y += gravity * TimeDelta;
+        if (velocity.y > maxFallSpeed)
+            velocity.y = maxFallSpeed;
+
+        Pos.y += velocity.y * TimeDelta;
+    }
+    else
+    {
+        velocity.y = 0.f; // 바닥에 있으면 낙하속도 초기화
+    }
+}
+
+bool Character::CheckGround()
+{
+    // 발 위치 계산 (중심에서 아래쪽 collider 기준으로)
+    FPOINT origin = { Pos.x, Pos.y + colliderRect.bottom }; // 발바닥 중심
+    FPOINT direction = { 0.f, 1.f }; // 아래 방향
+
+    Ray ray = { origin, direction };
+
+    RaycastHit hitInfo;
+    float maxDistance = 5.0f; // 약간 여유를 줘야 바닥에 거의 닿았을 때도 감지 가능
+
+    bool hit = CollisionManager::GetInstance()->RaycastAll(ray, maxDistance, hitInfo, true, 0.1f);
+
+    return hit;
 }
 
 

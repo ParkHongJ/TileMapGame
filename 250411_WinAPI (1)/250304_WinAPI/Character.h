@@ -33,8 +33,14 @@ private:
 	float				  attackSpeed;
 	float				   attackRate;
 
-	bool					   isFlip;
+	// Gravity
+	float gravity = 1000.f; // 중력 가속도 (픽셀/sec^2)
+	float maxFallSpeed = 2000.f; // 최대 낙하 속도
 	bool                      isInAir;
+
+
+
+	bool					   isFlip;
 	bool                  isAttacking;
 	bool					  isOnPet;
 	
@@ -60,30 +66,45 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
-		
+	void Move(int dirX);
+
+
+	// Animation
+
 	void InitAnimationMap();
 
+	void PlayAnimation();
 
 	void SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState);
 	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
 	void SetIsLookUpLocked(bool isLookUpLocked) { this->isLookUpLocked = isLookUpLocked; }
 	void SetIsLookDownLocked(bool isLookDownLocked) { this->isLookDownLocked = isLookDownLocked; }
+
+	POINT GetCurrFrameInd() const;
+	FrameInfo GetCurrFrameInfo() const;
+	bool GetIsLookUpLocked();
+	bool GetIsLookDownLocked();
+	bool GetCurrAnimEnd();
+
+	// Gravity
+	
+	void ApplyGravity(float TimeDelta);
+	
+	bool CheckGround();
+
+	
+	float GetVelocitySize();
+	float GetYVelocity();
+
+
 	void SetSpeed(float speed) { this->speed = speed; }
 	
-	void PlayAnimation();
 	void ChangeState(CharacterState* newState);
 
 	bool PressAnyKey();
 
-	float GetVelocitySize();
-	float GetYVelocity();
-	bool GetIsLookUpLocked();
-	bool GetIsLookDownLocked();
-	POINT GetCurrFrameInd() const;
-	FrameInfo GetCurrFrameInfo() const;
-	bool GetCurrAnimEnd();
-
-	void Move(int dirX);
+	RECT GetColliderSize() { return { colliderRect.left,colliderRect.top,colliderRect.right,colliderRect.bottom }; }
+	
 
 	Character() {};
 	virtual ~Character() {};

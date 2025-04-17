@@ -9,12 +9,7 @@ void AttackState::Enter(Character* character)
 void AttackState::Update()
 {
     // 공격 중 입력이나 상태 변화 감지 가능
-    UpdateAnimation();
-}
 
-void AttackState::UpdateAnimation()
-{
-    character->PlayAnimation(); 
 }
 
 void AttackState::ChangeSubState(SubState newSubState)
