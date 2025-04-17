@@ -435,7 +435,7 @@
     </ClInclude>
     <ClInclude Include="TestHyoBackGround.h">
       <Filter>MainGame\Scene\Hyo</Filter>
-    </ClCompile>
+    </ClInclude>
     <ClInclude Include="UI_Manager.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
