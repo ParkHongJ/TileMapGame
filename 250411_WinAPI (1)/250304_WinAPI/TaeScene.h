@@ -4,6 +4,7 @@
 
 class Image;
 class Character; 
+class BoxCollider;
 
 class TaeScene : public Scene
 {
@@ -11,7 +12,16 @@ private:
 
 	Image* backGround;
 
+
+
+	GameObject* ground = nullptr;
+	FPOINT groundPos = {};
+
 	Character* yellow;
+
+
+	BoxCollider* yellowCollider = nullptr;
+	BoxCollider* groundCollider = nullptr;
 
 
 public:

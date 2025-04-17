@@ -85,13 +85,8 @@ void MoveState::Update()
         }
     }
 
-    UpdateAnimation();
 }
 
-void MoveState::UpdateAnimation()
-{
-    character->PlayAnimation(); 
-}
 
 void MoveState::ChangeSubState(SubState newSubState)
 {

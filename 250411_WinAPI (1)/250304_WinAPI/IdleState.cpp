@@ -74,13 +74,6 @@ void IdleState::Update()
     {
         ChangeSubState(SubState::IDLE_ALONE);
     }
-
-    UpdateAnimation();
-}
-
-void IdleState::UpdateAnimation()
-{
-    character->PlayAnimation();
 }
 
 void IdleState::ChangeSubState( SubState newSubState)

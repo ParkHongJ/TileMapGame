@@ -9,12 +9,6 @@ void InteractionState::Enter(Character* character)
 void InteractionState::Update()
 {
     // 상태 변경 로직이 있다면 여기에
-    UpdateAnimation();
-}
-
-void InteractionState::UpdateAnimation()
-{
-    character->PlayAnimation(); // stateId = 2 (Interaction)
 }
 
 void InteractionState::ChangeSubState(SubState newSubState)

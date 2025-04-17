@@ -61,6 +61,9 @@
     <Filter Include="MainGame\Scene\Tae\State">
       <UniqueIdentifier>{2a8b99f6-b807-4ce4-ae35-684fc3f20459}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Tae\Character">
+      <UniqueIdentifier>{d52b7bdf-0923-4e8c-be32-2fae55062330}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -125,9 +128,6 @@
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>2D Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
       <Filter>MainGame\Scene\Tae</Filter>
@@ -207,6 +207,9 @@
     <ClCompile Include="Npc_InteractUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>MainGame\Scene\Tae\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -277,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>2D Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
       <Filter>MainGame\Scene\Tae</Filter>
@@ -397,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="InteractObject.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>MainGame\Scene\Tae\Character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
