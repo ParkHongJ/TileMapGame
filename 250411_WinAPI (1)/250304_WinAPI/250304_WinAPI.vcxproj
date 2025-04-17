@@ -174,6 +174,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TestAnimationObject.cpp" />
+    <ClCompile Include="TestHyoBackGround.cpp" />
     <ClCompile Include="TestRenderSort.cpp" />
     <ClCompile Include="TestYongSceneBackGround.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TaeScene.h" />
     <ClInclude Include="TestAnimationObject.h" />
+    <ClInclude Include="TestHyoBackGround.h" />
     <ClInclude Include="TestRenderSort.h" />
     <ClInclude Include="TestYongSceneBackGround.h" />
     <ClInclude Include="Tile.h" />

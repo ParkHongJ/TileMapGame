@@ -14,6 +14,8 @@ public:
 
 	float GetBackGroundWidth() { return mapSizeWidth; } 
 	float GetBackGroundHeight() { return mapSizeHeight; }
+	void SetIsLookUp(bool isLookUp) { this->isLookUp = isLookUp; }
+	void SetIsLookDown(bool isLookDown) { this->isLookDown = isLookDown; }
 
 	HyoCharacter() {};
 	virtual ~HyoCharacter() {};
@@ -25,6 +27,12 @@ private:
 	
 	float mapSizeHeight;
 	float mapSizeWidth;
+
+	float lookUpTime; 
+	float lookDownTime; 
+
+	bool isLookUp;
+	bool isLookDown;
 
 	int dir;
 	// Image* playerIris;
