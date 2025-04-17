@@ -47,6 +47,8 @@ public:
 
 	inline void SetAbleCol(bool bAbleCol) { this->bAbleCol = bAbleCol; }
 	inline const bool IsAbleCol() const { return this->bAbleCol; }
+
+	void TakeCollision(float coolTime);
 protected:
 	// 렌더 분기.
 	RENDERORDER	objectRenderId;
@@ -70,5 +72,12 @@ protected:
 
 	// 콜라이더 만들 오브젝트인데 충돌 금지일 때 끄기
 	bool bAbleCol = false;
+
+public:
+	template<typename T>
+	T* GetType() 
+	{
+		return dynamic_cast<T*>(this);
+	}
 };
 

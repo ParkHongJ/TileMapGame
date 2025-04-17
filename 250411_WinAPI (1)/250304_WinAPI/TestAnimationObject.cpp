@@ -5,13 +5,15 @@
 #include "CollisionManager.h"
 #include "Item.h"
 #include "Image.h"
+#include "Bomb.h"
 
 TestAnimationObject::TestAnimationObject()
 {
 	objectRenderId = RENDER_PLAYER;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
-	string Temp = typeid(TestAnimationObject).name();
 	// GetComponent 활용해서 캐스팅 부담 덜어보기.
+
+	itemOffsetPos = { 30.f,10.f };
 	int i = 5;
 }
 
@@ -34,7 +36,7 @@ HRESULT TestAnimationObject::Init()
 	//AnimManager->RegisterAnimation("걷기", Anim, true);
 	//Count = 0;
 
-	image = ImageManager::GetInstance()->FindImage("TestJunYongAttack");
+	image = ImageManager::GetInstance()->FindImage("Tae_Player");
 
 	status = new PlayerStatus();
 	Pos = { 500, 100 };
@@ -90,6 +92,12 @@ void TestAnimationObject::Update(float TimeDelta)
 
 	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RETURN))
 	{
+		if (HoldItem)
+		{
+
+			HoldItem->UnEquip(&Pos);
+			HoldItem = nullptr;
+		}
 		//pair<GameObject*, GameObject*> temp = CollisionManager::GetInstance()->GetInteractObjectPairInCircle(this, 30.f);
 		//if ((temp.first && temp.second))
 		//{
@@ -99,6 +107,16 @@ void TestAnimationObject::Update(float TimeDelta)
 		//}
 	}
 
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown('K') && 0 < status->GetBombCount())
+	{
+		status->MinusBombCount();
+		Bomb* temp = new Bomb();
+		ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
+		FPOINT offset = { 10,0 };
+		temp->SetPos(Pos + offset);
+	}
+
 	testAbleHold = false;
 
 	if (KeyManager::GetInstance()->IsStayKeyDown(VK_SPACE))
@@ -106,6 +124,10 @@ void TestAnimationObject::Update(float TimeDelta)
 		testAbleHold = true;
 	}
 
+	if (HoldItem)
+	{
+		HoldItem->SetPos(Pos + itemOffsetPos);
+	}
 }
 
 void TestAnimationObject::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -135,24 +157,51 @@ void TestAnimationObject::Detect(GameObject* obj)
 {
 	if (obj)
 	{
-		if (dynamic_cast<Item*>(obj) && testAbleHold && !testHold)
+		//TakeCollision(1.f);
+
+		if (auto item = obj->GetType<Item>())
 		{
-			Item* temp = dynamic_cast<Item*>(obj);
-			switch (temp->GetItemType())
+			if (testAbleHold)
 			{
-			case ItemType::TYPE_ONCE:
-				temp->Equip(status->GetInfo());
-				break;
-			case ItemType::TYPE_LIMIT:
-				temp->Equip(this);
-				break;
-			case ItemType::TYPE_ALWAYS:
-				temp->Equip(this);
-				break;
+  				switch (item->GetItemType())
+				{
+				case ItemType::TYPE_LIMIT:
+					HoldItem = item;
+					break;
+				case ItemType::TYPE_ALWAYS:
+					HoldItem = item;
+					break;
+				}
+
+				testHold = true;
 			}
 
-			testHold = true;
+			else if (ItemType::TYPE_ONCE == item->GetItemType())
+			{
+				item->Equip(status->GetInfo());
+			}
 		}
+
+		//if ("Item" == obj->GetName())
+		//{
+		//	if (testAbleHold && !testHold)
+		//	{
+		//		switch (item->GetItemType())
+		//		{
+		//		case ItemType::TYPE_ONCE:
+		//			item->Equip(status->GetInfo());
+		//			break;
+		//		case ItemType::TYPE_LIMIT:
+		//			HoldItem = item;
+		//			break;
+		//		case ItemType::TYPE_ALWAYS:
+		//			HoldItem = item;
+		//			break;
+		//		}
+		//	}
+
+		//	testHold = true;
+		//}
 	}
 
 }

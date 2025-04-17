@@ -1,9 +1,27 @@
 #include "Bomb.h"
 #include "Image.h"
 #include "Collider.h"
+#include "CollisionManager.h"
 
 Bomb::Bomb()
 {
+	dropImage = ImageManager::GetInstance()->FindImage("items");
+	holdImage = ImageManager::GetInstance()->FindImage("items");
+
+	itemState = ItemState::STATE_UNEQUIP;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
+
+	curFrameIndexX = 0;
+	curFrameIndexY = 5;
+
+	startFrameIndexX = 0;
+	startFrameIndexY = 5;
+
+	endFrameIndexX = 2;
+	endFrameIndexY = 5;
+	frameSpeed = 3.334f;
+
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, this);
 }
 
 Bomb::~Bomb()
@@ -12,34 +30,40 @@ Bomb::~Bomb()
 
 HRESULT Bomb::Init()
 {
-
-	dropImage = ImageManager::GetInstance()->FindImage("items");
-	holdImage = ImageManager::GetInstance()->FindImage("items");
-
 	Pos = { 200, 200 };
-
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
-
-	itemState = ItemState::STATE_UNEQUIP;
-	interactState = INTERACTSTATE::INTERACT_ABLE;
 	return S_OK;
 }
 
 void Bomb::Update(float TimeDelta)
 {
-	__super::Update(TimeDelta);
+	FrameUpdate(TimeDelta);
+	
+
+	explosionTime -= TimeDelta;
+	animationTime -= TimeDelta;
+
+	if (0.f >= animationTime)
+	{
+		frameSpeed = 5.f;
+		//frameSpeed += TimeDelta; // 가라
+	}
+
+	if (0.f >= explosionTime)
+	{
+		Explosion();
+	}
 }
 
 void Bomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (ItemState::STATE_EQUIP == itemState)
 	{
-		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, 0, 5); // 임의값
+		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY);
 	}
 
 	else
 	{
-		dropImage->FrameRender(renderTarget, Pos.x, Pos.y, 0, 5); // 임의값
+		dropImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY); // 임의값
 	}
 }
 
@@ -82,4 +106,29 @@ void Bomb::Detect(GameObject* obj)
 {
 
 	//set
+}
+
+void Bomb::FrameUpdate(float TimeDelta)
+{
+
+	elipsedTime += frameSpeed * TimeDelta;
+	curFrameIndexX = int(elipsedTime);
+
+	if (curFrameIndexX > endFrameIndexX)
+	{
+		curFrameIndexX = elipsedTime = 0;
+	}
+}
+
+void Bomb::Explosion()
+{
+	vector<GameObject*> temp;
+	CollisionManager::GetInstance()->GetObjectsInCircle(Pos, 200.f, &temp);
+
+	for (auto& iter : temp)
+	{
+		iter->SetDestroy();
+	}
+
+	SetDestroy();
 }

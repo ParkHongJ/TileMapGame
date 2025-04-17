@@ -57,3 +57,9 @@ void GameObject::Detect(GameObject* obj)
 {
 
 }
+
+void GameObject::TakeCollision(float coolTime)
+{
+	bAbleCol = false;
+	collisionCoolTime = coolTime;
+}

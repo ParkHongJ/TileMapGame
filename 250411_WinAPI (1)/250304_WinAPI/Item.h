@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "PlayerStatus.h"
 
 enum class ItemState
 {
@@ -42,6 +43,8 @@ public:
 	virtual void Use(void* info);
 	virtual void Detect(GameObject* obj) override;
 
+	virtual void FrameUpdate(float TimeDelta);
+
 	// 던지거나 죽으면서 뱉으면 DropMove로 움직여보자.
 	virtual void DropMove(float TimeDelta);
 	virtual void DropMoveX(float TimeDelta);
@@ -49,18 +52,12 @@ public:
 
 	void ChangeState(ItemState state); // 장착 및 해제
 
-	/*inline void SetLock(bool isLock) { this->isLock = isLock; };
-	inline const bool GetLock () const { return isLock; };
+	virtual void DeadEvent(); // 장착 및 해제
 
-	inline void SetHold(bool isHold) { this->isHold = isHold; };
-	inline const bool GetHold() const { return isHold; };*/
 
 	inline void SetPrice(unsigned int price) { this->price = price; };
 	inline const unsigned int GetPrice() const { return price; };
-
-	inline void SetOwner(GameObject* owner) { this->owner = owner; };
-	inline const GameObject* GetOwner() const { return owner; };
-	                                                             
+                                                         
 	inline void SetItemType(ItemType type) { itemType = type; };
 	inline const ItemType GetItemType() const { return itemType; };
 
@@ -79,7 +76,21 @@ protected:
 
 	ItemType itemType;
 	ItemState itemState;
-	GameObject* owner;
+
+	int startFrameIndexX;
+	int startFrameIndexY;
+
+	int endFrameIndexX;
+	int endFrameIndexY;
+
+	int curFrameIndexX;
+	int curFrameIndexY;
+
+	float elipsedTime;
+	float frameSpeed;
+
+	float equipColCoolTime;
+	float equipColMaxCoolTime = 0.5f;
 
 private:
 	

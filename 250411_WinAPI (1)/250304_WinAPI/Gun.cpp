@@ -5,6 +5,7 @@
 
 Gun::Gun()
 {
+	 // 미구현 Gun
 }
 
 Gun::~Gun()
@@ -21,7 +22,12 @@ HRESULT Gun::Init()
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
+	itemType = ItemType::TYPE_ALWAYS;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
+
+	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
+	endFrameIndexY = startFrameIndexY = curFrameIndexY = 3;
+	
 	return S_OK;
 }
 
@@ -32,14 +38,14 @@ void Gun::Update(float TimeDelta)
 
 void Gun::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	if (ItemState::STATE_EQUIP == itemState)
+	//if (ItemState::STATE_EQUIP == itemState)
 	{
-		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, 3, 0); // 임의값
+		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY); // 임의값
 	}
 
-	else
+	//else
 	{
-		dropImage->FrameRender(renderTarget, Pos.x, Pos.y, 3, 0); // 임의값
+		//dropImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY); // 임의값
 	}
 }
 
@@ -54,8 +60,7 @@ void Gun::Equip()
 
 void Gun::Equip(void* info)
 {
-	PlayerStatusInfo* desc = (PlayerStatusInfo*)info;
-	desc->bombCount += 30;
+
 }
 
 void Gun::Equip(GameObject* owner)
@@ -75,7 +80,7 @@ void Gun::UnEquip(void* info)
 
 void Gun::Use()
 {
-	Pos = { 1000, 1000 }; // Test
+	//Pos = { 1000, 1000 }; // Test
 }
 
 void Gun::Use(void* info)
@@ -85,6 +90,9 @@ void Gun::Use(void* info)
 
 void Gun::Detect(GameObject* obj)
 {
+	objectRenderId = RENDER_HOLD;
+	interactState = INTERACTSTATE::INTERACT_UNABLE;
+	//__super::Detect(obj);
 
 }
 

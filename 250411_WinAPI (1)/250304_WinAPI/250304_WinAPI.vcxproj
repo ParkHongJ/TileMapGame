@@ -133,11 +133,13 @@
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="IncreaseBomb.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CharacterState.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="DummyHongPlayer.cpp" />
     <ClCompile Include="GameOverUI.cpp" />
     <ClCompile Include="Gun.cpp" />
@@ -174,6 +176,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
     <ClCompile Include="InGameUI.cpp" />
+    <ClCompile Include="Whip.cpp" />
     <ClCompile Include="YongScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,11 +186,13 @@
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="IncreaseBomb.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="CharacterState.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="DummyHongPlayer.h" />
     <ClInclude Include="GameOverUI.h" />
     <ClInclude Include="Gun.h" />
@@ -226,6 +231,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="InGameUI.h" />
+    <ClInclude Include="Whip.h" />
     <ClInclude Include="YongScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

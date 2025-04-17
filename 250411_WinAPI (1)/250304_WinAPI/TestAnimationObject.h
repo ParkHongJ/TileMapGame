@@ -29,6 +29,9 @@ private:
 	int Count;
 	class Image* image;
 
-	//Ite
+	Item* HoldItem;
+	Item* BackItem;
+
+	FPOINT itemOffsetPos;
 };
 

@@ -64,6 +64,9 @@
     <Filter Include="MainGame\Scene\Yong\Monster">
       <UniqueIdentifier>{ea65e594-7dd5-4b97-98b6-e65ba5dc0df9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Component">
+      <UniqueIdentifier>{d61a132b-bce0-4540-9b69-d895d66bd617}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -215,6 +218,15 @@
     </ClCompile>
     <ClCompile Include="TestMonster.cpp">
       <Filter>MainGame\Scene\Yong\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>MainGame\Scene\Yong\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseBomb.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -412,6 +424,15 @@
     </ClInclude>
     <ClInclude Include="TestMonster.h">
       <Filter>MainGame\Scene\Yong\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>MainGame\Scene\Yong\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseBomb.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
