@@ -42,13 +42,31 @@ HRESULT Character::Init()
     
 
     colliderSize = { 30.0f, 50.0f };
+
+    leftHandColliderSize = rightHandColliderSize = { 20.0f , 10.f };
+ 
     colliderOffsetY = 25.f;
 
-    Collider = new BoxCollider(
+    collider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
         { colliderSize.x, colliderSize.y },  // 
         this
     );
+
+    leftHandCollider = new BoxCollider(
+        { -colliderSize.x, -10.0f },
+        {   leftHandColliderSize.x, leftHandColliderSize.y},
+        this
+    );
+
+
+    rightHandCollider = new BoxCollider(
+        { colliderSize.x ,-10.f },
+        { rightHandColliderSize.x, rightHandColliderSize.y },
+        this
+    );
+
+    
 
 
     // settings
@@ -78,6 +96,7 @@ HRESULT Character::Init()
 
     isOnLadder = false;
     isOnRope = false;
+    isHangOn = false;
 
     interActionPQ = {};
     interactionRadius = 25.f;
@@ -150,7 +169,6 @@ void Character::Update(float TimeDelta)
     sprintf_s(debug, "islookdownlocked  : %d islookuplocked: %d\n", isLookDownLocked,isLookUpLocked);
     OutputDebugStringA(debug);
     
-    PlayAnimation();
    
     // 상태 전이 판단
     HandleTransitions();
@@ -163,11 +181,13 @@ void Character::Update(float TimeDelta)
     if (state == &idleState) HandleIdleLogic();
     else if (state == &moveState) HandleMoveLogic();
     else if (state == &attackState) HandleAttackLogic();
-
+    else if (state == &interactionState) HandleInteractionLogic();
 
     // 공중 점프 애니메이션 처리
-    HandleAirAnimation();
+    if(!isHangOn)
+        HandleAirAnimation();
 
+    PlayAnimation();
     ApplyGravity(TimeDelta);
 
 
@@ -192,7 +212,19 @@ void Character::HandleTransitions()
     bool isInter = km->IsOnceKeyDown('A');
     bool isUp = km->IsStayKeyDown(VK_UP);
 
+    if (isInAir)
+    {
 
+        if (CheckHangOn())
+        {
+            isHangOn = true;
+            velocity = { 0.0f,0.0f };
+            ChangeState(&interactionState);
+
+            return;
+        }
+
+    }
 
 
     if (isUp || isOnLadder || isOnRope)
@@ -227,7 +259,6 @@ void Character::HandleTransitions()
 
 
 
-
     // 0. 점프 (공격 중이더라도 점프 가능)
     if (isJump && isTouchingBottom)
     {
@@ -237,7 +268,6 @@ void Character::HandleTransitions()
         isOnRope = false;
 
         interActionPQ = {};
-
     }
 
     
@@ -324,8 +354,8 @@ bool Character::CheckAlmostFall()
     
     RaycastHit hitLeft, hitRight;
 
-    bool isGroundLeft = CollisionManager::GetInstance()->RaycastAll({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, true, 1.0f, this);
-    bool isGroundRight = CollisionManager::GetInstance()->RaycastAll({ footRight, {0.f, 1.f} },10.f, hitRight, true, 1.0f, this);
+    bool isGroundLeft = CollisionManager::GetInstance()->RaycastAll({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, false , 1.0f, this);
+    bool isGroundRight = CollisionManager::GetInstance()->RaycastAll({ footRight, {0.f, 1.f} }, 10.f, hitRight, false , 1.0f, this);
 
     // 둘 중 하나만 떠 있으면 가장자리
     return (isGroundLeft ^ isGroundRight); // XOR
@@ -333,9 +363,37 @@ bool Character::CheckAlmostFall()
 
 }
 
+bool Character::CheckHangOn()
+{
+    float maxHangDist = 4.0f;      // 매달릴 수 있는 거리
+    float debugTime = 1.0f;        // 디버그 Ray 지속 시간
+    bool debugDraw = true;
+
+    RaycastHit hitLeft, hitRight;
+
+    // 왼손 아래로 Ray 쏘기
+    Ray leftRay = {
+        leftHandCollider->GetWorldPos(),
+        { 0.f, 1.f }
+    };
+
+    bool leftHang = CollisionManager::GetInstance()->RaycastAll(leftRay, maxHangDist, hitLeft, debugDraw, debugTime, this);
+
+    // 오른손 아래로 Ray 쏘기
+    Ray rightRay = {
+        rightHandCollider->GetWorldPos(),
+        { 0.f, 1.f }
+    };
+
+    bool rightHang = CollisionManager::GetInstance()->RaycastAll(rightRay, maxHangDist, hitRight, debugDraw, debugTime, this);
+
+    // 둘 중 하나라도 맞으면 매달릴 수 있음
+    return leftHang || rightHang;
+}
+
+
 void Character::HandleIdleLogic() {
     IdleState* idle = dynamic_cast<IdleState*>(state);
-    
     
     if (!idle) return;
 
@@ -525,6 +583,9 @@ void Character::InitAnimationMap()
     animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_CLIMB_ROPE)}] =
     { {0, 7},  {9, 7}, AnimationMode::Loop };
 
+    animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_HANGON_TILE)}] =
+    { {8, 3},  {11, 3}, AnimationMode::Hold };
+
 
     // JUMP 
 
@@ -614,6 +675,7 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     }
 
 
+
 }
 
 
@@ -631,8 +693,26 @@ void Character::PlayAnimation()
     frameTime = 0.f;
 
 
+    if (isHangOn)
+    {
+        switch (currFrameInfo.mode)
+        {
+        case AnimationMode::Loop:
+            currFrameInd.x++;
+            if (currFrameInd.x > currFrameInfo.endFrame.x)
+                currFrameInd.x = currFrameInfo.startFrame.x;
+            break;
+
+        case AnimationMode::FreezeAtX:
+        case AnimationMode::Hold:
+            if (currFrameInd.x < currFrameInfo.endFrame.x)
+                currFrameInd.x++;
+            break;
+        }
+    }
+
     // 공중 애니메이션일 경우
-    if (currFrameInfo.startFrame.y == 9)
+    if (currFrameInfo.startFrame.y == 9 && isInAir)
     {
         float vel = velocity.y;
 
@@ -927,4 +1007,14 @@ bool Character::CanGoY(float vy)
 
     return false;
 
+}
+// Source (Character.cpp)에 정의
+bool Character::GetIsHangOn() const
+{
+    return isHangOn;
+}
+
+void Character::SetIsHangOn(bool value)
+{
+    isHangOn = value;
 }

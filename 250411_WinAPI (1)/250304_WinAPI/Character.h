@@ -27,7 +27,9 @@ private:
 	Image*				  playerImage;
 	CharacterState*				state;
 
-	BoxCollider*		     Collider;
+	BoxCollider*		     collider;
+	BoxCollider*		leftHandCollider;
+	BoxCollider*		rightHandCollider;
 
 	//Item*				     currItem;
 
@@ -50,8 +52,9 @@ private:
 	bool                      isInAir;
 
 
+	bool				isHangOn;
 	bool                  isAttacking;
-	bool					  isOnPet;
+	bool					  isOnVehicle;
 	
 	bool                  jumpPressed;
 	bool                attackPressed;
@@ -74,6 +77,10 @@ private:
 
 
 	float	bottomHitDist = 10000.0f; 
+
+
+	FPOINT leftHandColliderSize;
+	FPOINT rightHandColliderSize;
 
 	FPOINT colliderSize;
 	float colliderOffsetY;
@@ -107,6 +114,9 @@ public:
 
 
 	// Move
+	// Header (Character.h)¿¡ ¼±¾ğ
+	bool GetIsHangOn() const;
+	void SetIsHangOn(bool value);
 
 
 	void Move();
@@ -160,6 +170,7 @@ public:
 
 
 	bool CheckAlmostFall();
+	bool CheckHangOn();
 
 
 	// HFSM
@@ -180,6 +191,8 @@ public:
 	float GetVelocitySize();
 	float GetYVelocity();
 
+
+	
 
 	void SetSpeed(float speed) { this->speed = speed; }
 	

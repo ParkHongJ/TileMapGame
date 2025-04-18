@@ -10,8 +10,11 @@ void InteractionState::Enter(Character* character)
 void InteractionState::Update()
 {
 
-
-    if (character->GetIsOnLadder())
+    if (character->GetIsHangOn())
+    {
+        ChangeSubState(SubState::INTERACTION_HANGON_TILE);
+    }
+    else if (character->GetIsOnLadder())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
     }
@@ -19,6 +22,7 @@ void InteractionState::Update()
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
     }
+
 
 
 }
@@ -31,7 +35,7 @@ void InteractionState::ChangeSubState(SubState newSubState)
 
 void InteractionState::Exit()
 {
-    currentSubState = SubState::NONE;
+
     character->SetFrameTime(0.0f);
 }
 
@@ -45,6 +49,6 @@ const char* InteractionState::GetSubStateName() const {
     case SubState::INTERACTION_EXIT_LEVEL:   return "INTERACTION_EXIT_LEVEL";
     case SubState::INTERACTION_HOLD_ITEM:    return "INTERACTION_HOLD_ITEM";
     case SubState::INTERACTION_PUSH_ITEM:    return "INTERACTION_PUSH_ITEM";
-    default:                                 return "UNKNOWN_INTERACTION_STATE";
+    case SubState::INTERACTION_HANGON_TILE:    return "INTERACTION_HANGON_TILE";
     }
 }
