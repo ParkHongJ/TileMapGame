@@ -13,7 +13,7 @@ TestAnimationObject::TestAnimationObject()
 	objectRenderId = RENDER_PLAYER;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
 	// GetComponent 활용해서 캐스팅 부담 덜어보기.
-
+	// typeid(TestAnimationObject);
 	itemOffsetPos = { 30.f,10.f };
 	int i = 5;
 }

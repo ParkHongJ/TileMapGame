@@ -18,7 +18,9 @@ HRESULT Gun::Init()
 	dropImage = ImageManager::GetInstance()->FindImage("items");
 	holdImage = ImageManager::GetInstance()->FindImage("items");
 
-	Pos = { 500, 400 };
+	Pos = { 700, 100 };
+
+	moveDir = { 0,1 };
 
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
 
@@ -28,13 +30,16 @@ HRESULT Gun::Init()
 
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 3;
-	
+	BulletCnt = 5;
+
+	SetDrop();
 	return S_OK;
 }
 
 void Gun::Update(float TimeDelta)
 {
-	__super::Update(TimeDelta);
+	__super::DropMove(TimeDelta);
+	//__super::Update(TimeDelta);
 }
 
 void Gun::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -74,6 +79,7 @@ void Gun::Equip(GameObject* owner)
 void Gun::UnEquip()
 {
 	__super::UnEquip();
+	SetDrop();
 }
 
 void Gun::UnEquip(void* info)
@@ -88,7 +94,8 @@ void Gun::Use()
 
 void Gun::Use(void* info)
 {
-	__super::Use(info);
+
+	//__super::Use(info);
 }
 
 void Gun::Detect(GameObject* obj)

@@ -1,8 +1,8 @@
 #pragma once
 #include "Singleton.h"
 #include "config.h"
+#include "Collider.h"
 
-class Collider;
 class GameObject;
 
 struct Ray {
@@ -44,18 +44,22 @@ public:
 	bool CollisionAABB(Collider* collider1, Collider* collider2);
 	bool CollisionSphere(Collider* collider1, Collider* collider2);
 	void BoxAll();
-	
 	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, bool debugDraw = false, float debugTime = 0.0f, GameObject* ignoreObject = nullptr);
+	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, set<GameObject*>& ignoreObjects, bool debugDraw = false, float debugTime = 0.0f);
 	bool GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects);
 	bool GetObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects);
 	bool GetInteractObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects);
 	pair<GameObject*, GameObject*> GetInteractObjectPairInCircle(GameObject* owner, float radius);
+	void ColMaskAABB();
 
 private:
 	void DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length);
 	void AddDebugRay(FPOINT origin, FPOINT direction, float length, float duration);
 
 private:
+	unordered_map<CollisionMaskType, Collider*> layerCollisionMap;
+	unordered_map<CollisionMaskType, uint8_t> layerMaskMap;
+
 	vector<Collider*> colliders;
 	vector<DebugRay> debugRays;
 };

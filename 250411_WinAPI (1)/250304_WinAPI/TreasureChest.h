@@ -1,11 +1,10 @@
 #pragma once
 #include "Item.h"
-
-class Gun : public Item
+class TreasureChest : public Item
 {
 public:
-	Gun();
-	virtual ~Gun();
+	TreasureChest();
+	virtual ~TreasureChest();
 
 public:
 	virtual HRESULT Init() override;
@@ -30,9 +29,5 @@ public:
 	virtual void DropMove(float TimeDelta) override;
 	virtual void DropMoveX(float TimeDelta) override;
 	virtual void DropMoveY(float TimeDelta) override;
-
-private:
-	int BulletCnt;
-
 };
 
