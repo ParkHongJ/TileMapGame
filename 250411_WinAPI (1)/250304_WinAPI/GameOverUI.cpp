@@ -44,7 +44,6 @@ HRESULT GameOverUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	isBackPage = false;
 	selectBoxIndex = 1;
 	selectBoxMovefloat = 45.0f;
-	stickerMovefloat = 45.0f;
 
 	imageRatio = ResolutionRatio(*GameOver_journalRearImage);
 

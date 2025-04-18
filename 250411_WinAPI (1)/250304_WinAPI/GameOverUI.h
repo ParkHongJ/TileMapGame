@@ -35,8 +35,6 @@ private:
 	bool isBackPage;
 	int selectBoxIndex;
 	float selectBoxMovefloat;
-	float stickerMovefloat;
-	vector<float> debugPosY;
 
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
