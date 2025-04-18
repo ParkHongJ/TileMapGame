@@ -31,21 +31,33 @@ void CameraManager::Release()
 void CameraManager::Update(const FPOINT& playerPos, float TimeDelta)
 {
 	target = playerPos;
+	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
 
 	if (isLookUp && !isLookDown)
 	{
 		yOffset = 600.0f;
+		pos.y = -(target.y) + offset.y + currYOffset;
 	}
-	else if (isLookDown && !isLookUp)
+	else if (!isLookUp && !isLookDown)
+	{
+		yOffset = 0.0f;
+		pos.y = -(target.y) + offset.y + currYOffset;
+	}
+	if (isLookDown && !isLookUp)
 	{
 		yOffset = -600.0f;
+		pos.y = -(target.y) + offset.y + currYOffset;
 	}
+	else if (!isLookUp && !isLookDown)
+	{
+		yOffset = 0.0f;
+		pos.y = -(target.y) + offset.y + currYOffset;
+	}
+
 	//else
 	//{
 	//	yOffset = 0.0f;
 	//}
-
-	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
 
 	pos.x = -(target.x) + offset.x;
 	pos.y = -(target.y) + offset.y + currYOffset;
