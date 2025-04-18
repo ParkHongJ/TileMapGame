@@ -2,8 +2,7 @@
 #include "CharacterState.h"
 class Character;
 
-class IdleState : public CharacterState
-{
+class IdleState : public CharacterState {
 public:
     enum class SubState {
         NONE,
@@ -22,30 +21,20 @@ public:
         IDLE_HURT,
         IDLE_DIE
     };
+
 private:
     SubState currentSubState;
     Character* character;
-	
+
 public:
     IdleState(SubState initialSubState = SubState::NONE)
         : currentSubState(initialSubState) {
     }
 
     virtual void Enter(Character* character) override;
-    
-
     virtual void Update() override;
-
-  
-    void ChangeSubState(SubState newSubState);
-
     virtual void Exit() override;
-
-
-
     virtual const char* GetSubStateName() const override;
-
-
-
+    void ChangeSubState(SubState newSubState);
+    SubState GetCurrentSubState() const { return currentSubState; } 
 };
-

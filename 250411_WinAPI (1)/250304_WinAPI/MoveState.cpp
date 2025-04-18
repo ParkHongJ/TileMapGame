@@ -8,86 +8,52 @@ void MoveState::Enter(Character* character)
  
     if (character->GetIsLookDownLocked()) ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
     else ChangeSubState(SubState::MOVE_ALONE);
+
 }
 
-void MoveState::Update()
-{
+void MoveState::Update() {
     KeyManager* km = KeyManager::GetInstance();
-
-    bool isJump = km->IsOnceKeyDown(VK_SPACE);
-    bool inAir = character->GetIsinAir();
 
     bool isLeft = km->IsStayKeyDown(VK_LEFT);
     bool isRight = km->IsStayKeyDown(VK_RIGHT);
     bool isDown = km->IsStayKeyDown(VK_DOWN);
     bool isDownUp = km->IsOnceKeyUp(VK_DOWN);
-    bool isShift = km->IsStayKeyDown(VK_SHIFT);
 
-    // 좌우 키에서 손을 뗐을 때
-    if (km->IsOnceKeyUp(VK_LEFT) || km->IsOnceKeyUp(VK_RIGHT))
-    {
+    // 좌우 입력 없으면 Idle로 전이
+    if (!isLeft && !isRight) {
+        character->SetXVelocity(0.f);
         if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
             character->SetIsLookDownLocked(true);
 
-        character->SetXVelocity(0.0f); // dir 제거 → velocity.x = 0
         character->ChangeState(&Character::idleState);
         return;
     }
 
-    float speed = character->GetSpeed();
-    float vx = 0.f;
-
-    if (isLeft)  vx = -speed;
-    if (isRight) vx = speed;
-
-    // 공중 상태일 때
-    if (inAir)
+    // 공중 상태에서는 서브 상태 변경 없음
+    if (character->GetIsInAir())
     {
-        if (vx != 0.f)
-            character->SetXVelocity(vx);
+        ChangeSubState(SubState::MOVE_ONAIR);
+        return;
     }
-    else
-    {
-        if (vx != 0.f)
-        {
-            // 하강 애니메이션이 끝나면 ALONE 상태로 복귀
-            if (currentSubState == SubState::MOVE_LOOKDOWN_RELEASE)
-            {
-                if (character->GetCurrAnimEnd())
-                    ChangeSubState(SubState::MOVE_ALONE);
-            }
-            else
-            {
-                if (isDown)
-                {
-                    if (!character->GetIsLookDownLocked() && currentSubState != SubState::MOVE_LOOKDOWN_LOOP)
-                    {
-                        ChangeSubState(SubState::MOVE_LOOKDOWN_START);
-                        if (character->GetCurrAnimEnd())
-                            character->SetIsLookDownLocked(true);
-                    }
-                    else ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-                }
-                else if (isDownUp)
-                {
-                    ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
-                    character->SetIsLookDownLocked(false);
-                }
-                else
-                {
-                    ChangeSubState(SubState::MOVE_ALONE);
-                }
-            }
 
-            // 속도 조정
-            if (isShift || isDown) character->SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
-            else                   character->SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
-
-            character->SetXVelocity(vx); // 방향 → 속도 적용
+    // 아래 입력에 따른 서브 상태 변경
+    if (isDown) {
+       
+       if(character->GetCurrAnimEnd() && currentSubState == SubState::MOVE_LOOKDOWN_START){
+       
+            ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
         }
+       else if (currentSubState != SubState::MOVE_LOOKDOWN_LOOP) {
+           ChangeSubState(SubState::MOVE_LOOKDOWN_START);
+       }
+    }
+    else if (isDownUp) {
+        ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
+    }
+    else {
+        ChangeSubState(SubState::MOVE_ALONE);
     }
 }
-
 
 
 void MoveState::ChangeSubState(SubState newSubState)
@@ -99,7 +65,7 @@ void MoveState::ChangeSubState(SubState newSubState)
     }
 
     // 공중에 있을 땐 상태는 바꾸되 애니메이션은 바꾸지 않는다
-    if (character->GetIsinAir() && character->GetCurrFrameInfo().startFrame.y == 9)
+    if (character->GetIsInAir() && character->GetCurrFrameInfo().startFrame.y == 9)
     {
         currentSubState = newSubState;
         return;

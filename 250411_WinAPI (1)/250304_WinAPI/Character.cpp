@@ -22,8 +22,12 @@ HRESULT Character::Init()
   
     SetPos({ WINSIZE_X / 2,0});
 
-    dir = { 0.0f, 0.0f };
     velocity = { 0.0f, 0.0f };
+
+
+    gravity = 1000.f; // 중력 가속도 (픽셀/sec^2)
+    maxFallSpeed = 800.f; // 최대 낙하 속도
+    jumpPower = 500.0f;
 
 
     // Render
@@ -31,17 +35,13 @@ HRESULT Character::Init()
     currFrameInd = { 0,0 };
     currFrameInfo = { { 0,0 }, {0, 0} };
     
-    jumpFrameInfo = { {0, 9}, {7, 9} };
-    attackFrameInfo = { {10, 12}, {15,12} };
-    ropeFrameInfo = { {0, 12}, {9,12} };
 
-    //colliderRect = {-40, -40, 40, 40};
-    //colliderRect = {-10, -10, 10, 10};
-    //colliderRect = { -10, -20, 10, 20 }; // width: 20, height: 40
+    colliderSize = 60.f;
+    colliderOffset = 25.f;
 
-    yellowCollider = new BoxCollider(
-        { 0.0f , 0.0f },     // Offset
-        { 50.0f, 180.0f },  // 
+    Collider = new BoxCollider(
+        { 0.0f , colliderOffset },     // Offset
+        { colliderSize, colliderSize },  // 
         this
     );
 
@@ -60,6 +60,24 @@ HRESULT Character::Init()
     attackPressed = false;
     isLookUpLocked = false;
 
+    currLockTime = 0.0f;
+    lookUpLockTime = 1.0f;
+    lookDownLockTime = 1.0f;
+
+
+    isTouchingLeft = false;
+    isTouchingRight = false;
+    isTouchingTop = false;
+    isTouchingBottom = false;
+
+
+    isOnLadder = false;
+    isOnRope = false;
+
+    interActionPQ = {};
+    interactionRadius = 25.f;
+    interactionOffset = 25.f;
+
     InitAnimationMap();
 
     return S_OK;
@@ -77,82 +95,300 @@ void Character::Release()
 
 void Character::Update(float TimeDelta)
 {
-  
     CheckCollision();
-
-
     isInAir = !isTouchingBottom;
-     
-    auto km = KeyManager::GetInstance();
-    if (km->IsOnceKeyDown('Z') && isTouchingBottom)
-    {
-        SetYVelocity(-GetJumpPower()); 
-        SetIsInAir(true);
-    }
 
-    char debug[128];
-    sprintf_s(debug, "islookdownlocked  : %d islookuplocked: %d\n", isLookDownLocked,isLookUpLocked);
-    OutputDebugStringA(debug);
+    KeyManager* km = KeyManager::GetInstance();
 
-    // HFSM
+
+    PlayAnimation();
+   
+    // 상태 전이 판단
+    HandleTransitions();
+
+    // 현재 상태 업데이트
     if (state)
         state->Update();
 
 
-    // ---- 변경된 애니메이션 처리 로직 시작 ----
+    if (state == &idleState) HandleIdleLogic();
+    else if (state == &moveState) HandleMoveLogic();
+    else if (state == &attackState) HandleAttackLogic();
 
+
+    // 공중 점프 애니메이션 처리
+    HandleAirAnimation();
+
+    ApplyGravity(TimeDelta);
+
+
+    Move();
+
+
+    // Camera에 정보 전달
+    auto cm = CameraManager::GetInstance();
+    cm->SetTargetPos(Pos);
+    cm->SetLookingState(isLookUpLocked, isLookDownLocked);
+
+}
+
+void Character::HandleTransitions()
+{
+    KeyManager* km = KeyManager::GetInstance();
+    bool isLeft = km->IsStayKeyDown(VK_LEFT);
+    bool isRight = km->IsStayKeyDown(VK_RIGHT);
+    bool isAnyDirection = isLeft || isRight;
+    bool isAttack = km->IsOnceKeyDown('X');
+    bool isJump = km->IsOnceKeyDown('Z');
+    bool isInter = km->IsOnceKeyDown('A');
+    bool isUp = km->IsStayKeyDown(VK_UP);
+
+
+
+
+    if (isUp || isOnLadder || isOnRope)
+    {
+        
+        OutputDebugStringA("==================올라탈 곳 검사중=========================");
+        CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+
+        if (!interActionPQ.empty())
+        {
+            // 사다리, 로프 pos 로 플레이어 위치 조정
+
+            /*if (interActionPQ.top() == 사다리 || interActionPQ.top() == 로프)
+            {
+                isOnLadder = true;
+                isOnRope = true;
+
+                ChangeState(&interactionState);
+                return;
+            }
+            else if (interActionPQ.top() == 상인)
+            {
+
+            }
+            else if (interActionPQ.top() == )
+            {
+
+            }*/
+
+        }
+    }
+
+
+
+
+    // 0. 점프 (공격 중이더라도 점프 가능)
+    if (isJump && isTouchingBottom)
+    {
+        velocity.y = -jumpPower;
+        isInAir = true;
+        isOnLadder = false;
+        isOnRope = false;
+
+        interActionPQ = {};
+
+    }
+
+    
+    // 공격 
+    char buf[128];
+    sprintf_s(buf, "  isAttacking 변경됨 → %s\n", isAttacking ? "true" : "false");
+    OutputDebugStringA(buf);
+
+    if (isAttacking) return;
+
+     if (isAttack && !isAttacking)
+    {
+        isAttacking = true;
+
+        ChangeState(&attackState);
+
+        return;
+    }
+
+    // 이동
+    if (isAnyDirection && !isInAir)
+    {
+        ChangeState(&moveState);
+        return;
+    }
+
+    // 공중 아닐 때만 idle
+    if (!isAnyDirection && !isInAir)
+    {
+        ChangeState(&idleState);
+    }
+
+}
+
+void Character::HandleAirAnimation()
+{
     const int AIR_ANIM_ROW = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
     const auto& frame = currFrameInfo;
 
-    // 점프 중이면
-    if (isInAir)
+    if (isInAir && !isAttacking)
     {
-        // 현재 프레임이 공중 프레임이 아닐 경우 (점프 직후)
-        if (frame.startFrame.y != animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y)
+        if (frame.startFrame.y != AIR_ANIM_ROW)
         {
             if (velocity.y < 0)
                 SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP));
             else
                 SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN));
         }
-        // 이미 JUMP_UP 상태에서 낙하로 전환되는 시점
-        else if (frame.startFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x && 
-                 frame.endFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y && 
-                 velocity.y >= 0)
+        else if (frame.startFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x&&
+            frame.endFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y&&
+            velocity.y >= 0)
         {
             SetAnimationFrameInfo(ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN));
         }
     }
     else if (frame.startFrame.y == AIR_ANIM_ROW)
     {
-        // 착지한 경우에만 상태 재진입 (프레임 초기화)
+        // 착지하면 상태 재진입
         if (state)
             state->Enter(this);
     }
-
-    // ---- 변경된 애니메이션 처리 로직 끝 ----
-
+}
 
 
-    PlayAnimation();
 
-    Move();
+void Character::HandleIdleLogic() {
+    IdleState* idle = dynamic_cast<IdleState*>(state);
+    
+    
+    if (!idle) return;
 
-    ApplyGravity(TimeDelta);
 
-    auto cm = CameraManager::GetInstance();
-    cm->SetTargetPos(Pos);
+    float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+   
+    switch (idle->GetCurrentSubState()) {
+    case IdleState::SubState::IDLE_LOOKUP_START:
+        currLockTime += deltaTime;
+        if (GetCurrAnimEnd() && currLockTime > lookUpLockTime)
+            isLookUpLocked = true;
+        break;
 
-    cm->SetLookingState(isLookUpLocked, isLookDownLocked);
+    case IdleState::SubState::IDLE_LOOKUP_STOP:
+        // 정지 애니메이션 상태 유지, 별도 로직 필요 시 추가
+        break;
+
+    case IdleState::SubState::IDLE_LOOKUP_RELEASE:
+        // 릴리즈 애니메이션 완료 시 alone으로 넘어가는 로직은 IdleState에 있음
+        currLockTime = 0.0f;
+        isLookUpLocked = false;
+        break;
+
+    case IdleState::SubState::IDLE_LOOKDOWN_START:
+        currLockTime += deltaTime;
+        if (GetCurrAnimEnd() && currLockTime > lookDownLockTime)
+            isLookDownLocked = true;
+        break;
+
+    case IdleState::SubState::IDLE_LOOKDOWN_STOP:
+        // 정지 애니메이션 상태 유지
+        break;
+
+    case IdleState::SubState::IDLE_LOOKDOWN_RELEASE:
+        // 애니메이션이 끝나면 IDLE_ALONE 으로 전환됨
+        currLockTime = 0.0f;
+        isLookDownLocked = false;
+        break;
+
+    case IdleState::SubState::IDLE_ALONE:
+        // 기본 idle 상태, 특별한 로직 없음
+        break;
+
+    case IdleState::SubState::IDLE_ONAIR:
+        // 공중에 있을 때 별도 처리 필요 시 여기에
+        break;
+
+    case IdleState::SubState::IDLE_ONPET:
+    case IdleState::SubState::IDLE_ONPET_LOOKUP:
+    case IdleState::SubState::IDLE_ONPET_LOOKDOWN:
+    case IdleState::SubState::IDLE_FALL_ALMOST:
+    case IdleState::SubState::IDLE_HURT:
+    case IdleState::SubState::IDLE_DIE:
+        // 아직 미구현 상태이거나 외부에서 처리 필요
+        break;
+
+    case IdleState::SubState::NONE:
+    default:
+        break;
+    }
+
+ 
+}
+
+void Character::HandleMoveLogic() {
+    MoveState* move = dynamic_cast<MoveState*>(state);
+    if (!move) return;
+
+    float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+
+
+    // 현재 서브상태에 따른 처리
+    switch (move->GetCurrentSubState()) {
+    case MoveState::SubState::MOVE_LOOKDOWN_START:
+        break;
+
+    case MoveState::SubState::MOVE_LOOKDOWN_RELEASE:
+        if (GetCurrAnimEnd())
+            move->ChangeSubState(MoveState::SubState::MOVE_ALONE);
+        break;
+
+    case MoveState::SubState::MOVE_LOOKDOWN_LOOP:
+    case MoveState::SubState::MOVE_ALONE:
+        break;
+    }
+
+
 
 }
 
+
+void Character::HandleAttackLogic() {
+    AttackState* attack = dynamic_cast<AttackState*>(state);
+    if (!attack) return;
+
+    switch (attack->GetCurrentSubState()) {
+    case AttackState::SubState::ATTACK_WHIP:
+        // TODO : 애니메이션 프레임별로 collision 검사, 채찍 아이템 render
+        break;
+
+    case AttackState::SubState::ATTACK_ITEM_THROW:
+
+        break;
+
+    default:
+        break;
+    }
+
+  
+}
+
+void Character::HandleInteractionLogic()
+{
+    InteractionState* inter = dynamic_cast<InteractionState*>(state);
+    if (!inter) return;
+
+    switch (inter->GetCurrentSubState()) {
+    case InteractionState::SubState::INTERACTION_CLIMB_LADDER:
+    case InteractionState::SubState::INTERACTION_CLIMB_ROPE:
+        if (!MoveY()) ChangeState(&moveState);
+        break;
+
+    default:
+        break;
+    }
+}
 
 void Character::InitAnimationMap()
 {
      // IDLE
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ALONE)}] =
-    { {0, 0}, {0, 0}, AnimationMode::Hold };
+    { {0, 0}, {0, 0}, AnimationMode::Loop };
 
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_ONAIR)}] =
     { {0, 9}, {7, 9}, AnimationMode::Hold };
@@ -192,10 +428,20 @@ void Character::InitAnimationMap()
     { {0, 9}, {7, 9}, AnimationMode::Hold };
 
     // ATTACK
-    animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ALONE)}] =
+    animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_WHIP)}] =
     { {0, 4}, {5, 4}, AnimationMode::Hold };
 
+    // INTERACTION
 
+    animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_CLIMB_LADDER)}] =
+    { {0, 6},  {5, 7}, AnimationMode::Loop };
+
+
+    animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_CLIMB_ROPE)}] =
+    { {0, 7},  {9, 7}, AnimationMode::Loop };
+
+
+    // JUMP 
 
     animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}] =
     { {0, 9}, {3, 9}, AnimationMode::FreezeAtX }; // 상승 프레임
@@ -238,12 +484,14 @@ void Character::InitAnimationMap()
 //    }
 //}
 
+
 void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState)
 {
     auto key = std::make_pair(stateClassNum, subState);
     auto it = animationMap.find(key);
     if (it != animationMap.end())
     {
+        OutputDebugStringA(" 애니메이션 프레임 초기화 호출됨\n");
         // 프레임 초기화는 진짜로 바뀐 경우에만 하게끔
         if (currFrameInfo.startFrame.x != it->second.startFrame.x ||
             currFrameInfo.startFrame.y != it->second.startFrame.y ||
@@ -290,9 +538,13 @@ void Character::PlayAnimation()
 
     frameTime += TimeDelta;
 
-    if (frameTime < ANIMATION_FRAME_TIME) return;
+    if (frameTime < ANIMATION_FRAME_TIME)
+    {
+        return;
+    }
    
     frameTime = 0.f;
+
 
     // 공중 애니메이션일 경우
     if (currFrameInfo.startFrame.y == 9)
@@ -345,15 +597,19 @@ void Character::PlayAnimation()
                 currFrameInd.x++;
         break;
     }
-}
 
+}
 
 void Character::ChangeState(CharacterState* newState)
 {
+    if (state == newState)
+        return; // 상태가 같으면 전이하지 않음
+
     if (state) state->Exit();
     state = newState;
     if (state) state->Enter(this);
 }
+
 
 bool Character::PressAnyKey(void)
 {
@@ -403,15 +659,31 @@ bool Character::GetCurrAnimEnd()
     else return false;
 }
 
+
 void Character::ApplyGravity(float TimeDelta)
 {
     if (isInAir)
     {
-        Pos.y += velocity.y * TimeDelta;
-        velocity.y += gravity * TimeDelta;
+        float fallDist = velocity.y * TimeDelta;
 
+        if (isTouchingBottom && fallDist > bottomHitDist)
+        {
+            // 땅 위에 착지하도록 거리 보정
+            Pos.y += bottomHitDist - colliderOffset - 0.1f;
+            velocity.y = 0.f;
+            isInAir = false;
+            return;
+        }
+
+        Pos.y += fallDist;
+        velocity.y += gravity * TimeDelta;
         if (velocity.y > maxFallSpeed)
             velocity.y = maxFallSpeed;
+    }
+    else if (isOnLadder || isOnRope)
+    {
+        // 사다리, 밧줄 시에는 중력 적용 X
+        isInAir = false;
     }
     else
     {
@@ -420,46 +692,153 @@ void Character::ApplyGravity(float TimeDelta)
     }
 }
 
+
 void Character::CheckCollision()
 {
     float maxDist = 10.0f;
-    float debugTime = 0.0f;
+    float debugTime = 1.0f;
 
-    // Collider 기준 100x100일 때
-    FPOINT leftTop = { Pos.x - 45.f, Pos.y - 30.f };
-    FPOINT rightTop = { Pos.x + 45.f, Pos.y - 30.f };
-    FPOINT leftBottom = { Pos.x - 30.f, Pos.y + 45.f };
-    FPOINT rightBottom = { Pos.x + 30.f, Pos.y + 45.f };
+    // Collider 기준 
+    FPOINT leftTop = { Pos.x - colliderSize/2, Pos.y - colliderSize/2 + colliderOffset };
+    FPOINT rightTop = { Pos.x + colliderSize/2, Pos.y - colliderSize/2+ colliderOffset };
+    FPOINT leftBottom = { Pos.x - colliderSize/2, Pos.y + colliderSize/2 + colliderOffset };
+    FPOINT rightBottom = { Pos.x + colliderSize/2, Pos.y + colliderSize/2 + colliderOffset };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
 
-    isTouchingLeft = CollisionManager::GetInstance()->RaycastAll({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime);
+    isTouchingLeft = CollisionManager::GetInstance()->RaycastAll({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, true, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime, this);
 
-    isTouchingRight = CollisionManager::GetInstance()->RaycastAll({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime);
+    isTouchingRight = CollisionManager::GetInstance()->RaycastAll({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, true, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime, this);
 
-    isTouchingTop = CollisionManager::GetInstance()->RaycastAll({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastAll({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, true, debugTime);
+    isTouchingTop = CollisionManager::GetInstance()->RaycastAll({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, true, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, true, debugTime, this);
 
-    isTouchingBottom = CollisionManager::GetInstance()->RaycastAll({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, true, debugTime);
+    isTouchingBottom = CollisionManager::GetInstance()->RaycastAll({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, true, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, true, debugTime, this);
+
+   
+
+    if (hitBottom1.hit && hitBottom2.hit)
+        bottomHitDist = min(hitBottom1.distance, hitBottom2.distance);
+    else if (hitBottom1.hit)
+        bottomHitDist = hitBottom1.distance;
+    else if (hitBottom2.hit)
+        bottomHitDist = hitBottom2.distance;
+
+
+   /* if (isTouchingLeft || isTouchingRight || isTouchingTop|| isTouchingBottom)
+    {
+        GameObject* obj = hitLeft1.collider->GetOwner();
+        int a = 10;
+    }*/
 }
 
 void Character::Move()
 {
-    // 이동 방향에 따라 충돌 여부 확인
-    if ((velocity.x < 0 && isTouchingLeft) || (velocity.x > 0 && isTouchingRight))
-        return;
+    KeyManager* km = KeyManager::GetInstance();
+
+    float vx = 0.f;
+    if (km->IsStayKeyDown(VK_LEFT))       vx = -GetSpeed();
+    else if (km->IsStayKeyDown(VK_RIGHT)) vx = GetSpeed();
+    else                                  vx = 0.f;
+
+    SetXVelocity(vx);
+
+    if (!GetIsInAir()) {
+        if (km->IsStayKeyDown(VK_DOWN) || km->IsStayKeyDown(VK_SHIFT))
+            SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
+        else
+            SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);
+    }
 
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+    float moveDist = velocity.x * TimeDelta;
 
+    // 공중에서 벽에 부딪혔을 때 이동을 막음
+    if (GetIsInAir()) {
+        if ((velocity.x < 0 && isTouchingLeft) || (velocity.x > 0 && isTouchingRight) ) {
+            velocity.x = 0.f;  // 공중에서는 이동을 멈춤
+            moveDist = 0.f;    // 이동량을 0으로 설정
+        }
+        if ( (velocity.y < 0 && isTouchingTop)  ) {
+            velocity.y = 0.f;  // 공중에서는 이동을 멈춤
+          //  moveDist = 0.f;    // 이동량을 0으로 설정
+        }
+    }
+    else {
+        // 지상에서는 이동 자체를 막음 (벽에 부딪히면)
+        if ((velocity.x < 0 && isTouchingLeft) || (velocity.x > 0 && isTouchingRight)) {
+            return;  // 벽에 부딪혔으므로 이동을 막음
+        }
+    }
+
+    // 이동 방향에 따라 뒤집기
     if (velocity.x > 0)
         isFlip = false;
     else if (velocity.x < 0)
         isFlip = true;
 
-    Pos.x += velocity.x * TimeDelta;
+    // 이동
+    Pos.x += moveDist;
+}
+
+
+// 사다리, 밧줄
+bool Character::MoveY()
+{
+    KeyManager* km = KeyManager::GetInstance();
+    float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+
+    float vy = 0.f;
+    if (km->IsStayKeyDown(VK_UP))       vy = -GetSpeed();
+    else if (km->IsStayKeyDown(VK_DOWN)) vy = GetSpeed();
+    else                                  vy = 0.f;
+
+
+    if ((vy < 0 && isTouchingTop) || (vy > 0 && isTouchingBottom)) {
+        return false;
+    }
+
+    if (CanGoY(vy)) {
+        SetYVelocity(vy);
+        Pos.y += velocity.y * TimeDelta;
+        return true;
+    }
+
+    return false;
+}
+
+bool Character::CanGoY(float vy)
+{
+    // 사다리 & 밧줄의 다음 타일을 갈 수 있느냐 검사
+
+
+    vector<GameObject*> inCircleObjects;
+
+    FPOINT center = Pos;
+    center.y += vy < 0 ? -interactionOffset : interactionOffset;
+    CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionRadius, &inCircleObjects);
+
+
+    //사다리 or 밧줄인지 검사
+   /* for (auto it : inCircleObjects)
+    {
+        if(*it  == )
+        {
+
+
+            inCircleObjects.clear();
+            inCircleObjects.shrink_to_fit();
+            return true;
+         }
+    }
+*/
+
+
+    return false;
+
 }

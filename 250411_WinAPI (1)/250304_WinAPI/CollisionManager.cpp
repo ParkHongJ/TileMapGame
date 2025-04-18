@@ -176,8 +176,11 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
 
         if (col->Owner == nullptr) continue;
 
-        if (col->Owner == ignoreObject) continue;
+        if (col->Owner == ignoreObject)
+        {
 
+            continue;
+        }
         RaycastHit temp;
         if (col->Raycast(ray, maxDist, temp))
         {

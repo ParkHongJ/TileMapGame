@@ -29,6 +29,6 @@ public:
     virtual void Update() override;
     void ChangeSubState(SubState newSubState);
     virtual void Exit() override;
-    virtual const char* GetSubStateName() const override { return "InteractionState"; }
-
+    virtual const char* GetSubStateName() const override;
+    SubState GetCurrentSubState() const { return currentSubState; }
 };

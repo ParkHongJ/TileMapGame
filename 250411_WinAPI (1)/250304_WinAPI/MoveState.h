@@ -33,4 +33,5 @@ public:
 
     virtual void Exit() override;
     virtual const char* GetSubStateName() const override;
+    SubState GetCurrentSubState() const { return currentSubState; }
 };
