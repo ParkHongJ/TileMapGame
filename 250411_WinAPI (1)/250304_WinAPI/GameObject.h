@@ -6,6 +6,13 @@ enum class INTERACTSTATE
 	INTERACT_UNABLE, INTERACT_ABLE
 };
 
+// config 혹은 gameobject 에 enumclass 만들어서 오브젝트마다 이름 넣는 거 어떤가요 ex) 사다리, 상인, 로프, 열쇠, 총
+
+enum class OBJECTNAME
+{
+	PLAYER, MONSTER, ITEM, LADDER, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR
+};
+
 class Collider;
 
 class GameObject

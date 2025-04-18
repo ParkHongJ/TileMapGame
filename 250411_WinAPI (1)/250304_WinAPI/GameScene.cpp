@@ -18,6 +18,9 @@
 #include "Gun.h"
 #include "Whip.h"
 #include "IncreaseBomb.h"
+#include "IncreaseGold.h"
+#include "TreasureChest.h"
+#include "Ladder.h"
 #include "CameraManager.h"
 
 HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
@@ -35,11 +38,15 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage(
         "items", L"Textures/items.png.", 16, 16, renderTarget);
 
+    ImageManager::GetInstance()->AddImage("floor_cave", L"Textures/floor_cave.png", 12, 12, renderTarget);
+
+
     ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
+  
 
     GameManager::GetInstance()->Init("Data/map1.tilemap");
 
@@ -47,16 +54,16 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
  
 
     // Collider register
-
-
-
-
    // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
     // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
     // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseGold());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder());
+
 
     return S_OK;
 }

@@ -10,6 +10,7 @@
 #define ANIMSTATE 5
 
 class BoxCollider;
+class PlayerStatus;
 
 enum class SubAnim {
 	NONE,
@@ -88,7 +89,13 @@ public:
 	static AttackState				  attackState;
 	static InteractionState		 interactionState;
 
-	
+/// <summary>
+/// Add JunYong
+/// </summary>
+private:
+	PlayerStatus* playerStatus;
+public:
+
 
 public:
 

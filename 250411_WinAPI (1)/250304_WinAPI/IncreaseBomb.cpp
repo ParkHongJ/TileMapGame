@@ -1,7 +1,7 @@
 #include "Image.h"
 #include "Collider.h"
 #include "IncreaseBomb.h"
-#include "TestAnimationObject.h"
+#include "Character.h"
 #include "CameraManager.h"
 
 IncreaseBomb::IncreaseBomb()
@@ -50,6 +50,11 @@ void IncreaseBomb::Equip()
 
 void IncreaseBomb::Equip(void* info)
 {
+	if (ItemState::STATE_EQUIP == itemState)
+	{
+		return;
+	}
+
 	itemState = ItemState::STATE_EQUIP;
 	PlayerStatusInfo* desc = (PlayerStatusInfo*)info;
 	desc->bombCount += 3;
@@ -57,14 +62,17 @@ void IncreaseBomb::Equip(void* info)
 
 void IncreaseBomb::UnEquip()
 {
+
 }
 
 void IncreaseBomb::UnEquip(void* info)
 {
+
 }
 
 void IncreaseBomb::Use()
 {
+
 }
 
 void IncreaseBomb::DropMove(float TimeDelta)
@@ -74,7 +82,7 @@ void IncreaseBomb::DropMove(float TimeDelta)
 
 void IncreaseBomb::Detect(GameObject* obj)
 {
-	if (auto player = obj->GetType<TestAnimationObject>())
+	if (auto player = obj->GetType<Character>())
 	{
 		SetDestroy();
 	}
