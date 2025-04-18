@@ -67,6 +67,17 @@ bool BoxCollider::CheckCollisionWithCircle(FPOINT center, float radius) const
     return (dx * dx + dy * dy) <= radius * radius;
 }
 
+bool BoxCollider::CheckCollisionWithCircle(FPOINT center, float radius, float& distance)
+{
+    float closestX = Clamp<float>(center.x, Min.x, Max.x);
+    float closestY = Clamp<float>(center.y, Min.y, Max.y);
+
+    float dx = center.x - closestX;
+    float dy = center.y - closestY;
+    distance = sqrtf(dx * dx + dy * dy);
+    return distance <= radius;
+}
+
 bool BoxCollider::Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const
 {
     float tmin = 0.0f;
@@ -138,4 +149,11 @@ bool SphereCollider::CheckCollisionWithCircle(FPOINT center, float radius) const
 {
     float totalR = radius + this->radius;
     return (Pos - center).Length() <= totalR * totalR;
+}
+
+bool SphereCollider::CheckCollisionWithCircle(FPOINT center, float radius, float& distance)
+{
+    float totalR = radius + this->radius;
+    distance = (Pos - center).Length();
+    return distance <= totalR * totalR;
 }

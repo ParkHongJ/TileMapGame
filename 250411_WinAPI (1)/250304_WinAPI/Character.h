@@ -100,12 +100,15 @@ public:
 	void SetDir(FPOINT dir) { this->dir = dir; }
 	void Move();
 	void SetYVelocity(float velocityY) { this->velocity.y = velocityY; }
+	void SetXVelocity(float velocityX) { this->velocity.x = velocityX; }
+	
 	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
 	bool GetIsinAir() { return this->isInAir; }
 	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
 
 	float GetJumpPower() { return this->jumpPower; }
-		
+	float GetSpeed() { return this->speed; }
+
 	// Animation
 
 	void InitAnimationMap();

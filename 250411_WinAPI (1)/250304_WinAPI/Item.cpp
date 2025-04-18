@@ -3,39 +3,36 @@
 #include "CollisionManager.h"
 
 
-Item::Item() : isLock(false), isHold(false), 
+Item::Item() : 
 price(0), holdImage(nullptr), 
 dropImage(nullptr), moveDir({ 0,1 }), movePower({ 0.f,0.f }),
 moveReverseDir({ 1,1 }),prePos({ 0,0 }), RayDis(35.f), gravity(9.8f),
-state(ItemState::STATE_UNEQUIP), owner(nullptr)
+itemState(ItemState::STATE_UNEQUIP), startFrameIndexX(0), startFrameIndexY(0), endFrameIndexX(0), endFrameIndexY(0), frameSpeed(1.f), elipsedTime(0.f)
 {
-
+	objectRenderId = RENDER_ITEM;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
 }
 
 Item::~Item()
 {
-
+	
 }
 
 HRESULT Item::Init()
 {
-
 	return S_OK;
 }
 
 void Item::Update(float TimeDelta)
 {
-	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
-	{
-		movePower = { 500.f, 300.f }; // Test
-	}
-
-	if (ItemState::STATE_UNEQUIP == state)
+	if (ItemState::STATE_UNEQUIP == itemState)
 	{
 		DropMove(TimeDelta);
 	}
 
 	prePos = Pos;
+
+	FrameUpdate(TimeDelta);
 }
 
 void Item::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -51,46 +48,81 @@ void Item::Release()
 void Item::Equip()
 {
 	ChangeState(ItemState::STATE_EQUIP);
+	objectRenderId = RENDER_HOLD;
 }
 
 void Item::Equip(void* info)
 {
 	ChangeState(ItemState::STATE_EQUIP);
+	objectRenderId = RENDER_HOLD;
+}
+
+void Item::Equip(GameObject* owner)
+{
+	ChangeState(ItemState::STATE_EQUIP);
+	objectRenderId = RENDER_HOLD;
 }
 
 void Item::UnEquip()
 {
 	ChangeState(ItemState::STATE_UNEQUIP);
+	//movePower = { 500.f, 300.f }; // Test
 }
 
 void Item::UnEquip(void* info)
 {
 	ChangeState(ItemState::STATE_UNEQUIP);
+	// info에 기반해서 던지기
+	movePower = { 500.f, 300.f }; // Test
 }
 
 void Item::Use()
 {
-	if (ItemState::STATE_EQUIP == state)
+	if (ItemState::STATE_EQUIP == itemState)
 	{
 		return;
 	}
-
-
 }
 
 void Item::Use(void* info)
 {
-	if (ItemState::STATE_EQUIP == state)
+	if (ItemState::STATE_EQUIP == itemState)
 	{
 		return;
 	}
+}
+
+void Item::Detect(GameObject* obj)
+{
+	//objectRenderId = RENDER_HOLD;
+	//interactState = INTERACTSTATE::INTERACT_UNABLE;
+}
+
+void Item::FrameUpdate(float TimeDelta)
+{
+	if (startFrameIndexX != endFrameIndexX ||
+		startFrameIndexY != endFrameIndexY)
+	{
+		elipsedTime += frameSpeed * TimeDelta;
+		//curFrameIndexX = (int)elipsedTime - holdImage->GetWidth()
+		//if (elipsedTime > endFrameTime)
+		//{
+
+		//}
+	}
+
+	else
+	{
+		curFrameIndexX = startFrameIndexX;
+		curFrameIndexY = startFrameIndexY;
+	}
+
 }
 
 void Item::DropMove(float TimeDelta)
 {
 	DropMoveX(TimeDelta);
 	DropMoveY(TimeDelta);
-
 }
 
 void Item::DropMoveX(float TimeDelta)
@@ -114,18 +146,22 @@ void Item::DropMoveX(float TimeDelta)
 	{
 		// 충돌 지점에서 멈춤
 
-		//Pos.x = out.point.x - 35.f;
+		Pos.x = out.point.x - 35.f;
 		moveReverseDir.x *= -1;
-		movePower.x /= 3.f;
+		//movePower.x /= 3.f;
 		//movePower.x = 0.f;
 	}
 
 	else 
 	{
-		Pos.x = nextX - (RayDis * moveReverseDir.x);
+		//Pos.x = nextX - (RayDis * moveReverseDir.x);
 		//Pos.x = nextX - 35.f;
 		//Pos.y = nextY - 35.f;
+		Pos.x = nextX - (RayDis * moveReverseDir.x);
 	}
+
+	//Pos.x = nextX - (RayDis * moveReverseDir.x);
+
 }
 
 void Item::DropMoveY(float TimeDelta)
@@ -149,31 +185,43 @@ void Item::DropMoveY(float TimeDelta)
 	{
 		// 충돌 지점에서 멈춤
 
-		//Pos.x = out.point.x - 35.f;
+		Pos.x = out.point.x - 35.f;
 		moveReverseDir.y *= -1;
 		movePower.y /= 3.f;
 	}
 
 	else
 	{
-		Pos.y = nextY - (RayDis * moveReverseDir.y);
+		//Pos.y = nextY - (RayDis * moveReverseDir.y);
 		//Pos.x = nextX - 35.f;
 		//Pos.y = nextY - 35.f;
+
+		Pos.y = nextY - (RayDis * moveReverseDir.y);
 	}
+
+	
+
 }
-
-
 
 void Item::ChangeState(ItemState state)
 {
 	switch (state)
 	{
 	case ItemState::STATE_UNEQUIP:
-		isHold = false;
+		//equipColCoolTime = equipColMaxCoolTime;
+		//owner = nullptr;
+		//isHold = false;
 		break;
 	case ItemState::STATE_EQUIP:
-		isLock = false;
-		isHold = true;
+		//isLock = false;
+		//isHold = true;
 		break;
 	}
+
+	itemState = state;
+}
+
+void Item::DeadEvent()
+{
+
 }

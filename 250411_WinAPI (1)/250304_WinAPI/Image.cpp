@@ -489,6 +489,58 @@ void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int f
 	}
 }
 
+void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, float scaleX, float scaleY, bool isFlip)
+{
+	if (!imageInfo->bitmap) return;
+
+	float fw = static_cast<float>(imageInfo->frameWidth);
+	float fh = static_cast<float>(imageInfo->frameHeight);
+
+	D2D1_RECT_F destRect = D2D1::RectF(
+		x - fw * scaleX / 2.0f,
+		y - fh * scaleY / 2.0f,
+		x + fw * scaleX / 2.0f,
+		y + fh * scaleY / 2.0f
+	);
+
+	D2D1_RECT_F srcRect = D2D1::RectF(
+		frameX * fw  ,
+		frameY * fh ,
+		(frameX + 1) * fw ,
+		(frameY + 1) * fh 
+	);
+
+	// Transform 저장
+	D2D1::Matrix3x2F originalTransform;
+	renderTarget->GetTransform(&originalTransform);
+
+	if (isFlip)
+	{
+		// 중심 기준 좌우반전 행렬
+		D2D1::Matrix3x2F flip =
+			D2D1::Matrix3x2F::Translation(-x, -y) *
+			D2D1::Matrix3x2F::Scale(-1.0f, 1.0f) *
+			D2D1::Matrix3x2F::Translation(x, y);
+
+		renderTarget->SetTransform(flip * originalTransform);
+	}
+
+	// 실제 그리기
+	renderTarget->DrawBitmap(
+		imageInfo->bitmap.Get(),
+		&destRect,
+		1.0f,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		&srcRect
+	);
+
+	// Transform 복원
+	if (isFlip)
+	{
+		renderTarget->SetTransform(originalTransform);
+	}
+}
+
 void Image::Release()
 {
 	if (imageInfo)

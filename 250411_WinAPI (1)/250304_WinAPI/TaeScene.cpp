@@ -31,7 +31,7 @@ HRESULT TaeScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
      yellowCollider = new BoxCollider(
         { 0.0f , 0.0f },     // Offset
-        {50.0f, 50.0f},  // 
+        {50.0f, 180.0f},  // 
         yellow           
     );
     
