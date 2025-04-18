@@ -75,8 +75,8 @@ private:
 
 	float	bottomHitDist = 10000.0f; 
 
-	float colliderSize;
-	float colliderOffset;
+	FPOINT colliderSize;
+	float colliderOffsetY;
 
 	priority_queue<pair<float, GameObject*>> interActionPQ;
 	float								interactionRadius;

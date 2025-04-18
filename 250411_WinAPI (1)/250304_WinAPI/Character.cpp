@@ -41,12 +41,12 @@ HRESULT Character::Init()
     currFrameInfo = { { 0,0 }, {0, 0} };
     
 
-    colliderSize = 60.f;
-    colliderOffset = 25.f;
+    colliderSize = { 30.0f, 50.0f };
+    colliderOffsetY = 25.f;
 
     Collider = new BoxCollider(
-        { 0.0f , colliderOffset },     // Offset
-        { colliderSize, colliderSize },  // 
+        { 0.0f , colliderOffsetY },     // Offset
+        { colliderSize.x, colliderSize.y },  // 
         this
     );
 
@@ -81,7 +81,7 @@ HRESULT Character::Init()
 
     interActionPQ = {};
     interactionRadius = 25.f;
-    interactionOffset = 25.f;
+    interactionOffset = 40.f;
 
     InitAnimationMap();
 
@@ -307,9 +307,21 @@ bool Character::CheckAlmostFall()
 {
     float edgeCheckOffset = 5.f; // 캐릭터 발 위치 기준 양쪽 끝에서 검사
 
-    FPOINT footLeft = { Pos.x - edgeCheckOffset, Pos.y + colliderSize / 2 + colliderOffset };
-    FPOINT footRight = { Pos.x + edgeCheckOffset, Pos.y + colliderSize / 2 + colliderOffset };
+    FPOINT footLeft;
+    FPOINT footRight;
 
+    if (isFlip)
+    {
+        footLeft = { Pos.x + colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+        footRight = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    }
+    else
+    {
+        footLeft = { Pos.x - colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+        footRight = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    
+    }
+    
     RaycastHit hitLeft, hitRight;
 
     bool isGroundLeft = CollisionManager::GetInstance()->RaycastAll({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, true, 1.0f, this);
@@ -742,7 +754,7 @@ void Character::ApplyGravity(float TimeDelta)
         if (isTouchingBottom && fallDist > bottomHitDist)
         {
             // 땅 위에 착지하도록 거리 보정
-            Pos.y += bottomHitDist - colliderOffset - 0.1f;
+            Pos.y += bottomHitDist - colliderOffsetY - 0.1f;
             velocity.y = 0.f;
             isInAir = false;
             return;
@@ -772,10 +784,10 @@ void Character::CheckCollision()
     float debugTime = 1.0f;
 
     // Collider 기준 
-    FPOINT leftTop = { Pos.x - colliderSize/2, Pos.y - colliderSize/2 + colliderOffset };
-    FPOINT rightTop = { Pos.x + colliderSize/2, Pos.y - colliderSize/2+ colliderOffset };
-    FPOINT leftBottom = { Pos.x - colliderSize/2, Pos.y + colliderSize/2 + colliderOffset };
-    FPOINT rightBottom = { Pos.x + colliderSize/2, Pos.y + colliderSize/2 + colliderOffset };
+    FPOINT leftTop = { Pos.x - colliderSize.x/2, Pos.y - colliderSize.y/2 + colliderOffsetY };
+    FPOINT rightTop = { Pos.x + colliderSize.x/2, Pos.y - colliderSize.y/2+ colliderOffsetY };
+    FPOINT leftBottom = { Pos.x - colliderSize.x/2, Pos.y + colliderSize.y/2 + colliderOffsetY };
+    FPOINT rightBottom = { Pos.x + colliderSize.x/2, Pos.y + colliderSize.y/2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
