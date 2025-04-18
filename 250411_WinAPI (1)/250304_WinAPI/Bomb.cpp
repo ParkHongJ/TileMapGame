@@ -1,6 +1,7 @@
 #include "Bomb.h"
 #include "Image.h"
 #include "Collider.h"
+#include "CameraManager.h"
 #include "CollisionManager.h"
 
 Bomb::Bomb()
@@ -56,14 +57,16 @@ void Bomb::Update(float TimeDelta)
 
 void Bomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
+	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
+
 	if (ItemState::STATE_EQUIP == itemState)
 	{
-		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY);
+		holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameIndexX, curFrameIndexY);
 	}
 
 	else
 	{
-		dropImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY); // 임의값
+		dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameIndexX, curFrameIndexY); // 임의값
 	}
 }
 

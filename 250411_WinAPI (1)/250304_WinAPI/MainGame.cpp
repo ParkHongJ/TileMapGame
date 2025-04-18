@@ -14,6 +14,7 @@
 #include "TaeScene.h"
 #include "JinScene.h"
 #include "YongScene.h"
+#include "GameScene.h"
 #include "ObjectRegister.h"
 
 
@@ -36,6 +37,7 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("진석", new JinScene());
 	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
+	SceneManager::GetInstance()->AddScene("게임", new GameScene());
 	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
 	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
 
@@ -51,7 +53,7 @@ HRESULT MainGame::Init()
 		"Tae_Player", TEXT("Textures/char_yellow.png"), 16, 16, m_pRenderTarget.Get());
 
 	//SceneManager::GetInstance()->ChangeScene("효진");
-	SceneManager::GetInstance()->ChangeScene("준용");
+	SceneManager::GetInstance()->ChangeScene("게임");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);

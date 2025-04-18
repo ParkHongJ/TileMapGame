@@ -2,7 +2,7 @@
 #include "Image.h"
 #include "Collider.h"
 #include "PlayerStatus.h"
-
+#include "CameraManager.h"
 Gun::Gun()
 {
 	 // 미구현 Gun
@@ -38,9 +38,11 @@ void Gun::Update(float TimeDelta)
 
 void Gun::Render(ID2D1HwndRenderTarget* renderTarget)
 {
+	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
+
 	//if (ItemState::STATE_EQUIP == itemState)
 	{
-		holdImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY); // 임의값
+		holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameIndexX, curFrameIndexY); // 임의값
 	}
 
 	//else

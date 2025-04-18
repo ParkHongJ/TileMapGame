@@ -28,10 +28,13 @@ void CameraManager::Release()
 {
 }
 
-void CameraManager::Update(const FPOINT& playerPos, float TimeDelta)
+void CameraManager::Update( float TimeDelta)
 {
-	target = playerPos;
+	//target = playerPos;
 	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
+
+
+
 
 	if (isLookUp && !isLookDown)
 	{

@@ -3,6 +3,8 @@
 #include "CollisionManager.h"
 #include "Image.h"
 #include "CharacterState.h"
+#include "CameraManager.h"
+#include "Collider.h"
 
 
 IdleState Character::idleState(IdleState::SubState::NONE);
@@ -35,6 +37,13 @@ HRESULT Character::Init()
     //colliderRect = {-40, -40, 40, 40};
     //colliderRect = {-10, -10, 10, 10};
     //colliderRect = { -10, -20, 10, 20 }; // width: 20, height: 40
+
+    yellowCollider = new BoxCollider(
+        { 0.0f , 0.0f },     // Offset
+        { 50.0f, 180.0f },  // 
+        this
+    );
+
 
     // settings
     speed = 200.f;
@@ -72,7 +81,7 @@ void Character::Update(float TimeDelta)
 
 
     isInAir = !isTouchingBottom;
-
+     
     auto km = KeyManager::GetInstance();
     if (km->IsOnceKeyDown('Z') && isTouchingBottom)
     {
@@ -81,7 +90,7 @@ void Character::Update(float TimeDelta)
     }
 
     char debug[128];
-    sprintf_s(debug, "isTouchingBottom: %d\n", isTouchingBottom);
+    sprintf_s(debug, "islookdownlocked  : %d islookuplocked: %d\n", isLookDownLocked,isLookUpLocked);
     OutputDebugStringA(debug);
 
     // HFSM
@@ -129,6 +138,12 @@ void Character::Update(float TimeDelta)
     Move();
 
     ApplyGravity(TimeDelta);
+
+    auto cm = CameraManager::GetInstance();
+    cm->SetTargetPos(Pos);
+
+    cm->SetLookingState(isLookUpLocked, isLookDownLocked);
+
 }
 
 
@@ -247,6 +262,7 @@ void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int s
 
 void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 {
+    FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
     if (state)
     {
         char buf[256];
@@ -260,7 +276,7 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 
     if (playerImage)
     {
-        playerImage->FrameRender(renderTarget, Pos.x, Pos.y, currFrameInd.x, currFrameInd.y, isFlip);
+        playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, isFlip);
     }
 
 
@@ -406,7 +422,7 @@ void Character::ApplyGravity(float TimeDelta)
 void Character::CheckCollision()
 {
     float maxDist = 10.0f;
-    float debugTime = 3.0f;
+    float debugTime = 0.0f;
 
     // Collider 기준 100x100일 때
     FPOINT leftTop = { Pos.x - 45.f, Pos.y - 30.f };

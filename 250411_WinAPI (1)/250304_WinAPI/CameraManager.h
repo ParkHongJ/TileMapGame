@@ -32,7 +32,7 @@ private:
 public: 
 	HRESULT Init();
 	void Release();
-	void Update(const FPOINT& playerPos, float TimeDelta);
+	void Update( float TimeDelta);
 
 	Viewport GetInRect() { return ViewPort; }
 
@@ -42,5 +42,6 @@ public:
 	void SetYOffset(float yOffset) { this->yOffset = yOffset; }
 	void SetLookingState(bool isLookUp, bool isLookDown) { this->isLookUp = isLookUp; this->isLookDown = isLookDown; }
 
+	void SetTargetPos(FPOINT input) { this->target = input; }
 };
 

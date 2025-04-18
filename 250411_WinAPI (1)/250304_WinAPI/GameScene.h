@@ -1,7 +1,12 @@
 #pragma once
 #include "Scene.h"
+class Character;
+class BoxCollider;
 class GameScene : public Scene
 {
+private:
+
+	
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;

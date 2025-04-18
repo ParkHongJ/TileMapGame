@@ -3,6 +3,8 @@
 #include "CommonFunction.h"
 
 #include "GameObject.h"
+//임시
+#include "CameraManager.h"
 void CollisionManager::Init()
 {
 }
@@ -56,13 +58,14 @@ void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)
     // Debug Ray 시각화
     for (const auto& ray : debugRays)
     {
+        FPOINT cameraPos = CameraManager::GetInstance()->GetPos();
         FPOINT end = {
-            ray.origin.x + ray.direction.x * ray.length,
-            ray.origin.y + ray.direction.y * ray.length
+            ray.origin.x + ray.direction.x * ray.length + cameraPos.x,
+            ray.origin.y + ray.direction.y * ray.length + cameraPos.y
         };
 
         renderTarget->DrawLine(
-            D2D1::Point2F(ray.origin.x, ray.origin.y),
+            D2D1::Point2F(ray.origin.x + cameraPos.x, ray.origin.y + cameraPos.y),
             D2D1::Point2F(end.x, end.y),
             GBrush.Get(), // 또는 다른 전역 브러시
             1.5f

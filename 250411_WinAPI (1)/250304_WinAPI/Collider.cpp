@@ -2,6 +2,8 @@
 #include "CollisionManager.h"
 #include "GameObject.h"
 #include "CommonFunction.h"
+//임시
+#include "CameraManager.h"
 
 Collider::Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject)
 	: Offset(_Offset), Scale(_Scale), Owner(OwnerObject), Pos({ 0.f, 0.f })
@@ -53,7 +55,10 @@ void BoxCollider::Update(float TimeDelta)
 
 void BoxCollider::DebugRender(ID2D1RenderTarget* rt)
 {
-	DrawCenteredRect(rt, Pos, Scale.x / 2.f, D2D1::ColorF(D2D1::ColorF::Green));
+    //임시 코드
+    FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+
+	DrawCenteredRect(rt, cameraPos, Scale.x / 2.f, D2D1::ColorF(D2D1::ColorF::Green));
 }
 
 bool BoxCollider::CheckCollisionWithCircle(FPOINT center, float radius) const

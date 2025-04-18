@@ -1,5 +1,13 @@
 [
     {
+        "name": "Character",
+        "atlasPath": "Textures/char_yellow.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "DummyHongPlayer",
         "atlasPath": "Textures/char_lime.png",
         "cellSize": {

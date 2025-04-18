@@ -9,6 +9,8 @@
 
 #define ANIMSTATE 5
 
+class BoxCollider;
+
 enum class SubAnim {
 	NONE,
 	JUMP_UP,
@@ -17,9 +19,11 @@ enum class SubAnim {
 
 class Character : public GameObject
 {
-
+	GENERATE_BODY(Textures/char_yellow.png, 128, 128)
 private:
 	map<std::pair<unsigned int, unsigned int>, FrameInfo> animationMap;
+
+	BoxCollider* yellowCollider = nullptr;
 
 	CharacterState*				state;
 

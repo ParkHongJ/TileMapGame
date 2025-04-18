@@ -3,6 +3,8 @@
 #include "Image.h"
 #include "Collider.h"
 #include "GameManager.h"
+#include "CameraManager.h"
+
 HRESULT Tile::Init()
 {
 	tileScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
@@ -38,7 +40,8 @@ void Tile::Render(ID2D1HwndRenderTarget* renderTarget)
 	if (tileInfo.valid)
 	{
 		//collider->DebugRender(renderTarget);
-		tileImage->Render(renderTarget, Pos.x, Pos.y, tileScale, tileScale, tileInfo.atlasX, tileInfo.atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+		FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+		tileImage->Render(renderTarget, cameraPos.x, cameraPos.y, tileScale, tileScale, tileInfo.atlasX, tileInfo.atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 		RenderDeco(renderTarget);
 	}
 }
@@ -50,21 +53,24 @@ void Tile::RenderDeco(ID2D1HwndRenderTarget* renderTarget)
 		if (decos[i] == nullptr)
 			continue;
 
+
+		FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+
 		DecoDirection dir = decos[i]->dir;
 		
 		switch (dir)
 		{
 		case DecoDirection::TOP:
-			decos[i]->decoImage->Render(renderTarget, Pos.x, Pos.y - GAME_TILE_SIZE / 2.f, tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+			decos[i]->decoImage->Render(renderTarget, cameraPos.x, cameraPos.y - GAME_TILE_SIZE / 2.f, tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 			break;
 		case DecoDirection::DOWN:
-			decos[i]->decoImage->Render(renderTarget, Pos.x, Pos.y + GAME_TILE_SIZE / 2.f, tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+			decos[i]->decoImage->Render(renderTarget, cameraPos.x, cameraPos.y + GAME_TILE_SIZE / 2.f, tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 			break;
 		case DecoDirection::LEFT:
-			decos[i]->decoImage->Render(renderTarget, Pos.x - GAME_TILE_SIZE / 2.f, Pos.y, -tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+			decos[i]->decoImage->Render(renderTarget, cameraPos.x - GAME_TILE_SIZE / 2.f, cameraPos.y, -tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 			break;
 		case DecoDirection::RIGHT:
-			decos[i]->decoImage->Render(renderTarget, Pos.x + GAME_TILE_SIZE / 2.f, Pos.y, tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+			decos[i]->decoImage->Render(renderTarget, cameraPos.x + GAME_TILE_SIZE / 2.f, cameraPos.y, tileScale, tileScale, decos[i]->atlasX, decos[i]->atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 			break;
 		}
 	}

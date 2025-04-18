@@ -2,6 +2,7 @@
 #include "Collider.h"
 #include "IncreaseBomb.h"
 #include "TestAnimationObject.h"
+#include "CameraManager.h"
 
 IncreaseBomb::IncreaseBomb()
 {
@@ -34,7 +35,9 @@ void IncreaseBomb::Update(float TimeDelta)
 
 void IncreaseBomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	dropImage->FrameRender(renderTarget, Pos.x, Pos.y, 0, 2); // 임의값
+	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
+
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 2); // 임의값
 }
 
 void IncreaseBomb::Release()

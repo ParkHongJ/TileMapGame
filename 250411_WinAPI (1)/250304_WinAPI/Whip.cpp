@@ -1,5 +1,6 @@
 #include "Whip.h"
 #include "Image.h"
+#include "CameraManager.h"
 #include "Collider.h"
 
 Whip::Whip()
@@ -40,7 +41,9 @@ void Whip::Update(float TimeDelta)
 
 void Whip::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	holdImage->FrameRender(renderTarget, Pos.x, Pos.y, whipFrame, 12, 0.75f, 0.75f); // 임의값
+	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
+
+	holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, whipFrame, 12, 0.75f, 0.75f); // 임의값
 }
 
 void Whip::Release()
