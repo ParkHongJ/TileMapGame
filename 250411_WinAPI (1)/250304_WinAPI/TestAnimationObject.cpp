@@ -36,7 +36,8 @@ HRESULT TestAnimationObject::Init()
 	//AnimManager->RegisterAnimation("걷기", Anim, true);
 	//Count = 0;
 
-	image = ImageManager::GetInstance()->FindImage("Tae_Player");
+	image = ImageManager::GetInstance()->FindImage("Tae_Player"); 
+	// 태관님 플레이어 기준으로 맞춰보기
 
 	status = new PlayerStatus();
 	Pos = { 500, 100 };

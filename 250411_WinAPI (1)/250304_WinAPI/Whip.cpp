@@ -74,6 +74,9 @@ void Whip::Use()
 
 void Whip::Use(void* info)
 {
+	// 프레임을 플레이어에서 받아와서 맞추고 
+	// 그에 맞는 콜리전 갱신 or 프레임 한 번에만 콜리전?
+	// 근데 이거 플레이어 프레임이랑 1대1대응 아니고 보정해야되네
 	whipFrame = (*(int*)info);
 
 
@@ -81,6 +84,8 @@ void Whip::Use(void* info)
 
 void Whip::Detect(GameObject* obj)
 {
+	//objectRenderId = RENDER_HOLD;
+	//interactState = INTERACTSTATE::INTERACT_UNABLE;
 }
 
 void Whip::DropMove(float TimeDelta)

@@ -53,7 +53,7 @@ protected:
 	// 렌더 분기.
 	RENDERORDER	objectRenderId;
 
-	// 상호작용 가능한지
+	// 상호작용 가능한지 판단해서 분기하려 한건데 콜리전 마스킹하게되면..?
 	INTERACTSTATE interactState;
 
 	float collisionCoolTime;

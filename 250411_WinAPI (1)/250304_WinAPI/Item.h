@@ -33,6 +33,7 @@ public:
 	/// 장착하고 바로 먹어지면 Equip(info)로 내부 처리 + 바로 UnEquip 해보기.
 	/// 플레이어가 들었을 때 계속 끼고 있는거면 Equip해서 상태 바꾸기.
 	/// 플레이어가 멤버로 들고 있으면 Item->Use()로 사용하게? 고민
+	/// 플레이어가 공격 때 계속 Attack()함수 호출이면 그냥
 	/// </summary>
 	virtual void Equip(); // 장착
 	virtual void Equip(void* info); // 장착했을 때 플레이어 정보 던져서 갱신
@@ -52,8 +53,7 @@ public:
 
 	void ChangeState(ItemState state); // 장착 및 해제
 
-	virtual void DeadEvent(); // 장착 및 해제
-
+	virtual void DeadEvent(); // 당장은 생각하지 말자.
 
 	inline void SetPrice(unsigned int price) { this->price = price; };
 	inline const unsigned int GetPrice() const { return price; };

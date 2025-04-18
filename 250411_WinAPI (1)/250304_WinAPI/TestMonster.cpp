@@ -1,4 +1,5 @@
 #include "TestMonster.h"
+#include "TestAnimationObject.h"
 
 TestMonster::TestMonster()
 {
@@ -32,5 +33,9 @@ void TestMonster::Render(ID2D1HwndRenderTarget* renderTarget)
 
 void TestMonster::Detect(GameObject* obj)
 {
+	if (auto player = obj->GetType<TestAnimationObject>())
+	{
 
+		//SetDestroy();
+	}
 }

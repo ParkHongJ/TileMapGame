@@ -148,7 +148,7 @@ void Item::DropMoveX(float TimeDelta)
 
 		Pos.x = out.point.x - 35.f;
 		moveReverseDir.x *= -1;
-		movePower.x /= 3.f;
+		//movePower.x /= 3.f;
 		//movePower.x = 0.f;
 	}
 
