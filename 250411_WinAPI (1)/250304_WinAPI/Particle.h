@@ -3,17 +3,16 @@
 class Particle
 {
 public:
-	void Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime);
+	void Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime, int atlasX, int atlasY);
 	virtual void Update(float TimeDelta) ;
 	virtual void Render(ID2D1HwndRenderTarget* rt);
 	virtual void Release();
 
 	bool IsEnd() const { return isEnd; }
-
+	void AddParticleOption(class IParticleOption* particleOp);
 public:
 	//베이스
 	FPOINT pos;
-	FPOINT velocity;
 	float size;
 	float angle;
 	float lifeTime;
@@ -38,6 +37,7 @@ public:
 class PhysicsOption : public IParticleOption
 {
 	//중력관련
+	FPOINT velocity;
 	FPOINT acceleration = { 0, 0 };  // 가속도
 	float mass = 1.0f;
 	FPOINT gravity = { 0, 1500.0f };  // 중력
@@ -55,7 +55,7 @@ public:
 		totalForce.y += force.y;
 	}
 
-	void Init(string imageStr, FPOINT velocity, float bounciness, float lifeTime);
+	void Init(FPOINT velocity, float bounciness);
 	virtual void Update(Particle& particle, float TimeDelta) override;
 	virtual void Render(Particle& particle, ID2D1HwndRenderTarget* rt) override;
 };

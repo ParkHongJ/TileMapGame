@@ -6,6 +6,8 @@
 #include "Collider.h"
 #include "HongParticle.h"
 #include "CameraManager.h"
+#include "ParticleManager.h"
+#include "Particle.h"
 HRESULT DummyHongPlayer::Init()
 {
 	return S_OK;
@@ -58,13 +60,29 @@ void DummyHongPlayer::Update(float TimeDelta)
 		//totalForce = { 0.f,0.f };
 
 
-		for (int i = 0; i < 5; i++)
-		{
-			GameObject* obj = new HongParticle;
+			/*GameObject* obj = new HongParticle;
 			ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_MONSTER, obj);
-			obj->SetPos(Pos);
-		}
+			obj->SetPos(Pos);*/
 
+
+		for (int i = 0; i < 15; i++)
+		{
+			Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 30.f, 3.f, 0, 0);
+			PhysicsOption* physicsOp = new PhysicsOption;
+
+			float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+			float speed = RandomRange(350.f, 375.0f);            // ¼Óµµµµ ·£´ý
+
+			velocity =
+			{
+				sinf(angleRad) * speed,
+				-cosf(angleRad) * speed  // 135µµ (¿ÞÂÊ À§)
+			};
+
+			physicsOp->Init(velocity, 0.5f);
+			
+			particle->AddParticleOption(physicsOp);
+		}
 		/*vector<GameObject*> OutObject;
 		if (CollisionManager::GetInstance()->GetObjectsInCircle(Pos, 100.f, &OutObject))
 		{

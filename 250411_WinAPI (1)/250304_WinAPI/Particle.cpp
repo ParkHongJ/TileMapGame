@@ -5,11 +5,28 @@
 #include "CollisionManager.h"
 #include "Collider.h"
 #include "CameraManager.h"
+#include "ImageManager.h"
 
-void Particle::Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime)
+void Particle::Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime, int atlasX, int atlasY)
 {
+	this->pos = pos;
 	this->angle = angle;
+	
+	float randOffset = RandomRange(-0.3f, 0.3f); // ±0.3초
+	this->lifeTime = lifeTime + randOffset;
+
+	this->size = size / ATLAS_TILE_SIZE;
+	
+	atlas = { atlasX, atlasY };
+
 	isEnd = false;
+
+	image = ImageManager::GetInstance()->FindImage(imageStr);
+
+	if (image == nullptr)
+	{
+		MessageBox(g_hWnd, L"Image Load Error", L"경고", MB_OK);
+	}
 }
 
 void Particle::Update(float TimeDelta)
@@ -44,9 +61,7 @@ void Particle::Render(ID2D1HwndRenderTarget* rt)
 	{
 		FPOINT cameraPos = pos + CameraManager::GetInstance()->GetPos();
 
-		float effectScale = size / ATLAS_TILE_SIZE;
-
-		image->Render(rt, cameraPos.x, cameraPos.y, effectScale, effectScale, atlas.x, atlas.y, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+		image->Render(rt, cameraPos.x, cameraPos.y, size, size, atlas.x, atlas.y, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 	}
 }
 
@@ -58,11 +73,23 @@ void Particle::Release()
 			delete iter;
 	}
 	options.clear();
+
+	image = nullptr;
 }
 
-void PhysicsOption::Init(string imageStr, FPOINT velocity, float bounciness, float lifeTime)
+void Particle::AddParticleOption(IParticleOption* particleOp)
 {
+	if (particleOp != nullptr)
+	{
+		options.push_back(particleOp);
+	}
+}
 
+void PhysicsOption::Init(FPOINT _velocity, float bounciness)
+{
+	bPhysics = true;
+	useGravity = true;
+	velocity = _velocity;
 }
 
 void PhysicsOption::Update(Particle& particle, float TimeDelta)
@@ -78,9 +105,9 @@ void PhysicsOption::Update(Particle& particle, float TimeDelta)
 		ClampVector(totalForce, 850.f);
 
 		acceleration = totalForce / mass;
-		particle.velocity += acceleration * TimeDelta;
+		velocity += acceleration * TimeDelta;
 
-		FPOINT moveVec = particle.velocity * TimeDelta;
+		FPOINT moveVec = velocity * TimeDelta;
 		FPOINT nextPos = particle.pos + moveVec;
 
 		Ray ray;
@@ -116,22 +143,22 @@ void PhysicsOption::Update(Particle& particle, float TimeDelta)
 			else
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
-			particle.velocity = Reflect(particle.velocity, hitNormal.Normalized());
+			velocity = Reflect(velocity, hitNormal.Normalized());
 
-			particle.velocity *= bounciness;
+			velocity *= bounciness;
 
 			const float STOP_THRESHOLD = 100.f;
-			if (fabs(particle.velocity.y) < STOP_THRESHOLD)
-				particle.velocity.y = 0.f;
+			if (fabs(velocity.y) < STOP_THRESHOLD)
+				velocity.y = 0.f;
 
 			// 보정 위치
 			particle.pos += ray.direction * hitDistance;
 
-			ClampVector(particle.velocity, 450.f);
+			ClampVector(velocity, 450.f);
 
-			if (particle.velocity.Length() < STOP_THRESHOLD && particle.velocity.y > 0.f)
+			if (velocity.Length() < STOP_THRESHOLD && velocity.y > 0.f)
 			{
-				particle.velocity = { 0.f, 0.f };
+				velocity = { 0.f, 0.f };
 				useGravity = false;
 				bPhysics = false;
 			}

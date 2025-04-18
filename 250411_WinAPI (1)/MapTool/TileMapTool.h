@@ -7,8 +7,8 @@
 #include "EditorTile.h"
 #include "ObjectRegistry.h"
 
-constexpr int mapWidth = 16;
-constexpr int mapHeight = 16;
+constexpr int mapWidth = 40;
+constexpr int mapHeight = 32;
 
 struct ToolGameObject
 {
