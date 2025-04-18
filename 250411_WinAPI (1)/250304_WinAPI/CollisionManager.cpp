@@ -6,8 +6,34 @@
 #include "GameObject.h"
 //임시
 #include "CameraManager.h"
+
+//enum class CollisionMaskType : uint8_t
+//{
+//    WORLDOBJECT = 1,
+//    PLAYER = 1 << 1,
+//    MONSTER = 1 << 2,
+//    ITEM = 1 << 3,
+//    TILE = 1 << 4,
+//    EFFECT = 1 << 5
+//};
 void CollisionManager::Init()
 {
+    layerMaskMap[CollisionMaskType::WORLDOBJECT] = uint8_t(CollisionMaskType::PLAYER) | 
+        uint8_t(CollisionMaskType::MONSTER) | uint8_t(CollisionMaskType::TILE);
+
+    layerMaskMap[CollisionMaskType::PLAYER] = uint8_t(CollisionMaskType::WORLDOBJECT) | 
+        uint8_t(CollisionMaskType::MONSTER) | uint8_t(CollisionMaskType::ITEM) | 
+        uint8_t(CollisionMaskType::TILE);
+
+    layerMaskMap[CollisionMaskType::MONSTER] = uint8_t(CollisionMaskType::PLAYER) | 
+        uint8_t(CollisionMaskType::WORLDOBJECT) | uint8_t(CollisionMaskType::TILE);
+
+    layerMaskMap[CollisionMaskType::ITEM] = uint8_t(CollisionMaskType::PLAYER);
+
+    layerMaskMap[CollisionMaskType::TILE] = uint8_t(CollisionMaskType::PLAYER) 
+        | uint8_t(CollisionMaskType::MONSTER) || uint8_t(CollisionMaskType::EFFECT);
+
+    layerMaskMap[CollisionMaskType::EFFECT] = uint8_t(CollisionMaskType::TILE);
 }
 
 void CollisionManager::Update(float TimeDelta)
@@ -150,6 +176,30 @@ void CollisionManager::BoxAll()
     }
 }
 
+void CollisionManager::ColMaskAABB()
+{
+    uint8_t mask;
+    for (const auto& pair : layerCollisionMap)
+    {
+        mask = layerMaskMap[pair.first];
+
+        for (const auto& pair2 : layerCollisionMap)
+        {
+            // 검사 해야하는 레이어라면
+            if (mask & uint8_t(pair2.first))
+            {
+                bool bCollision = CollisionAABB(pair.second, pair2.second);
+
+                if (bCollision)
+                {
+                    pair.second->GetOwner()->Detect(pair2.second->GetOwner());
+                    pair2.second->GetOwner()->Detect(pair.second->GetOwner());
+                }
+            }
+        }
+    }
+}
+
 void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length)
 {
     FPOINT end = {
@@ -181,6 +231,48 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
 
             continue;
         }
+        RaycastHit temp;
+        if (col->Raycast(ray, maxDist, temp))
+        {
+            if (temp.distance < closestHit.distance)
+            {
+                closestHit = temp;
+                closestHit.collider = col;
+                found = true;
+            }
+        }
+    }
+
+    if (found)
+        outHit = closestHit;
+
+    // 디버그 그리기
+    if (debugDraw && debugTime > 0.0f)
+    {
+        float drawLen = found ? outHit.distance : maxDist;
+        AddDebugRay(ray.origin, ray.direction, drawLen, debugTime);
+    }
+
+    return found;
+}
+
+bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& outHit, set<GameObject*>& ignoreObjects, bool debugDraw, float debugTime)
+{
+    bool found = false;
+    RaycastHit closestHit;
+    closestHit.distance = maxDist;
+
+    for (auto* col : colliders)
+    {
+        if (!col) continue;
+
+        if (col->Owner == nullptr) continue;
+
+        if (ignoreObjects.end() == ignoreObjects.find(col->Owner))
+        {
+            continue;
+        }
+
         RaycastHit temp;
         if (col->Raycast(ray, maxDist, temp))
         {

@@ -7,6 +7,10 @@
 #include "CameraManager.h"
 #include "Collider.h"
 
+// Add JunYong
+#include "PlayerStatus.h"
+#include "Bomb.h"
+
 
 IdleState Character::idleState(IdleState::SubState::NONE);
 MoveState Character::moveState(MoveState::SubState::NONE);
@@ -20,7 +24,8 @@ HRESULT Character::Init()
     state = &Character::idleState;
     state->Enter(this);
   
-    SetPos({ WINSIZE_X / 2,0});
+    SetPos({ WINSIZE_X / 2,0 });
+    SetPos({ 200 / 2,0});
 
     velocity = { 0.0f, 0.0f };
 
@@ -80,6 +85,9 @@ HRESULT Character::Init()
 
     InitAnimationMap();
 
+    // Add Junyong
+    playerStatus = new PlayerStatus();
+
     return S_OK;
 }
 
@@ -91,16 +99,57 @@ void Character::Release()
         playerImage = nullptr;
 
     }
+
+    // Add JunYong
+    if (playerStatus)
+    {
+        delete playerStatus;
+        playerStatus = nullptr;
+    }
 }
 
 void Character::Update(float TimeDelta)
 {
     CheckCollision();
     isInAir = !isTouchingBottom;
+     
+    auto km = KeyManager::GetInstance();
+    if (km->IsOnceKeyDown('Z') && isTouchingBottom)
+    {
+        SetYVelocity(-GetJumpPower()); 
+        SetIsInAir(true);
+    }
 
-    KeyManager* km = KeyManager::GetInstance();
+    // Add JunYong
+    if (km->IsOnceKeyDown('F'))
+    {
+        if (0 < playerStatus->GetBombCount())
+        {
+            if (isTouchingBottom)
+            {
+                Bomb* temp = new Bomb();
+                ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
+                FPOINT offset = { 100,0 };
+                temp->SetPos(Pos + offset);
+            }
 
+            else
+            {
+                Bomb* temp = new Bomb();
+                ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
+                FPOINT offset = { 100,0 };
+                temp->SetPos(Pos + offset);
+            }
 
+            playerStatus->MinusBombCount();
+        }
+
+    }
+
+    char debug[128];
+    sprintf_s(debug, "islookdownlocked  : %d islookuplocked: %d\n", isLookDownLocked,isLookUpLocked);
+    OutputDebugStringA(debug);
+    
     PlayAnimation();
    
     // 상태 전이 판단

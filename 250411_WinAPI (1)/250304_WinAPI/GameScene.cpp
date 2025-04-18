@@ -17,6 +17,9 @@
 #include "Gun.h"
 #include "Whip.h"
 #include "IncreaseBomb.h"
+#include "IncreaseGold.h"
+#include "TreasureChest.h"
+#include "Ladder.h"
 #include "CameraManager.h"
 #include "snakeMonster.h"
 #include "playerHP_UI.h"
@@ -41,6 +44,9 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage(
         "items", L"Textures/items.png.", 16, 16, renderTarget);
 
+    ImageManager::GetInstance()->AddImage("floor_cave", L"Textures/floor_cave.png", 12, 12, renderTarget);
+
+
     ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
@@ -58,6 +64,9 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
 
     GameManager::GetInstance()->Init("map1");
+  
+
+    GameManager::GetInstance()->Init("Data/map1.tilemap");
 
     CameraManager::GetInstance()->Init();
  
@@ -75,6 +84,10 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseGold());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder());
+
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());

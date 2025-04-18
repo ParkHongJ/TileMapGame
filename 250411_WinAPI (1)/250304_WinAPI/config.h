@@ -9,6 +9,9 @@
 #include <iostream>
 #include <bitset>
 #include <map>
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <queue>
 #include <d2d1.h>             // 기본 D2D (선택적)

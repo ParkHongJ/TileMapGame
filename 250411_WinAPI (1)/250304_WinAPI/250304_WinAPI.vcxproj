@@ -149,6 +149,7 @@
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="IncreaseGold.cpp" />
     <ClCompile Include="goldBackground_UI.cpp" />
     <ClCompile Include="IncreaseBomb.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="JinScene.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="lightBulb_UI.cpp" />
+    <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
@@ -207,6 +209,7 @@
     <ClCompile Include="TilemapTool.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TimerManager.cpp" />
+    <ClCompile Include="TreasureChest.cpp" />
     <ClCompile Include="Whip.cpp" />
     <ClCompile Include="playerUI.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -221,6 +224,7 @@
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="goldBackground_UI.h" />
+    <ClInclude Include="IncreaseGold.h" />
     <ClInclude Include="IncreaseBomb.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraManager.h" />
@@ -248,6 +252,7 @@
     <ClInclude Include="InteractionState.h" />
     <ClInclude Include="JinScene.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="Ladder.h" />
     <ClInclude Include="lightBulb_UI.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainGame.h" />
@@ -283,6 +288,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TimerManager.h" />
     <ClInclude Include="InGameUI.h" />
+    <ClInclude Include="TreasureChest.h" />
     <ClInclude Include="Whip.h" />
     <ClInclude Include="playerUI.h" />
     <ClInclude Include="UI.h" />

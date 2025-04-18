@@ -15,9 +15,14 @@ enum class ColliderType
 	SPHERE
 };
 
-enum ColliderOwnerType
+enum class CollisionMaskType : uint8_t
 {
-	WORLDOBJECT, PLAYER, MONSTER, ITEM, TILE, EFFECT
+	WORLDOBJECT = 1,
+	PLAYER = 1 << 1,
+	MONSTER = 1 << 2,
+	ITEM = 1 << 3,
+	TILE = 1 << 4,
+	EFFECT = 1 << 5
 };
 
 class Collider
@@ -34,7 +39,6 @@ public:
 	virtual void Update(float TimeDelta) = 0;
 	virtual bool CheckCollisionWithCircle(FPOINT center, float radius) const = 0;
 	virtual bool CheckCollisionWithCircle(FPOINT center, float radius, float& distance) = 0;
-
 
 public:
 	virtual bool Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit) const = 0;
@@ -55,7 +59,7 @@ protected:
 	FPOINT Scale;
 	GameObject* Owner;
 	ColliderType Type;
-	ColliderOwnerType ownerType;
+	CollisionMaskType maskType;
 };
 
 class BoxCollider : public Collider

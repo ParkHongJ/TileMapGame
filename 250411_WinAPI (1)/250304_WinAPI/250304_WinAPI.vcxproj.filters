@@ -70,6 +70,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Labber">
+      <UniqueIdentifier>{b435f6ab-4cb6-4344-9c2e-7498f5f5bbcb}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\Scene\Jin\PlayerUI">
       <UniqueIdentifier>{3e6495e6-af93-4ab7-ae85-147600099e97}</UniqueIdentifier>
     </Filter>
@@ -251,6 +254,15 @@
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseGold.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureChest.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
@@ -508,6 +520,15 @@
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseGold.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureChest.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>MainGame\Scene\Hong</Filter>

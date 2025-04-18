@@ -2,12 +2,13 @@
 #include "Image.h"
 #include "Item.h"
 #include "CollisionManager.h"
+#include "CommonFunction.h"
 
 
 Item::Item() : 
 price(0), holdImage(nullptr), 
 dropImage(nullptr), moveDir({ 0,1 }), movePower({ 0.f,0.f }),
-moveReverseDir({ 1,1 }),prePos({ 0,0 }), RayDis(35.f), gravity(9.8f),
+moveReverseDir({ 1,1 }),prePos({ 0,0 }), RayDis(35.f),
 itemState(ItemState::STATE_UNEQUIP), startFrameIndexX(0), startFrameIndexY(0), endFrameIndexX(0), endFrameIndexY(0), frameSpeed(1.f), elipsedTime(0.f)
 {
 	objectRenderId = RENDER_ITEM;
@@ -26,8 +27,12 @@ HRESULT Item::Init()
 
 void Item::Update(float TimeDelta)
 {
+	DropMove(TimeDelta);
+	movePower = { -50.f, 90.f }; // Test
+	//Pos += {30.f * TimeDelta, 10.f * TimeDelta};
 	if (ItemState::STATE_UNEQUIP == itemState)
 	{
+		DropTime += TimeDelta;
 		DropMove(TimeDelta);
 	}
 
@@ -122,44 +127,124 @@ void Item::FrameUpdate(float TimeDelta)
 
 void Item::DropMove(float TimeDelta)
 {
-	DropMoveX(TimeDelta);
-	DropMoveY(TimeDelta);
+	if (bPhysics)
+	{
+		if (useGravity)
+		{
+			AddForce({ gravity.x * mass, gravity.y * mass });
+		}
+
+		// force 제한
+		ClampVector(totalForce, 450.f);
+
+		acceleration = totalForce / mass;
+		velocity += acceleration * TimeDelta;
+
+		FPOINT moveVec = { velocity.x * TimeDelta, velocity.y * TimeDelta };
+		FPOINT nextPos = { Pos.x + moveVec.x, Pos.y + moveVec.y };
+
+		Ray ray;
+		ray.origin = Pos;
+		ray.direction = moveVec.Normalized();
+
+		float moveLength = moveVec.Length();
+		float hitDistance;
+		FPOINT hitNormal;
+
+		RaycastHit out;
+
+		if (CollisionManager::GetInstance()->RaycastAll(ray, moveLength, out, true, 1.f, this))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		{
+			hitDistance = out.distance;
+
+			FPOINT colliderPos = out.collider->GetWorldPos();
+			FPOINT colliderScale = out.collider->GetScale();
+
+			// 2. 방향 벡터
+			FPOINT toHit = out.point - colliderPos;
+
+			// 스케일 보정한 방향 추정
+			float xRatio = toHit.x / (colliderScale.x * 0.5f);
+			float yRatio = toHit.y / (colliderScale.y * 0.5f);
+
+			if (fabs(xRatio) > fabs(yRatio))
+				hitNormal = { (xRatio < 0 ? -1.f : 1.f), 0.f };
+			else
+				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
+
+			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
+			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
+
+			velocity *= bounciness;
+
+			totalForce.x = 0.0f;
+			totalForce.y = 0.0f;
+
+			const float STOP_THRESHOLD = 100.f;
+			if (fabs(velocity.x) < STOP_THRESHOLD)
+				velocity.x = 0.f;
+			if (fabs(velocity.y) < STOP_THRESHOLD)
+				velocity.y = 0.f;
+
+			// 보정 위치
+			Pos += ray.direction * hitDistance;
+
+			ClampVector(velocity, 350.f);
+
+			if (velocity.Length() < 130.f)
+			{
+				velocity = { 0.f, 0.f };
+				useGravity = false;
+				bPhysics = false;
+			}
+
+			// 살짝 밀기 (겹침 방지)
+
+			Pos = out.point + hitNormal * 0.5f;
+		}
+		else
+		{
+			Pos = nextPos;
+		}
+	}
+	//DropMoveX(TimeDelta);
+	//DropMoveY(TimeDelta);
 }
 
 void Item::DropMoveX(float TimeDelta)
 {
-	Ray ray;
-	ray.origin = Pos;
+	//Ray ray;
+	//ray.origin = Pos;
 
-	moveDir = {  Pos.x - prePos.x, Pos.y };
-	moveDir.x *= moveReverseDir.x;
+	//moveDir = {  Pos.x - prePos.x, Pos.y };
+	//moveDir.x *= moveReverseDir.x;
 
-	ray.direction = moveDir.Normalized();
-	
-	FPOINT rayPos = Pos;
-	rayPos.x += RayDis * moveReverseDir.x;
-	float nextX = rayPos.x + moveReverseDir.x * movePower.x * TimeDelta;
-	ray = { rayPos, {moveDir.x, 0.f} };
-	RaycastHit out;
-	bool hit = CollisionManager::GetInstance()->RaycastAll(ray, moveReverseDir.x * movePower.x * TimeDelta, out, true, 1.f);
+	//ray.direction = moveDir.Normalized();
+	//
+	//FPOINT rayPos = Pos;
+	//rayPos.x += RayDis * moveReverseDir.x;
+	//float nextX = rayPos.x + moveReverseDir.x * movePower.x * TimeDelta;
+	//ray = { rayPos, {moveDir.x, 0.f} };
+	//RaycastHit out;
+	//bool hit = CollisionManager::GetInstance()->RaycastAll(ray, moveReverseDir.x * movePower.x * TimeDelta, out, true, 1.f, this);
 
-	if (hit && nextX >= out.point.x)
-	{
-		// 충돌 지점에서 멈춤
+	//if (hit && nextX >= out.point.x)
+	//{
+	//	// 충돌 지점에서 멈춤
 
-		Pos.x = out.point.x - 35.f;
-		moveReverseDir.x *= -1;
-		//movePower.x /= 3.f;
-		//movePower.x = 0.f;
-	}
+	//	Pos.x = out.point.x - RayDis;
+	//	moveReverseDir.x *= -1;
+	//	//movePower.x /= 3.f;
+	//	//movePower.x = 0.f;
+	//}
 
-	else 
-	{
-		//Pos.x = nextX - (RayDis * moveReverseDir.x);
-		//Pos.x = nextX - 35.f;
-		//Pos.y = nextY - 35.f;
-		Pos.x = nextX - (RayDis * moveReverseDir.x);
-	}
+	//else 
+	//{
+	//	//Pos.x = nextX - (RayDis * moveReverseDir.x);
+	//	//Pos.x = nextX - 35.f;
+	//	//Pos.y = nextY - 35.f;
+	//	Pos.x = nextX - (RayDis * moveReverseDir.x);
+	//}
 
 	//Pos.x = nextX - (RayDis * moveReverseDir.x);
 
@@ -167,38 +252,42 @@ void Item::DropMoveX(float TimeDelta)
 
 void Item::DropMoveY(float TimeDelta)
 {
-	Ray ray;
-	ray.origin = Pos;
+	//Ray ray;
+	//ray.origin = Pos;
 
-	moveDir = { Pos.x, Pos.y - prePos.y };
-	moveDir.y *= moveReverseDir.y;
+	//moveDir = { Pos.x, Pos.y - prePos.y };
+	//moveDir.y *= moveReverseDir.y;
 
-	ray.direction = moveDir.Normalized();
+	//ray.direction = moveDir.Normalized();
 
-	FPOINT rayPos = Pos;
-	rayPos.y += RayDis * moveReverseDir.y;
-	float nextY = rayPos.y + moveReverseDir.y * movePower.y * TimeDelta;
-	ray = { rayPos, {0.f, moveDir.y} };
-	RaycastHit out;
-	bool hit = CollisionManager::GetInstance()->RaycastAll(ray, moveReverseDir.y * movePower.y * TimeDelta, out, true, 1.f);
+	//FPOINT rayPos = Pos;
+	//rayPos.y += RayDis * moveReverseDir.y;
+	//float nextY = rayPos.y + moveReverseDir.y * movePower.y * TimeDelta;
+	//ray = { rayPos, {0.f, moveDir.y} };
+	//RaycastHit out;
+	//bool hit = CollisionManager::GetInstance()->RaycastAll(ray, moveReverseDir.y * movePower.y * TimeDelta, out, true, 1.f);
 
-	if (hit && nextY >= out.point.y)
-	{
-		// 충돌 지점에서 멈춤
+	//if (hit && nextY >= out.point.y)
+	//{
+	//	// 충돌 지점에서 멈춤
 
-		Pos.x = out.point.x - 35.f;
-		moveReverseDir.y *= -1;
-		movePower.y /= 3.f;
-	}
+	//	Pos.y = out.point.y - RayDis;
+	//	//moveReverseDir.y *= -1;
+	//	//movePower.y /= 3.f;
+	//	DropTime = 0.f;
+	//}
 
-	else
-	{
-		//Pos.y = nextY - (RayDis * moveReverseDir.y);
-		//Pos.x = nextX - 35.f;
-		//Pos.y = nextY - 35.f;
+	//else
+	//{
+	//	//Pos.y = nextY - (RayDis * moveReverseDir.y);
+	//	//Pos.x = nextX - 35.f;
+	//	//Pos.y = nextY - 35.f;
 
-		Pos.y = nextY - (RayDis * moveReverseDir.y);
-	}
+	//	// v0 * sin세타.t - 1/2g*t*t;
+	//	Pos.y += (0.5f * gravity * DropTime * DropTime);
+
+	//	//Pos.y = nextY - (RayDis * moveReverseDir.y);
+	//}
 
 	
 
@@ -225,4 +314,25 @@ void Item::ChangeState(ItemState state)
 void Item::DeadEvent()
 {
 
+}
+
+void Item::SetDrop()
+{
+	float angleRad = RandomRange(0.0f, 2.0f * 3.141592f); // 0 ~ 360도 (라디안)
+	float speed = RandomRange(250.0f, 450.0f);            // 속도도 랜덤
+	//float speed = 300.f;            // 속도도 랜덤
+
+	velocity =
+	{
+		//cosf(angleRad) * speed,  // 135도 (왼쪽 위)
+		//-sinf(angleRad) * speed
+
+		cosf(DEG_TO_RAD(135.f)) * speed,  // 135도 (왼쪽 위)
+		-sinf(DEG_TO_RAD(135.f)) * speed
+	};
+	acceleration = { 0, 0 };  // 가속도
+	totalForce = { 0.f,0.f };
+
+	useGravity = true;
+	bPhysics = true;
 }
