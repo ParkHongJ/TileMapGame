@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GameManager.h"
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -11,6 +12,11 @@ using json = nlohmann::json;
 void GameManager::Release()
 {
 	ReleaseInstance();
+}
+
+void GameManager::ReleaseStage()
+{
+
 }
 
 void GameManager::LoadTile(const char* path)
@@ -163,11 +169,16 @@ void GameManager::GenerateDecoTile()
 
 void GameManager::Init(const char* path)
 {
-	LoadTile(path);
+	string scenePath = "Data/" + string(path);
+
+	string tilePath = scenePath + ".tilemap";
+	string objectPath = scenePath + ".json";
+
+	LoadTile(tilePath.c_str());
 	GenerateDecoTile();
 	GenerateBorderTile();
 	//TODO юс╫ц
-	LoadObject("Data/map1.json");
+	LoadObject(objectPath.c_str());
 }
 
 bool GameManager::IsTileValid(int x, int y)

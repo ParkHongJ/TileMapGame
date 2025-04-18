@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "LoadingScene.h"
 #include "Image.h"
 

@@ -1,6 +1,6 @@
 // main.cpp
 
-#include "config.h"
+#include "pch.h"
 #include "MainGame.h"
 
 HINSTANCE g_hInstance;	// 프로그램 인스턴스 핸들

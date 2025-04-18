@@ -1,11 +1,14 @@
+#include "pch.h"
 #include "HongParticle.h"
 #include "CommonFunction.h"
 #include "CollisionManager.h"
 #include "Collider.h"
+#include "CameraManager.h"
+#include "Image.h"
 HRESULT HongParticle::Init()
 {
 	float angleRad = RandomRange(0.0f, 2.0f * 3.141592f); // 0 ~ 360도 (라디안)
-	float speed = RandomRange(250.0f, 450.0f);            // 속도도 랜덤
+	float speed = RandomRange(450.0f, 550.0f);            // 속도도 랜덤
 
 	velocity =
 	{
@@ -17,6 +20,8 @@ HRESULT HongParticle::Init()
 
 	useGravity = true;
 	bPhysics = true;
+
+	blood = ImageManager::GetInstance()->FindImage("Effect");
     return S_OK;
 }
 
@@ -52,8 +57,12 @@ void HongParticle::Update(float TimeDelta)
 
 		RaycastHit out;
 
-		if (CollisionManager::GetInstance()->RaycastAll(ray, moveLength, out))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		if (CollisionManager::GetInstance()->RaycastAll(ray, moveLength, out))
 		{
+			//충돌했으면 중력의 영향을 잠시 초기화
+			totalForce.x = 0.0f;
+			totalForce.y = 0.0f;
+
 			hitDistance = out.distance;
 
 			FPOINT colliderPos = out.collider->GetWorldPos();
@@ -71,17 +80,21 @@ void HongParticle::Update(float TimeDelta)
 			else
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
-			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
-			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
-
+			velocity = Reflect(velocity, hitNormal.Normalized());
+			
+			// 반사 속도가 너무 약하면, 살짝 보정
+			/*const float MIN_BOUNCE_SPEED = 150.f;
+			if (velocity.Length() < MIN_BOUNCE_SPEED)
+			{
+				velocity = velocity.Normalized() * MIN_BOUNCE_SPEED;
+			}*/
+			
 			velocity *= bounciness;
 
-			totalForce.x = 0.0f;
-			totalForce.y = 0.0f;
 
 			const float STOP_THRESHOLD = 100.f;
-			if (fabs(velocity.x) < STOP_THRESHOLD)
-				velocity.x = 0.f;
+			/*if (fabs(velocity.x) < STOP_THRESHOLD)
+				velocity.x = 0.f;*/
 			if (fabs(velocity.y) < STOP_THRESHOLD)
 				velocity.y = 0.f;
 
@@ -90,15 +103,12 @@ void HongParticle::Update(float TimeDelta)
 
 			ClampVector(velocity, 350.f);
 
-			if (velocity.Length() < 130.f)
+			if (velocity.Length() < STOP_THRESHOLD && velocity.y > 0.f)
 			{
 				velocity = { 0.f, 0.f };
 				useGravity = false;
 				bPhysics = false;
 			}
-
-			// 살짝 밀기 (겹침 방지)
-
 			Pos = out.point + hitNormal * 0.5f;
 		}
 		else
@@ -110,6 +120,13 @@ void HongParticle::Update(float TimeDelta)
 
 void HongParticle::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	DrawCenteredRect(renderTarget, Pos, 10.f, D2D1::ColorF::Magenta);
 
+	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+	//DrawCenteredRect(renderTarget, cameraPos, 10.f, D2D1::ColorF::Magenta);
+
+	float EffectSize = 30.f / ATLAS_TILE_SIZE;
+	blood->Render(renderTarget, cameraPos.x, cameraPos.y, EffectSize, EffectSize, 0, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+
+	wstring velocityText = L"x : " + to_wstring(velocity.x);
+	DrawD2DText(renderTarget, velocityText.c_str(), cameraPos.x, cameraPos.y + 15.f);
 }

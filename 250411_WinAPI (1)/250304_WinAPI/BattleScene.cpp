@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "BattleScene.h"
 #include "Image.h"
 #include "CommonFunction.h"

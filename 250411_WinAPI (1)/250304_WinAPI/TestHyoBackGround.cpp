@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TestHyoBackGround.h"
 #include "Image.h"
 #include "CameraManager.h"

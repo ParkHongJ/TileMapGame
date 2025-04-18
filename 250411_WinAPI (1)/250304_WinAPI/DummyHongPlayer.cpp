@@ -1,9 +1,11 @@
+#include "pch.h"
 #include "DummyHongPlayer.h"
 #include "CommonFunction.h"
 #include "CollisionManager.h"
 #include "Tile.h"
 #include "Collider.h"
 #include "HongParticle.h"
+#include "CameraManager.h"
 HRESULT DummyHongPlayer::Init()
 {
 	return S_OK;
@@ -255,12 +257,18 @@ void DummyHongPlayer::Update(float TimeDelta)
 	}
 }
 
+void DummyHongPlayer::LateUpdate(float TimeDelta)
+{
+	CameraManager::GetInstance()->SetTargetPos(Pos);
+}
+
 void DummyHongPlayer::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	DrawCenteredRect(renderTarget, Pos, 35.f, D2D1::ColorF::Magenta);
+	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+	DrawCenteredRect(renderTarget, cameraPos, 35.f, D2D1::ColorF::Magenta);
 
 	float radius = 100.f;
-	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(Pos.x, Pos.y), radius, radius), GBrush.Get());
+	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(cameraPos.x, cameraPos.y), radius, radius), GBrush.Get());
 
 
 	wstring wstr = L"TotalForce x : " + to_wstring(totalForce.x) + L" y : " + to_wstring(totalForce.y);

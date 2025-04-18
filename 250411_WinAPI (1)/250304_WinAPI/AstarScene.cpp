@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "AstarScene.h"
 #include <algorithm>
 

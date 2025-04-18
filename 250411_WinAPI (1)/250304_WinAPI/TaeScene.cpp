@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TaeScene.h"
 #include "Image.h"
 #include "ImageManager.h"

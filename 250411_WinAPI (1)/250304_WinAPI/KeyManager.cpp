@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "KeyManager.h"
 
 HRESULT KeyManager::Init()

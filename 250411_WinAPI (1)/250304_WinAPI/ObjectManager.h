@@ -23,7 +23,7 @@ public:
     void LateUpdate(float TimeDelta);
     void Render(ID2D1HwndRenderTarget* renderTarget);
     void Release();
-
+    void ClearObjects();
     void AddObject(RENDERORDER renderId, GameObject* obj);
     void AddObject(unsigned int id, RENDERORDER renderId, GameObject* obj);
     void ReplaceObject(unsigned int id, GameObject* obj);

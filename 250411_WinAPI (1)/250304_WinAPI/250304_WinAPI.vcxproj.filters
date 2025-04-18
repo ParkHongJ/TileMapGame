@@ -249,6 +249,15 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>MainGame\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitter.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -469,6 +478,15 @@
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitter.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleManager.h">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

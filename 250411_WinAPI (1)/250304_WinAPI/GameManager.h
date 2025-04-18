@@ -9,7 +9,7 @@ class GameManager : public Singleton<GameManager>
 {
 public:
 	void Release();
-
+	void ReleaseStage();
 
 	void LoadTile(const char* path);
 	void LoadObject(const char* path);

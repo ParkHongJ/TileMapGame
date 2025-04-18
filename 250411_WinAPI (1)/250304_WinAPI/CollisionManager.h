@@ -36,7 +36,7 @@ public:
 	void Update(float TimeDelta);
 	void DebugRender(ID2D1HwndRenderTarget* renderTarget);
 	void Release();
-
+	void Clear();
 public:
 	void Register(class Collider* collider);
 	void UnRegister(class Collider* collider);

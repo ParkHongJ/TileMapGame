@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "MainGame.h"
 #include "CommonFunction.h"
 #include "Image.h"
@@ -86,6 +87,8 @@ void MainGame::Release()
 	SceneManager::GetInstance()->Release();
 	KeyManager::GetInstance()->Release();
 	ImageManager::GetInstance()->Release();
+	ObjectManager::GetInstance()->ReleaseInstance();
+	CollisionManager::GetInstance()->ReleaseInstance();
 
 	CoUninitialize(); // 프로그램 종료 시 정리
 }

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TestYongSceneBackGround.h"
 #include "Image.h"
 

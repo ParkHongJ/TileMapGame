@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Whip.h"
 #include "Image.h"
 #include "CameraManager.h"

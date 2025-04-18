@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "CollisionManager.h"
 #include "Collider.h"
 #include "CommonFunction.h"
@@ -44,7 +45,13 @@ void CollisionManager::Update(float TimeDelta)
 
 void CollisionManager::Release()
 {
-	ReleaseInstance();
+    colliders.clear();
+	//ReleaseInstance();
+}
+
+void CollisionManager::Clear()
+{
+    colliders.clear();
 }
 
 void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)

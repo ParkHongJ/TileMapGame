@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TestAnimationObject.h"
 #include "AnimationManager.h"
 #include "PlayerStatus.h"

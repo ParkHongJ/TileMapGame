@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Bomb.h"
 #include "Image.h"
 #include "Collider.h"

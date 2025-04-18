@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Scene.h"
 
 HRESULT Scene::Init(ID2D1HwndRenderTarget* renderTarget)

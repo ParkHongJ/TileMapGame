@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "playerUI.h"
 #include "Image.h"
 #include "JinScene.h"

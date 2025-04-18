@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "YongScene.h"
 #include "Image.h"
 #include "TestAnimationObject.h"

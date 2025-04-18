@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ObjectFactory.h"
 
 ObjectFactory& ObjectFactory::Get()

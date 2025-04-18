@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ObjectManager.h"
 #include "GameObject.h"
 #include <queue>
@@ -169,7 +170,22 @@ void ObjectManager::Release()
 
 	objects.clear();
 
-	ReleaseInstance();
+	//ReleaseInstance();
+}
+
+void ObjectManager::ClearObjects()
+{
+	for (auto& iter : objects)
+	{
+		if (iter.second)
+		{
+			iter.second->Release();
+			delete iter.second;
+			iter.second = nullptr;
+		}
+	}
+
+	objects.clear();
 }
 
 ObjectManager::~ObjectManager()

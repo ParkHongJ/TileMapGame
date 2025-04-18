@@ -1,5 +1,5 @@
+#include "pch.h"
 #include "PlayerStatus.h"
-#include "config.h"
 
 PlayerStatus::PlayerStatus()
 {

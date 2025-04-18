@@ -13,12 +13,13 @@ public:
 	FPOINT acceleration = { 0, 0 };  // 가속도
 
 	float mass = 1.0f;
-	FPOINT gravity = { 0, 98.0f };  // 중력
+	FPOINT gravity = { 0, 980.0f };  // 중력
 	bool useGravity = false;
 	bool bPhysics = false;
 	FPOINT totalForce = { 0, 0 };
-	float bounciness = 0.4f;
+	float bounciness = 0.36f;
 
+	Image* blood = nullptr;
 	float RandomRange(float min, float max)
 	{
 		float r = (float)rand() / RAND_MAX; // 0.0 ~ 1.0

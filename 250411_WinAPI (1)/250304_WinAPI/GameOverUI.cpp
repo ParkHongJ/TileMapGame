@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GameOverUI.h"
 #include "Image.h"
 #include "JinScene.h"

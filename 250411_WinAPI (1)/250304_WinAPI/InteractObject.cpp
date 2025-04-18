@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "InteractObject.h"
 
 void InteractObject::Interact()

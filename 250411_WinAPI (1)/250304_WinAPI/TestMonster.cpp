@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TestMonster.h"
 #include "TestAnimationObject.h"
 

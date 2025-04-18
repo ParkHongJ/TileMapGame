@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GameScene.h"
 #include "GameManager.h"
 #include "TaeScene.h"
@@ -8,9 +9,7 @@
 #include "TimerManager.h"
 #include "CollisionManager.h"
 #include "Collider.h"
-#include "GameManager.h"
 #include "ObjectManager.h"
-#include "Image.h"
 #include "TestAnimationObject.h"
 #include "TestRenderSort.h"
 #include "TestYongSceneBackGround.h"
@@ -22,7 +21,6 @@
 
 HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
-
     ImageManager::GetInstance()->AddImage(
         "TestJunYongAttack", L"Image/TestJunYongAttack.bmp", 6, 1, renderTarget);
 
@@ -41,7 +39,7 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
 
-    GameManager::GetInstance()->Init("Data/map1.tilemap");
+    GameManager::GetInstance()->Init("map1");
 
     CameraManager::GetInstance()->Init();
  
@@ -69,7 +67,9 @@ void GameScene::Release()
     //    delete yellow;
     //    yellow = nullptr;
     //}
+    //ObjectManager::GetInstance()->Release();
 
+    //CollisionManager::GetInstance()->Release();
 }
 
 void GameScene::Update(float TimeDelta)

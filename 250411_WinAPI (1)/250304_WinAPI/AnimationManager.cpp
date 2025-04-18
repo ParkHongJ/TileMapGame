@@ -1,6 +1,6 @@
+#include "pch.h"
 #include "AnimationManager.h"
 #include "Animation.h"
-
 AnimationManager::AnimationManager()
 {
 }
