@@ -7,9 +7,8 @@
 #include "AstarScene.h"
 #include "LoadingScene.h"
 #include "CollisionManager.h"
-#include "playerUI.h"
 #include "GameOverUI.h"
-
+#include "PlayerUI.h"
 #include "HongScene.h"
 #include "HyoScene.h"
 #include "TaeScene.h"
@@ -29,18 +28,18 @@ HRESULT MainGame::Init()
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init(m_pRenderTarget.Get());
 
-	//SceneManager::GetInstance()->AddScene("A*???????", new AstarScene());
-	//SceneManager::GetInstance()->AddScene("??????_1", new BattleScene());
+	//SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
+	//SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
 
-	SceneManager::GetInstance()->AddScene("???", new HongScene());
-	SceneManager::GetInstance()->AddScene("???", new HyoScene());
-	SceneManager::GetInstance()->AddScene("????", new JinScene());
-	SceneManager::GetInstance()->AddScene("?°?", new TaeScene());
-	SceneManager::GetInstance()->AddScene("???", new YongScene());
+	SceneManager::GetInstance()->AddScene("홍준", new HongScene());
+	SceneManager::GetInstance()->AddScene("효진", new HyoScene());
+	SceneManager::GetInstance()->AddScene("진석", new JinScene());
+	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
+	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
 	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
-	
-	//SceneManager::GetInstance()->AddLoadingScene("?ε?_1", new LoadingScene());
+
+	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 
 
 	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
@@ -49,10 +48,10 @@ HRESULT MainGame::Init()
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
-		"Tae_Player", TEXT("Textures/char_yellow.png"),16,16, m_pRenderTarget.Get());
+		"Tae_Player", TEXT("Textures/char_yellow.png"), 16, 16, m_pRenderTarget.Get());
 
-	//SceneManager::GetInstance()->ChangeScene("???");
-	//SceneManager::GetInstance()->ChangeScene("???");
+	//SceneManager::GetInstance()->ChangeScene("효진");
+	SceneManager::GetInstance()->ChangeScene("준용");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
@@ -62,7 +61,7 @@ HRESULT MainGame::Init()
 	if (FAILED(backBuffer->Init(TILEMAPTOOL_X, TILEMAPTOOL_Y)))
 	{
 		MessageBox(g_hWnd,
-			TEXT("????? ???? ????"), TEXT("???"), MB_OK);
+			TEXT("백버퍼 생성 실패"), TEXT("경고"), MB_OK);
 		return E_FAIL;
 	}*/
 
@@ -86,7 +85,7 @@ void MainGame::Release()
 	KeyManager::GetInstance()->Release();
 	ImageManager::GetInstance()->Release();
 
-	CoUninitialize(); // ???α?? ???? ?? ????
+	CoUninitialize(); // 프로그램 종료 시 정리
 }
 
 void MainGame::Update()
@@ -112,7 +111,7 @@ void MainGame::Render()
 	Draw();
 
 	EndDraw();
-	
+
 }
 
 LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -123,26 +122,26 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 		switch (wParam)
 		{
 		case 'a': case 'A':
-			//SceneManager::GetInstance()->ChangeScene("??????_1");
+			//SceneManager::GetInstance()->ChangeScene("전투씬_1");
 			break;
 		case 'd': case 'D':
-			SceneManager::GetInstance()->ChangeScene("???");
+			SceneManager::GetInstance()->ChangeScene("준용");
 			break;
 		case 'w': case 'W':
 			SceneManager::GetInstance()->ChangeScene("GameOverUI");
 			break;
 
 		case '1':
-			SceneManager::GetInstance()->ChangeScene("?°?");
+			SceneManager::GetInstance()->ChangeScene("태관");
 			break;
 		case '3':
-			SceneManager::GetInstance()->ChangeScene("???");
+			SceneManager::GetInstance()->ChangeScene("홍준");
 			break;
 		case '4':
-			SceneManager::GetInstance()->ChangeScene("???");
+			SceneManager::GetInstance()->ChangeScene("효진");
 			break;
 		}
-	
+
 		break;
 	case WM_LBUTTONDOWN:
 		g_ptMouse.x = LOWORD(lParam);
@@ -174,7 +173,7 @@ MainGame::~MainGame()
 HRESULT MainGame::InitD2D()
 {
 	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
-	// Factory ????
+	// Factory 생성
 	HRESULT hr = D2D1CreateFactory(
 		D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		__uuidof(ID2D1Factory),
@@ -185,7 +184,7 @@ HRESULT MainGame::InitD2D()
 	if (FAILED(hr))
 		return E_FAIL;
 
-	// RenderTarget ????
+	// RenderTarget 설정
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 
@@ -195,7 +194,7 @@ HRESULT MainGame::InitD2D()
 
 	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
 
-	// ???? (??: ?? ??)
+	// 브러시 (예: 기본 색)
 	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &GBrush);
 
 	if (!GdwriteFactory)
@@ -208,11 +207,11 @@ HRESULT MainGame::InitD2D()
 
 		if (FAILED(hr))
 		{
-			MessageBox(nullptr, L"DWriteCreateFactory ????", L"Error", MB_OK);
+			MessageBox(nullptr, L"DWriteCreateFactory 실패", L"Error", MB_OK);
 		}
 
 		GdwriteFactory->CreateTextFormat(
-			L"???? ????",                // Font name
+			L"맑은 고딕",                // Font name
 			nullptr,                    // Font collection
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
@@ -235,13 +234,13 @@ void MainGame::BeginDraw()
 
 void MainGame::Draw()
 {
-	//??? ?????? ??????
+	//이게 맵이라고 생각해
 	//backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
 
 	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
 	ObjectManager::GetInstance()->Render(m_pRenderTarget.Get());
 	// Legacy
-	//// ?????? ???? ????
+	//// 백버퍼에 먼저 복사
 	//HDC hBackBufferDC = backBuffer->GetMemDC();
 
 	//SceneManager::GetInstance()->Render(hBackBufferDC);
@@ -250,7 +249,7 @@ void MainGame::Draw()
 	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
 	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
 
-	//// ?????? ??? ?????? ???? hdc?? ????
+	//// 백버퍼에 있는 내용을 메인 hdc에 복사
 	//backBuffer->Render(hdc);
 }
 
@@ -261,6 +260,6 @@ void MainGame::EndDraw()
 	if (hr == D2DERR_RECREATE_TARGET)
 	{
 		m_pRenderTarget.Reset();
-		Init(); // ??? ????
+		Init(); // 다시 생성
 	}
 }
