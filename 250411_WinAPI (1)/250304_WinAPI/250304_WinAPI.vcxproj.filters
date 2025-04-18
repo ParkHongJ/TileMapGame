@@ -258,6 +258,12 @@
     <ClCompile Include="ParticleManager.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
+     <ClCompile Include="Monster.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="SnakeMonster.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -487,6 +493,12 @@
     </ClInclude>
     <ClInclude Include="ParticleManager.h">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="SnakeMonster.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

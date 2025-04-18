@@ -1,11 +1,13 @@
 #pragma once
 #include "Scene.h"
 class Character;
+class SnakeMonster;
 class BoxCollider;
 class GameScene : public Scene
 {
 private:
 
+	SnakeMonster* snake;
 	
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
