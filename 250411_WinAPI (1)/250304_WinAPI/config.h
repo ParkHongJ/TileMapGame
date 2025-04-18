@@ -10,6 +10,7 @@
 #include <bitset>
 #include <map>
 #include <vector>
+#include <queue>
 #include <d2d1.h>             // 기본 D2D (선택적)
 #include <wrl/client.h>
 

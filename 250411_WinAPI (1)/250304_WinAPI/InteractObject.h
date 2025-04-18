@@ -1,13 +1,21 @@
 #pragma once
 #include "GameObject.h"
 
-enum class INTERACTSTATE
-{
-	STATE_UNEQUIP, STATE_EQUIP
-};
+
 
 class InteractObject : public GameObject
 {
-	
+	virtual void Interact();
+
+	virtual void Pick();
+
+	virtual void Picked();
+
+	virtual void Move();
+
+	InteractObject* owner;
+	InteractObject* mine;
+
+
 };
 

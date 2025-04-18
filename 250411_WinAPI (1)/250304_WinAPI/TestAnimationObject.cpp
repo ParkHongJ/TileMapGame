@@ -2,7 +2,20 @@
 #include "AnimationManager.h"
 #include "PlayerStatus.h"
 #include "Collider.h"
+#include "CollisionManager.h"
+#include "Item.h"
 #include "Image.h"
+#include "Bomb.h"
+
+TestAnimationObject::TestAnimationObject()
+{
+	objectRenderId = RENDER_PLAYER;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
+	// GetComponent 활용해서 캐스팅 부담 덜어보기.
+
+	itemOffsetPos = { 30.f,10.f };
+	int i = 5;
+}
 
 HRESULT TestAnimationObject::Init()
 {
@@ -23,13 +36,12 @@ HRESULT TestAnimationObject::Init()
 	//AnimManager->RegisterAnimation("걷기", Anim, true);
 	//Count = 0;
 
-	image = ImageManager::GetInstance()->FindImage("TestJunYongAttack");
+	image = ImageManager::GetInstance()->FindImage("Tae_Player"); 
+	// 태관님 플레이어 기준으로 맞춰보기
 
 	status = new PlayerStatus();
 	Pos = { 500, 100 };
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 150,150 }, this);
-
-
 	return S_OK;
 }
 
@@ -79,8 +91,44 @@ void TestAnimationObject::Update(float TimeDelta)
 		Pos.y += 300.f * TimeDelta;
 	}
 
+	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RETURN))
+	{
+		if (HoldItem)
+		{
 
-//	AnimManager->Update(TimeDelta);
+			HoldItem->UnEquip(&Pos);
+			HoldItem = nullptr;
+		}
+		//pair<GameObject*, GameObject*> temp = CollisionManager::GetInstance()->GetInteractObjectPairInCircle(this, 30.f);
+		//if ((temp.first && temp.second))
+		//{
+		//	GameObject* dest = temp.second;
+		//	dest->SetObjectRenderId(RENDER_HOLD);
+		//	dynamic_cast<Item*>(dest)->Equip(this);
+		//}
+	}
+
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown('K') && 0 < status->GetBombCount())
+	{
+		status->MinusBombCount();
+		Bomb* temp = new Bomb();
+		ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
+		FPOINT offset = { 10,0 };
+		temp->SetPos(Pos + offset);
+	}
+
+	testAbleHold = false;
+
+	if (KeyManager::GetInstance()->IsStayKeyDown(VK_SPACE))
+	{
+		testAbleHold = true;
+	}
+
+	if (HoldItem)
+	{
+		HoldItem->SetPos(Pos + itemOffsetPos);
+	}
 }
 
 void TestAnimationObject::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -98,6 +146,65 @@ void TestAnimationObject::Release()
 		delete AnimManager;
 		AnimManager = nullptr;
 	}
+
+	if (status)
+	{
+		delete status;
+		status = nullptr;
+	}
+}
+
+void TestAnimationObject::Detect(GameObject* obj)
+{
+	if (obj)
+	{
+		//TakeCollision(1.f);
+
+		if (auto item = obj->GetType<Item>())
+		{
+			if (testAbleHold)
+			{
+  				switch (item->GetItemType())
+				{
+				case ItemType::TYPE_LIMIT:
+					HoldItem = item;
+					break;
+				case ItemType::TYPE_ALWAYS:
+					HoldItem = item;
+					break;
+				}
+
+				testHold = true;
+			}
+
+			else if (ItemType::TYPE_ONCE == item->GetItemType())
+			{
+				item->Equip(status->GetInfo());
+			}
+		}
+
+		//if ("Item" == obj->GetName())
+		//{
+		//	if (testAbleHold && !testHold)
+		//	{
+		//		switch (item->GetItemType())
+		//		{
+		//		case ItemType::TYPE_ONCE:
+		//			item->Equip(status->GetInfo());
+		//			break;
+		//		case ItemType::TYPE_LIMIT:
+		//			HoldItem = item;
+		//			break;
+		//		case ItemType::TYPE_ALWAYS:
+		//			HoldItem = item;
+		//			break;
+		//		}
+		//	}
+
+		//	testHold = true;
+		//}
+	}
+
 }
 
 void TestAnimationObject::Attack(int _Test)

@@ -47,6 +47,9 @@ public:
 	
 	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, bool debugDraw = false, float debugTime = 0.0f);
 	bool GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects);
+	bool GetObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects);
+	bool GetInteractObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects);
+	pair<GameObject*, GameObject*> GetInteractObjectPairInCircle(GameObject* owner, float radius);
 
 private:
 	void DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length);

@@ -40,8 +40,6 @@ bool Animation::Update(float TimeDelta)
 
 	UpdateEvent();
 
-	PreElapseTime = CurElapseTime;
-
 	return Ret && !IsLoop;
 }
 
@@ -88,6 +86,8 @@ void Animation::UpdateEvent()
 			PlayEvent(iter.second);
 		}
 	}
+
+	PreElapseTime = CurElapseTime;
 }
 
 void Animation::Render(ID2D1HwndRenderTarget* renderTarget)

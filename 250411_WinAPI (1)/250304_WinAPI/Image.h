@@ -90,6 +90,7 @@ public:
 		float srcW, float srcH);
 
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, bool isFlip = false);
+	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, float scaleX, float scaleY, bool isFlip = false);
 	void Release();
 
 	inline ID2D1Bitmap* GetBitmap() const { return imageInfo->bitmap.Get(); }

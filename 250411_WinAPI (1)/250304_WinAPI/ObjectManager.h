@@ -5,6 +5,7 @@
 
 
 class GameObject;
+class InteractObject;
 
 enum RENDERORDER
 {
@@ -33,7 +34,11 @@ public:
 
 private:
     unordered_map<unsigned int, GameObject*> objects;
+    //unordered_map<unsigned int, GameObject*> tiles;
+    //unordered_map<unsigned int, InteractObject*> interactObjects;
     list<GameObject*> renderObjects[RENDER_END];
     unsigned int nextId;
+    //unsigned int nextTileId;
+    //unsigned int nextInteractId;
 };
 

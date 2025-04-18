@@ -57,6 +57,12 @@
     <Filter Include="MainGame\Scene\Tae\State">
       <UniqueIdentifier>{2a8b99f6-b807-4ce4-ae35-684fc3f20459}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Monster">
+      <UniqueIdentifier>{ea65e594-7dd5-4b97-98b6-e65ba5dc0df9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Yong\Component">
+      <UniqueIdentifier>{d61a132b-bce0-4540-9b69-d895d66bd617}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\Scene\Tae\Character">
       <UniqueIdentifier>{d52b7bdf-0923-4e8c-be32-2fae55062330}</UniqueIdentifier>
     </Filter>
@@ -206,6 +212,21 @@
     </ClCompile>
     <ClCompile Include="Npc_InteractUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
+    </ClCompile>
+    <ClCompile Include="Gun.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMonster.cpp">
+      <Filter>MainGame\Scene\Yong\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>MainGame\Scene\Yong\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseBomb.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
@@ -411,6 +432,21 @@
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
     <ClInclude Include="InteractObject.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Gun.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMonster.h">
+      <Filter>MainGame\Scene\Yong\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>MainGame\Scene\Yong\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseBomb.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
