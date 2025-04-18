@@ -148,6 +148,7 @@
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="IncreaseBomb.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraManager.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="IncreaseBomb.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraManager.h" />

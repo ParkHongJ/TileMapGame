@@ -1,27 +1,16 @@
 #pragma once
 #include "Scene.h"
-#include "GameObject.h"
-
-class Image;
-class Character; 
-class BoxCollider;
-
-class TaeScene : public Scene
+class GameScene : public Scene
 {
-private:
-
-	Character* yellow;
-	BoxCollider* yellowCollider = nullptr;
-
-
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
+	virtual void LateUpdate(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
-	TaeScene() {};
-	virtual ~TaeScene() {};
-
+public:
+	GameScene() {};
+	virtual ~GameScene() {};
 };
 

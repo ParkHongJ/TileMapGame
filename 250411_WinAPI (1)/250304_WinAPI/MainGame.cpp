@@ -94,7 +94,6 @@ void MainGame::Update()
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	SceneManager::GetInstance()->Update(deltaTime);
 	ObjectManager::GetInstance()->Update(deltaTime);
-	CollisionManager::GetInstance()->Update(deltaTime);
 
 }
 
@@ -102,6 +101,7 @@ void MainGame::LateUpdate()
 {
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	ObjectManager::GetInstance()->LateUpdate(deltaTime);
+	CollisionManager::GetInstance()->Update(deltaTime);
 }
 
 void MainGame::Render()

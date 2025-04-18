@@ -33,7 +33,7 @@ void HongScene::Release()
 void HongScene::Update(float TimeDelta)
 {
 	//ObjectManager::GetInstance()->Update(TimeDelta);
-	CollisionManager::GetInstance()->Update(TimeDelta);
+	//CollisionManager::GetInstance()->Update(TimeDelta);
 }
 
 void HongScene::LateUpdate(float TimeDelta)
@@ -46,6 +46,6 @@ void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
 	//ObjectManager::GetInstance()->Render(renderTarget);
 	
 #ifdef _DEBUG
-	CollisionManager::GetInstance()->DebugRender(renderTarget);
+	//CollisionManager::GetInstance()->DebugRender(renderTarget);
 #endif _DEBUG
 }
