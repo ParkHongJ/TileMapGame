@@ -39,8 +39,7 @@ void MoveState::Update() {
     if (isDown) {
        
        if(character->GetCurrAnimEnd() && currentSubState == SubState::MOVE_LOOKDOWN_START){
-            OutputDebugStringA("[디버그] MOVE_LOOKDOWN_LOOP 상태 전환\n");
-            
+       
             ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
         }
        else if (currentSubState != SubState::MOVE_LOOKDOWN_LOOP) {

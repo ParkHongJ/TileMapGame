@@ -20,6 +20,14 @@ void AttackState::Update()
       
     }
 
+
+    // 아이템에 따라 분기
+
+    //switch (character->GetCurrItem())
+    //{
+
+    //}
+
     switch (currentSubState)
     {
     case SubState::ATTACK_WHIP:

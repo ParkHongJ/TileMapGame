@@ -8,7 +8,18 @@ void InteractionState::Enter(Character* character)
 
 void InteractionState::Update()
 {
-    // 상태 변경 로직이 있다면 여기에
+
+
+    if (character->GetIsOnLadder())
+    {
+        ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
+    }
+    else if (character->GetIsOnRope())
+    {
+        ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
+    }
+
+
 }
 
 void InteractionState::ChangeSubState(SubState newSubState)
@@ -21,4 +32,18 @@ void InteractionState::Exit()
 {
     currentSubState = SubState::NONE;
     character->SetFrameTime(0.0f);
+}
+
+const char* InteractionState::GetSubStateName() const {
+    switch (currentSubState) {
+    case SubState::NONE:                     return "NONE";
+    case SubState::INTERACTION_CLIMB_LADDER: return "INTERACTION_CLIMB_LADDER";
+    case SubState::INTERACTION_CLIMB_ROPE:   return "INTERACTION_CLIMB_ROPE";
+    case SubState::INTERACTION_ENTER_TUNNEL: return "INTERACTION_ENTER_TUNNEL";
+    case SubState::INTERACTION_EXIT_TUNNEL:  return "INTERACTION_EXIT_TUNNEL";
+    case SubState::INTERACTION_EXIT_LEVEL:   return "INTERACTION_EXIT_LEVEL";
+    case SubState::INTERACTION_HOLD_ITEM:    return "INTERACTION_HOLD_ITEM";
+    case SubState::INTERACTION_PUSH_ITEM:    return "INTERACTION_PUSH_ITEM";
+    default:                                 return "UNKNOWN_INTERACTION_STATE";
+    }
 }

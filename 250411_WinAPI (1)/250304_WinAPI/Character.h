@@ -23,23 +23,20 @@ class Character : public GameObject
 private:
 	map<std::pair<unsigned int, unsigned int>, FrameInfo> animationMap;
 
+	Image*				  playerImage;
 	CharacterState*				state;
 
-	BoxCollider* yellowCollider;
+	BoxCollider*		     Collider;
 
-	Image*				  playerImage;
+	//Item*				     currItem;
 
-	FPOINT						  dir;
 	FPOINT				     velocity;
-	RECT			     colliderRect;
 
+
+	bool					   isFlip;
 	float					frameTime;
 	POINT				 currFrameInd;
-
 	FrameInfo		    currFrameInfo;
-	FrameInfo           jumpFrameInfo;
-	FrameInfo		  attackFrameInfo;
-	FrameInfo			ropeFrameInfo;
 
 	float						speed;
 	float				  attackSpeed;
@@ -52,7 +49,6 @@ private:
 	bool                      isInAir;
 
 
-	bool					   isFlip;
 	bool                  isAttacking;
 	bool					  isOnPet;
 	
@@ -67,16 +63,25 @@ private:
 	float			 lookDownLockTime;
 
 
-
 	bool			   isTouchingLeft;
 	bool			  isTouchingRight;
 	bool				isTouchingTop;
 	bool		     isTouchingBottom;
 
-	float bottomHitDist = 10000.0f; // 캐릭터에서 땅까지의 거리 (기본은 아주 큰 값)
+	bool				isOnLadder;
+	bool				isOnRope;
+
+
+	float	bottomHitDist = 10000.0f; 
 
 	float colliderSize;
 	float colliderOffset;
+
+	priority_queue<pair<float, GameObject*>> interActionPQ;
+	float								interactionRadius;
+	float								interactionOffset;
+
+
 
 public:
 	static IdleState					idleState;
@@ -97,8 +102,9 @@ public:
 	// Move
 
 
-	void SetDir(FPOINT dir) { this->dir = dir; }
 	void Move();
+	bool MoveY();
+	bool CanGoY(float vy);
 	void SetYVelocity(float velocityY) { this->velocity.y = velocityY; }
 	void SetXVelocity(float velocityX) { this->velocity.x = velocityX; }
 	
@@ -137,11 +143,21 @@ public:
 	void SetIsAttacking(bool input) { this->isAttacking = input; }
 	
 
+	// 사다리 상태
+	void SetIsOnLadder(bool value) { isOnLadder = value; }
+	bool GetIsOnLadder() const { return isOnLadder; }
+
+	// 밧줄 상태
+	void SetIsOnRope(bool value) { isOnRope = value; }
+	bool GetIsOnRope() const { return isOnRope; }
+
+
 
 	// HFSM
 	void HandleIdleLogic();
 	void HandleMoveLogic();
 	void HandleAttackLogic();
+	void HandleInteractionLogic();
 
 
 
@@ -161,9 +177,6 @@ public:
 	void ChangeState(CharacterState* newState);
 
 	bool PressAnyKey();
-
-	RECT GetColliderSize() { return { colliderRect.left,colliderRect.top,colliderRect.right,colliderRect.bottom }; }
-	
 
 	Character() {};
 	virtual ~Character() {};

@@ -133,8 +133,8 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			SceneManager::GetInstance()->ChangeScene("GameOverUI");
 			break;
 
-		case '1':
-			SceneManager::GetInstance()->ChangeScene("태관");
+		//case '1':
+		//	SceneManager::GetInstance()->ChangeScene("태관");
 			break;
 		case '3':
 			SceneManager::GetInstance()->ChangeScene("홍준");
