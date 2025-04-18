@@ -9,29 +9,29 @@ HRESULT playerUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	tempChar = new JinScene();
 	tempChar->Init(renderTarget);
 
-	ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
-	playerLifeImage = ImageManager::GetInstance()->FindImage("playerLife");
+	//ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
+	//playerLifeImage = ImageManager::GetInstance()->FindImage("playerLife");
 
-	ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
-	playerLifeRunsOutImage = ImageManager::GetInstance()->FindImage("playerLifeRunsOut");
+	//ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
+	//playerLifeRunsOutImage = ImageManager::GetInstance()->FindImage("playerLifeRunsOut");
 
-	ImageManager::GetInstance()->AddImage("bombImage", L"Textures/UI/Hud/bomb.png", renderTarget);
-	bombImage = ImageManager::GetInstance()->FindImage("bombImage");
+	//ImageManager::GetInstance()->AddImage("playerBombImage", L"Textures/UI/Hud/bomb.png", renderTarget);
+	//bombImage = ImageManager::GetInstance()->FindImage("playerBombImage");
 
-	ImageManager::GetInstance()->AddImage("ropeImage", L"Textures/UI/Hud/rope.png", renderTarget);
-	ropeImage = ImageManager::GetInstance()->FindImage("ropeImage");
+	//ImageManager::GetInstance()->AddImage("playerRopeImage", L"Textures/UI/Hud/rope.png", renderTarget);
+	//ropeImage = ImageManager::GetInstance()->FindImage("playerRopeImage");
 
-	ImageManager::GetInstance()->AddImage("currencyImage", L"Textures/UI/Hud/currency.png", renderTarget);
-	currencyImage = ImageManager::GetInstance()->FindImage("currencyImage");
+	//ImageManager::GetInstance()->AddImage("currencyImage", L"Textures/UI/Hud/currency.png", renderTarget);
+	//currencyImage = ImageManager::GetInstance()->FindImage("currencyImage");
 
-	ImageManager::GetInstance()->AddImage("sandGlassImage", L"Textures/UI/Hud/sandGlass.png", renderTarget);
-	sandGlassImage = ImageManager::GetInstance()->FindImage("sandGlassImage");
+	//ImageManager::GetInstance()->AddImage("sandGlassImage", L"Textures/UI/Hud/sandGlass.png", renderTarget);
+	//sandGlassImage = ImageManager::GetInstance()->FindImage("sandGlassImage");
 
-	ImageManager::GetInstance()->AddImage("currencyBackground", L"Textures/UI/Hud/currencyBackground.png", renderTarget);
-	currencyBackgroundImage = ImageManager::GetInstance()->FindImage("currencyBackground");
+	//ImageManager::GetInstance()->AddImage("playerGoldImage", L"Textures/UI/Hud/currencyBackground.png", renderTarget);
+	//currencyBackgroundImage = ImageManager::GetInstance()->FindImage("playerGoldImage");
 
-	ImageManager::GetInstance()->AddImage("lightBulb", L"Textures/UI/Hud/lightBulb.png", renderTarget);
-	lightBulbImage = ImageManager::GetInstance()->FindImage("lightBulb");
+	//ImageManager::GetInstance()->AddImage("lightBulb", L"Textures/UI/Hud/lightBulb.png", renderTarget);
+	//lightBulbImage = ImageManager::GetInstance()->FindImage("lightBulb");
 
 	lifeCount = tempChar->GetPlayerLife();
 	bombCount = tempChar->GetPlayerBomb();

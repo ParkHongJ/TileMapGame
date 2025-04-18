@@ -19,6 +19,13 @@
 #include "Whip.h"
 #include "IncreaseBomb.h"
 #include "CameraManager.h"
+#include "playerHP_UI.h"
+#include "playerGold_UI.h"
+#include "goldBackground_UI.h"
+#include "playerBomb_UI.h"
+#include "playerRope_UI.h"
+#include "sandGlass_UI.h"
+#include "lightBulb_UI.h"
 
 HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -40,6 +47,15 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("playerBombImage", L"Textures/UI/Hud/bomb.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("playerRopeImage", L"Textures/UI/Hud/rope.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("playerGoldImage", L"Textures/UI/Hud/currency.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("goldBackgroundImage", L"Textures/UI/Hud/currencyBackground.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("sandGlassImage", L"Textures/UI/Hud/sandGlass.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("lightBulbImage", L"Textures/UI/Hud/lightBulb.png", renderTarget);
+
 
     GameManager::GetInstance()->Init("Data/map1.tilemap");
 
@@ -57,6 +73,13 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new sandGlass_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new lightBulb_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerRope_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI());
 
     return S_OK;
 }
@@ -88,7 +111,7 @@ void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
     Viewport viewTile = CameraManager::GetInstance()->GetInRect();
    /* if (yellow)
         yellow->Render(renderTarget);*/
-
+    
 
 
 }
