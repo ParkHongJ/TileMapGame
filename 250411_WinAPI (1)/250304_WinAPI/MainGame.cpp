@@ -17,6 +17,7 @@
 #include "YongScene.h"
 #include "GameScene.h"
 #include "ObjectRegister.h"
+#include "ParticleManager.h"
 
 
 HRESULT MainGame::Init()

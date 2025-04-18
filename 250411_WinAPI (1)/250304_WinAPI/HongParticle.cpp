@@ -7,19 +7,23 @@
 #include "Image.h"
 HRESULT HongParticle::Init()
 {
-	float angleRad = RandomRange(0.0f, 2.0f * 3.141592f); // 0 ~ 360도 (라디안)
-	float speed = RandomRange(450.0f, 550.0f);            // 속도도 랜덤
+	float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+	float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
 
 	velocity =
 	{
-		cosf(angleRad) * speed,  // 135도 (왼쪽 위)
-		-sinf(angleRad) * speed
+		sinf(angleRad) * speed,
+		-cosf(angleRad) * speed  // 135도 (왼쪽 위)
 	};
 	acceleration = { 0, 0 };  // 가속도
 	totalForce = { 0.f,0.f };
 
 	useGravity = true;
 	bPhysics = true;
+
+
+	float effectScale = 30.f / ATLAS_TILE_SIZE;
+	scale = { effectScale, effectScale };
 
 	blood = ImageManager::GetInstance()->FindImage("Effect");
     return S_OK;
@@ -31,6 +35,26 @@ void HongParticle::Release()
 
 void HongParticle::Update(float TimeDelta)
 {
+	/*lifeTime -= TimeDelta * 0.1f;
+	if (lifeTime <= 0.f)
+	{
+		SetActive(false);
+	}
+	else
+	{
+		scale.x -= TimeDelta * 0.1f;
+		scale.y -= TimeDelta * 0.1f;
+
+		if (scale.x <= 0.f)
+		{
+			scale.x = 0.f;
+		}
+		if (scale.y <= 0.f)
+		{
+			scale.y = 0.f;
+		}
+	}*/
+
 	if (bPhysics)
 	{
 		if (useGravity)
@@ -39,7 +63,7 @@ void HongParticle::Update(float TimeDelta)
 		}
 
 		// force 제한
-		ClampVector(totalForce, 450.f);
+		ClampVector(totalForce, 850.f);
 
 		acceleration = totalForce / mass;
 		velocity += acceleration * TimeDelta;
@@ -81,27 +105,17 @@ void HongParticle::Update(float TimeDelta)
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
 			velocity = Reflect(velocity, hitNormal.Normalized());
-			
-			// 반사 속도가 너무 약하면, 살짝 보정
-			/*const float MIN_BOUNCE_SPEED = 150.f;
-			if (velocity.Length() < MIN_BOUNCE_SPEED)
-			{
-				velocity = velocity.Normalized() * MIN_BOUNCE_SPEED;
-			}*/
-			
+						
 			velocity *= bounciness;
 
-
 			const float STOP_THRESHOLD = 100.f;
-			/*if (fabs(velocity.x) < STOP_THRESHOLD)
-				velocity.x = 0.f;*/
 			if (fabs(velocity.y) < STOP_THRESHOLD)
 				velocity.y = 0.f;
 
 			// 보정 위치
 			Pos += ray.direction * hitDistance;
 
-			ClampVector(velocity, 350.f);
+			ClampVector(velocity, 450.f);
 
 			if (velocity.Length() < STOP_THRESHOLD && velocity.y > 0.f)
 			{
@@ -120,12 +134,9 @@ void HongParticle::Update(float TimeDelta)
 
 void HongParticle::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-
 	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
-	//DrawCenteredRect(renderTarget, cameraPos, 10.f, D2D1::ColorF::Magenta);
 
-	float EffectSize = 30.f / ATLAS_TILE_SIZE;
-	blood->Render(renderTarget, cameraPos.x, cameraPos.y, EffectSize, EffectSize, 0, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+	blood->Render(renderTarget, cameraPos.x, cameraPos.y, scale.x, scale.y, 0, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 
 	wstring velocityText = L"x : " + to_wstring(velocity.x);
 	DrawD2DText(renderTarget, velocityText.c_str(), cameraPos.x, cameraPos.y + 15.f);

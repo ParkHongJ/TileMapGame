@@ -34,12 +34,12 @@ void ParticleManager::Render(ID2D1HwndRenderTarget* rt)
 	}
 }
 
-void ParticleManager::GetParticle(FPOINT pos, float moveSpeed, float angle, float size, float lifeTime)
+void ParticleManager::GetParticle(string imageStr, FPOINT pos, float angle, float size, float lifeTime)
 {
 	if (particlePool.empty())
 	{
 		Particle* particle = new Particle;
-		particle->Init(pos, moveSpeed, angle, size, lifeTime);
+		particle->Init(imageStr, pos, angle, size, lifeTime);
 		activeParticles.push_back(particle);
 	}
 	else
@@ -47,7 +47,7 @@ void ParticleManager::GetParticle(FPOINT pos, float moveSpeed, float angle, floa
 		Particle* particle = particlePool.back();
 		particlePool.pop_back();
 
-		particle->Init(pos, moveSpeed, angle, size, lifeTime);
+		particle->Init(imageStr, pos, angle, size, lifeTime);
 		activeParticles.push_back(particle);
 	}
 }

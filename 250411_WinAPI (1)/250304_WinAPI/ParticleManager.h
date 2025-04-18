@@ -9,7 +9,7 @@ public:
 	void Init();
 	void Update(float TimeDelta);
 	void Render(ID2D1HwndRenderTarget* rt);
-	void GetParticle(FPOINT pos, float moveSpeed, float angle, float size, float lifeTime);
+	void GetParticle(string imageStr, FPOINT pos, float angle, float size, float lifeTime);
 	void Release();
 
 	ParticleManager() {};

@@ -147,6 +147,50 @@ inline void DrawCenteredRect(ID2D1RenderTarget* rt, FPOINT center, float halfSiz
 	rt->DrawRectangle(rect, tempBrush.Get(), thickness);
 }
 
+inline float RandomRange(float min, float max)
+{
+	float r = (float)rand() / RAND_MAX; // 0.0 ~ 1.0
+	return min + (max - min) * r;
+}
+
+inline void ClampVector(FPOINT& vec, float maxLength)
+{
+	float len = sqrtf(vec.x * vec.x + vec.y * vec.y);
+	if (len > maxLength)
+	{
+		float scale = maxLength / len;
+		vec.x *= scale;
+		vec.y *= scale;
+	}
+}
+
+inline FPOINT RotateVector(const FPOINT& vec, float degrees)
+{
+	float rad = degrees * 3.1415926f / 180.0f;
+	float cosA = cosf(rad);
+	float sinA = sinf(rad);
+
+	return {
+		vec.x * cosA - vec.y * sinA,
+		vec.x * sinA + vec.y * cosA
+	};
+}
+
+inline float Dot(const FPOINT& a, const FPOINT& b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+inline FPOINT Reflect(const FPOINT& velocity, const FPOINT& normal)
+{
+	float dot = Dot(velocity, normal);
+	return {
+		velocity.x - 2.0f * normal.x * dot,
+		velocity.y - 2.0f * normal.y * dot
+	};
+}
+
+
 template<typename T>
 T Clamp(T value, T min, T max)
 {

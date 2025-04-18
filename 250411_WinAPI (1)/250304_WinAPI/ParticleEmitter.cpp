@@ -16,7 +16,7 @@ void ParticleEmitter::Emit(FPOINT pos, float moveSpeed, float angle, float size,
 		auto tempSize = size + (rand() % sizeRatio) - sizeRatio / 2;
 		auto tempLifeTime = lifeTime;
 
-		ParticleManager::GetInstance()->GetParticle(pos, tempMoveSpeed, tempAngle, tempSize, tempLifeTime);
+		//ParticleManager::GetInstance()->GetParticle(pos, tempAngle, tempSize, tempLifeTime);
 	}
 }
 
@@ -34,7 +34,7 @@ void ParticleEmitter::Emit(FPOINT pos, float moveSpeed, float size, float lifeTi
 
 		auto tempLifeTime = lifeTime;
 
-		ParticleManager::GetInstance()->GetParticle(pos, tempMoveSpeed, tempAngle, tempSize, tempLifeTime);
+		//ParticleManager::GetInstance()->GetParticle(pos, tempAngle, tempSize, tempLifeTime);
 	}
 }
 
