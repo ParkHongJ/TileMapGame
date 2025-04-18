@@ -19,6 +19,7 @@
 #include "Whip.h"
 #include "IncreaseBomb.h"
 #include "CameraManager.h"
+#include "snakeMonster.h"
 
 HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -40,6 +41,7 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("Snake_Monster", L"Image/monster.png",16,16, renderTarget);
 
     GameManager::GetInstance()->Init("Data/map1.tilemap");
 
@@ -47,9 +49,11 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
  
 
     // Collider register
-
-
-
+    snake = new SnakeMonster;
+    if (snake)
+    {
+        snake->Init();
+    }
 
    // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
     // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
@@ -57,6 +61,8 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+
+    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
 
     return S_OK;
 }
@@ -76,6 +82,9 @@ void GameScene::Update(float TimeDelta)
 {
    /* if (yellow)
         yellow->Update(TimeDelta);*/
+    if (snake)
+        snake->Update(TimeDelta);
+
     CameraManager::GetInstance()->Update(TimeDelta);
 }
 
@@ -89,6 +98,7 @@ void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
    /* if (yellow)
         yellow->Render(renderTarget);*/
 
-
+    if (snake)
+        snake->Render(renderTarget);
 
 }
