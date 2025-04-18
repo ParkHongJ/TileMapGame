@@ -7,7 +7,7 @@ class AttackState : public CharacterState
 public:
     enum class SubState {
         NONE,
-        ATTACK_ALONE,
+        ATTACK_WHIP,
         ATTACK_ITEM_THROW,
     };
 
@@ -24,5 +24,7 @@ public:
     virtual void Update() override;
     void ChangeSubState(SubState newSubState);
     virtual void Exit() override;
-    virtual const char* GetSubStateName() const override { return "AttackState"; }
+    virtual const char* GetSubStateName() const override;
+    SubState GetCurrentSubState() const { return currentSubState; }
+
 };

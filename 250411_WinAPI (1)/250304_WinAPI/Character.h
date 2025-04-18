@@ -23,9 +23,9 @@ class Character : public GameObject
 private:
 	map<std::pair<unsigned int, unsigned int>, FrameInfo> animationMap;
 
-	BoxCollider* yellowCollider = nullptr;
-
 	CharacterState*				state;
+
+	BoxCollider* yellowCollider;
 
 	Image*				  playerImage;
 
@@ -46,23 +46,10 @@ private:
 	float				   attackRate;
 
 	// Gravity
-	float gravity = 1000.f; // 중력 가속도 (픽셀/sec^2)
-	float maxFallSpeed = 800.f; // 최대 낙하 속도
-	float jumpPower = 500.0f;
+	float					  gravity;
+	float				 maxFallSpeed;
+	float				    jumpPower;
 	bool                      isInAir;
-	
-	// 예시: 상승 프레임
-	const int JUMP_UP_START = 0;
-	const int JUMP_UP_END = 3;
-
-	// 예시: 하강 프레임
-	const int JUMP_DOWN_START = 4;
-	const int JUMP_DOWN_END = 7;
-
-	// 최대 속도 (예상치 사용)
-	const float MAX_JUMP_VEL = 500.f;
-
-
 
 
 	bool					   isFlip;
@@ -75,12 +62,21 @@ private:
 	bool			   isLookUpLocked;
 	bool			 isLookDownLocked;
 
+	float				 currLockTime;
+	float			   lookUpLockTime;
+	float			 lookDownLockTime;
 
-	bool isTouchingLeft = false;
-	bool isTouchingRight = false;
-	bool isTouchingTop = false;
-	bool isTouchingBottom = false;
 
+
+	bool			   isTouchingLeft;
+	bool			  isTouchingRight;
+	bool				isTouchingTop;
+	bool		     isTouchingBottom;
+
+	float bottomHitDist = 10000.0f; // 캐릭터에서 땅까지의 거리 (기본은 아주 큰 값)
+
+	float colliderSize;
+	float colliderOffset;
 
 public:
 	static IdleState					idleState;
@@ -107,12 +103,15 @@ public:
 	void SetXVelocity(float velocityX) { this->velocity.x = velocityX; }
 	
 	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
-	bool GetIsinAir() { return this->isInAir; }
+	bool GetIsInAir() { return this->isInAir; }
 	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
 
 	float GetJumpPower() { return this->jumpPower; }
 	float GetSpeed() { return this->speed; }
 
+
+	void HandleTransitions();
+	void HandleAirAnimation();
 	// Animation
 
 	void InitAnimationMap();
@@ -129,6 +128,22 @@ public:
 	bool GetIsLookUpLocked();
 	bool GetIsLookDownLocked();
 	bool GetCurrAnimEnd();
+	
+	float GetCurrLockTime() { return this->currLockTime; }
+	void  SetCurrLockTime(float lockTime) { this->currLockTime = lockTime; }
+	float GetlookUpLockTime() { return this->lookUpLockTime; }
+	float GetlookDownLockTime() { return this->lookDownLockTime; }
+
+	void SetIsAttacking(bool input) { this->isAttacking = input; }
+	
+
+
+	// HFSM
+	void HandleIdleLogic();
+	void HandleMoveLogic();
+	void HandleAttackLogic();
+
+
 
 	// Gravity
 	
