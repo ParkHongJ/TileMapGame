@@ -254,6 +254,24 @@ void Character::HandleAirAnimation()
 
 
 
+bool Character::CheckAlmostFall()
+{
+    float edgeCheckOffset = 5.f; // 캐릭터 발 위치 기준 양쪽 끝에서 검사
+
+    FPOINT footLeft = { Pos.x - edgeCheckOffset, Pos.y + colliderSize / 2 + colliderOffset };
+    FPOINT footRight = { Pos.x + edgeCheckOffset, Pos.y + colliderSize / 2 + colliderOffset };
+
+    RaycastHit hitLeft, hitRight;
+
+    bool isGroundLeft = CollisionManager::GetInstance()->RaycastAll({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, true, 1.0f, this);
+    bool isGroundRight = CollisionManager::GetInstance()->RaycastAll({ footRight, {0.f, 1.f} },10.f, hitRight, true, 1.0f, this);
+
+    // 둘 중 하나만 떠 있으면 가장자리
+    return (isGroundLeft ^ isGroundRight); // XOR
+
+
+}
+
 void Character::HandleIdleLogic() {
     IdleState* idle = dynamic_cast<IdleState*>(state);
     
@@ -268,14 +286,15 @@ void Character::HandleIdleLogic() {
         currLockTime += deltaTime;
         if (GetCurrAnimEnd() && currLockTime > lookUpLockTime)
             isLookUpLocked = true;
+
+
+
         break;
 
     case IdleState::SubState::IDLE_LOOKUP_STOP:
-        // 정지 애니메이션 상태 유지, 별도 로직 필요 시 추가
         break;
 
     case IdleState::SubState::IDLE_LOOKUP_RELEASE:
-        // 릴리즈 애니메이션 완료 시 alone으로 넘어가는 로직은 IdleState에 있음
         currLockTime = 0.0f;
         isLookUpLocked = false;
         break;
@@ -287,30 +306,27 @@ void Character::HandleIdleLogic() {
         break;
 
     case IdleState::SubState::IDLE_LOOKDOWN_STOP:
-        // 정지 애니메이션 상태 유지
         break;
 
     case IdleState::SubState::IDLE_LOOKDOWN_RELEASE:
-        // 애니메이션이 끝나면 IDLE_ALONE 으로 전환됨
         currLockTime = 0.0f;
         isLookDownLocked = false;
         break;
 
     case IdleState::SubState::IDLE_ALONE:
-        // 기본 idle 상태, 특별한 로직 없음
         break;
 
     case IdleState::SubState::IDLE_ONAIR:
-        // 공중에 있을 때 별도 처리 필요 시 여기에
         break;
 
     case IdleState::SubState::IDLE_ONPET:
     case IdleState::SubState::IDLE_ONPET_LOOKUP:
     case IdleState::SubState::IDLE_ONPET_LOOKDOWN:
     case IdleState::SubState::IDLE_FALL_ALMOST:
+
+        break;
     case IdleState::SubState::IDLE_HURT:
     case IdleState::SubState::IDLE_DIE:
-        // 아직 미구현 상태이거나 외부에서 처리 필요
         break;
 
     case IdleState::SubState::NONE:
@@ -334,8 +350,7 @@ void Character::HandleMoveLogic() {
         break;
 
     case MoveState::SubState::MOVE_LOOKDOWN_RELEASE:
-        if (GetCurrAnimEnd())
-            move->ChangeSubState(MoveState::SubState::MOVE_ALONE);
+        
         break;
 
     case MoveState::SubState::MOVE_LOOKDOWN_LOOP:
@@ -410,6 +425,15 @@ void Character::InitAnimationMap()
 
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] =
     { {2, 1}, {4, 1}, AnimationMode::Hold };
+
+    animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] =
+    { {2, 1}, {4, 1}, AnimationMode::Hold };
+
+    animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_FALL_ALMOST)}] =
+    { {0, 3}, {7, 3}, AnimationMode::Loop };
+
+
+
 
     // MOVE
     animationMap[{MOVESTATE, static_cast<int>(MoveState::SubState::MOVE_ALONE)}] =
@@ -707,18 +731,19 @@ void Character::CheckCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
+    bool onDebug = false;
 
-    isTouchingLeft = CollisionManager::GetInstance()->RaycastAll({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, true, debugTime, this) ||
-        CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime, this);
+    isTouchingLeft = CollisionManager::GetInstance()->RaycastAll({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, onDebug, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, onDebug, debugTime, this);
 
-    isTouchingRight = CollisionManager::GetInstance()->RaycastAll({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, true, debugTime, this) ||
-        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime, this);
+    isTouchingRight = CollisionManager::GetInstance()->RaycastAll({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, onDebug, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, onDebug, debugTime, this);
 
-    isTouchingTop = CollisionManager::GetInstance()->RaycastAll({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, true, debugTime, this) ||
-        CollisionManager::GetInstance()->RaycastAll({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, true, debugTime, this);
+    isTouchingTop = CollisionManager::GetInstance()->RaycastAll({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, onDebug, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, onDebug, debugTime, this);
 
-    isTouchingBottom = CollisionManager::GetInstance()->RaycastAll({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, true, debugTime, this) ||
-        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, true, debugTime, this);
+    isTouchingBottom = CollisionManager::GetInstance()->RaycastAll({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, onDebug, debugTime, this) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, onDebug, debugTime, this);
 
    
 

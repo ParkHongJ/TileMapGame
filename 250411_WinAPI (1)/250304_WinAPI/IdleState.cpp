@@ -26,6 +26,14 @@ void IdleState::Update() {
         return;
     }
 
+    if (currentSubState == SubState::IDLE_ALONE) {
+        if (character->CheckAlmostFall()) {
+            ChangeSubState(SubState::IDLE_FALL_ALMOST);
+            character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
+            return;
+        }
+    }
+
     if (km->IsStayKeyDown(VK_UP)) {
         if (!character->GetIsLookUpLocked())
             ChangeSubState(SubState::IDLE_LOOKUP_START);

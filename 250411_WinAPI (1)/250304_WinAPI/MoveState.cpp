@@ -49,6 +49,9 @@ void MoveState::Update() {
     }
     else if (isDownUp) {
         ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
+
+        if (character->GetCurrAnimEnd())
+            ChangeSubState(MoveState::SubState::MOVE_ALONE);
     }
     else {
         ChangeSubState(SubState::MOVE_ALONE);

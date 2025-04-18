@@ -152,6 +152,8 @@ public:
 	bool GetIsOnRope() const { return isOnRope; }
 
 
+	bool CheckAlmostFall();
+
 
 	// HFSM
 	void HandleIdleLogic();
