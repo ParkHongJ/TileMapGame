@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "playerGold_UI.h"
 #include "Image.h"
 #include "PlayerStatus.h"
