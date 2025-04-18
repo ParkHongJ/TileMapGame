@@ -15,10 +15,11 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
 
 	GameManager::GetInstance()->Init("Data/map1.tilemap");
 
-	ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
+	//ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
 
 	return S_OK;
 }

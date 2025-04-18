@@ -14,7 +14,7 @@
 #include "TaeScene.h"
 #include "JinScene.h"
 #include "YongScene.h"
-
+#include "ObjectRegister.h"
 
 
 HRESULT MainGame::Init()

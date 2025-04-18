@@ -154,7 +154,7 @@ void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, 
     );
 }
 
-bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& outHit, bool debugDraw, float debugTime)
+bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& outHit, bool debugDraw, float debugTime, GameObject* ignoreObject)
 {
     bool found = false;
     RaycastHit closestHit;
@@ -163,6 +163,10 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
     for (auto* col : colliders)
     {
         if (!col) continue;
+
+        if (col->Owner == nullptr) continue;
+
+        if (col->Owner == ignoreObject) continue;
 
         RaycastHit temp;
         if (col->Raycast(ray, maxDist, temp))

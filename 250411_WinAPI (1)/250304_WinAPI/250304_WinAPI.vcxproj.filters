@@ -461,6 +461,9 @@
     <ClInclude Include="ObjectRegister.h">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="generate_register.bat">

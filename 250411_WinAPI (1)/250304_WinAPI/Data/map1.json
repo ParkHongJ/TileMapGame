@@ -1,0 +1,10 @@
+[
+    {
+        "atlas": "Textures/char_lime.png",
+        "height": 128.0,
+        "name": "DummyHongPlayer",
+        "width": 128.0,
+        "x": 229.99998474121094,
+        "y": 183.3333282470703
+    }
+]

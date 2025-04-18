@@ -16,6 +16,7 @@ public:
         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> conv;
         return conv.from_bytes(str);
     }
+    static std::string WStringToString(const std::wstring& wstr);
 };
 
 class ObjectRegistry

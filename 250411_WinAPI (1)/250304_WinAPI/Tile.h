@@ -46,7 +46,7 @@ public:
 	void RenderDeco(ID2D1HwndRenderTarget* renderTarget);
 
 public:
-	void InitTile(int atlasX, int atlasY, bool valid, FPOINT pos);
+	void InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType type);
 	
 	//위쪽에 블럭이없다면 오른쪽일경우 다른데코타일로 변경
 	void CreateDecoTile(DecoDirection dir, bool hasTileAbove = false);

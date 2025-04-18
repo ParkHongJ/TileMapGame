@@ -1,7 +1,12 @@
 #include "GameManager.h"
-
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include "../MapTool/EditorTile.h"
 #include "Tile.h"
+#include "ObjectManager.h"
+#include "ObjectFactory.h"
+
+using json = nlohmann::json;
 
 void GameManager::Release()
 {
@@ -33,9 +38,82 @@ void GameManager::LoadTile(const char* path)
 			float renderX = (src.pos.x + 0.5f) * GAME_TILE_SIZE;
 			float renderY = (src.pos.y + 0.5f) * GAME_TILE_SIZE;
 
-			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY });
+			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY }, TileType::BLOCK);
 
 			tileMap[y][x] = tile;
+		}
+	}
+}
+
+void GameManager::LoadObject(const char* path)
+{
+	std::ifstream in(path);
+	if (!in.is_open())
+	{
+		printf("Failed to open: %s\n", path);
+		return;
+	}
+
+	json j;
+	in >> j;
+	in.close();
+
+	for (const auto& item : j)
+	{
+		std::string name = item.value("name", "");
+		float x = item.value("x", 0.0f);
+		float y = item.value("y", 0.0f);
+		float w = item.value("width", 0.0f);
+		float h = item.value("height", 0.0f);
+
+		// 생성
+		GameObject* obj = ObjectFactory::Get().Create(name);
+		if (!obj)
+		{
+			int a = 10;
+			continue;
+		}
+
+		const float tileSize = 128.f; // 툴과 동일한 타일 단위
+		float gx = x / tileSize;
+		float gy = y / tileSize;
+
+		float gameTileSize = 64.f;
+		// 게임 좌표계로 변환 (필요시 다시 픽셀로 곱하거나 절대 좌표 계산)
+		FPOINT worldPos = { gx * gameTileSize, gy * gameTileSize };
+		obj->SetPos(worldPos);
+
+		// 월드에 추가
+		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, obj);
+	}
+
+	printf("Loaded objects from: %s\n", path);
+}
+
+void GameManager::GenerateBorderTile()
+{
+	for (int y = 0; y < 36; ++y)
+	{
+		for (int x = 0; x < 44; ++x)
+		{
+			// 중심 영역은 스킵 (2~17)
+			if (x >= 2 && x < 42 && y >= 2 && y < 34)
+				continue;
+
+			Tile* tile = new Tile;
+			ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_TILE, tile);
+
+			// 툴 좌표계 기준으로 변환: 외곽은 -2 ~ 17 까지
+			int toolX = x - 2;
+			int toolY = y - 2;
+
+			float renderX = (toolX + 0.5f) * GAME_TILE_SIZE;
+			float renderY = (toolY + 0.5f) * GAME_TILE_SIZE;
+
+			// 외곽용 atlasX/Y는 -1로 넣거나 외곽 전용 타일 index
+			tile->InitTile(0, 2, true, { renderX, renderY }, TileType::BORDER);
+
+			//tileMap[y][x] = tile;
 		}
 	}
 }
@@ -87,6 +165,9 @@ void GameManager::Init(const char* path)
 {
 	LoadTile(path);
 	GenerateDecoTile();
+	GenerateBorderTile();
+	//TODO 임시
+	LoadObject("Data/map1.json");
 }
 
 bool GameManager::IsTileValid(int x, int y)

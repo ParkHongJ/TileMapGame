@@ -12,6 +12,8 @@ public:
 
 
 	void LoadTile(const char* path);
+	void LoadObject(const char* path);
+	void GenerateBorderTile();
 	void GenerateDecoTile();
 
 	void Init(const char* path);
@@ -20,6 +22,6 @@ private:
 
 private:
 	//나중에 게임매니저로 빼든해야한다.
-	Tile* tileMap[16][16];
+	Tile* tileMap[44][36];
 };
 
