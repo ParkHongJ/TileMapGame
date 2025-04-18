@@ -37,7 +37,7 @@ HRESULT Character::Init()
     //colliderRect = { -10, -20, 10, 20 }; // width: 20, height: 40
 
     // settings
-    speed = 200.f;--
+    speed = 200.f;
     attackSpeed = 3.0f;
     attackRate = 0.3f;
 
@@ -74,7 +74,7 @@ void Character::Update(float TimeDelta)
     isInAir = !isTouchingBottom;
 
     auto km = KeyManager::GetInstance();
-    if (km->IsOnceKeyDown(VK_SPACE) && isTouchingBottom)
+    if (km->IsOnceKeyDown('Z') && isTouchingBottom)
     {
         SetYVelocity(-GetJumpPower()); 
         SetIsInAir(true);
@@ -409,10 +409,10 @@ void Character::CheckCollision()
     float debugTime = 3.0f;
 
     // Collider 기준 100x100일 때
-    FPOINT leftTop = { Pos.x - 30.f, Pos.y - 30.f };
-    FPOINT rightTop = { Pos.x + 30.f, Pos.y - 30.f };
-    FPOINT leftBottom = { Pos.x - 30.f, Pos.y + 25.f };
-    FPOINT rightBottom = { Pos.x + 30.f, Pos.y + 25.f };
+    FPOINT leftTop = { Pos.x - 45.f, Pos.y - 30.f };
+    FPOINT rightTop = { Pos.x + 45.f, Pos.y - 30.f };
+    FPOINT leftBottom = { Pos.x - 30.f, Pos.y + 45.f };
+    FPOINT rightBottom = { Pos.x + 30.f, Pos.y + 45.f };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
