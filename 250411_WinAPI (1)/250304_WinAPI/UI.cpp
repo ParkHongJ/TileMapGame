@@ -4,7 +4,7 @@
 
 HRESULT UI::Init()
 {
-	//imageRatio = ResolutionRatio();
+
 	return S_OK;
 }
 
@@ -20,11 +20,12 @@ void UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 }
 
-FPOINT UI::ResolutionRatio(Image* image)
+FPOINT UI::ResolutionRatio()
 {
 	FPOINT ratio = { 0.0f, 0.0f };
-	ratio.x = WINSIZE_X / static_cast<float>(image->GetWidth());
-	ratio.y = WINSIZE_Y / static_cast<float>(image->GetHeight());
+	Image* standardImage = ImageManager::GetInstance()->FindImage("GameOverPage");
+	ratio.x = WINSIZE_X / static_cast<float>(standardImage->GetWidth());
+	ratio.y = WINSIZE_Y / static_cast<float>(standardImage->GetHeight());
 
 	return ratio;
 }

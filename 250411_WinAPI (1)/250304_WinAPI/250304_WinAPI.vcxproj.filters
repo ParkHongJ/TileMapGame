@@ -76,6 +76,12 @@
     <Filter Include="MainGame\Scene\Jin\PlayerUI">
       <UniqueIdentifier>{3e6495e6-af93-4ab7-ae85-147600099e97}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Jin\InteractUI">
+      <UniqueIdentifier>{64a7e8da-740c-4587-93b7-a3dc4d10ba3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainGame\Scene\Jin\Journal">
+      <UniqueIdentifier>{e6c18105-8e33-4479-bfec-da67667b50b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -213,9 +219,6 @@
     <ClCompile Include="GameOverUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_InteractUI.cpp">
-      <Filter>MainGame\Scene\Jin</Filter>
-    </ClCompile>
     <ClCompile Include="Npc_InteractUI.cpp">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClCompile>
@@ -302,6 +305,20 @@
     </ClCompile>
     <ClCompile Include="GunBullet.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    <ClCompile Include="dialogUI.cpp">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_InteractUI.cpp">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Journal_1.cpp">
+      <Filter>MainGame\Scene\Jin\Journal</Filter>
+    </ClCompile>
+    <ClCompile Include="DoorInteractUI.cpp">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ShopInteractUI.cpp">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -482,9 +499,6 @@
     <ClInclude Include="GameOverUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_InteractUI.h">
-      <Filter>MainGame\Scene\Jin</Filter>
-    </ClInclude>
     <ClInclude Include="Npc_InteractUI.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
@@ -571,6 +585,20 @@
     </ClInclude>
     <ClInclude Include="GunBullet.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    <ClInclude Include="dialogUI.h">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_InteractUI.h">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Journal_1.h">
+      <Filter>MainGame\Scene\Jin\Journal</Filter>
+    </ClInclude>
+    <ClInclude Include="DoorInteractUI.h">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopInteractUI.h">
+      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

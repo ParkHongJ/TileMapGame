@@ -29,6 +29,8 @@
 #include "playerRope_UI.h"
 #include "sandGlass_UI.h"
 #include "lightBulb_UI.h"
+#include "Journal_1.h"
+#include "dialogUI.h"
 
 HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -53,6 +55,7 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Snake_Monster", L"Image/monster.png",16,16, renderTarget);
+    ImageManager::GetInstance()->AddImage("GameOverPage", L"Textures/UI/Journal/journal_back.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerBombImage", L"Textures/UI/Hud/bomb.png", renderTarget);
@@ -65,6 +68,10 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
    // fx_big
     ImageManager::GetInstance()->AddImage("fx_big", L"Textures/fx_big.png", 4, 4, renderTarget);
 
+    ImageManager::GetInstance()->AddImage("journalPage", L"Textures/UI/Journal/journal_pagetorn.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("journal_1_Photo", L"Textures/UI/Journal/journal_1_Photo.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("TextDialogBox", L"Textures/UI/Hud/TextDialogBox.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("TextDialogArrow", L"Textures/UI/Hud/TextDialogArrow.png", renderTarget);
 
     GameManager::GetInstance()->Init("map1");
   
@@ -100,6 +107,8 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
 
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
 
     return S_OK;

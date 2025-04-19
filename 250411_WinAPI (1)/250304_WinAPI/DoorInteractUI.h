@@ -2,10 +2,11 @@
 #include "UI.h"
 
 class Image;
-class Obj_InterectUI : public UI
+class DoorInteractUI : public UI
 {
 private:
-
+	Image* interactKey;
+	Image* doorSprite;
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
