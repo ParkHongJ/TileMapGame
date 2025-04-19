@@ -8,8 +8,16 @@
 #include "CameraManager.h"
 #include "ParticleManager.h"
 #include "Particle.h"
+#include "Image.h"
 HRESULT DummyHongPlayer::Init()
 {
+
+	int a = 10;
+	len1 = elbow.Length();
+	len2 = (hand - elbow).Length();
+
+	img = ImageManager::GetInstance()->FindImage("Explosion");
+
 	return S_OK;
 }
 
@@ -39,6 +47,21 @@ void DummyHongPlayer::Update(float TimeDelta)
 		Pos.x += moveSpeed * TimeDelta;
 	}
 
+	//if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RBUTTON))
+	//{
+	//	FPOINT cameraPos = CameraManager::GetInstance()->GetPos();
+
+	//	targetPos = { (float)g_ptMouse.x, (float)g_ptMouse.y /*Pos.x + 350.f, Pos.y - 150.f*/};
+	//	worldElbow = Pos + elbow;
+	//	worldHand = Pos + hand;
+
+	//	SolveIK2Bone(Pos, worldElbow, worldHand, targetPos, len1, len2);
+
+	//	elbow = worldElbow - Pos;
+	//	hand = worldHand - Pos;
+
+	//}
+
 	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
 	{
 		//isFalling = !isFalling;
@@ -65,17 +88,22 @@ void DummyHongPlayer::Update(float TimeDelta)
 			obj->SetPos(Pos);*/
 
 
+		bExplosion = !bExplosion;
+
 		for (int i = 0; i < 15; i++)
 		{
 			{
-				Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 30.f, 3.f, 1, 0);
+				FPOINT randPos = { RandomRange(-100, 100.f), RandomRange(-100, 100.f) };
+				Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 3.f, 1, 0);
+
 				PhysicsOption* physicsOp = new PhysicsOption;
 				SizeOption* sizeOp = new SizeOption(0.04f);
 				TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
 
-				float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
-				float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
-				//float speed = RandomRange(850.f, 1175.0f);            // 속도도 랜덤
+				//float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+				float angleRad = RandomRange(0.0f, 3.141592f * 2.0f); // 0 ~ 360도
+				//float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
+				float speed = RandomRange(850.f, 1175.0f);            // 속도도 랜덤
 
 				velocity =
 				{
@@ -83,8 +111,8 @@ void DummyHongPlayer::Update(float TimeDelta)
 					-cosf(angleRad) * speed  // 135도 (왼쪽 위)
 				};
 
-				//physicsOp->Init(velocity, 0.3f);
-				physicsOp->Init(velocity, 0.5f);
+				physicsOp->Init(velocity, 0.3f);
+				//physicsOp->Init(velocity, 0.5f);
 
 				particle->AddParticleOption(physicsOp);
 				particle->AddParticleOption(sizeOp);
@@ -92,24 +120,35 @@ void DummyHongPlayer::Update(float TimeDelta)
 			}
 
 			{
-				Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 45.f, 0.01f, 4, 1);
-				PhysicsOption* physicsOp = new PhysicsOption;
 
 				float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
-				float speed = RandomRange(450.f, 555.0f);            // 속도도 랜덤
+				FPOINT randPos = { RandomRange(-100, 100.f), RandomRange(-100, 100.f) };
 
-				velocity =
-				{
-					sinf(angleRad) * speed,
-					-cosf(angleRad) * speed  // 135도 (왼쪽 위)
-				};
+				Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, angleRad, 105.f, 1.f, 1, 2);
 
-				physicsOp->Init(velocity, 0.5f);
-
-				AlphaOption* alphaOp = new AlphaOption(0.5f);
-				particle->AddParticleOption(physicsOp);
+				AlphaOption* alphaOp = new AlphaOption(5.0f);
 				particle->AddParticleOption(alphaOp);
 			}
+
+			//{
+			//	Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 45.f, 0.01f, 4, 1);
+			//	PhysicsOption* physicsOp = new PhysicsOption;
+
+			//	float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+			//	float speed = RandomRange(450.f, 555.0f);            // 속도도 랜덤
+
+			//	velocity =
+			//	{
+			//		sinf(angleRad) * speed,
+			//		-cosf(angleRad) * speed  // 135도 (왼쪽 위)
+			//	};
+
+			//	physicsOp->Init(velocity, 0.5f);
+
+			//	AlphaOption* alphaOp = new AlphaOption(0.5f);
+			//	particle->AddParticleOption(physicsOp);
+			//	particle->AddParticleOption(alphaOp);
+			//}
 		}
 		/*vector<GameObject*> OutObject;
 		if (CollisionManager::GetInstance()->GetObjectsInCircle(Pos, 100.f, &OutObject))
@@ -306,6 +345,22 @@ void DummyHongPlayer::Update(float TimeDelta)
 void DummyHongPlayer::LateUpdate(float TimeDelta)
 {
 	CameraManager::GetInstance()->SetTargetPos(Pos);
+
+	if (bExplosion)
+	{
+		CurrentFrame += TimeDelta * 300.f;
+		if (CurrentFrame >= 1.f)
+		{
+			CurrentIndex++;
+			CurrentFrame = 0.f;
+			if (CurrentIndex >= 11)
+			{
+				CurrentIndex = 0;
+				bExplosion = false;
+			}
+		}
+	}
+	
 }
 
 void DummyHongPlayer::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -322,4 +377,58 @@ void DummyHongPlayer::Render(ID2D1HwndRenderTarget* renderTarget)
 
 	wstr = L"velocity x : " + to_wstring(velocity.x) + L" y : " + to_wstring(velocity.y);
 	DrawD2DText(renderTarget, wstr.c_str(), 500, 230);
+
+	//float radius = 20.f;
+	//DrawCenteredRect(renderTarget, cameraPos, 35.f, D2D1::ColorF::Magenta);
+
+	//FPOINT elbowPos = Pos + elbow + CameraManager::GetInstance()->GetPos();
+	//DrawCenteredRect(renderTarget, elbowPos, 15.f, D2D1::ColorF::Blue);
+
+	//FPOINT handPos = Pos + hand + CameraManager::GetInstance()->GetPos();
+	//DrawCenteredRect(renderTarget, handPos, 15.f, D2D1::ColorF::Red);
+	
+	
+	//renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(handPos.x, handPos.y), radius, radius), GBrush.Get());
+
+	if (img && bExplosion)
+	{
+		int x = CurrentIndex % 4;
+		int y = CurrentIndex / 4;
+		img->FrameRender(renderTarget, cameraPos.x, cameraPos.y, x, y);
+	}
+}
+
+void DummyHongPlayer::SolveIK2Bone(FPOINT root, FPOINT& elbow, FPOINT& hand, const FPOINT& target, float len1, float len2)
+{
+	float totalLen = len1 + len2;
+	float distToTarget = (target - root).Length();
+
+	if (distToTarget > totalLen)
+	{
+		// 도달 불가 → 최대한 타겟 방향으로 쭉 뻗음
+		FPOINT dir = (target - root).Normalized();
+
+		elbow = root + dir * len1;
+		hand = elbow + dir * len2;
+		return;
+	}
+
+	const int iteration = 10;
+	for (int i = 0; i < iteration; ++i)
+	{
+		// Forward pass
+		hand = target;
+		FPOINT dir = (elbow - hand).Normalized();
+		elbow = hand + dir * len2;
+
+		dir = (root - elbow).Normalized();
+		elbow = root + dir * len1;
+
+		// Backward pass
+		dir = (elbow - root).Normalized();
+		elbow = root + dir * len1;
+
+		dir = (hand - elbow).Normalized();
+		hand = elbow + dir * len2;
+	}
 }

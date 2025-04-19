@@ -378,7 +378,7 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	);
 }
 
-void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float atlasX, float atlasY, float srcW, float srcH, float alpha)
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float atlasX, float atlasY, float srcW, float srcH, float alpha, float angle)
 {
 	if (!imageInfo->bitmap) return;
 
@@ -414,27 +414,41 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 		y - destH * anchorY + destH
 	);
 
+
 	// Transform 적용
 	D2D1::Matrix3x2F originalTransform;
 	renderTarget->GetTransform(&originalTransform);
 
+	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Identity();
+
+	// 중심 기준 회전
+	if (angle != 0.f)
+	{
+		transform =
+			D2D1::Matrix3x2F::Translation(-x, -y) *
+			D2D1::Matrix3x2F::Rotation(angle) *
+			D2D1::Matrix3x2F::Translation(x, y);
+	}
+
 	if (flipX)
 	{
 		// 중심 기준 좌우반전 행렬
-		D2D1::Matrix3x2F flipMat =
+		transform =
 			D2D1::Matrix3x2F::Translation(-x, -y) *
 			D2D1::Matrix3x2F::Scale(-1.0f, 1.0f) *
-			D2D1::Matrix3x2F::Translation(x, y);
+			D2D1::Matrix3x2F::Translation(x, y) *
+			transform;
 
-		renderTarget->SetTransform(flipMat * originalTransform);
+		renderTarget->SetTransform(transform * originalTransform);
 	}
 
 	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, alpha, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
 
+	renderTarget->SetTransform(originalTransform);
 	// Transform 복원
 	if (flipX)
 	{
-		renderTarget->SetTransform(originalTransform);
+		//renderTarget->SetTransform(originalTransform);
 	}
 }
 

@@ -422,7 +422,7 @@ void Character::ApplyGravity(float TimeDelta)
 
 void Character::CheckCollision()
 {
-    float maxDist = 10.0f;
+    float maxDist = 15.0f;
     float debugTime = 0.0f;
 
     // Collider 기준 100x100일 때

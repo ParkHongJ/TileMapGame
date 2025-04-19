@@ -62,7 +62,7 @@ void Particle::Render(ID2D1HwndRenderTarget* rt)
 	{
 		FPOINT cameraPos = pos + CameraManager::GetInstance()->GetPos();
 
-		image->Render(rt, cameraPos.x, cameraPos.y, size, size, atlas.x, atlas.y, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE, alpha);
+		image->Render(rt, cameraPos.x, cameraPos.y, size, size, atlas.x, atlas.y, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE, alpha, angle);
 	}
 }
 
