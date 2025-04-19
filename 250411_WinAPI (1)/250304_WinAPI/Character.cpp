@@ -165,7 +165,7 @@ void Character::Update(float TimeDelta)
 
    
     // 상태 전이 판단
-    if (!isMovingAuto && state != &interactionState)
+    if (!isMovingAuto)
         HandleTransitions();
 
 
@@ -229,36 +229,46 @@ void Character::HandleTransitions()
     bool isUp = km->IsStayKeyDown(VK_UP);
 
 
-    if (isJump)
+    // [1] 매달림 상태에서는 점프만 허용
+    if (isHangOn)
     {
-        if (isTouchingBottom || isHangOn)  // 매달림 상태에서도 점프 가능하게
+        if (isJump)
         {
             velocity.y = -jumpPower;
             isInAir = true;
-            isHangOn = false;      // 매달림 해제
+            isHangOn = false; // 매달림 해제
             isOnLadder = false;
             isOnRope = false;
-
-            ChangeState(&idleState);  // 공중에서도 idleState로 전이되게 할 수도 있음
-
-            return;
+            ChangeState(&idleState);
         }
+
+        return; // 다른 상태 전이는 차단
     }
 
-
+    // [2] 공중에서 매달릴 수 있는지 검사
     if (isInAir)
     {
         if (CheckHangOn())
         {
             isHangOn = true;
-            velocity = { 0.0f,0.0f };
+            velocity = { 0.0f, 0.0f };
             ChangeState(&interactionState);
-
             return;
         }
-        else isHangOn = false;
-
+        else
+            isHangOn = false;
     }
+
+    if (isJump)
+    {
+        velocity.y = -jumpPower;
+        isInAir = true;
+        isHangOn = false; // 매달림 해제
+        isOnLadder = false;
+        isOnRope = false;
+        ChangeState(&idleState);
+    }
+
 
 
     if (isUp || isOnLadder || isOnRope)
