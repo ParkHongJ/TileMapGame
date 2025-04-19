@@ -83,7 +83,8 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType typ
 
 	if (type != BORDER && valid)
 	{
-		collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, this);
+		//collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, this);
+		collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
 		tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
 	}
 	else

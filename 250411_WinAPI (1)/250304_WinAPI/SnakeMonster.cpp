@@ -19,11 +19,17 @@ HRESULT SnakeMonster::Init()
 {
     snakeImage = ImageManager::GetInstance()->FindImage("Snake_Monster");
 
+    //snakeCollider = new BoxCollider(
+    //    { 20.0f , 15.0f },     // Offset
+    //    { 85.0f, 80.0f },  // 
+    //    this
+    //    );
+
     snakeCollider = new BoxCollider(
         { 20.0f , 15.0f },     // Offset
         { 85.0f, 80.0f },  // 
-        this
-        );
+        CollisionMaskType::MONSTER,this
+    );
 
    // Pos = { (WINSIZE_X / 2), (WINSIZE_Y / 2)};
     SetPos({ 230,250 });
@@ -167,10 +173,10 @@ void SnakeMonster::CheckCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isTouchingLeft = CollisionManager::GetInstance()->RaycastAll({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, true, debugTime)/* ||
+    isTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, true, debugTime)/* ||
         CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime)*/;
 
-    isTouchingRight = CollisionManager::GetInstance()->RaycastAll({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, true, debugTime) /*||
+    isTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, true, debugTime) /*||
         CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime)*/;
 
     isTouchingTop = CollisionManager::GetInstance()->RaycastAll({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, true, debugTime) ||

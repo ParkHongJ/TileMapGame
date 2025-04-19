@@ -22,7 +22,8 @@ HRESULT IncreaseBomb::Init()
 
 	Pos = { 500, 300 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, this);
+	//BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, CollisionMaskType::ITEM, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
@@ -51,14 +52,9 @@ void IncreaseBomb::Equip()
 
 void IncreaseBomb::Equip(void* info)
 {
-	if (ItemState::STATE_EQUIP == itemState)
-	{
-		return;
-	}
-
 	itemState = ItemState::STATE_EQUIP;
-	PlayerStatusInfo* desc = (PlayerStatusInfo*)info;
-	desc->bombCount += 3;
+	PlayerStatus* desc = (PlayerStatus*)info;
+	desc->GetInfo()->bombCount += 3;
 }
 
 void IncreaseBomb::UnEquip()
@@ -85,6 +81,12 @@ void IncreaseBomb::Detect(GameObject* obj)
 {
 	if (auto player = obj->GetType<Character>())
 	{
+		Equip(player->GetPlayerStatus());
 		SetDestroy();
+	}
+
+	else if (auto player = obj->GetType<Character>())
+	{
+
 	}
 }

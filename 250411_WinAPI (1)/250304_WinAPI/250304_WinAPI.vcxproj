@@ -149,6 +149,7 @@
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GunBullet.cpp" />
     <ClCompile Include="IncreaseGold.cpp" />
     <ClCompile Include="goldBackground_UI.cpp" />
     <ClCompile Include="IncreaseBomb.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="goldBackground_UI.h" />
+    <ClInclude Include="GunBullet.h" />
     <ClInclude Include="IncreaseGold.h" />
     <ClInclude Include="IncreaseBomb.h" />
     <ClInclude Include="Button.h" />

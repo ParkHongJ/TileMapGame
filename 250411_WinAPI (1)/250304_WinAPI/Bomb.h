@@ -26,10 +26,10 @@ public:
 
 	void Explosion();
 
-
 private:
 	float gravity = 5.f;
 	float explosionTime = 3.f;
+	float animAcc = 5.f;
 	float animationTime = 1.f;
 
 	// »ç¿ë

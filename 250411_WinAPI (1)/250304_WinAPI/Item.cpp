@@ -9,7 +9,7 @@ Item::Item() :
 price(0), holdImage(nullptr), 
 dropImage(nullptr), moveDir({ 0,1 }), movePower({ 0.f,0.f }),
 moveReverseDir({ 1,1 }),prePos({ 0,0 }), RayDis(35.f),
-itemState(ItemState::STATE_UNEQUIP), startFrameIndexX(0), startFrameIndexY(0), endFrameIndexX(0), endFrameIndexY(0), frameSpeed(1.f), elipsedTime(0.f)
+itemState(ItemState::STATE_UNEQUIP), startFrameIndexX(0), startFrameIndexY(0), endFrameIndexX(0), endFrameIndexY(0), frameSpeed(1.f), elipsedTime(0.f), isFlip(false)
 {
 	objectRenderId = RENDER_ITEM;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
@@ -153,7 +153,7 @@ void Item::DropMove(float TimeDelta)
 
 		RaycastHit out;
 
-		if (CollisionManager::GetInstance()->RaycastAll(ray, moveLength, out, true, 1.f, this))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE,true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
 		{
 			hitDistance = out.distance;
 

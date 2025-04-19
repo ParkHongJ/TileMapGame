@@ -28,12 +28,31 @@ void CollisionManager::Init()
     layerMaskMap[CollisionMaskType::MONSTER] = uint8_t(CollisionMaskType::PLAYER) | 
         uint8_t(CollisionMaskType::WORLDOBJECT) | uint8_t(CollisionMaskType::TILE);
 
-    layerMaskMap[CollisionMaskType::ITEM] = uint8_t(CollisionMaskType::PLAYER);
+    layerMaskMap[CollisionMaskType::ITEM]/* = uint8_t(CollisionMaskType::PLAYER)*/;
 
     layerMaskMap[CollisionMaskType::TILE] = uint8_t(CollisionMaskType::PLAYER) 
         | uint8_t(CollisionMaskType::MONSTER) || uint8_t(CollisionMaskType::EFFECT);
 
     layerMaskMap[CollisionMaskType::EFFECT] = uint8_t(CollisionMaskType::TILE);
+
+
+    //Ray
+    layerRayMaskMap[CollisionMaskType::WORLDOBJECT] = uint8_t(CollisionMaskType::PLAYER) |
+        uint8_t(CollisionMaskType::MONSTER) | uint8_t(CollisionMaskType::TILE);
+
+    layerRayMaskMap[CollisionMaskType::PLAYER] = 
+        uint8_t(CollisionMaskType::ITEM) | uint8_t(CollisionMaskType::TILE); // Player로 테스트
+
+    layerRayMaskMap[CollisionMaskType::MONSTER] = uint8_t(CollisionMaskType::PLAYER) |
+        uint8_t(CollisionMaskType::WORLDOBJECT) | uint8_t(CollisionMaskType::TILE);
+
+    layerRayMaskMap[CollisionMaskType::ITEM] = uint8_t(CollisionMaskType::PLAYER);
+
+    layerRayMaskMap[CollisionMaskType::TILE] = uint8_t(CollisionMaskType::PLAYER)
+        | uint8_t(CollisionMaskType::MONSTER) || uint8_t(CollisionMaskType::EFFECT);
+
+    layerRayMaskMap[CollisionMaskType::EFFECT] = uint8_t(CollisionMaskType::TILE);
+    
 }
 
 void CollisionManager::Update(float TimeDelta)
@@ -57,6 +76,24 @@ void CollisionManager::Update(float TimeDelta)
         }
     }
 
+    for (auto& test : layerCollisionMap)
+    {
+        for (auto iter = test.second.begin(); iter != test.second.end();)
+        {
+            if (true == (*iter)->GetOwner()->IsDestroyed())
+            {
+                iter = test.second.erase(iter);
+            }
+
+            else
+            {
+                (*iter)->Update(TimeDelta);
+                ++iter;
+            }
+        }
+
+    }
+
     for (int i = 0; i < debugRays.size(); )
     {
         debugRays[i].remainingTime -= TimeDelta;
@@ -66,7 +103,8 @@ void CollisionManager::Update(float TimeDelta)
             ++i;
     }
 
-    BoxAll();
+    //BoxAll();
+    ColMaskAABB();
 }
 
 void CollisionManager::Release()
@@ -87,6 +125,14 @@ void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)
 	{
 		collider->DebugRender(renderTarget);
 	}
+
+    for (auto& colliderSet : layerCollisionMap)
+    {
+        for (auto iter : colliderSet.second)
+        {
+            iter->DebugRender(renderTarget);
+        }
+    }
 
     // Debug Ray 시각화
     for (const auto& ray : debugRays)
@@ -110,6 +156,11 @@ void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)
 void CollisionManager::Register(Collider* collider)
 {
 	colliders.push_back(collider);
+}
+
+void CollisionManager::RegisterMask(Collider* collider)
+{
+    layerCollisionMap[collider->GetMaskType()].insert(collider);
 }
 
 void CollisionManager::UnRegister(Collider* collider)
@@ -188,16 +239,44 @@ void CollisionManager::ColMaskAABB()
             // 검사 해야하는 레이어라면
             if (mask & uint8_t(pair2.first))
             {
-                bool bCollision = CollisionAABB(pair.second, pair2.second);
-
-                if (bCollision)
+                for (auto& iter : pair.second)
                 {
-                    pair.second->GetOwner()->Detect(pair2.second->GetOwner());
-                    pair2.second->GetOwner()->Detect(pair.second->GetOwner());
+                    for (auto& iter2 : pair2.second)
+                    {
+                        bool bCollision = CollisionAABB(iter, iter2);
+
+                        if (bCollision)
+                        {
+                            iter->GetOwner()->Detect(iter2->GetOwner());
+                            iter2->GetOwner()->Detect(iter->GetOwner());
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+bool CollisionManager::ChangeMaskType(CollisionMaskType curMaskType, CollisionMaskType nextMaskType, GameObject* owner)
+{
+    if (curMaskType == nextMaskType)
+    {
+        return false;
+    }
+
+    for (auto& iter : layerCollisionMap[curMaskType]) // 비효율적
+    {
+        if (owner == iter->GetOwner())
+        {
+            iter->SetMaskType(nextMaskType);
+            layerCollisionMap[curMaskType].erase(iter);
+            layerCollisionMap[nextMaskType].insert(iter);
+            return true;
+        }
+    }
+
+    return false;
+
 }
 
 void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length)
@@ -256,22 +335,18 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
     return found;
 }
 
-bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& outHit, set<GameObject*>& ignoreObjects, bool debugDraw, float debugTime)
+bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime)
 {
+
     bool found = false;
     RaycastHit closestHit;
     closestHit.distance = maxDist;
 
-    for (auto* col : colliders)
+    for (auto* col : layerCollisionMap[maskType])
     {
         if (!col) continue;
 
         if (col->Owner == nullptr) continue;
-
-        if (ignoreObjects.end() == ignoreObjects.find(col->Owner))
-        {
-            continue;
-        }
 
         RaycastHit temp;
         if (col->Raycast(ray, maxDist, temp))
@@ -286,12 +361,59 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
     }
 
     if (found)
-        outHit = closestHit;
+        hitOut = closestHit;
 
     // 디버그 그리기
     if (debugDraw && debugTime > 0.0f)
     {
-        float drawLen = found ? outHit.distance : maxDist;
+        float drawLen = found ? hitOut.distance : maxDist;
+        AddDebugRay(ray.origin, ray.direction, drawLen, debugTime);
+    }
+
+    return found;
+}
+
+bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime)
+{
+	bool found = false;
+	RaycastHit closestHit;
+	closestHit.distance = maxDist;
+
+	uint8_t mask;
+
+	mask = layerRayMaskMap[maskType];
+
+	for (const auto& pair2 : layerCollisionMap)
+	{
+		// 검사 해야하는 레이어라면
+		if (mask & uint8_t(pair2.first))
+		{
+			for (auto& iter : layerCollisionMap[maskType])
+			{
+				for (auto& iter2 : pair2.second)
+				{
+					RaycastHit temp;
+					if (iter2->Raycast(ray, maxDist, temp))
+					{
+						if (temp.distance < closestHit.distance)
+						{
+							closestHit = temp;
+							closestHit.collider = iter2;
+							found = true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+    if (found)
+        hitOut = closestHit;
+
+    // 디버그 그리기
+    if (debugDraw && debugTime > 0.0f)
+    {
+        float drawLen = found ? hitOut.distance : maxDist;
         AddDebugRay(ray.origin, ray.direction, drawLen, debugTime);
     }
 
@@ -310,6 +432,18 @@ bool CollisionManager::GetObjectsInCircle(FPOINT center, float radius, vector<Ga
             continue;
 
         inCircleObjects->push_back(col->Owner);
+    }
+
+    for (auto& col : layerCollisionMap)
+    {
+        for (auto& iter : col.second)
+        {
+            if (!iter->CheckCollisionWithCircle(center, radius))
+                continue;
+
+            inCircleObjects->push_back(iter->Owner);
+        }
+
     }
 
     if (inCircleObjects->empty())
@@ -338,6 +472,7 @@ bool CollisionManager::GetObjectsInCircle(GameObject* owner, float radius, prior
 
     return !inCircleObjects.empty();
 }
+
 bool CollisionManager::GetInteractObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects)
 {
     FPOINT center = owner->GetPos();
@@ -357,8 +492,27 @@ bool CollisionManager::GetInteractObjectsInCircle(GameObject* owner, float radiu
         inCircleObjects.push({ distance, col->Owner });
     }
 
+    for (auto& col : layerCollisionMap)
+    {
+        for (auto& iter : col.second)
+        {
+            if (owner == (iter->GetOwner()) || INTERACTSTATE::INTERACT_ABLE != iter->GetOwner()->GetObjectInteractState())
+            {
+                continue;
+            }
+
+            float distance = 0.f;
+
+            if (!iter->CheckCollisionWithCircle(center, radius))
+                continue;
+
+            inCircleObjects.push({ distance, iter->Owner });
+        }
+    }
+
     return !inCircleObjects.empty();
 }
+
 pair<GameObject*, GameObject*> CollisionManager::GetInteractObjectPairInCircle(GameObject* owner, float radius)
 {
     FPOINT center = owner->GetPos();

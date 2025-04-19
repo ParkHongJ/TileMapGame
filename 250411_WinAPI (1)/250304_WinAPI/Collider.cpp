@@ -13,6 +13,14 @@ Collider::Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject)
 	CollisionManager::GetInstance()->Register(this);
 }
 
+Collider::Collider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject)
+    : Offset(_Offset), Scale(_Scale), Owner(OwnerObject), Pos({ 0.f, 0.f })
+{
+    //순서보장 확실히 필요하다.
+    this->maskType = maskType;
+    CollisionManager::GetInstance()->RegisterMask(this);
+}
+
 Collider::~Collider()
 {
 	CollisionManager::GetInstance()->UnRegister(this);
@@ -27,6 +35,13 @@ BoxCollider::BoxCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject)
 	: Collider(_Offset, _Scale, OwnerObject)
 	, Min({ 0.f, 0.f })
 	, Max({ 0.f, 0.f })
+{
+    Type = ColliderType::BOX;
+}
+
+BoxCollider::BoxCollider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject) : Collider(_Offset, _Scale, maskType, OwnerObject)
+, Min({ 0.f, 0.f })
+, Max({ 0.f, 0.f })
 {
     Type = ColliderType::BOX;
 }
@@ -138,6 +153,13 @@ bool BoxCollider::Raycast(const Ray& ray, float maxDistance, RaycastHit& outHit)
 SphereCollider::SphereCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject, float radius)
 	: Collider(_Offset, _Scale, OwnerObject)
 	, radius(radius)
+{
+    Type = ColliderType::SPHERE;
+}
+
+SphereCollider::SphereCollider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType , GameObject* OwnerObject, float radius)
+    : Collider(_Offset, _Scale, maskType, OwnerObject)
+    , radius(radius)
 {
     Type = ColliderType::SPHERE;
 }

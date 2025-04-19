@@ -6,6 +6,7 @@
 
 class GameObject;
 class InteractObject;
+class Character;
 
 enum RENDERORDER
 {
@@ -29,11 +30,14 @@ public:
     void ReplaceObject(unsigned int id, GameObject* obj);
     bool RemoveObject(unsigned int id);
 
+    Character* GetPlayer(void) { return player; };
+
     GameObject* FindObject(unsigned int id);
     GameObject* FindAbleInteractObject(GameObject* obj);
 
 private:
     unordered_map<unsigned int, GameObject*> objects;
+    Character* player;
     //unordered_map<unsigned int, GameObject*> tiles;
     //unordered_map<unsigned int, InteractObject*> interactObjects;
     list<GameObject*> renderObjects[RENDER_END];

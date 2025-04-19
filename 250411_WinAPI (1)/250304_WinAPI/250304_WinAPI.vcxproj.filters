@@ -273,7 +273,7 @@
     <ClCompile Include="ParticleManager.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
-     <ClCompile Include="Monster.cpp">
+    <ClCompile Include="Monster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
     <ClCompile Include="SnakeMonster.cpp">
@@ -299,6 +299,9 @@
     </ClCompile>
     <ClCompile Include="sandGlass_UI.cpp">
       <Filter>MainGame\Scene\Jin\PlayerUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GunBullet.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -545,7 +548,7 @@
     <ClInclude Include="SnakeMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
-     <ClInclude Include="playerBomb_UI.h">
+    <ClInclude Include="playerBomb_UI.h">
       <Filter>MainGame\Scene\Jin\PlayerUI</Filter>
     </ClInclude>
     <ClInclude Include="playerHP_UI.h">
@@ -565,6 +568,9 @@
     </ClInclude>
     <ClInclude Include="sandGlass_UI.h">
       <Filter>MainGame\Scene\Jin\PlayerUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GunBullet.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
