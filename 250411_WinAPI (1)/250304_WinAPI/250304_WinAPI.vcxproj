@@ -148,6 +148,8 @@
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="dialogUI.cpp" />
+    <ClCompile Include="DoorInteractUI.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="goldBackground_UI.cpp" />
     <ClCompile Include="IncreaseBomb.cpp" />
@@ -174,6 +176,7 @@
     <ClCompile Include="InteractObject.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="JinScene.cpp" />
+    <ClCompile Include="Journal_1.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="lightBulb_UI.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
@@ -196,6 +199,7 @@
     <ClCompile Include="sandGlass_UI.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ShopInteractUI.cpp" />
     <ClCompile Include="SnakeMonster.cpp" />
     <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TestAnimationObject.cpp" />
@@ -219,6 +223,8 @@
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="dialogUI.h" />
+    <ClInclude Include="DoorInteractUI.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="goldBackground_UI.h" />
     <ClInclude Include="IncreaseBomb.h" />
@@ -247,6 +253,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="InteractionState.h" />
     <ClInclude Include="JinScene.h" />
+    <ClInclude Include="Journal_1.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="lightBulb_UI.h" />
     <ClInclude Include="LoadingScene.h" />
@@ -270,6 +277,7 @@
     <ClInclude Include="sandGlass_UI.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShopInteractUI.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SnakeMonster.h" />
     <ClInclude Include="TaeScene.h" />

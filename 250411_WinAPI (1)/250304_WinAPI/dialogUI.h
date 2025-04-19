@@ -2,14 +2,21 @@
 #include "UI.h"
 
 class Image;
-class Obj_InterectUI : public UI
+class dialogUI : public UI
 {
 private:
-
+	Image* imageBox;
+	Image* imageArrow;
+	FPOINT arrowPos;
+	float playerPosX;
+	float playerToCharDist;
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+
+	float DistCaculate();
+	inline float SetPlayerXpos(float SetValue) { playerPosX = SetValue; };
 };
 
