@@ -5,6 +5,7 @@
 void InteractionState::Enter(Character* character)
 {
     this->character = character;
+    Update();
 }
 
 void InteractionState::Update()

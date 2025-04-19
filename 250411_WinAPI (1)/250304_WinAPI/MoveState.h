@@ -15,7 +15,8 @@ public:
         MOVE_ONPET,
         MOVE_ONPET_LOOKDOWN,
         MOVE_ONAIR,
-        MOVE_ONAIR_ONPET
+        MOVE_ONAIR_ONPET,
+        MOVE_HANGON_AUTO
     };
 
 private:

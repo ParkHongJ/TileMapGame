@@ -8,6 +8,7 @@
 #include "InteractionState.h"
 
 #define ANIMSTATE 5
+#define TOLERANCE 2.0f
 
 class BoxCollider;
 class PlayerStatus;
@@ -79,8 +80,11 @@ private:
 
 	FPOINT leftHandPos;
 	FPOINT rightHandPos;
+	
 
-	FPOINT hangOnPosition;
+
+	bool isMovingAuto = false;
+	FPOINT targetHangOnPos = { 0.f, 0.f };
 
 	FPOINT colliderSize;
 	float colliderOffsetY;
@@ -118,6 +122,8 @@ public:
 	bool GetIsHangOn() const;
 	void SetIsHangOn(bool value);
 
+		bool GetIsMovingAuto() const;
+		void SetIsMovingAuto(bool value);
 
 	void Move();
 	bool MoveY();
@@ -179,6 +185,9 @@ public:
 	void HandleMoveLogic();
 	void HandleAttackLogic();
 	void HandleInteractionLogic();
+
+
+	FPOINT GetHangOnTargetPos();
 
 
 

@@ -14,6 +14,8 @@ void IdleState::Enter(Character* character) {
 void IdleState::Update() {
     KeyManager* km = KeyManager::GetInstance();
 
+    //if (character->GetIsHangOn()) return;
+
     if (km->IsStayKeyDown(VK_LEFT) || km->IsStayKeyDown(VK_RIGHT)) {
         character->ChangeState(&Character::moveState);
         character->SetIsLookUpLocked(false);

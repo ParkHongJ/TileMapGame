@@ -7,7 +7,8 @@ void MoveState::Enter(Character* character)
     this->character = character;
  
     if (character->GetIsLookDownLocked()) ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-    else ChangeSubState(SubState::MOVE_ALONE);
+    else if (character->GetIsMovingAuto()) ChangeSubState(SubState::MOVE_HANGON_AUTO);
+        else ChangeSubState(SubState::MOVE_ALONE);
 
 }
 
@@ -18,6 +19,14 @@ void MoveState::Update() {
     bool isRight = km->IsStayKeyDown(VK_RIGHT);
     bool isDown = km->IsStayKeyDown(VK_DOWN);
     bool isDownUp = km->IsOnceKeyUp(VK_DOWN);
+    
+
+    if (character->GetIsMovingAuto())
+    {
+        ChangeSubState(SubState::MOVE_HANGON_AUTO);
+        return;
+    }
+
 
     // 좌우 입력 없으면 Idle로 전이
     if (!isLeft && !isRight) {
@@ -97,6 +106,7 @@ const char* MoveState::GetSubStateName() const
     case SubState::MOVE_ONPET_LOOKDOWN:   return "MOVE_ONPET_LOOKDOWN"; break;
     case SubState::MOVE_ONAIR:            return "MOVE_ONAIR"; break;
     case SubState::MOVE_ONAIR_ONPET:      return "MOVE_ONAIR_ONPET"; break;
+    case SubState::MOVE_HANGON_AUTO:             return "MOVE_AUTO"; break;
     case SubState::NONE:                  
     default:                              return "NONE"; break;
     }
