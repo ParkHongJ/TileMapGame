@@ -41,9 +41,8 @@ HRESULT Character::Init()
     currFrameInfo = { { 0,0 }, {0, 0} };
     
 
-    colliderSize = { 30.0f, 50.0f };
+    colliderSize = { 30.0f, 40.0f };
 
-    leftHandColliderSize = rightHandColliderSize = { 20.0f , 10.f };
  
     colliderOffsetY = 25.f;
 
@@ -53,18 +52,9 @@ HRESULT Character::Init()
         this
     );
 
-    leftHandCollider = new BoxCollider(
-        { -colliderSize.x, -10.0f },
-        {   leftHandColliderSize.x, leftHandColliderSize.y},
-        this
-    );
 
-
-    rightHandCollider = new BoxCollider(
-        { colliderSize.x ,-10.f },
-        { rightHandColliderSize.x, rightHandColliderSize.y },
-        this
-    );
+   leftHandPos = { Pos.x - colliderSize.x / 2, Pos.y };
+   rightHandPos = { Pos.x + colliderSize.x / 2, Pos.y };
 
     
 
@@ -129,15 +119,11 @@ void Character::Release()
 
 void Character::Update(float TimeDelta)
 {
-    CheckCollision();
+    CheckTileCollision();
     isInAir = !isTouchingBottom;
+
      
     auto km = KeyManager::GetInstance();
-    if (km->IsOnceKeyDown('Z') && isTouchingBottom)
-    {
-        SetYVelocity(-GetJumpPower()); 
-        SetIsInAir(true);
-    }
 
     // Add JunYong
     if (km->IsOnceKeyDown('F'))
@@ -173,6 +159,8 @@ void Character::Update(float TimeDelta)
     // 상태 전이 판단
     HandleTransitions();
 
+
+
     // 현재 상태 업데이트
     if (state)
         state->Update();
@@ -183,6 +171,9 @@ void Character::Update(float TimeDelta)
     else if (state == &attackState) HandleAttackLogic();
     else if (state == &interactionState) HandleInteractionLogic();
 
+
+
+
     // 공중 점프 애니메이션 처리
     if(!isHangOn)
         HandleAirAnimation();
@@ -190,14 +181,25 @@ void Character::Update(float TimeDelta)
     PlayAnimation();
     ApplyGravity(TimeDelta);
 
-
-    Move();
-
-
     // Camera에 정보 전달
     auto cm = CameraManager::GetInstance();
     cm->SetTargetPos(Pos);
     cm->SetLookingState(isLookUpLocked, isLookDownLocked);
+
+    Move();
+    // Update() 내에서
+    if (!isHangOn && isInAir)
+    {
+        if (CheckHangOn())
+        {
+            isHangOn = true;
+            velocity = { 0.0f, 0.0f };
+            ChangeState(&interactionState);
+            return;
+        }
+    }
+
+
 
 }
 
@@ -212,9 +214,26 @@ void Character::HandleTransitions()
     bool isInter = km->IsOnceKeyDown('A');
     bool isUp = km->IsStayKeyDown(VK_UP);
 
+
+    if (isJump)
+    {
+        if (isTouchingBottom || isHangOn)  // 매달림 상태에서도 점프 가능하게
+        {
+            velocity.y = -jumpPower;
+            isInAir = true;
+            isHangOn = false;      // 매달림 해제
+            isOnLadder = false;
+            isOnRope = false;
+
+            ChangeState(&idleState);  // 공중에서도 idleState로 전이되게 할 수도 있음
+
+            return;
+        }
+    }
+
+
     if (isInAir)
     {
-
         if (CheckHangOn())
         {
             isHangOn = true;
@@ -223,6 +242,7 @@ void Character::HandleTransitions()
 
             return;
         }
+        else isHangOn = false;
 
     }
 
@@ -258,17 +278,6 @@ void Character::HandleTransitions()
     }
 
 
-
-    // 0. 점프 (공격 중이더라도 점프 가능)
-    if (isJump && isTouchingBottom)
-    {
-        velocity.y = -jumpPower;
-        isInAir = true;
-        isOnLadder = false;
-        isOnRope = false;
-
-        interActionPQ = {};
-    }
 
     
     // 공격 
@@ -365,31 +374,41 @@ bool Character::CheckAlmostFall()
 
 bool Character::CheckHangOn()
 {
-    float maxHangDist = 4.0f;      // 매달릴 수 있는 거리
-    float debugTime = 1.0f;        // 디버그 Ray 지속 시간
+    float maxHangDist = 7.0f;
+    float debugTime = 1.0f;
     bool debugDraw = true;
 
     RaycastHit hitLeft, hitRight;
+    bool leftHang = false, rightHang = false;
 
-    // 왼손 아래로 Ray 쏘기
-    Ray leftRay = {
-        leftHandCollider->GetWorldPos(),
-        { 0.f, 1.f }
-    };
+    leftHandPos = { Pos.x - colliderSize.x , Pos.y - colliderSize.y / 2 };
+    rightHandPos = { Pos.x + colliderSize.x , Pos.y - colliderSize.y /2 };
 
-    bool leftHang = CollisionManager::GetInstance()->RaycastAll(leftRay, maxHangDist, hitLeft, debugDraw, debugTime, this);
+    Ray leftRay = { leftHandPos, { -0.1f, 1.f } };
+    if (CollisionManager::GetInstance()->RaycastAll(leftRay, maxHangDist, hitLeft, debugDraw, debugTime, this))
+    {
+        if (hitLeft.hit && isFlip)
+        {
+            // 손이 타일보다 위에 있을 때만 매달림
+            if (leftHandPos.y < hitLeft.point.y - 0.5f) // -1.0f는 여유
+                leftHang = true;
+        }
+    }
 
-    // 오른손 아래로 Ray 쏘기
-    Ray rightRay = {
-        rightHandCollider->GetWorldPos(),
-        { 0.f, 1.f }
-    };
+    Ray rightRay = { rightHandPos, { 0.1f, 1.f } };
+    if (CollisionManager::GetInstance()->RaycastAll(rightRay, maxHangDist, hitRight, debugDraw, debugTime, this))
+    {
+        if (hitRight.hit && !isFlip)
+        {
+            if (rightHandPos.y < hitRight.point.y - 0.5f)
+                rightHang = true;
+        }
+    }
 
-    bool rightHang = CollisionManager::GetInstance()->RaycastAll(rightRay, maxHangDist, hitRight, debugDraw, debugTime, this);
-
-    // 둘 중 하나라도 맞으면 매달릴 수 있음
     return leftHang || rightHang;
 }
+
+
 
 
 void Character::HandleIdleLogic() {
@@ -405,9 +424,6 @@ void Character::HandleIdleLogic() {
         currLockTime += deltaTime;
         if (GetCurrAnimEnd() && currLockTime > lookUpLockTime)
             isLookUpLocked = true;
-
-
-
         break;
 
     case IdleState::SubState::IDLE_LOOKUP_STOP:
@@ -693,23 +709,6 @@ void Character::PlayAnimation()
     frameTime = 0.f;
 
 
-    if (isHangOn)
-    {
-        switch (currFrameInfo.mode)
-        {
-        case AnimationMode::Loop:
-            currFrameInd.x++;
-            if (currFrameInd.x > currFrameInfo.endFrame.x)
-                currFrameInd.x = currFrameInfo.startFrame.x;
-            break;
-
-        case AnimationMode::FreezeAtX:
-        case AnimationMode::Hold:
-            if (currFrameInd.x < currFrameInfo.endFrame.x)
-                currFrameInd.x++;
-            break;
-        }
-    }
 
     // 공중 애니메이션일 경우
     if (currFrameInfo.startFrame.y == 9 && isInAir)
@@ -744,12 +743,12 @@ void Character::PlayAnimation()
             currFrameInd.x = frame;
         }
 
-        return;
     }
-
-    // 일반 애니메이션
-    switch (currFrameInfo.mode)
+    else
     {
+        // 일반 애니메이션
+        switch (currFrameInfo.mode)
+        {
         case AnimationMode::Loop:
             currFrameInd.x++;
             if (currFrameInd.x > currFrameInfo.endFrame.x)
@@ -760,8 +759,11 @@ void Character::PlayAnimation()
         case AnimationMode::Hold:
             if (currFrameInd.x < currFrameInfo.endFrame.x)
                 currFrameInd.x++;
-        break;
+            break;
+        }
     }
+
+   
 
 }
 
@@ -858,7 +860,7 @@ void Character::ApplyGravity(float TimeDelta)
 }
 
 
-void Character::CheckCollision()
+void Character::CheckTileCollision()
 {
     float maxDist = 10.0f;
     float debugTime = 1.0f;
@@ -905,6 +907,12 @@ void Character::CheckCollision()
 
 void Character::Move()
 {
+    if (isHangOn)
+    {
+        velocity.x = 0.f;
+        return;
+    }
+
     KeyManager* km = KeyManager::GetInstance();
 
     float vx = 0.f;

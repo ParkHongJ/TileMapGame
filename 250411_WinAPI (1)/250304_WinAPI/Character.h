@@ -28,8 +28,6 @@ private:
 	CharacterState*				state;
 
 	BoxCollider*		     collider;
-	BoxCollider*		leftHandCollider;
-	BoxCollider*		rightHandCollider;
 
 	//Item*				     currItem;
 
@@ -79,8 +77,10 @@ private:
 	float	bottomHitDist = 10000.0f; 
 
 
-	FPOINT leftHandColliderSize;
-	FPOINT rightHandColliderSize;
+	FPOINT leftHandPos;
+	FPOINT rightHandPos;
+
+	FPOINT hangOnPosition;
 
 	FPOINT colliderSize;
 	float colliderOffsetY;
@@ -172,6 +172,7 @@ public:
 	bool CheckAlmostFall();
 	bool CheckHangOn();
 
+	void CheckTileCollision();
 
 	// HFSM
 	void HandleIdleLogic();
@@ -185,7 +186,6 @@ public:
 	
 	void ApplyGravity(float TimeDelta);
 	
-	void CheckCollision();
 
 	
 	float GetVelocitySize();
