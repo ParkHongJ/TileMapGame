@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Monster.h"
-#include "CollisionManager.h"
+//#include "CollisionManager.h"
 
 Monster::Monster()
 {
@@ -14,7 +14,7 @@ HRESULT Monster::Init()
 {
 	monsterState = MonsterState::IDLE;
 	damage = 0;
-	dir = { 0,0 };
+	dir = { -1,-1 };
 	moveSpeed = 0.0f;
 
 	startFrameIndexX = 0;
@@ -28,7 +28,6 @@ HRESULT Monster::Init()
 
 	elipsedTime = 0.0f;
 	frameSpeed = 0.0f;
-
 	meetPlayer = false;
 	isAttack = false;
 	isDamaged = false;
@@ -48,6 +47,10 @@ void Monster::Update(float TimeDelta)
 }
 
 void Monster::FrameUpdate(float TimeDelta)
+{
+}
+
+void Monster::CheckCollision()
 {
 }
 
