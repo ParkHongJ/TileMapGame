@@ -22,6 +22,7 @@ HRESULT TreasureChest::Init()
 
 	Pos = { 700, 100 };
 
+	//BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
 
 	itemState = ItemState::STATE_UNEQUIP;

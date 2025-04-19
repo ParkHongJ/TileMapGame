@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "ObjectManager.h"
 #include "GameObject.h"
+#include "Character.h"
 #include <queue>
 
 ObjectManager::ObjectManager()
-	: nextId(0)
+	: nextId(0), player(nullptr)
 {
 
 }
@@ -25,6 +26,11 @@ void ObjectManager::AddObject(RENDERORDER renderId, GameObject* obj)
 	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
 	obj->SetObjectRenderId(renderId);
 	objects.emplace(++nextId, obj);
+
+	if (renderId == RENDERORDER::RENDER_PLAYER)
+	{
+		player = (Character*)obj;
+	}
 }
 
 void ObjectManager::AddObject(unsigned int id, RENDERORDER renderId, GameObject* obj)
@@ -38,10 +44,17 @@ void ObjectManager::AddObject(unsigned int id, RENDERORDER renderId, GameObject*
 	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
 	obj->SetObjectRenderId(renderId);
 	objects.emplace(id, obj);
+
+	if (renderId == RENDERORDER::RENDER_PLAYER)
+	{
+		player = (Character*)obj;
+	}
 }
 
 void ObjectManager::ReplaceObject(unsigned int id, GameObject* obj)
 {
+	// 플레이어는 이 함수로 대체하지 말자.
+
 	if (false == RemoveObject(id))
 	{
 		MessageBox(g_hWnd, TEXT("해당 인덱스 오브젝트가 존재하지 않습니다."), TEXT("경고"), MB_OK);

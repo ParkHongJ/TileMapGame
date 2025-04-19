@@ -31,6 +31,7 @@ class Collider
 
 public:
 	Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject);
+	Collider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject);
 	virtual ~Collider();
 
 	void Release() {};
@@ -51,6 +52,8 @@ public:
 	inline const FPOINT& GetWorldPos() { return Pos; }
 	inline const FPOINT& GetScale() { return Scale; }
 	inline const ColliderType& GetType() { return Type; }
+	inline const CollisionMaskType& GetMaskType() { return maskType; }
+	inline void SetMaskType(CollisionMaskType maskType) { this->maskType = maskType; };
 	inline GameObject* GetOwner() const { return Owner; }
 
 protected:
@@ -66,6 +69,7 @@ class BoxCollider : public Collider
 {
 public:
 	BoxCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject);
+	BoxCollider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject);
 	~BoxCollider() {};
 
 public:
@@ -82,6 +86,7 @@ class SphereCollider : public Collider
 {
 public:
 	SphereCollider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject, float radius);
+	SphereCollider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject, float radius);
 	~SphereCollider() {};
 
 	virtual void Update(float TimeDelta) override;

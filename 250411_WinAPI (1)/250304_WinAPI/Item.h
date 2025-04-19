@@ -144,6 +144,8 @@ protected:
 	float equipColMaxCoolTime = 0.5f;
 
 private:
+
+	bool isFlip;
 	FPOINT velocity;
 	FPOINT acceleration = { 0, 0 };  // °¡¼Óµµ
 

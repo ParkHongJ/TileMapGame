@@ -19,11 +19,17 @@ HRESULT SnakeMonster::Init()
 {
     snakeImage = ImageManager::GetInstance()->FindImage("Snake_Monster");
 
+    //snakeCollider = new BoxCollider(
+    //    { 20.0f , 15.0f },     // Offset
+    //    { 85.0f, 80.0f },  // 
+    //    this
+    //    );
+
     snakeCollider = new BoxCollider(
         { 20.0f , 15.0f },     // Offset
         { 85.0f, 80.0f },  // 
-        this
-        );
+        CollisionMaskType::MONSTER,this
+    );
 
    // Pos = { (WINSIZE_X / 2), (WINSIZE_Y / 2)};
     Pos = { 300, 250 };

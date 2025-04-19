@@ -26,13 +26,25 @@ public:
 	virtual void Use(void* info) override;
 	virtual void Detect(GameObject* obj) override;
 
+	virtual void FrameUpdate(float TimeDelta) override;
+
+	void Fire();
+
+
 	// 던지거나 죽으면서 뱉으면 DropMove로 움직여보자.
 	virtual void DropMove(float TimeDelta) override;
 	virtual void DropMoveX(float TimeDelta) override;
 	virtual void DropMoveY(float TimeDelta) override;
 
 private:
-	int BulletCnt;
+	int bulletCnt;
+	float fireCoolTime;
+	float fireMaxCoolTime;
+	bool isFire;
 
+	int fireCurFrameX;
+
+	Image* fireImage;
+	FPOINT fireOffset;
 };
 

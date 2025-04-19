@@ -22,7 +22,7 @@ HRESULT IncreaseGold::Init()
 
 	Pos = { 800, 100 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 40 }, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 40 }, CollisionMaskType::ITEM, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
@@ -54,15 +54,9 @@ void IncreaseGold::Equip()
 
 void IncreaseGold::Equip(void* info)
 {
-	if (ItemState::STATE_EQUIP == itemState)
-	{
-		// 두 번 충돌 방지 임시 코드
-		return;
-	}
-
 	itemState = ItemState::STATE_EQUIP;
-	PlayerStatusInfo* desc = (PlayerStatusInfo*)info;
-	desc->gold += gold;
+	PlayerStatus* desc = (PlayerStatus*)info;
+	desc->GetInfo()->gold += gold;
 }
 
 void IncreaseGold::UnEquip()
@@ -89,6 +83,7 @@ void IncreaseGold::Detect(GameObject* obj)
 {
 	if (auto player = obj->GetType<Character>())
 	{
+		Equip(player->GetPlayerStatus());
 		SetDestroy();
 	}
 

@@ -46,7 +46,7 @@ void Bomb::Update(float TimeDelta)
 
 	if (0.f >= animationTime)
 	{
-		frameSpeed = 5.f;
+		frameSpeed += animAcc * TimeDelta;
 		//frameSpeed += TimeDelta; // °¡¶ó
 	}
 

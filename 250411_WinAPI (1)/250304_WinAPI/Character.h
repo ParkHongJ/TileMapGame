@@ -90,13 +90,10 @@ public:
 	static AttackState				  attackState;
 	static InteractionState		 interactionState;
 
-/// <summary>
-/// Add JunYong
-/// </summary>
 private:
 	PlayerStatus* playerStatus;
 public:
-
+	inline PlayerStatus* GetPlayerStatus() { return playerStatus; };
 
 public:
 
@@ -104,6 +101,8 @@ public:
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+
+	virtual void Detect(GameObject* obj) override;
 
 
 	// Move

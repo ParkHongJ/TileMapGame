@@ -30,6 +30,7 @@ HRESULT MainGame::Init()
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init(m_pRenderTarget.Get());
+	CollisionManager::GetInstance()->Init();
 
 	//SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
 	//SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
@@ -100,6 +101,7 @@ void MainGame::Update()
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	SceneManager::GetInstance()->Update(deltaTime);
 	ObjectManager::GetInstance()->Update(deltaTime);
+	CollisionManager::GetInstance()->Update(deltaTime);
 
 }
 
@@ -107,7 +109,6 @@ void MainGame::LateUpdate()
 {
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	ObjectManager::GetInstance()->LateUpdate(deltaTime);
-	CollisionManager::GetInstance()->Update(deltaTime);
 }
 
 void MainGame::Render()
