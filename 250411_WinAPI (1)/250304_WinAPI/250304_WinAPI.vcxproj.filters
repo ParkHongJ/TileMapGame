@@ -305,6 +305,7 @@
     </ClCompile>
     <ClCompile Include="GunBullet.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
     <ClCompile Include="dialogUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClCompile>
@@ -585,6 +586,7 @@
     </ClInclude>
     <ClInclude Include="GunBullet.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
     <ClInclude Include="dialogUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClInclude>
