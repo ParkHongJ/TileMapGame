@@ -378,7 +378,7 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	);
 }
 
-void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float atlasX, float atlasY, float srcW, float srcH)
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float atlasX, float atlasY, float srcW, float srcH, float alpha)
 {
 	if (!imageInfo->bitmap) return;
 
@@ -429,7 +429,7 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 		renderTarget->SetTransform(flipMat * originalTransform);
 	}
 
-	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, alpha, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
 
 	// Transform º¹¿ø
 	if (flipX)

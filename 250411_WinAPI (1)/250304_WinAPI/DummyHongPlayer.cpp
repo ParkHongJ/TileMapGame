@@ -67,21 +67,49 @@ void DummyHongPlayer::Update(float TimeDelta)
 
 		for (int i = 0; i < 15; i++)
 		{
-			Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 30.f, 3.f, 0, 0);
-			PhysicsOption* physicsOp = new PhysicsOption;
-
-			float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
-			float speed = RandomRange(350.f, 375.0f);            // ¼Óµµµµ ·£´ý
-
-			velocity =
 			{
-				sinf(angleRad) * speed,
-				-cosf(angleRad) * speed  // 135µµ (¿ÞÂÊ À§)
-			};
+				Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 30.f, 3.f, 1, 0);
+				PhysicsOption* physicsOp = new PhysicsOption;
+				SizeOption* sizeOp = new SizeOption(0.04f);
+				TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
 
-			physicsOp->Init(velocity, 0.5f);
-			
-			particle->AddParticleOption(physicsOp);
+				float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+				float speed = RandomRange(350.f, 375.0f);            // ¼Óµµµµ ·£´ý
+				//float speed = RandomRange(850.f, 1175.0f);            // ¼Óµµµµ ·£´ý
+
+				velocity =
+				{
+					sinf(angleRad) * speed,
+					-cosf(angleRad) * speed  // 135µµ (¿ÞÂÊ À§)
+				};
+
+				//physicsOp->Init(velocity, 0.3f);
+				physicsOp->Init(velocity, 0.5f);
+
+				particle->AddParticleOption(physicsOp);
+				particle->AddParticleOption(sizeOp);
+				particle->AddParticleOption(trailOp);
+			}
+
+			{
+				Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, 0.f, 45.f, 0.01f, 4, 1);
+				PhysicsOption* physicsOp = new PhysicsOption;
+
+				float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+				float speed = RandomRange(450.f, 555.0f);            // ¼Óµµµµ ·£´ý
+
+				velocity =
+				{
+					sinf(angleRad) * speed,
+					-cosf(angleRad) * speed  // 135µµ (¿ÞÂÊ À§)
+				};
+
+				physicsOp->Init(velocity, 0.5f);
+
+				AlphaOption* alphaOp = new AlphaOption(0.5f);
+				particle->AddParticleOption(physicsOp);
+				particle->AddParticleOption(alphaOp);
+			}
 		}
 		/*vector<GameObject*> OutObject;
 		if (CollisionManager::GetInstance()->GetObjectsInCircle(Pos, 100.f, &OutObject))

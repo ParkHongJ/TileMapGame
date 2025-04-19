@@ -6,6 +6,7 @@
 #include "Collider.h"
 #include "CameraManager.h"
 #include "ImageManager.h"
+#include "ParticleManager.h"
 
 void Particle::Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime, int atlasX, int atlasY)
 {
@@ -18,7 +19,7 @@ void Particle::Init(string imageStr, FPOINT pos, float angle, float size, float 
 	this->size = size / ATLAS_TILE_SIZE;
 	
 	atlas = { atlasX, atlasY };
-
+	alpha = 1.f;
 	isEnd = false;
 
 	image = ImageManager::GetInstance()->FindImage(imageStr);
@@ -61,7 +62,7 @@ void Particle::Render(ID2D1HwndRenderTarget* rt)
 	{
 		FPOINT cameraPos = pos + CameraManager::GetInstance()->GetPos();
 
-		image->Render(rt, cameraPos.x, cameraPos.y, size, size, atlas.x, atlas.y, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+		image->Render(rt, cameraPos.x, cameraPos.y, size, size, atlas.x, atlas.y, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE, alpha);
 	}
 }
 
@@ -194,4 +195,62 @@ void HomingLinearOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
 	rt->SetTransform(mat);
 	rt->DrawBitmap(bmp, D2D1::RectF(0, 0, size.width, size.height), 1.0f);
 	rt->SetTransform(D2D1::Matrix3x2F::Identity()); // 원래대로
+}
+
+void AlphaOption::Update(Particle& p, float dt)
+{
+	p.alpha -= lessAlpha * dt;
+}
+
+void AlphaOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+{
+}
+
+void SizeOption::Update(Particle& p, float dt)
+{
+	p.size -= lessSize * dt;
+
+	if (p.size <= 0.f)
+	{
+		p.size = 0.f;
+	}
+}
+
+void SizeOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+{
+}
+
+TrailOption::TrailOption(string trailStr, float interval, float lifeTime)
+	: trailParticleStr(trailStr), spawnInterval(interval), trailLifeTime(lifeTime)
+{
+	timeAccumulator = 0.f;
+}
+
+void TrailOption::Update(Particle& p, float dt)
+{
+	timeAccumulator += dt;
+	if (timeAccumulator >= spawnInterval)
+	{
+		timeAccumulator = 0.f;
+
+		// 잔상 파티클 생성
+
+		if (p.lifeTime <= 0.2f)
+		{
+			return;
+		}
+
+		if (p.size <= 0.15f)
+		{
+			return;
+		}
+		Particle* trail = ParticleManager::GetInstance()->GetParticle(trailParticleStr, p.pos, p.angle, p.size + 30.f, trailLifeTime, p.atlas.x, p.atlas.y);
+
+		// 흔적용 옵션 붙이기 (예: 점점 사라짐, 작아짐)
+		trail->AddParticleOption(new SizeOption(0.5f));
+	}
+}
+
+void TrailOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+{
 }

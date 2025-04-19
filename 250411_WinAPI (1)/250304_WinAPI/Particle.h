@@ -18,7 +18,7 @@ public:
 	float lifeTime;
 	float elapsedTime;
 	bool isEnd;
-
+	float alpha;
 	POINT atlas;
 
 	class Image* image;
@@ -98,6 +98,50 @@ public:
 		if (delta.x * delta.x + delta.y * delta.y < 4.f) // 거리^2 < 2^2
 			p.isEnd = true;
 	}
+
+	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+};
+
+class AlphaOption : public IParticleOption
+{
+	float lessAlpha = 1;
+public:
+	AlphaOption(float alphaRatio)
+		: lessAlpha(alphaRatio) {
+	}
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
+
+	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+};
+
+class SizeOption : public IParticleOption
+{
+	float lessSize;
+public:
+	SizeOption(float sizeRatio)
+		: lessSize(sizeRatio) {
+	}
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
+
+	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+};
+
+class TrailOption : public IParticleOption
+{
+	string trailParticleStr;
+	float timeAccumulator;
+	float spawnInterval; // 50ms마다 하나 생성
+	float trailLifeTime;
+
+public:
+	TrailOption(string trailStr, float interval, float lifeTime);
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
 
 	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
 };
