@@ -22,6 +22,6 @@ private:
 
 private:
 	//나중에 게임매니저로 빼든해야한다.
-	Tile* tileMap[44][36];
+	Tile* tileMap[36][44];
 };
 

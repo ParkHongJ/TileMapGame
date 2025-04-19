@@ -87,7 +87,7 @@ public:
 		float x, float y,
 		float scaleX, float scaleY,
 		float atalasX, float atalasY,
-		float srcW, float srcH);
+		float srcW, float srcH, float alpha = 1.f, float angle = 0.f);
 
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, bool isFlip = false);
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, float scaleX, float scaleY, bool isFlip = false);

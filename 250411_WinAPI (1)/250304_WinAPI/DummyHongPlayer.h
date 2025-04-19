@@ -34,6 +34,24 @@ private:
 	FPOINT totalForce = { 0, 0 };
 	float bounciness = 0.5f;
 
+
+
+	FPOINT elbow = { 100.f, 0 };
+	FPOINT hand = { 200.f, 0 };
+
+	FPOINT worldElbow; // 계산용 월드 좌표
+	FPOINT worldHand;
+	float len1;       // 상대좌표 기준
+	float len2;
+	FPOINT targetPos; // 목표 지점
+
+	Image* img;
+	bool bExplosion = false;
+	float CurrentFrame = 0.f;
+	int CurrentIndex = 0;
+
+	void SolveIK2Bone(FPOINT root, FPOINT& elbow, FPOINT& hand, const FPOINT& target, float len1, float len2);
+
 	float RandomRange(float min, float max)
 	{
 		float r = (float)rand() / RAND_MAX; // 0.0 ~ 1.0
@@ -85,3 +103,9 @@ private:
 
 };
 
+
+
+//float len1 = 50; // upper arm
+//float len2 = 50; // forearm
+//
+//SolveIK2Bone(root, elbow, hand, target, len1, len2);

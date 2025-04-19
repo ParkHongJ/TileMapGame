@@ -31,6 +31,7 @@ HRESULT MainGame::Init()
 	KeyManager::GetInstance()->Init();
 	SceneManager::GetInstance()->Init(m_pRenderTarget.Get());
 	CollisionManager::GetInstance()->Init();
+	ParticleManager::GetInstance()->Init();
 
 	//SceneManager::GetInstance()->AddScene("A*알고리즘", new AstarScene());
 	//SceneManager::GetInstance()->AddScene("전투씬_1", new BattleScene());
@@ -90,6 +91,8 @@ void MainGame::Release()
 	KeyManager::GetInstance()->Release();
 	ImageManager::GetInstance()->Release();
 	ObjectManager::GetInstance()->ReleaseInstance();
+	ParticleManager::GetInstance()->Release();
+	ParticleManager::GetInstance()->ReleaseInstance();
 	CollisionManager::GetInstance()->ReleaseInstance();
 
 	CoUninitialize(); // 프로그램 종료 시 정리
@@ -102,7 +105,7 @@ void MainGame::Update()
 	SceneManager::GetInstance()->Update(deltaTime);
 	ObjectManager::GetInstance()->Update(deltaTime);
 	CollisionManager::GetInstance()->Update(deltaTime);
-
+	ParticleManager::GetInstance()->Update(deltaTime);
 }
 
 void MainGame::LateUpdate()
@@ -246,6 +249,8 @@ void MainGame::Draw()
 
 	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
 	ObjectManager::GetInstance()->Render(m_pRenderTarget.Get());
+	ParticleManager::GetInstance()->Render(m_pRenderTarget.Get());
+
 	// Legacy
 	//// 백버퍼에 먼저 복사
 	//HDC hBackBufferDC = backBuffer->GetMemDC();

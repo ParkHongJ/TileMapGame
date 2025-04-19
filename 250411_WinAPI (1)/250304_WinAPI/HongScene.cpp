@@ -21,6 +21,7 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("Effect", L"Textures/fx_small.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
 
 	GameManager::GetInstance()->Init("hongScene");
 

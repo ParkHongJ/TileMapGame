@@ -3,23 +3,22 @@
 class Particle
 {
 public:
-	void Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime);
+	void Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime, int atlasX, int atlasY);
 	virtual void Update(float TimeDelta) ;
 	virtual void Render(ID2D1HwndRenderTarget* rt);
 	virtual void Release();
 
 	bool IsEnd() const { return isEnd; }
-
+	void AddParticleOption(class IParticleOption* particleOp);
 public:
 	//베이스
 	FPOINT pos;
-	FPOINT velocity;
 	float size;
 	float angle;
 	float lifeTime;
 	float elapsedTime;
 	bool isEnd;
-
+	float alpha;
 	POINT atlas;
 
 	class Image* image;
@@ -38,6 +37,7 @@ public:
 class PhysicsOption : public IParticleOption
 {
 	//중력관련
+	FPOINT velocity;
 	FPOINT acceleration = { 0, 0 };  // 가속도
 	float mass = 1.0f;
 	FPOINT gravity = { 0, 1500.0f };  // 중력
@@ -55,7 +55,7 @@ public:
 		totalForce.y += force.y;
 	}
 
-	void Init(string imageStr, FPOINT velocity, float bounciness, float lifeTime);
+	void Init(FPOINT velocity, float bounciness);
 	virtual void Update(Particle& particle, float TimeDelta) override;
 	virtual void Render(Particle& particle, ID2D1HwndRenderTarget* rt) override;
 };
@@ -98,6 +98,50 @@ public:
 		if (delta.x * delta.x + delta.y * delta.y < 4.f) // 거리^2 < 2^2
 			p.isEnd = true;
 	}
+
+	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+};
+
+class AlphaOption : public IParticleOption
+{
+	float lessAlpha = 1;
+public:
+	AlphaOption(float alphaRatio)
+		: lessAlpha(alphaRatio) {
+	}
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
+
+	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+};
+
+class SizeOption : public IParticleOption
+{
+	float lessSize;
+public:
+	SizeOption(float sizeRatio)
+		: lessSize(sizeRatio) {
+	}
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
+
+	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+};
+
+class TrailOption : public IParticleOption
+{
+	string trailParticleStr;
+	float timeAccumulator;
+	float spawnInterval; // 50ms마다 하나 생성
+	float trailLifeTime;
+
+public:
+	TrailOption(string trailStr, float interval, float lifeTime);
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
 
 	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
 };

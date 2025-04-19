@@ -215,7 +215,7 @@ void TileMapTool::DrawTileMap()
     ImVec2 mapOrigin = ImGui::GetCursorScreenPos();
 
     float scaledTileSize = tileSize * zoom;
-    ImGui::InvisibleButton("MapDropZone", ImVec2(16 * scaledTileSize, 16 * scaledTileSize));
+    ImGui::InvisibleButton("MapDropZone", ImVec2(40 * scaledTileSize, 32 * scaledTileSize));
     ImVec2 screenMouse = ImGui::GetMousePos();
 
     ImGui::SetCursorScreenPos(mapOrigin);

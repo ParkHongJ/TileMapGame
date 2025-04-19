@@ -95,7 +95,6 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType typ
 
 void Tile::CreateDecoTile(DecoDirection dir, bool hasTileAbove)
 {
-
 	DecoInfo* decoInfo = new DecoInfo;
 
 	int decoIndex = (int)dir - 1;
