@@ -49,6 +49,7 @@ void Whip::Render(ID2D1HwndRenderTarget* renderTarget)
 
 void Whip::Release()
 {
+
 }
 
 void Whip::Equip()

@@ -58,6 +58,7 @@ HRESULT MainGame::Init()
 
 	//SceneManager::GetInstance()->ChangeScene("효진");
 	SceneManager::GetInstance()->ChangeScene("게임");
+	
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);

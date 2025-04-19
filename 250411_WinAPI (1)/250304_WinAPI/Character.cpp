@@ -103,7 +103,7 @@ void Character::Release()
 {
     if (playerImage)
     {
-        ImageManager::GetInstance()->DeleteImage("Tae_Player");
+       // ImageManager::GetInstance()->DeleteImage("Tae_Player"); 다른데서도 쓰던거 있어서 주석했어여
         playerImage = nullptr;
 
     }
@@ -387,13 +387,13 @@ bool Character::CheckAlmostFall()
     
     RaycastHit hitLeft, hitRight;
 
-    bool isGroundLeft = CollisionManager::GetInstance()->RaycastAll({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, false , 1.0f, this);
-    bool isGroundRight = CollisionManager::GetInstance()->RaycastAll({ footRight, {0.f, 1.f} }, 10.f, hitRight, false , 1.0f, this);
+    //bool isGroundLeft = CollisionManager::GetInstance()->RaycastAll({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, false, 1.0f, this);
+    bool isGroundLeft = CollisionManager::GetInstance()->RaycastType({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, CollisionMaskType::TILE,false, 1.0f);
+   // bool isGroundRight = CollisionManager::GetInstance()->RaycastAll({ footRight, {0.f, 1.f} }, 10.f, hitRight, false, 1.0f, this);
+    bool isGroundRight = CollisionManager::GetInstance()->RaycastType({ footRight, {0.f, 1.f} }, 10.f, hitRight, CollisionMaskType::TILE, false , 1.0f);
 
     // 둘 중 하나만 떠 있으면 가장자리
     return (isGroundLeft ^ isGroundRight); // XOR
-
-
 }
 
 bool Character::CheckHangOn()
@@ -409,7 +409,8 @@ bool Character::CheckHangOn()
     rightHandPos = { Pos.x + colliderSize.x , Pos.y - colliderSize.y /2 };
 
     Ray leftRay = { leftHandPos, { -0.1f, 1.f } };
-    if (CollisionManager::GetInstance()->RaycastAll(leftRay, maxHangDist, hitLeft, debugDraw, debugTime, this))
+   // if (CollisionManager::GetInstance()->RaycastAll(leftRay, maxHangDist, hitLeft, debugDraw, debugTime, this))
+    if (CollisionManager::GetInstance()->RaycastType(leftRay, maxHangDist, hitLeft,CollisionMaskType::TILE,debugDraw, debugTime))
     {
         if (hitLeft.hit && isFlip)
         {
@@ -420,7 +421,9 @@ bool Character::CheckHangOn()
     }
 
     Ray rightRay = { rightHandPos, { 0.1f, 1.f } };
-    if (CollisionManager::GetInstance()->RaycastAll(rightRay, maxHangDist, hitRight, debugDraw, debugTime, this))
+    if (CollisionManager::GetInstance()->RaycastType(rightRay, maxHangDist, hitRight, CollisionMaskType::TILE, debugDraw, debugTime))
+
+    //if (CollisionManager::GetInstance()->RaycastAll(rightRay, maxHangDist, hitRight, debugDraw, debugTime, this))
     {
         if (hitRight.hit && !isFlip)
         {

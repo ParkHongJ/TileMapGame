@@ -110,12 +110,23 @@ void CollisionManager::Update(float TimeDelta)
 void CollisionManager::Release()
 {
     colliders.clear();
+
+    for (auto& colliderSet : layerCollisionMap)
+    {
+        colliderSet.second.clear();
+    }
+
 	//ReleaseInstance();
 }
 
 void CollisionManager::Clear()
 {
     colliders.clear();
+
+    for (auto& colliderSet : layerCollisionMap)
+    {
+        colliderSet.second.clear();
+    }
 }
 
 void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)
