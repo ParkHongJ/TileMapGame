@@ -13,7 +13,9 @@ public :
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void FrameUpdate(float TimeDelta) override;
+	virtual void CheckCollision() override;
 	virtual void Move() override;
+	virtual void ReverseMove();
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 private: 
