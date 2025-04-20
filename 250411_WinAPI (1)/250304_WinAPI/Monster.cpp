@@ -14,6 +14,7 @@ HRESULT Monster::Init()
 {
 	monsterState = MonsterState::IDLE;
 	damage = 0;
+	monsterHP = 0;
 	dir = { -1,-1 };
 	moveSpeed = 0.0f;
 
@@ -50,7 +51,15 @@ void Monster::FrameUpdate(float TimeDelta)
 {
 }
 
-void Monster::CheckCollision()
+void Monster::CheckTileCollision()
+{
+}
+
+void Monster::CheckPlayerCollision()
+{
+}
+
+void Monster::CheckItemCollision()
 {
 }
 
