@@ -57,6 +57,9 @@ public:
 
 	void TakeCollision(float coolTime);
 protected:
+	// 오브젝트 이름 (4.20 추가)
+	OBJECTNAME objectName;
+
 	// 렌더 분기.
 	RENDERORDER	objectRenderId;
 
@@ -86,5 +89,8 @@ public:
 	{
 		return dynamic_cast<T*>(this);
 	}
+
+	OBJECTNAME GetObjectName() { return objectName; }
+	void SetObjectName(OBJECTNAME objectName) { this->objectName = objectName; }
 };
 
