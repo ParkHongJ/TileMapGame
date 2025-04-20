@@ -59,6 +59,8 @@ private:
 
 	// Stat
 
+	int8_t					   health;
+
 	float						speed;
 	float				  attackSpeed;
 	float				   attackRate;
@@ -151,6 +153,7 @@ public:
 	// 
 	void Jump();
 	void HangOnTile();
+	void CheckInterAction();
 	bool CheckAlmostFall();
 	bool CheckHangOn();
 	FPOINT GetHangOnTargetPos();

@@ -26,6 +26,9 @@ HRESULT Character::Init()
   
     SetPos({ 200 / 2,0});
 
+    // Stat
+
+    health = 3;
     velocity = { 0.0f, 0.0f };
     gravity = 1000.f; 
     maxFallSpeed = 800.f; 
@@ -290,7 +293,6 @@ void Character::Update(float TimeDelta)
             state->Update();
 
 
-
         PlayAnimation();
 
         return;
@@ -412,35 +414,9 @@ void Character::HandleTransitions()
         HangOnTile();
     }
 
-    if (currInput.moveUp || isOnLadder || isOnRope)
-    {
-        
-        OutputDebugStringA("==================올라탈 곳 검사중=========================");
-        CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+    // [3] 상호작용 있는지 검사
 
-        if (!interActionPQ.empty())
-        {
-            // 사다리, 로프 pos 로 플레이어 위치 조정
-
-            /*if (interActionPQ.top() == 사다리 || interActionPQ.top() == 로프)
-            {
-                isOnLadder = true;
-                isOnRope = true;
-
-                ChangeState(&interactionState);
-                return;
-            }
-            else if (interActionPQ.top() == 상인)
-            {
-
-            }
-            else if (interActionPQ.top() == )
-            {
-
-            }*/
-
-        }
-    }
+    CheckInterAction();
 
 
     // 공격 
@@ -569,9 +545,6 @@ void Character::HandleMoveLogic() {
 
             targetHangOnPos = GetHangOnTargetPos();  // 목표 위치 계산
             velocity = { 0.f, 0.f }; // 중단
-
-            // 여기서는 상태 전이 보류 (이동 완료 후 시도할 것)
-
         }
         break;
 
@@ -755,7 +728,7 @@ bool Character::CheckAlmostFall()
     bool isGroundLeft = CollisionManager::GetInstance()->RaycastType({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, CollisionMaskType::TILE,false , 1.0f );
     bool isGroundRight = CollisionManager::GetInstance()->RaycastType({ footRight, {0.f, 1.f} }, 10.f, hitRight,CollisionMaskType::TILE, false , 1.0f);
 
-    // 둘 중 하나만 떠 있으면 가장자리
+    // 둘 중 하나만 떠 있으면 가장자리--
     return (isGroundLeft ^ isGroundRight); // XOR
 }
 
@@ -793,6 +766,70 @@ bool Character::CheckHangOn()
     }
 
     return leftHang || rightHang;
+}
+
+void Character::CheckInterAction()
+{
+    
+    if (currInput.moveUp || isOnLadder || isOnRope)
+    {
+        // 사다리 상호작용 중 점프 가능
+        if (currInput.jump && !isInAir)
+        {
+            isOnLadder = false;
+            isOnRope = false;
+            Jump();
+            return;
+        }
+
+        OutputDebugStringA("==================올라탈 곳 검사중=========================");
+        CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+
+
+        if (!interActionPQ.empty())
+        {
+            // 사다리, 로프 pos 로 플레이어 위치 조정
+
+            if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
+            {
+                isOnLadder = true;
+
+                ChangeState(&interactionState);
+                return;
+            }
+            else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+            {
+                isOnRope = true;
+
+                ChangeState(&interactionState);
+                return;
+            }
+
+        }
+    }
+    else if (currInput.interact)
+    {
+        CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+        if (!interActionPQ.empty())
+        {
+            // 
+
+            if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::DOOR)
+            {
+                ChangeState(&interactionState);
+                return;
+            }
+            /*
+            else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+            {
+                isOnRope = true;
+
+                ChangeState(&interactionState);
+                return;
+            }*/
+
+        }
+    }
 }
 
 void Character::Detect(GameObject* obj)
@@ -895,12 +932,7 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, isFlip);
     }
-
-
-
 }
-
-
 
 void Character::ChangeState(CharacterState* newState)
 {
@@ -917,8 +949,6 @@ void Character::ApplyGravity(float TimeDelta)
     if (isInAir)
     {
         float fallDist = velocity.y * TimeDelta;
-
-     
 
         // 중력 적용
         Pos.y += fallDist;
@@ -1054,24 +1084,26 @@ void Character::Move()
 // 사다리, 밧줄
 bool Character::MoveY()
 {
-   /* KeyManager* km = KeyManager::GetInstance();
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 
     float vy = 0.f;
-    if (km->IsStayKeyDown(VK_UP))       vy = -GetSpeed();
-    else if (km->IsStayKeyDown(VK_DOWN)) vy = GetSpeed();
-    else                                  vy = 0.f;
+    if (currInput.moveUp)       vy = -GetSpeed();
+    else if (currInput.moveDown) vy = GetSpeed();
+    else                                vy = 0.f;
 
+
+ 
 
     if ((vy < 0 && isTouchingTop) || (vy > 0 && isTouchingBottom)) {
         return false;
     }
 
+
     if (CanGoY(vy)) {
-        SetYVelocity(vy);
+
         Pos.y += velocity.y * TimeDelta;
         return true;
-    }*/
+    }
 
     return false;
 }
@@ -1079,8 +1111,6 @@ bool Character::MoveY()
 bool Character::CanGoY(float vy)
 {
     // 사다리 & 밧줄의 다음 타일을 갈 수 있느냐 검사
-
-
     vector<GameObject*> inCircleObjects;
 
     FPOINT center = Pos;
@@ -1089,20 +1119,16 @@ bool Character::CanGoY(float vy)
 
 
     //사다리 or 밧줄인지 검사
-   /* for (auto it : inCircleObjects)
+    for (auto it : inCircleObjects)
     {
-        if(*it  == )
+        if(it->GetObjectName() == OBJECTNAME::LADDER ||
+           it->GetObjectName() == OBJECTNAME::ROPE )
         {
-
-
             inCircleObjects.clear();
             inCircleObjects.shrink_to_fit();
             return true;
          }
     }
-*/
-
-
     return false;
 
 }
