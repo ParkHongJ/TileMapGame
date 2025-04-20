@@ -6,19 +6,11 @@ void MoveState::Enter(Character* character)
 {
     this->character = character;
  
-    if (character->GetIsLookDownLocked()) ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-    else if (character->GetIsMovingAuto()) ChangeSubState(SubState::MOVE_HANGON_AUTO);
-        else ChangeSubState(SubState::MOVE_ALONE);
 
 }
 
 void MoveState::Update() {
-    KeyManager* km = KeyManager::GetInstance();
-
-    bool isLeft = km->IsStayKeyDown(VK_LEFT);
-    bool isRight = km->IsStayKeyDown(VK_RIGHT);
-    bool isDown = km->IsStayKeyDown(VK_DOWN);
-    bool isDownUp = km->IsOnceKeyUp(VK_DOWN);
+    InputIntent input = character->GetCurrInputIntent();
     
 
     if (character->GetIsMovingAuto())
@@ -28,16 +20,6 @@ void MoveState::Update() {
     }
 
 
-    // 좌우 입력 없으면 Idle로 전이
-    if (!isLeft && !isRight) {
-        character->SetXVelocity(0.f);
-        if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
-            character->SetIsLookDownLocked(true);
-
-        character->ChangeState(&Character::idleState);
-        return;
-    }
-
     // 공중 상태에서는 서브 상태 변경 없음
     if (character->GetIsInAir())
     {
@@ -46,25 +28,38 @@ void MoveState::Update() {
     }
 
     // 아래 입력에 따른 서브 상태 변경
-    if (isDown) {
-       
-       if(character->GetCurrAnimEnd() && currentSubState == SubState::MOVE_LOOKDOWN_START){
-       
-            ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
-        }
-       else if (currentSubState != SubState::MOVE_LOOKDOWN_LOOP) {
-           ChangeSubState(SubState::MOVE_LOOKDOWN_START);
-       }
-    }
-    else if (isDownUp) {
-        ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
 
-        if (character->GetCurrAnimEnd())
-            ChangeSubState(MoveState::SubState::MOVE_ALONE);
+    if (input.moveDown)
+    {
+        if (character->GetIsCrouching()) 
+        {
+            ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
+            return;
+        }
+
+        if (currentSubState == SubState::MOVE_LOOKDOWN_START)
+        {
+            // START 상태일 땐 상태 유지. 애니메이션 끝나면 LOOP로 전이
+            if (character->GetCurrAnimEnd())
+                ChangeSubState(SubState::MOVE_LOOKDOWN_LOOP);
+            return;
+        }
+
+        if (currentSubState == SubState::MOVE_LOOKDOWN_LOOP)
+            return;
+
+        if (!character->GetIsCrouching())
+        {
+            ChangeSubState(SubState::MOVE_LOOKDOWN_START);
+            return;
+        }
     }
-    else {
+    else if (input.moveDownReleased) {
+        ChangeSubState(SubState::MOVE_LOOKDOWN_RELEASE);
+    }
+    else
         ChangeSubState(SubState::MOVE_ALONE);
-    }
+
 }
 
 

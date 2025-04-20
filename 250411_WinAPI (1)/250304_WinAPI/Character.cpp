@@ -67,11 +67,9 @@ HRESULT Character::Init()
     isFlip = false;
     isInAir = false;
     isAttacking = false;
-
-    jumpPressed = false;
-    attackPressed = false;
+    isCrouching = false;
     isLookUpLocked = false;
-
+    isLookDownLocked = false;
     currLockTime = 0.0f;
     lookUpLockTime = 1.0f;
     lookDownLockTime = 1.0f;
@@ -116,8 +114,37 @@ void Character::Release()
     }
 }
 
+void Character::HandleInput()
+{
+    KeyManager* km = KeyManager::GetInstance();
+
+    currInput = {};
+    currInput.moveLeft = km->IsStayKeyDown(VK_LEFT);
+    currInput.moveLeftReleased = km->IsOnceKeyUp(VK_LEFT);
+
+    currInput.moveRight = km->IsStayKeyDown(VK_RIGHT);
+    currInput.moveRightReleased = km->IsOnceKeyUp(VK_RIGHT);
+
+    currInput.moveUp = km->IsStayKeyDown(VK_UP);
+    currInput.moveUpReleased = km->IsOnceKeyUp(VK_UP);
+
+    currInput.moveDown = km->IsStayKeyDown(VK_DOWN);
+    currInput.moveDownReleased = km->IsOnceKeyUp(VK_DOWN);
+
+    currInput.jump = km->IsOnceKeyDown('Z');
+    currInput.attack = km->IsOnceKeyDown('X');
+    currInput.interact = km->IsOnceKeyDown('A');
+    currInput.shift = km->IsStayKeyDown(VK_SHIFT);
+}
+
+
 void Character::Update(float TimeDelta)
 {
+
+    // Camera에 정보 전달
+    auto cm = CameraManager::GetInstance();
+    cm->SetTargetPos(Pos);
+    cm->SetLookingState(isLookUpLocked, isLookDownLocked);
 
 
     if (isMovingAuto)
@@ -130,9 +157,11 @@ void Character::Update(float TimeDelta)
 
         return;
     }
-        
-        CheckTileCollision();
+
+    HandleInput();
+    CheckTileCollision();
     isInAir = !isTouchingBottom;
+
 
   
     auto km = KeyManager::GetInstance();
@@ -176,8 +205,7 @@ void Character::Update(float TimeDelta)
 
 
 
-    if (state == &interactionState)
-        HandleInteractionLogic();
+    if (state == &interactionState) HandleInteractionLogic();
     else if (state == &attackState) HandleAttackLogic();
     else if (state == &moveState) HandleMoveLogic();
     else if (state == &idleState) HandleIdleLogic();
@@ -193,85 +221,85 @@ void Character::Update(float TimeDelta)
     if (!isMovingAuto && !isHangOn)
         ApplyGravity(TimeDelta);
 
-    // Camera에 정보 전달
-    auto cm = CameraManager::GetInstance();
-    cm->SetTargetPos(Pos);
-    cm->SetLookingState(isLookUpLocked, isLookDownLocked);
-
     if (!isMovingAuto)
         Move();
     
 
-    if (!isHangOn && isInAir)
-    {
-        if (CheckHangOn())
-        {
-            isHangOn = true;
-            velocity = { 0.0f, 0.0f };
-            ChangeState(&interactionState);
-            return;
-        }
-    }
+    //if (!isHangOn && isInAir)
+    //{
+    //    if (CheckHangOn())
+    //    {
+    //        isHangOn = true;
+    //        velocity = { 0.0f, 0.0f };
+    //        ChangeState(&interactionState);
+    //        return;
+    //    }
+    //}
 
 
 
 }
 
+void Character::Jump()
+{
+    velocity.y = -jumpPower;
+    isInAir = true;
+    isHangOn = false; // 매달림 해제
+    isOnLadder = false;
+    isOnRope = false;
+    ChangeState(&idleState);
+    return;
+
+}
+void Character::HangOnTile()
+{
+    if (CheckHangOn())
+    {
+        isHangOn = true;
+        velocity = { 0.0f, 0.0f };
+        ChangeState(&interactionState);
+        return;
+    }
+    else
+        isHangOn = false;
+}
+
 void Character::HandleTransitions()
 {
-    KeyManager* km = KeyManager::GetInstance();
-    bool isLeft = km->IsStayKeyDown(VK_LEFT);
-    bool isRight = km->IsStayKeyDown(VK_RIGHT);
-    bool isAnyDirection = isLeft || isRight;
-    bool isAttack = km->IsOnceKeyDown('X');
-    bool isJump = km->IsOnceKeyDown('Z');
-    bool isInter = km->IsOnceKeyDown('A');
-    bool isUp = km->IsStayKeyDown(VK_UP);
+
+    if (currInput.jump && !isInAir)
+    {
+        Jump();
+    }
 
 
     // [1] 매달림 상태에서는 점프만 허용
     if (isHangOn)
     {
-        if (isJump)
+        if (currInput.jump)
         {
             velocity.y = -jumpPower;
             isInAir = true;
             isHangOn = false; // 매달림 해제
             isOnLadder = false;
             isOnRope = false;
-            ChangeState(&idleState);
         }
+        
+        ChangeState(&interactionState);
+        return;
 
-        return; // 다른 상태 전이는 차단
     }
 
     // [2] 공중에서 매달릴 수 있는지 검사
     if (isInAir)
     {
-        if (CheckHangOn())
-        {
-            isHangOn = true;
-            velocity = { 0.0f, 0.0f };
-            ChangeState(&interactionState);
-            return;
-        }
-        else
-            isHangOn = false;
-    }
-
-    if (isJump)
-    {
-        velocity.y = -jumpPower;
-        isInAir = true;
-        isHangOn = false; // 매달림 해제
-        isOnLadder = false;
-        isOnRope = false;
-        ChangeState(&idleState);
+        HangOnTile();
     }
 
 
 
-    if (isUp || isOnLadder || isOnRope)
+
+    if (currInput.moveUp || isOnLadder || isOnRope)
     {
         
         OutputDebugStringA("==================올라탈 곳 검사중=========================");
@@ -302,8 +330,6 @@ void Character::HandleTransitions()
     }
 
 
-
-    
     // 공격 
     char buf[128];
     sprintf_s(buf, "  isAttacking 변경됨 → %s\n", isAttacking ? "true" : "false");
@@ -311,7 +337,7 @@ void Character::HandleTransitions()
 
     if (isAttacking) return;
 
-     if (isAttack && !isAttacking)
+    if (currInput.attack && !isAttacking)
     {
         isAttacking = true;
 
@@ -321,17 +347,15 @@ void Character::HandleTransitions()
     }
 
     // 이동
-    if (isAnyDirection && !isInAir)
+    if ((currInput.moveLeft || currInput.moveRight) )
     {
         ChangeState(&moveState);
         return;
     }
-
-    // 공중 아닐 때만 idle
-    if (!isAnyDirection && !isInAir)
-    {
-        ChangeState(&idleState);
-    }
+ 
+    // 유후 상태
+    ChangeState(&idleState);
+    
 
 }
 
@@ -444,6 +468,7 @@ FPOINT Character::GetHangOnTargetPos()
 }
 
 
+
 void Character::HandleIdleLogic() {
     IdleState* idle = dynamic_cast<IdleState*>(state);
     
@@ -454,6 +479,7 @@ void Character::HandleIdleLogic() {
    
     switch (idle->GetCurrentSubState()) {
     case IdleState::SubState::IDLE_LOOKUP_START:
+        
         currLockTime += deltaTime;
         if (GetCurrAnimEnd() && currLockTime > lookUpLockTime)
             isLookUpLocked = true;
@@ -474,11 +500,13 @@ void Character::HandleIdleLogic() {
         break;
 
     case IdleState::SubState::IDLE_LOOKDOWN_STOP:
+        isCrouching = true;
         break;
 
     case IdleState::SubState::IDLE_LOOKDOWN_RELEASE:
         currLockTime = 0.0f;
         isLookDownLocked = false;
+        isCrouching = false;
         break;
 
     case IdleState::SubState::IDLE_ALONE:
@@ -518,16 +546,14 @@ void Character::HandleMoveLogic() {
     // 현재 서브상태에 따른 처리
     switch (move->GetCurrentSubState()) {
     case MoveState::SubState::MOVE_LOOKDOWN_START:
-
-
         
-
         break;
 
     case MoveState::SubState::MOVE_LOOKDOWN_RELEASE:
-        
+        isCrouching = false;
         break;
     case MoveState::SubState::MOVE_LOOKDOWN_LOOP:
+        isCrouching = true;
         if (CheckAlmostFall())
         {
             isMovingAuto = true;
@@ -651,8 +677,6 @@ void Character::InitAnimationMap()
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] =
     { {2, 1}, {4, 1}, AnimationMode::Hold };
 
-    animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] =
-    { {2, 1}, {4, 1}, AnimationMode::Hold };
 
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_FALL_ALMOST)}] =
     { {0, 3}, {7, 3}, AnimationMode::Loop };
@@ -779,8 +803,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n ishangOn : %d Speed: %f Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isHangOn, speed, velocity.x, velocity.y
+            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n ishangOn : %d isCrouching: %d Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isHangOn, isCrouching, velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);

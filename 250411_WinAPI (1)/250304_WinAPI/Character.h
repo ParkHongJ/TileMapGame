@@ -19,6 +19,26 @@ enum class SubAnim {
 	JUMP_DOWN,
 };
 
+struct InputIntent {
+	bool moveLeft = false;
+	bool moveLeftReleased = false;
+	bool moveRight = false;
+	bool moveRightReleased = false;
+	bool moveDown = false;
+	bool moveDownReleased = false;
+	bool moveUp = false;
+	bool moveUpReleased = false;
+	bool jump = false;
+	bool attack = false;
+	bool interact = false;
+	bool shift = false;
+
+	bool hasMovement() const { return moveLeft || moveRight; }
+};
+
+
+
+
 class Character : public GameObject
 {
 	GENERATE_BODY(Textures/char_yellow.png, 128, 128)
@@ -29,6 +49,8 @@ private:
 	CharacterState*				state;
 
 	BoxCollider*		     collider;
+	InputIntent				currInput;
+
 
 	//Item*				     currItem;
 
@@ -54,10 +76,8 @@ private:
 	bool				isHangOn;
 	bool                  isAttacking;
 	bool					  isOnVehicle;
-	
-	bool                  jumpPressed;
-	bool                attackPressed;
 
+	bool				isCrouching;
 	bool			   isLookUpLocked;
 	bool			 isLookDownLocked;
 
@@ -139,6 +159,8 @@ public:
 	float GetSpeed() { return this->speed; }
 
 
+	void HandleInput();
+	const InputIntent& GetCurrInputIntent() { return currInput; }
 	void HandleTransitions();
 	void HandleAirAnimation();
 	// Animation
@@ -154,6 +176,8 @@ public:
 
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
+
+	bool GetIsCrouching() { return isCrouching; }
 	bool GetIsLookUpLocked();
 	bool GetIsLookDownLocked();
 	bool GetCurrAnimEnd();
@@ -189,7 +213,8 @@ public:
 
 	FPOINT GetHangOnTargetPos();
 
-
+	void Jump();
+	void HangOnTile();
 
 	// Gravity
 	
