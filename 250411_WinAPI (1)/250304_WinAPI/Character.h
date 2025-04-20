@@ -19,6 +19,23 @@ enum class SubAnim {
 	JUMP_DOWN,
 };
 
+struct InputIntent {
+	bool moveLeft = false;
+	bool moveLeftReleased = false;
+	bool moveRight = false;
+	bool moveRightReleased = false;
+	bool moveDown = false;
+	bool moveDownReleased = false;
+	bool moveUp = false;
+	bool moveUpReleased = false;
+	bool jump = false;
+	bool attack = false;
+	bool interact = false;
+	bool shift = false;
+
+	bool hasMovement() const { return moveLeft || moveRight; }
+};
+
 class Character : public GameObject
 {
 	GENERATE_BODY(Textures/char_yellow.png, 128, 128)
@@ -28,10 +45,23 @@ private:
 	Image*				  playerImage;
 	CharacterState*				state;
 
+
+	// Collider
 	BoxCollider*		     collider;
+	FPOINT			     colliderSize;
+	float			  colliderOffsetY;
+
+
+	InputIntent				currInput;
+
 
 	//Item*				     currItem;
 
+	// Stat
+
+	float						speed;
+	float				  attackSpeed;
+	float				   attackRate;
 	FPOINT				     velocity;
 
 
@@ -40,24 +70,27 @@ private:
 	POINT				 currFrameInd;
 	FrameInfo		    currFrameInfo;
 
-	float						speed;
-	float				  attackSpeed;
-	float				   attackRate;
 
 	// Gravity
 	float					  gravity;
 	float				 maxFallSpeed;
 	float				    jumpPower;
+	float			    bottomHitDist;
+
+
+
+	// State Boolean
+	bool			     isMovingAuto;
+
 	bool                      isInAir;
-
-
-	bool				isHangOn;
+	bool				    isHanging;
 	bool                  isAttacking;
-	bool					  isOnVehicle;
-	
-	bool                  jumpPressed;
-	bool                attackPressed;
+	bool			      isCrouching;
+	bool				   isOnLadder;
+	bool				     isOnRope;
+	bool				  isOnVehicle;
 
+	// For Camera
 	bool			   isLookUpLocked;
 	bool			 isLookDownLocked;
 
@@ -66,32 +99,23 @@ private:
 	float			 lookDownLockTime;
 
 
+	// RayCast
+	FPOINT                leftHandPos;
+	FPOINT               rightHandPos;
+
 	bool			   isTouchingLeft;
 	bool			  isTouchingRight;
 	bool				isTouchingTop;
 	bool		     isTouchingBottom;
 
-	bool				isOnLadder;
-	bool				isOnRope;
+	// AutoHaningMove
+	FPOINT            targetHangOnPos;
 
+	// Interaction
 
-	float	bottomHitDist = 10000.0f; 
-
-
-	FPOINT leftHandPos;
-	FPOINT rightHandPos;
-	
-
-
-	bool isMovingAuto = false;
-	FPOINT targetHangOnPos = { 0.f, 0.f };
-
-	FPOINT colliderSize;
-	float colliderOffsetY;
-
-	priority_queue<pair<float, GameObject*>> interActionPQ;
-	float								interactionRadius;
-	float								interactionOffset;
+	priority_queue<pair<float, GameObject*>>            interActionPQ;
+	float								            interactionRadius;
+	float							            	interactionOffset;
 
 
 
@@ -107,7 +131,7 @@ public:
 	inline PlayerStatus* GetPlayerStatus() { return playerStatus; };
 
 public:
-
+	// GameObject
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
@@ -117,12 +141,6 @@ public:
 
 
 	// Move
-	// Header (Character.h)에 선언
-	bool GetIsHangOn() const;
-	void SetIsHangOn(bool value);
-
-		bool GetIsMovingAuto() const;
-		void SetIsMovingAuto(bool value);
 
 	void Move();
 	bool MoveY();
@@ -130,21 +148,19 @@ public:
 	void SetYVelocity(float velocityY) { this->velocity.y = velocityY; }
 	void SetXVelocity(float velocityX) { this->velocity.x = velocityX; }
 	
-	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
-	bool GetIsInAir() { return this->isInAir; }
-	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
+	// 
+	void Jump();
+	void HangOnTile();
+	bool CheckAlmostFall();
+	bool CheckHangOn();
+	FPOINT GetHangOnTargetPos();
 
-	float GetJumpPower() { return this->jumpPower; }
-	float GetSpeed() { return this->speed; }
 
-
-	void HandleTransitions();
-	void HandleAirAnimation();
 	// Animation
 
 	void InitAnimationMap();
-
 	void PlayAnimation();
+	void HandleAirAnimation();
 
 	void SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState);
 	void SetFrameTime(float frameTime) { this->frameTime = frameTime; }
@@ -153,6 +169,45 @@ public:
 
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
+
+
+	// HFSM
+	void HandleTransitions();
+
+	void HandleIdleLogic();
+	void HandleMoveLogic();
+	void HandleAttackLogic();
+	void HandleInteractionLogic();
+
+	void ChangeState(CharacterState* newState);
+
+
+	// Gravity
+
+	void ApplyGravity(float TimeDelta);
+
+	// Collision
+
+	void CheckTileCollision();
+
+
+	// Input
+	const InputIntent& GetCurrInputIntent() { return currInput; }
+	void HandleInput();
+	
+
+
+	// Setter
+
+	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
+	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
+
+	float GetJumpPower() { return this->jumpPower; }
+	float GetSpeed() { return this->speed; }
+
+
+
+	bool GetIsCrouching() { return isCrouching; }
 	bool GetIsLookUpLocked();
 	bool GetIsLookDownLocked();
 	bool GetCurrAnimEnd();
@@ -163,48 +218,24 @@ public:
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
 
 	void SetIsAttacking(bool input) { this->isAttacking = input; }
-	
+	bool GetIsInAir() { return this->isInAir; }
 
-	// 사다리 상태
 	void SetIsOnLadder(bool value) { isOnLadder = value; }
 	bool GetIsOnLadder() const { return isOnLadder; }
 
-	// 밧줄 상태
 	void SetIsOnRope(bool value) { isOnRope = value; }
 	bool GetIsOnRope() const { return isOnRope; }
-
-
-	bool CheckAlmostFall();
-	bool CheckHangOn();
-
-	void CheckTileCollision();
-
-	// HFSM
-	void HandleIdleLogic();
-	void HandleMoveLogic();
-	void HandleAttackLogic();
-	void HandleInteractionLogic();
-
-
-	FPOINT GetHangOnTargetPos();
-
-
-
-	// Gravity
-	
-	void ApplyGravity(float TimeDelta);
-	
-
 	
 	float GetVelocitySize();
 	float GetYVelocity();
 
+	bool GetIsHangOn() const;
+	void SetIsHangOn(bool value);
 
-	
+	bool GetIsMovingAuto() const;
+	void SetIsMovingAuto(bool value);
 
 	void SetSpeed(float speed) { this->speed = speed; }
-	
-	void ChangeState(CharacterState* newState);
 
 	bool PressAnyKey();
 

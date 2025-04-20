@@ -107,7 +107,7 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
 
-    ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
+    //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
 

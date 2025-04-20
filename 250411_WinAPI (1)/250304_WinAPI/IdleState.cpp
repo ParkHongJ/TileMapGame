@@ -6,22 +6,20 @@
 void IdleState::Enter(Character* character) {
     this->character = character;
 
-    if (character->GetIsLookDownLocked()) ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
-    else if (character->GetIsLookUpLocked()) ChangeSubState(SubState::IDLE_LOOKUP_STOP);
+    InputIntent input = character->GetCurrInputIntent();
+
+    if (input.moveDown) ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+    else if (input.moveUp) ChangeSubState(SubState::IDLE_LOOKUP_START);
     else ChangeSubState(SubState::IDLE_ALONE);
 }
 
 void IdleState::Update() {
-    KeyManager* km = KeyManager::GetInstance();
 
+    InputIntent input = character->GetCurrInputIntent();
+
+    
     //if (character->GetIsHangOn()) return;
 
-    if (km->IsStayKeyDown(VK_LEFT) || km->IsStayKeyDown(VK_RIGHT)) {
-        character->ChangeState(&Character::moveState);
-        character->SetIsLookUpLocked(false);
-        character->SetIsLookDownLocked(false);
-        return;
-    }
 
     if (character->GetIsInAir()) {
         ChangeSubState(SubState::IDLE_ONAIR);
@@ -36,29 +34,55 @@ void IdleState::Update() {
         }
     }
 
-    if (km->IsStayKeyDown(VK_UP)) {
+    if (input.moveUp) {
         if (!character->GetIsLookUpLocked())
             ChangeSubState(SubState::IDLE_LOOKUP_START);
         else
             ChangeSubState(SubState::IDLE_LOOKUP_STOP);
     }
-    else if (km->IsOnceKeyUp(VK_UP)) {
+    else if (input.moveUpReleased) {
         ChangeSubState(SubState::IDLE_LOOKUP_RELEASE);
     }
 
-    if (km->IsStayKeyDown(VK_DOWN)) {
-        if (!character->GetIsLookDownLocked())
-            ChangeSubState(SubState::IDLE_LOOKDOWN_START);
-        else
+    if(input.moveDown)
+    {
+        if (character->GetIsCrouching())
+        {
             ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+            return;
+        }
+
+        // 이미 START 상태면 애니메이션 끝날 때까지 대기
+        if (currentSubState == SubState::IDLE_LOOKDOWN_START)
+        {
+            if (character->GetCurrAnimEnd())
+            {
+                ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
+            }
+            return;
+        }
+
+        // STOP 상태면 그대로 유지
+        if (currentSubState == SubState::IDLE_LOOKDOWN_STOP)
+        {
+            return;
+        }
+
+        // 기본 진입은 START 상태로
+        if (!character->GetIsCrouching())
+        {
+            ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+            return;
+        }
     }
-    else if (km->IsOnceKeyUp(VK_DOWN)) {
+    else if (input.moveDownReleased)
+    {
         ChangeSubState(SubState::IDLE_LOOKDOWN_RELEASE);
     }
 
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
         currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
-        character->GetCurrFrameInd().x >= character->GetCurrFrameInfo().endFrame.x) {
+        character->GetCurrAnimEnd()) {
         ChangeSubState(SubState::IDLE_ALONE);
     }
 }
