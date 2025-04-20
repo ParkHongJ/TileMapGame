@@ -49,7 +49,7 @@ const char* InteractionState::GetSubStateName() const {
     case SubState::INTERACTION_EXIT_TUNNEL:  return "INTERACTION_EXIT_TUNNEL";
     case SubState::INTERACTION_EXIT_LEVEL:   return "INTERACTION_EXIT_LEVEL";
     case SubState::INTERACTION_HOLD_ITEM:    return "INTERACTION_HOLD_ITEM";
-    case SubState::INTERACTION_PUSH_ITEM:    return "INTERACTION_PUSH_ITEM";
+    case SubState::INTERACTION_PUSH_TILE:    return "INTERACTION_PUSH_ITEM";
     case SubState::INTERACTION_HANGON_TILE:    return "INTERACTION_HANGON_TILE";
     }
 }

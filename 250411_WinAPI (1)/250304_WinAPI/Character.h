@@ -7,7 +7,7 @@
 #include "AttackState.h"
 #include "InteractionState.h"
 
-#define ANIMSTATE 5
+#define SUBSTATE 5
 #define TOLERANCE 2.0f
 
 class BoxCollider;
@@ -17,6 +17,7 @@ enum class SubAnim {
 	NONE,
 	JUMP_UP,
 	JUMP_DOWN,
+	HURT_BIRD,
 };
 
 struct InputIntent {
@@ -32,6 +33,7 @@ struct InputIntent {
 	bool attack = false;
 	bool interact = false;
 	bool shift = false;
+	bool bomb = false;
 
 	bool hasMovement() const { return moveLeft || moveRight; }
 };
@@ -51,11 +53,11 @@ private:
 	FPOINT			     colliderSize;
 	float			  colliderOffsetY;
 
-
+	// Input
 	InputIntent				currInput;
 
 
-	//Item*				     currItem;
+	// Item*				 currItem;
 
 	// Stat
 
@@ -67,18 +69,17 @@ private:
 	FPOINT				     velocity;
 
 
+	// Render
 	bool					   isFlip;
 	float					frameTime;
 	POINT				 currFrameInd;
 	FrameInfo		    currFrameInfo;
-
 
 	// Gravity
 	float					  gravity;
 	float				 maxFallSpeed;
 	float				    jumpPower;
 	float			    bottomHitDist;
-
 
 
 	// State Boolean
@@ -91,15 +92,18 @@ private:
 	bool				   isOnLadder;
 	bool				     isOnRope;
 	bool				  isOnVehicle;
+	bool			 isFallFromHeight;
 
 	// For Camera
 	bool			   isLookUpLocked;
 	bool			 isLookDownLocked;
 
+
+	// Time lvalues
 	float				 currLockTime;
 	float			   lookUpLockTime;
 	float			 lookDownLockTime;
-
+	float				    faintTime;
 
 	// RayCast
 	FPOINT                leftHandPos;
@@ -113,6 +117,7 @@ private:
 	// AutoHaningMove
 	FPOINT            targetHangOnPos;
 
+
 	// Interaction
 
 	priority_queue<pair<float, GameObject*>>            interActionPQ;
@@ -120,7 +125,7 @@ private:
 	float							            	interactionOffset;
 
 
-
+	// Static State
 public:
 	static IdleState					idleState;
 	static MoveState					moveState;
@@ -173,7 +178,6 @@ public:
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
 
-
 	// HFSM
 	void HandleTransitions();
 
@@ -190,7 +194,6 @@ public:
 	void ApplyGravity(float TimeDelta);
 
 	// Collision
-
 	void CheckTileCollision();
 
 
@@ -198,22 +201,24 @@ public:
 	const InputIntent& GetCurrInputIntent() { return currInput; }
 	void HandleInput();
 	
+	// 
+
+	void OnDamage();
 
 
-	// Setter
 
+	// Getter & Setter
 	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
 	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
 
 	float GetJumpPower() { return this->jumpPower; }
 	float GetSpeed() { return this->speed; }
 
-
-
 	bool GetIsCrouching() { return isCrouching; }
 	bool GetIsLookUpLocked();
 	bool GetIsLookDownLocked();
 	bool GetCurrAnimEnd();
+	bool GetFallFromHeight() { return isFallFromHeight; }
 	
 	float GetCurrLockTime() { return this->currLockTime; }
 	void  SetCurrLockTime(float lockTime) { this->currLockTime = lockTime; }

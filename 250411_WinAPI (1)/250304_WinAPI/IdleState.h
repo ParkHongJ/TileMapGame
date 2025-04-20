@@ -18,7 +18,8 @@ public:
         IDLE_ONPET_LOOKUP,
         IDLE_ONPET_LOOKDOWN,
         IDLE_FALL_ALMOST,
-        IDLE_HURT,
+        IDLE_FALL_FROM_HEIGHT,
+        IDLE_FAINT,
         IDLE_DIE
     };
 

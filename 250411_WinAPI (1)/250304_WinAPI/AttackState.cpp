@@ -39,7 +39,7 @@ void AttackState::Update()
             character->SetIsAttacking(false);
 
             if (character->GetIsInAir())
-                character->SetAnimationFrameInfo(ANIMSTATE,
+                character->SetAnimationFrameInfo(SUBSTATE,
                     character->GetYVelocity() < 0
                     ? static_cast<int>(SubAnim::JUMP_UP)
                     : static_cast<int>(SubAnim::JUMP_DOWN));

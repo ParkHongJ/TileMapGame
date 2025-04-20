@@ -10,6 +10,7 @@ void IdleState::Enter(Character* character) {
 
     if (input.moveDown) ChangeSubState(SubState::IDLE_LOOKDOWN_START);
     else if (input.moveUp) ChangeSubState(SubState::IDLE_LOOKUP_START);
+    //else if (character->GetFallFromHeight()) ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
     else ChangeSubState(SubState::IDLE_ALONE);
 }
 
@@ -17,8 +18,11 @@ void IdleState::Update() {
 
     InputIntent input = character->GetCurrInputIntent();
 
-    
-    //if (character->GetIsHangOn()) return;
+    /*if (character->GetFallFromHeight())
+    {
+        ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
+        return;
+    }*/
 
 
     if (character->GetIsInAir()) {
@@ -79,10 +83,12 @@ void IdleState::Update() {
     {
         ChangeSubState(SubState::IDLE_LOOKDOWN_RELEASE);
     }
+ 
 
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
         currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
-        character->GetCurrAnimEnd()) {
+        character->GetCurrAnimEnd()) 
+    {
         ChangeSubState(SubState::IDLE_ALONE);
     }
 }
@@ -113,7 +119,7 @@ const char* IdleState::GetSubStateName() const {
     case SubState::IDLE_ONPET_LOOKUP:     return "IDLE_ONPET_LOOKUP";
     case SubState::IDLE_ONPET_LOOKDOWN:   return "IDLE_ONPET_LOOKDOWN";
     case SubState::IDLE_FALL_ALMOST:      return "IDLE_FALL_ALMOST";
-    case SubState::IDLE_HURT:             return "IDLE_HURT";
+    case SubState::IDLE_FALL_FROM_HEIGHT:             return "IDLE_HURT";
     case SubState::IDLE_DIE:              return "IDLE_DIE";
     case SubState::IDLE_ONAIR:              return "IDLE_ONAIR";
     case SubState::NONE: default:         return "NONE";

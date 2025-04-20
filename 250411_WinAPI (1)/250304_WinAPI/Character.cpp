@@ -40,10 +40,12 @@ HRESULT Character::Init()
     currFrameInd = { 0,0 };
     currFrameInfo = { { 0,0 }, {0, 0} };
 
-    // Camera
+    // Time lvalues
     currLockTime = 0.0f;
     lookUpLockTime = 1.0f;
     lookDownLockTime = 1.0f;
+    
+    faintTime = 1.0f; 
 
     // Collision
     colliderSize = { 30.0f, 40.0f };
@@ -126,10 +128,16 @@ void Character::InitAnimationMap()
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_LOOKDOWN_RELEASE)}] =
     { {2, 1}, {4, 1}, AnimationMode::Hold };
 
-
     animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_FALL_ALMOST)}] =
     { {0, 3}, {7, 3}, AnimationMode::Loop };
 
+    
+    animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_FALL_FROM_HEIGHT)}] =
+    { {0, 2}, {3, 2}, AnimationMode::Hold }; // 높은데서 추락 & 함정 피격
+
+
+    animationMap[{IDLESTATE, static_cast<int>(IdleState::SubState::IDLE_FAINT)}] =
+    { {9, 0}, {9, 0}, AnimationMode::Hold }; // 기절 (눈감고 엎드림) 1프레임
 
 
 
@@ -161,56 +169,36 @@ void Character::InitAnimationMap()
     animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_CLIMB_LADDER)}] =
     { {0, 6},  {5, 7}, AnimationMode::Loop };
 
-
     animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_CLIMB_ROPE)}] =
     { {0, 7},  {9, 7}, AnimationMode::Loop };
 
     animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_HANGON_TILE)}] =
     { {8, 3},  {11, 3}, AnimationMode::Hold };
 
+    animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_PUSH_TILE)}] =
+    { {6, 6},  {11, 6}, AnimationMode::Loop };
 
-    // JUMP 
+    animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_ENTER_TUNNEL)}] =
+    { {0, 5},  {5, 5}, AnimationMode::Loop };
 
-    animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}] =
+    animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_EXIT_TUNNEL)}] =
+    { {6, 5},  {11, 5}, AnimationMode::Loop };
+
+
+
+    // SubAnim (따로 렌더해야 할 필요가 있는 애니메이션)
+
+    animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}] =
     { {0, 9}, {3, 9}, AnimationMode::FreezeAtX }; // 상승 프레임
-    animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}] =
+    animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}] =
     { {4, 9}, {7, 9}, AnimationMode::FreezeAtX }; // 하강 프레임
+    //
+    //animationMap[{IDLESTATE, static_cast<int>(SubAnim::HURT_BIRD)}] =
+    //{ {0, 13}, {11, 13}, AnimationMode::Loop }; // 새 머리위로 날라다님
+
 
 
 }
-//
-//void Character::SetAnimationRange(PlayerState state)
-//{
-//    switch (state)
-//    {
-//        case PlayerState::IDLE:                  currFrameInfo = { {0, 0},  {0, 0} };            break;
-//        case PlayerState::MOVE:                  currFrameInfo = { {1, 0},  {9, 0} };            break;
-//        case PlayerState::LOOKUP_START:
-//        case PlayerState::LOOKUP_RELEASE:        currFrameInfo = { {0, 8},  {6, 8} };            break;
-//        case PlayerState::ONPET_LOOKUP_START:     currFrameInfo = { {8, 8},  {14, 8} };           break;
-//        case PlayerState::LOOKDOWN_START:
-//        case PlayerState::LOOKDOWN_RELEASE:      currFrameInfo = { {0, 1},  {4, 1} };            break;
-//        case PlayerState::LOOKDOWN_MOVE:         currFrameInfo = { {5, 1},  {11, 1}};            break;
-//        case PlayerState::LOOKDOWN_IDLE:         currFrameInfo = { {2, 1},  {2, 1} };            break;
-//        case PlayerState::CLIMB_LADDER:          currFrameInfo = { {0, 6},  {5, 7} };            break;
-//        case PlayerState::CLIMB_ROPE:            currFrameInfo = { {0, 7},  {9, 7} };            break;
-//        case PlayerState::ON_NOTTAMEDPET:        currFrameInfo = { {4, 11}, {9, 11}};            break;
-//        case PlayerState::ONPET_IDLE:            currFrameInfo = { {7, 8},  {7, 8} };            break;
-//        case PlayerState::ALMOST_FALL:           currFrameInfo = { {0, 3},  {7, 3} };            break;
-//        case PlayerState::ATTACK:                currFrameInfo = { {0, 4},  {5, 4} };            break;
-//        case PlayerState::HANG:                  currFrameInfo = { {8, 3},  {11, 3}};            break;
-//        case PlayerState::PUSH:                  currFrameInfo = { {6, 6},  {11, 6}};            break;
-//        case PlayerState::DIE:                   currFrameInfo = { {9, 0},  {9, 0} };            break;
-//        case PlayerState::FALL:                  currFrameInfo = { {0, 2},  {3, 2} };            break;
-//        case PlayerState::FALL_STUNEFFECT:       currFrameInfo = { {0, 13}, {11, 13} };          break;
-//        case PlayerState::ENTER_TUNNEL:          currFrameInfo = { {0, 5},  {5, 5} };            break;
-//        case PlayerState::EXIT_TUNNEL:           currFrameInfo = { {6, 5},  {11, 5}};            break;
-//        
-//    default:
-//        //currFrameInfo = { {0, 0}, {0, 0} };
-//        break;
-//    }
-//}
 
 void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int subState)
 {
@@ -243,7 +231,6 @@ void Character::Release()
         playerImage = nullptr;
 
     }
-
     // Add JunYong
     if (playerStatus)
     {
@@ -272,7 +259,9 @@ void Character::HandleInput()
     currInput.jump = km->IsOnceKeyDown('Z');
     currInput.attack = km->IsOnceKeyDown('X');
     currInput.interact = km->IsOnceKeyDown('A');
+    currInput.bomb = km->IsOnceKeyDown('C');
     currInput.shift = km->IsStayKeyDown(VK_SHIFT);
+
 }
 
 
@@ -284,7 +273,7 @@ void Character::Update(float TimeDelta)
     cm->SetTargetPos(Pos);
     cm->SetLookingState(isLookUpLocked, isLookDownLocked);
 
-
+    // 자동 이동 (벽 매달리기)
     if (isMovingAuto)
     {
         HandleMoveLogic();
@@ -292,41 +281,46 @@ void Character::Update(float TimeDelta)
         if (state)
             state->Update();
 
-
         PlayAnimation();
 
         return;
     }
 
-
     HandleInput();
-
 
     if (!isMovingAuto)
         Move();
 
-
-
     if (!isHanging)
         ApplyGravity(TimeDelta);
 
-
+    // Collision 검사 후 공중에 있는지 판단
     CheckTileCollision();
 
     isInAir = !isTouchingBottom;
 
 
-    // 바닥 가까이일 때만 착지로 판단
+    // 착지 판단 후 위치 보정
     if (isTouchingBottom && velocity.y > 0 && bottomHitDist < 2.0f)
     {
         // 바닥 위로 위치 보정
         Pos.y += bottomHitDist - colliderOffsetY + colliderSize.y / 2.f;
+
+        // 위치 보정과 동시에 낙사 판정
+
+        /*if (velocity.y > 1500.f)
+        {
+            isFallFromHeight = true;
+
+            ChangeState(&idleState);
+        }*/
+
+
         velocity.y = 0.f;
         isInAir = false;
         //return;
     }
 
-  
     auto km = KeyManager::GetInstance();
 
     // Add JunYong
@@ -341,7 +335,6 @@ void Character::Update(float TimeDelta)
                 FPOINT offset = { 100,0 };
                 temp->SetPos(Pos + offset);
             }
-
             else
             {
                 Bomb* temp = new Bomb();
@@ -352,9 +345,7 @@ void Character::Update(float TimeDelta)
 
             playerStatus->MinusBombCount();
         }
-
     }
-
    
     // 상태 전이 판단
     if (!isMovingAuto)
@@ -364,22 +355,19 @@ void Character::Update(float TimeDelta)
     if (state)
         state->Update();
 
-
-
     if (state == &interactionState) HandleInteractionLogic();
     else if (state == &attackState) HandleAttackLogic();
     else if (state == &moveState) HandleMoveLogic();
     else if (state == &idleState) HandleIdleLogic();
-
-
 
     // 공중 점프 애니메이션 처리
     if (!isHanging)
         HandleAirAnimation();
 
     PlayAnimation();
-}
 
+
+}
 
 void Character::HandleTransitions()
 {
@@ -419,7 +407,7 @@ void Character::HandleTransitions()
     CheckInterAction();
 
 
-    // 공격 
+    // [4] 공격 
     char buf[128];
     sprintf_s(buf, "  isAttacking 변경됨 → %s\n", isAttacking ? "true" : "false");
     OutputDebugStringA(buf);
@@ -435,24 +423,23 @@ void Character::HandleTransitions()
         return;
     }
 
-    // 이동
+    // [5] 이동
     if ((currInput.moveLeft || currInput.moveRight) )
     {
         ChangeState(&moveState);
         return;
     }
  
-    // 유후 상태
+    // [6] 유후 상태
     ChangeState(&idleState);
 
+    // [7] 예외를 위해 다시 한번 벽잡기 검사
     if (isInAir)
     {
         HangOnTile();
     }
 
 }
-
-
 
 void Character::HandleIdleLogic() {
     IdleState* idle = dynamic_cast<IdleState*>(state);
@@ -506,16 +493,18 @@ void Character::HandleIdleLogic() {
     case IdleState::SubState::IDLE_FALL_ALMOST:
 
         break;
-    case IdleState::SubState::IDLE_HURT:
+    case IdleState::SubState::IDLE_FALL_FROM_HEIGHT:
+        if (GetCurrAnimEnd())
+        {
+            isFallFromHeight = false;
+        }
+        break;
+    case IdleState::SubState::IDLE_FAINT:
+        
+        break;
     case IdleState::SubState::IDLE_DIE:
         break;
-
-    case IdleState::SubState::NONE:
-    default:
-        break;
     }
-
-
 }
 
 void Character::HandleMoveLogic() {
@@ -588,11 +577,7 @@ void Character::HandleMoveLogic() {
 
         break;
     }
-
     }
-
-
-
 }
 
 
@@ -634,8 +619,6 @@ void Character::HandleInteractionLogic()
     }
 }
 
-
-
 void Character::Jump()
 {
     velocity.y = -jumpPower;
@@ -661,9 +644,17 @@ void Character::HangOnTile()
         isHanging = false;
 }
 
+
+void Character::OnDamage()
+{
+
+
+}
+
+
 void Character::HandleAirAnimation()
 {
-    const int AIR_ANIM_ROW = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
+    const int AIR_ANIM_ROW = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
     const auto& frame = currFrameInfo;
 
     if (isInAir && !isAttacking)
@@ -673,27 +664,27 @@ void Character::HandleAirAnimation()
             if (velocity.y < 0)
             {
 
-                currFrameInd = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame;
+                currFrameInd = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame;
                 frameTime = 0.f;
 
-                currFrameInfo = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}];
+                currFrameInfo = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}];
             }
             else
             {
-                currFrameInd = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame;
+                currFrameInd = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame;
                 frameTime = 0.f;
 
-                currFrameInfo = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}];
+                currFrameInfo = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}];
             }
         }
-        else if (frame.startFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x&&
-            frame.endFrame.x == animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y&&
+        else if (frame.startFrame.x == animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x&&
+            frame.endFrame.x == animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y&&
             velocity.y >= 0)
         {
-            currFrameInd = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame;
+            currFrameInd = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame;
             frameTime = 0.f;
 
-            currFrameInfo = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}];
+            currFrameInfo = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}];
         }
     }
     else if (frame.startFrame.y == AIR_ANIM_ROW)
@@ -788,10 +779,11 @@ void Character::CheckInterAction()
 
         if (!interActionPQ.empty())
         {
-            // 사다리, 로프 pos 로 플레이어 위치 조정
-
+           
             if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
             {
+                // 사다리, 로프 posX 로 플레이어 위치 조정
+
                 isOnLadder = true;
 
                 ChangeState(&interactionState);
@@ -799,6 +791,8 @@ void Character::CheckInterAction()
             }
             else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
             {
+                // 사다리, 로프 posX 로 플레이어 위치 조정
+
                 isOnRope = true;
 
                 ChangeState(&interactionState);
@@ -850,17 +844,15 @@ void Character::PlayAnimation()
 
     frameTime = 0.f;
 
-
-
     // 공중 애니메이션일 경우
     if (currFrameInfo.startFrame.y == 9 && isInAir)
     {
         float vel = velocity.y;
 
-        const int JUMP_UP_START = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x;
-        const int JUMP_UP_END = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_UP)}].endFrame.x;
-        const int JUMP_DOWN_START = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame.x;
-        const int JUMP_DOWN_END = animationMap[{ANIMSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].endFrame.x;
+        const int JUMP_UP_START = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.x;
+        const int JUMP_UP_END = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].endFrame.x;
+        const int JUMP_DOWN_START = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].startFrame.x;
+        const int JUMP_DOWN_END = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_DOWN)}].endFrame.x;
 
         float ratio = 0.f;
 
@@ -907,12 +899,6 @@ void Character::PlayAnimation()
 
 }
 
-
-
-
-
-
-
 void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 {
     FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
@@ -921,8 +907,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n ishangOn : %d isCrouching: %d Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isHanging, isCrouching, velocity.x, velocity.y
+            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n ishangOn : %d isLookDownLocked: %d Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isLookDownLocked, isCrouching, velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);
@@ -955,8 +941,6 @@ void Character::ApplyGravity(float TimeDelta)
         velocity.y += gravity * TimeDelta;
         if (velocity.y > maxFallSpeed)
             velocity.y = maxFallSpeed;
-
-       
     }
     else if (isOnLadder || isOnRope)
     {
@@ -985,18 +969,6 @@ void Character::CheckTileCollision()
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
     bool onDebug = false;
-
-    //isTouchingLeft = CollisionManager::GetInstance()->RaycastAll({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, true, debugTime, this) ||
-    //    CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime, this);
-
-    //isTouchingRight = CollisionManager::GetInstance()->RaycastAll({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, true, debugTime, this) ||
-    //    CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime, this);
-
-    //isTouchingTop = CollisionManager::GetInstance()->RaycastAll({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, true, debugTime, this) ||
-    //    CollisionManager::GetInstance()->RaycastAll({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, true, debugTime, this);
-
-    //isTouchingBottom = CollisionManager::GetInstance()->RaycastAll({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, true, debugTime, this) ||
-    //    CollisionManager::GetInstance()->RaycastAll({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, true, debugTime, this);
 
  // RayAll -> RayType : 타일만 레이 쏘게 하는 코드로 변경
     isTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE ,true, debugTime) ||
@@ -1029,7 +1001,6 @@ void Character::Move()
         return;
     }
 
-
     float vx = 0.f;
     if (currInput.moveLeft)       vx = -GetSpeed();
     else if (currInput.moveRight) vx = GetSpeed();
@@ -1046,7 +1017,6 @@ void Character::Move()
     else {
         SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED); // 공중에서도 기본 속도
     }
-
 
     float TimeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 
@@ -1091,13 +1061,9 @@ bool Character::MoveY()
     else if (currInput.moveDown) vy = GetSpeed();
     else                                vy = 0.f;
 
-
- 
-
     if ((vy < 0 && isTouchingTop) || (vy > 0 && isTouchingBottom)) {
         return false;
     }
-
 
     if (CanGoY(vy)) {
 
@@ -1116,7 +1082,6 @@ bool Character::CanGoY(float vy)
     FPOINT center = Pos;
     center.y += vy < 0 ? -interactionOffset : interactionOffset;
     CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionRadius, &inCircleObjects);
-
 
     //사다리 or 밧줄인지 검사
     for (auto it : inCircleObjects)
@@ -1144,8 +1109,6 @@ bool Character::PressAnyKey(void)
     }
     return false;
 }
-
-
 
 
 float Character::GetVelocitySize()
