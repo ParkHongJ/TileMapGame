@@ -10,7 +10,7 @@ HRESULT Journal_1::Init()
     imageJournalPhoto = ImageManager::GetInstance()->FindImage("journal_1_Photo");
     Pos = { WINSIZE_X/2, WINSIZE_Y/2 };
     PhotoPos = { Pos.x, Pos.y - (imageJournalPhoto->GetHeight() * 0.125f)};
-    isInteract = false;
+
     return S_OK;
 }
 

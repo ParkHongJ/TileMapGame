@@ -27,5 +27,5 @@ void playerGold_UI::Update(float TimeDelta)
 void playerGold_UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (playerGoldImage)
-		playerGoldImage->Render(renderTarget, Pos.x, Pos.y);
+		playerGoldImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 }

@@ -27,5 +27,5 @@ void playerRope_UI::Update(float TimeDelta)
 void playerRope_UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (playerRopeImage)
-		playerRopeImage->Render(renderTarget, Pos.x, Pos.y);
+		playerRopeImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 }

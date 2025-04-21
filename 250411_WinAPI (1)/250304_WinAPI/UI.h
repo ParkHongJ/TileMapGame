@@ -17,15 +17,24 @@ protected:
 	FPOINT imageRatio;
 	float x_pos_divide_factor;
 	bool isInteract;
+	float defaultOpacity;
+	float opacityDuration;
+	float opacityTimer;
+	bool isOpaque;
+	bool requestOpaqueChange;
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
+	void SetOpaque();
+	void DisableOpaque();
+	inline void RequestOpaqueChange() { requestOpaqueChange = true; };
+
 	FPOINT ResolutionRatio();
 
-	UI() { x_pos_divide_factor = 25.0f;};
+	UI();
 	virtual ~UI() {};
 };
 

@@ -19,11 +19,17 @@ void playerBomb_UI::Release()
 
 void playerBomb_UI::Update(float TimeDelta)
 {
+	UI::Update(TimeDelta);
+
 	playerBomb_value = playerStat->GetBombCount();
+	//if(playerStat->pickedTheBomb || useTheBomb)
+ 	if (KeyManager::GetInstance()->IsOnceKeyDown('B'))
+		RequestOpaqueChange();
+
 }
 
 void playerBomb_UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (playerBombImage)
-		playerBombImage->Render(renderTarget, Pos.x, Pos.y);
+		playerBombImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 }

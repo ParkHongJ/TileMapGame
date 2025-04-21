@@ -350,7 +350,7 @@ HRESULT Image::Init(ID2D1RenderTarget* renderTarget, const wchar_t* filePath, in
 	return S_OK;
 }
 
-void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY)
+void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scaleX, float scaleY, float opacity)
 {
 	if (!imageInfo || !imageInfo->bitmap)
 		return;
@@ -373,7 +373,7 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 	renderTarget->DrawBitmap(
 		imageInfo->bitmap.Get(),
 		destRect,
-		1.0f, // 불투명도
+		opacity, // 불투명도
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
 	);
 }
