@@ -327,6 +327,21 @@
     <ClCompile Include="Pitfall.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ChangeCobwebBomb.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder1.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder2.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder3.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder4.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -610,6 +625,21 @@
     </ClInclude>
     <ClInclude Include="Pitfall.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeCobwebBomb.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder1.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder2.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder3.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder4.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

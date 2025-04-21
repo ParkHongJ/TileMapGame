@@ -11,6 +11,7 @@ HRESULT Tile::Init()
 
 	decos.resize((int)DecoDirection::RIGHT);
 	objectName = OBJECTNAME::TILE;
+	interactState = INTERACTSTATE::INTERACT_UNABLE;
 	return S_OK;
 }
 

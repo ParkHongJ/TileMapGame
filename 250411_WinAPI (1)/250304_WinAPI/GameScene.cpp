@@ -17,9 +17,13 @@
 #include "Gun.h"
 #include "Whip.h"
 #include "IncreaseBomb.h"
+#include "ChangeCobwebBomb.h"
 #include "IncreaseGold.h"
 #include "TreasureChest.h"
-#include "Ladder.h"
+#include "Ladder1.h"
+#include "Ladder2.h"
+#include "Ladder3.h"
+#include "Ladder4.h"
 #include "CameraManager.h"
 #include "snakeMonster.h"
 #include "playerHP_UI.h"
@@ -78,17 +82,24 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
     GameManager::GetInstance()->Init("Data/map1.tilemap");
 
+    ImageManager::GetInstance()->AddImage("Effect", L"Textures/fx_small.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
+
     CameraManager::GetInstance()->Init();
  
    // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
     // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
     // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
-    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseGold());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder1());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder2());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder3());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder4());
+
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI());
@@ -97,7 +108,7 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new lightBulb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerRope_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new ChangeCobwebBomb());
 
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());

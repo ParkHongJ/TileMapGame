@@ -11,7 +11,9 @@ Ladder::Ladder()
 	image = ImageManager::GetInstance()->FindImage("floor_cave");
 	Pos = { 1100,150 };
 
-	BoxCollider* col = new BoxCollider({ 0,200 }, { 80, 500}, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 120, 1100}, CollisionMaskType::ITEM, this);
+	interactState = INTERACTSTATE::INTERACT_ABLE;
+	objectName = OBJECTNAME::LADDER;
 }
 
 Ladder::~Ladder()
@@ -35,11 +37,11 @@ void Ladder::Render(ID2D1HwndRenderTarget* renderTarget)
 	// 0 ~ 4까지가 최대, 2는 뺄까
 	//image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 4, 0, 0.75f, 0.75f); // 임의값
 
-	float Height = image->GetHeight() / 12 * 0.75f;
-	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 4, 0); // 임의값
-	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y + Height, 4, 1); // 임의값
-	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y + Height * 2, 4, 2); // 임의값
-	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y + Height * 3, 4, 3); // 임의값
+	//float Height = image->GetHeight() / 12 * 0.75f;
+	//image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 4, 0); // 임의값
+	//image->FrameRender(renderTarget, cameraPos.x, cameraPos.y + Height, 4, 1); // 임의값
+	//image->FrameRender(renderTarget, cameraPos.x, cameraPos.y + Height * 2, 4, 2); // 임의값
+	//image->FrameRender(renderTarget, cameraPos.x, cameraPos.y + Height * 3, 4, 3); // 임의값
 	//image->FrameRender
 }
 
@@ -58,7 +60,3 @@ void Ladder::Detect(GameObject* obj)
 
 }
 
-void Ladder::InstallLadder(FPOINT pos, int cnt)
-{
-
-}

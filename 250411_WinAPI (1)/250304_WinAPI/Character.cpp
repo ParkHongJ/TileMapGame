@@ -32,7 +32,6 @@ HRESULT Character::Init()
 	maxFallSpeed = 800.f;
 	jumpPower = 500.0f;
 
-
 	// Animation
 	frameTime = 0.0f;
 	currFrameInd = { 0,0 };
@@ -52,14 +51,12 @@ HRESULT Character::Init()
 		CollisionMaskType::PLAYER, this
 	);
 
-
 	isTouchingLeft = false;
 	isTouchingRight = false;
 	isTouchingTop = false;
 	isTouchingBottom = false;
 
 	bottomHitDist = 10000.0f;
-
 
 	// Interaction
 	leftHandPos = { Pos.x - colliderSize.x / 2, Pos.y };
@@ -99,7 +96,7 @@ HRESULT Character::Init()
 	objectRenderId = RENDER_PLAYER;
 
 	whip = new Whip();
-	ObjectManager::GetInstance()->AddObject(RENDER_ITEM, whip);
+	ObjectManager::GetInstance()->AddObject(RENDER_HOLD, whip);
 	return S_OK;
 }
 
@@ -365,7 +362,6 @@ void Character::HandleTransitions()
 		Jump();
 	}
 
-
 	// [1] 매달림 상태에서는 점프만 허용
 	if (isHanging)
 	{
@@ -399,8 +395,8 @@ void Character::HandleTransitions()
 		if (!interActionPQ.empty())
 		{
 			// 사다리, 로프 pos 로 플레이어 위치 조정
-
-			/*if (interActionPQ.top() == 사다리 || interActionPQ.top() == 로프)
+			OBJECTNAME temp = interActionPQ.top().second->GetObjectName();
+			if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER || interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
 			{
 				isOnLadder = true;
 				isOnRope = true;
@@ -408,14 +404,14 @@ void Character::HandleTransitions()
 				ChangeState(&interactionState);
 				return;
 			}
-			else if (interActionPQ.top() == 상인)
-			{
+			//else if (interActionPQ.top() == 상인)
+			//{
 
-			}
-			else if (interActionPQ.top() == )
-			{
+			//}
+			//else if (interActionPQ.top() == )
+			//{
 
-			}*/
+			//}
 
 		}
 	}
@@ -639,8 +635,6 @@ void Character::HandleInteractionLogic()
 	}
 }
 
-
-
 void Character::Jump()
 {
 	velocity.y = -jumpPower;
@@ -805,6 +799,7 @@ void Character::JunUpdate(float TimeDelta)
 				Bomb* temp = new Bomb();
 				ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
 				temp->SetPos({ Pos.x /*+ offset.x*/, Pos.y + colliderOffsetY });
+				temp->UnEquip(playerStatus);
 				//temp->SetDrop(0.f, angle);
 			}
 
@@ -813,7 +808,8 @@ void Character::JunUpdate(float TimeDelta)
 				Bomb* temp = new Bomb();
 				ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
 				temp->SetPos(Pos + offset);
-				temp->SetDrop(900.f, angle);
+				temp->SetDrop(1000.f, angle, 0.3f, {0.f, 198.f});
+				temp->UnEquip(playerStatus);
 			}
 
 			playerStatus->MinusBombCount();

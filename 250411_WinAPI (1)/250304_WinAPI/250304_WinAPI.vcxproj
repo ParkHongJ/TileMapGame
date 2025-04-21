@@ -148,6 +148,7 @@
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="ChangeCobwebBomb.cpp" />
     <ClCompile Include="dialogUI.cpp" />
     <ClCompile Include="DoorInteractUI.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -180,6 +181,10 @@
     <ClCompile Include="JinScene.cpp" />
     <ClCompile Include="Journal_1.cpp" />
     <ClCompile Include="KeyManager.cpp" />
+    <ClCompile Include="Ladder1.cpp" />
+    <ClCompile Include="Ladder2.cpp" />
+    <ClCompile Include="Ladder3.cpp" />
+    <ClCompile Include="Ladder4.cpp" />
     <ClCompile Include="lightBulb_UI.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="LoadingScene.cpp" />
@@ -228,6 +233,7 @@
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="ChangeCobwebBomb.h" />
     <ClInclude Include="dialogUI.h" />
     <ClInclude Include="DoorInteractUI.h" />
     <ClInclude Include="GameScene.h" />
@@ -263,6 +269,10 @@
     <ClInclude Include="Journal_1.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="Ladder.h" />
+    <ClInclude Include="Ladder1.h" />
+    <ClInclude Include="Ladder2.h" />
+    <ClInclude Include="Ladder3.h" />
+    <ClInclude Include="Ladder4.h" />
     <ClInclude Include="lightBulb_UI.h" />
     <ClInclude Include="LoadingScene.h" />
     <ClInclude Include="MainGame.h" />

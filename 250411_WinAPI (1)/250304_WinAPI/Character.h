@@ -114,7 +114,7 @@ private:
 
 	// Interaction
 
-	priority_queue<pair<float, GameObject*>>            interActionPQ;
+	priority_queue<pair<float, GameObject*>>        interActionPQ;
 	float								            interactionRadius;
 	float							            	interactionOffset;
 

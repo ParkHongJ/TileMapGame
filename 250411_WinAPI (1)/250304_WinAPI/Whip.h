@@ -34,5 +34,6 @@ public:
 private:
 	int whipFrame = 0;
 	class BoxCollider* col = nullptr; // 나도 이러고 싶지 않았어
+	bool isHit = false;
 };
 

@@ -1,10 +1,11 @@
 #pragma once
 #include "Item.h"
-class Bomb : public Item
+
+class ChangeCobwebBomb : public Item
 {
 public:
-	Bomb();
-	virtual ~Bomb();
+	ChangeCobwebBomb();
+	virtual ~ChangeCobwebBomb();
 
 public:
 	virtual HRESULT Init() override;
@@ -21,19 +22,5 @@ public:
 	void DropMove(float TimeDelta) override;
 
 	virtual void Detect(GameObject* obj) override;
-
-	virtual void FrameUpdate(float TimeDelta) override;
-
-	void Explosion();
-
-private:
-	//float gravity = 5.f;
-	float explosionTime = 3.f;
-	float animAcc = 5.f;
-	float animationTime = 1.f;
-	bool IsCobweb = false;
-	bool IsStop = false;
-
-	// »ç¿ë
 };
 

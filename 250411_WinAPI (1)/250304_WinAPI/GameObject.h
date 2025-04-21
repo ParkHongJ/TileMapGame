@@ -57,6 +57,7 @@ public:
 
 	void TakeCollision(float coolTime);
 protected:
+	FPOINT objectScale;
 	// ·»´õ ºÐ±â.
 	RENDERORDER	objectRenderId;
 

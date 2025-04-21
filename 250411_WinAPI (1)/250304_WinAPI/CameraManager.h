@@ -34,7 +34,7 @@ public:
 	void Release();
 	void Update( float TimeDelta);
 
-	Viewport GetInRect() { return ViewPort; }
+	Viewport& GetInRect() { return ViewPort; }
 
 	const FPOINT GetPos() { return pos; }
 	void SetMapWidth(float mapWidth) { this->mapWidth = mapWidth; }
