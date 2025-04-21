@@ -146,6 +146,7 @@
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
+    <ClCompile Include="BatMonster.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="dialogUI.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
+    <ClInclude Include="BatMonster.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="dialogUI.h" />

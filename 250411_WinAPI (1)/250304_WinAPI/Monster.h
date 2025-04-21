@@ -84,6 +84,7 @@ protected:
 	bool isPlayerTouchingRight;
 	bool isPlayerTouchingTop;
 	bool isPlayerTouchingBottom;
+	bool isPlayerTouchingCenterTop;
 
 	bool isItemTouchingLeft;
 	bool isItemTouchingRight;
