@@ -10,6 +10,7 @@ HRESULT Tile::Init()
 	tileScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
 
 	decos.resize((int)DecoDirection::RIGHT);
+	objectName = OBJECTNAME::TILE;
 	return S_OK;
 }
 

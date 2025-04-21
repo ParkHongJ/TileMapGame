@@ -64,8 +64,8 @@ private:
 
 private:
 	unordered_map<CollisionMaskType, unordered_set<Collider*>> layerCollisionMap;
-	unordered_map<CollisionMaskType, uint8_t> layerMaskMap;
-	unordered_map<CollisionMaskType, uint8_t> layerRayMaskMap;
+	unordered_map<CollisionMaskType, uint16_t> layerMaskMap;
+	unordered_map<CollisionMaskType, uint16_t> layerRayMaskMap;
 
 	vector<Collider*> colliders;
 	vector<DebugRay> debugRays;

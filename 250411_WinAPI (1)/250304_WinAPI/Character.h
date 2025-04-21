@@ -12,6 +12,7 @@
 
 class BoxCollider;
 class PlayerStatus;
+class Item;
 
 enum class SubAnim {
 	NONE,
@@ -127,6 +128,8 @@ public:
 
 private:
 	PlayerStatus* playerStatus;
+
+
 public:
 	inline PlayerStatus* GetPlayerStatus() { return playerStatus; };
 
@@ -138,8 +141,21 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 	virtual void Detect(GameObject* obj) override;
+	//Add JunYong
+	void JunUpdate(float TimeDelta);
 
+private:
+	Item* whip;
+	Item* holdItem;
+	Item* backItem;
+	Item* preHoldItem;
 
+	float holdItemHitTime = 0.f;
+	float holdItemHitMaxTime = 0.1f;
+
+public:
+	inline Item* GetPreHoldItem() { return preHoldItem; };
+//Add JunYong
 	// Move
 
 	void Move();

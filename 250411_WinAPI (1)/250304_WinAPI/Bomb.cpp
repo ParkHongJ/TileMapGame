@@ -39,14 +39,18 @@ HRESULT Bomb::Init()
 void Bomb::Update(float TimeDelta)
 {
 	FrameUpdate(TimeDelta);
+	DropMove(TimeDelta);
 	
-
 	explosionTime -= TimeDelta;
 	animationTime -= TimeDelta;
 
 	if (0.f >= animationTime)
 	{
 		frameSpeed += animAcc * TimeDelta;
+		if (1.4f >= explosionTime)
+		{
+			frameSpeed += 2.f * animAcc * TimeDelta;
+		}
 		//frameSpeed += TimeDelta; // °¡¶ó
 	}
 

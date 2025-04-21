@@ -10,7 +10,7 @@ enum class INTERACTSTATE
 
 enum class OBJECTNAME
 {
-	PLAYER, MONSTER, ITEM, LADDER, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR
+	PLAYER, MONSTER, ITEM, LADDER, TILE, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR
 };
 
 class Collider;
@@ -79,6 +79,8 @@ protected:
 
 	// 콜라이더 만들 오브젝트인데 충돌 금지일 때 끄기
 	bool bAbleCol = false;
+protected:
+	OBJECTNAME objectName;
 
 public:
 	template<typename T>
@@ -86,5 +88,8 @@ public:
 	{
 		return dynamic_cast<T*>(this);
 	}
+
+	OBJECTNAME GetObjectName() { return objectName; }
+	void SetObjectName(OBJECTNAME objectName) { this->objectName = objectName; }
 };
 

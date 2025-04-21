@@ -110,7 +110,11 @@ public:
 		};
 	}
 
-	void SetDrop();
+	virtual void SetDrop(float speed, float angle);
+
+	void SetHoldItemPos(FPOINT pos, bool isFlip);
+
+	bool IsPlayerDropItem(GameObject* player);
 protected:
 	unsigned int price;
 
@@ -125,6 +129,7 @@ protected:
 	FPOINT movePower;
 	FPOINT prePos;
 
+	FPOINT holdOffset;
 	ItemType itemType;
 	ItemState itemState;
 
@@ -142,10 +147,11 @@ protected:
 
 	float equipColCoolTime;
 	float equipColMaxCoolTime = 0.5f;
+	bool isDrop = false;
+	bool isFlip = false;
 
-private:
+protected:
 
-	bool isFlip;
 	FPOINT velocity;
 	FPOINT acceleration = { 0, 0 };  // °¡¼Óµµ
 

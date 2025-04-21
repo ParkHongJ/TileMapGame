@@ -18,40 +18,43 @@
 //};
 void CollisionManager::Init()
 {
-    layerMaskMap[CollisionMaskType::WORLDOBJECT] = uint8_t(CollisionMaskType::PLAYER) | 
-        uint8_t(CollisionMaskType::MONSTER) | uint8_t(CollisionMaskType::TILE);
+    layerMaskMap[CollisionMaskType::WORLDOBJECT] = uint16_t(CollisionMaskType::PLAYER) |
+        uint16_t(CollisionMaskType::MONSTER) | uint16_t(CollisionMaskType::TILE);
 
-    layerMaskMap[CollisionMaskType::PLAYER] = uint8_t(CollisionMaskType::WORLDOBJECT) | 
-        uint8_t(CollisionMaskType::MONSTER) | uint8_t(CollisionMaskType::ITEM) | 
-        uint8_t(CollisionMaskType::TILE);
+    layerMaskMap[CollisionMaskType::PLAYER] = uint16_t(CollisionMaskType::WORLDOBJECT) |
+        uint16_t(CollisionMaskType::MONSTER) | uint16_t(CollisionMaskType::ITEM) |
+        uint16_t(CollisionMaskType::TILE);
 
-    layerMaskMap[CollisionMaskType::MONSTER] = uint8_t(CollisionMaskType::PLAYER) | 
-        uint8_t(CollisionMaskType::WORLDOBJECT) | uint8_t(CollisionMaskType::TILE);
+    layerMaskMap[CollisionMaskType::MONSTER] = uint16_t(CollisionMaskType::PLAYER) |
+        uint16_t(CollisionMaskType::WORLDOBJECT) | 
+        uint16_t(CollisionMaskType::TILE);
 
     layerMaskMap[CollisionMaskType::ITEM]/* = uint8_t(CollisionMaskType::PLAYER)*/;
 
-    layerMaskMap[CollisionMaskType::TILE] = uint8_t(CollisionMaskType::PLAYER) 
-        | uint8_t(CollisionMaskType::MONSTER) || uint8_t(CollisionMaskType::EFFECT);
+    layerMaskMap[CollisionMaskType::TILE] = uint16_t(CollisionMaskType::PLAYER)
+        | uint16_t(CollisionMaskType::MONSTER) || uint16_t(CollisionMaskType::EFFECT);
 
-    layerMaskMap[CollisionMaskType::EFFECT] = uint8_t(CollisionMaskType::TILE);
+    layerMaskMap[CollisionMaskType::EFFECT] = uint16_t(CollisionMaskType::TILE);
 
+    layerMaskMap[CollisionMaskType::PLAYERATTACK] = 
+         uint16_t(CollisionMaskType::WORLDOBJECT) | uint16_t(CollisionMaskType::MONSTER);
 
     //Ray
-    layerRayMaskMap[CollisionMaskType::WORLDOBJECT] = uint8_t(CollisionMaskType::PLAYER) |
-        uint8_t(CollisionMaskType::MONSTER) | uint8_t(CollisionMaskType::TILE);
+    layerRayMaskMap[CollisionMaskType::WORLDOBJECT] = uint16_t(CollisionMaskType::PLAYER) |
+        uint16_t(CollisionMaskType::MONSTER) | uint16_t(CollisionMaskType::TILE);
 
     layerRayMaskMap[CollisionMaskType::PLAYER] = 
-        uint8_t(CollisionMaskType::ITEM) | uint8_t(CollisionMaskType::TILE); // Player로 테스트
+        uint16_t(CollisionMaskType::ITEM) | uint16_t(CollisionMaskType::TILE); // Player로 테스트
 
-    layerRayMaskMap[CollisionMaskType::MONSTER] = uint8_t(CollisionMaskType::PLAYER) |
-        uint8_t(CollisionMaskType::WORLDOBJECT) | uint8_t(CollisionMaskType::TILE);
+    layerRayMaskMap[CollisionMaskType::MONSTER] = uint16_t(CollisionMaskType::PLAYER) |
+        uint16_t(CollisionMaskType::WORLDOBJECT) | uint16_t(CollisionMaskType::TILE);
 
-    layerRayMaskMap[CollisionMaskType::ITEM] = uint8_t(CollisionMaskType::PLAYER);
+    layerRayMaskMap[CollisionMaskType::ITEM] = uint16_t(CollisionMaskType::PLAYER);
 
-    layerRayMaskMap[CollisionMaskType::TILE] = uint8_t(CollisionMaskType::PLAYER)
-        | uint8_t(CollisionMaskType::MONSTER) || uint8_t(CollisionMaskType::EFFECT);
+    layerRayMaskMap[CollisionMaskType::TILE] = uint16_t(CollisionMaskType::PLAYER)
+        | uint16_t(CollisionMaskType::MONSTER) || uint16_t(CollisionMaskType::EFFECT);
 
-    layerRayMaskMap[CollisionMaskType::EFFECT] = uint8_t(CollisionMaskType::TILE);
+    layerRayMaskMap[CollisionMaskType::EFFECT] = uint16_t(CollisionMaskType::TILE);
     
 }
 
@@ -240,7 +243,7 @@ void CollisionManager::BoxAll()
 
 void CollisionManager::ColMaskAABB()
 {
-    uint8_t mask;
+    uint16_t mask;
     for (const auto& pair : layerCollisionMap)
     {
         mask = layerMaskMap[pair.first];
@@ -248,7 +251,7 @@ void CollisionManager::ColMaskAABB()
         for (const auto& pair2 : layerCollisionMap)
         {
             // 검사 해야하는 레이어라면
-            if (mask & uint8_t(pair2.first))
+            if (mask & uint16_t(pair2.first))
             {
                 for (auto& iter : pair.second)
                 {
@@ -280,8 +283,8 @@ bool CollisionManager::ChangeMaskType(CollisionMaskType curMaskType, CollisionMa
         if (owner == iter->GetOwner())
         {
             iter->SetMaskType(nextMaskType);
-            layerCollisionMap[curMaskType].erase(iter);
             layerCollisionMap[nextMaskType].insert(iter);
+            layerCollisionMap[curMaskType].erase(iter);
             return true;
         }
     }
@@ -390,14 +393,14 @@ bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& 
 	RaycastHit closestHit;
 	closestHit.distance = maxDist;
 
-	uint8_t mask;
+    uint16_t mask;
 
 	mask = layerRayMaskMap[maskType];
 
 	for (const auto& pair2 : layerCollisionMap)
 	{
 		// 검사 해야하는 레이어라면
-		if (mask & uint8_t(pair2.first))
+		if (mask & uint16_t(pair2.first))
 		{
 			for (auto& iter : layerCollisionMap[maskType])
 			{

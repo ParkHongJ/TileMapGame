@@ -23,8 +23,9 @@ void ObjectManager::AddObject(RENDERORDER renderId, GameObject* obj)
 		return;
 	}
 
-	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
 	obj->SetObjectRenderId(renderId);
+	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
+	
 	objects.emplace(++nextId, obj);
 
 	if (renderId == RENDERORDER::RENDER_PLAYER)
@@ -41,8 +42,9 @@ void ObjectManager::AddObject(unsigned int id, RENDERORDER renderId, GameObject*
 		return;
 	}
 
-	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
 	obj->SetObjectRenderId(renderId);
+	obj->Init(); // Init(pos) 이런 식으로 할 때는 주의..
+	
 	objects.emplace(id, obj);
 
 	if (renderId == RENDERORDER::RENDER_PLAYER)

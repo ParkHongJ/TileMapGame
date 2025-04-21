@@ -33,6 +33,6 @@ public:
 	virtual void FrameUpdate(float TimeDelta) override;
 private:
 	int whipFrame = 0;
-
+	class BoxCollider* col = nullptr; // 나도 이러고 싶지 않았어
 };
 

@@ -82,6 +82,9 @@
     <Filter Include="MainGame\Scene\Jin\Journal">
       <UniqueIdentifier>{e6c18105-8e33-4479-bfec-da67667b50b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Pitfall">
+      <UniqueIdentifier>{a2b10e7e-f06c-4728-ba4f-db3934fc9f15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -320,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pitfall.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -601,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Pitfall.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

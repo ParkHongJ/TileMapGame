@@ -15,14 +15,15 @@ enum class ColliderType
 	SPHERE
 };
 
-enum class CollisionMaskType : uint8_t
+enum class CollisionMaskType : uint16_t
 {
 	WORLDOBJECT = 1,
 	PLAYER = 1 << 1,
 	MONSTER = 1 << 2,
 	ITEM = 1 << 3,
 	TILE = 1 << 4,
-	EFFECT = 1 << 5
+	EFFECT = 1 << 5,
+	PLAYERATTACK = 1 << 6
 };
 
 class Collider
@@ -55,6 +56,8 @@ public:
 	inline const CollisionMaskType& GetMaskType() { return maskType; }
 	inline void SetMaskType(CollisionMaskType maskType) { this->maskType = maskType; };
 	inline GameObject* GetOwner() const { return Owner; }
+
+	inline void SetOffset(FPOINT offset) { this->Offset = offset; };
 
 protected:
 	FPOINT Pos;

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Image.h"
 #include "Item.h"
+#include "Character.h"
 #include "CollisionManager.h"
 #include "CommonFunction.h"
 
@@ -55,31 +56,44 @@ void Item::Equip()
 {
 	ChangeState(ItemState::STATE_EQUIP);
 	objectRenderId = RENDER_HOLD;
+	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM,this);
+
 }
 
 void Item::Equip(void* info)
 {
 	ChangeState(ItemState::STATE_EQUIP);
 	objectRenderId = RENDER_HOLD;
+	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM, this);
+
 }
 
 void Item::Equip(GameObject* owner)
 {
 	ChangeState(ItemState::STATE_EQUIP);
 	objectRenderId = RENDER_HOLD;
+	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM, this);
+
+
 }
 
 void Item::UnEquip()
 {
 	ChangeState(ItemState::STATE_UNEQUIP);
+	objectRenderId = RENDER_ITEM;
+	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::ITEM, CollisionMaskType::WORLDOBJECT, this);
+
 	//movePower = { 500.f, 300.f }; // Test
 }
 
 void Item::UnEquip(void* info)
 {
 	ChangeState(ItemState::STATE_UNEQUIP);
-	// info에 기반해서 던지기
-	movePower = { 500.f, 300.f }; // Test
+	objectRenderId = RENDER_ITEM;
+	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::ITEM, CollisionMaskType::WORLDOBJECT, this);
+
+
+	//movePower = { 500.f, 300.f }; // Test
 }
 
 void Item::Use()
@@ -122,11 +136,12 @@ void Item::FrameUpdate(float TimeDelta)
 		curFrameIndexX = startFrameIndexX;
 		curFrameIndexY = startFrameIndexY;
 	}
-
 }
 
 void Item::DropMove(float TimeDelta)
 {
+	// mass = 1.f;
+	// gravity.y = 980.f;
 	if (bPhysics)
 	{
 		if (useGravity)
@@ -316,10 +331,9 @@ void Item::DeadEvent()
 
 }
 
-void Item::SetDrop()
+void Item::SetDrop(float speed, float angle)
 {
-	float angleRad = RandomRange(0.0f, 2.0f * 3.141592f); // 0 ~ 360도 (라디안)
-	float speed = RandomRange(250.0f, 450.0f);            // 속도도 랜덤
+	//float speed = RandomRange(250.0f, 450.0f);            // 속도도 랜덤
 	//float speed = 300.f;            // 속도도 랜덤
 
 	velocity =
@@ -327,12 +341,29 @@ void Item::SetDrop()
 		//cosf(angleRad) * speed,  // 135도 (왼쪽 위)
 		//-sinf(angleRad) * speed
 
-		cosf(DEG_TO_RAD(135.f)) * speed,  // 135도 (왼쪽 위)
-		-sinf(DEG_TO_RAD(135.f)) * speed
+		cosf(DEG_TO_RAD(angle)) * speed,  // 135도 (왼쪽 위)
+		-sinf(DEG_TO_RAD(angle)) * speed
 	};
+
 	acceleration = { 0, 0 };  // 가속도
 	totalForce = { 0.f,0.f };
 
 	useGravity = true;
 	bPhysics = true;
+}
+
+void Item::SetHoldItemPos(FPOINT pos, bool isFlip)
+{
+	SetPos(pos + holdOffset);
+	this->isFlip = isFlip;
+}
+
+bool Item::IsPlayerDropItem(GameObject* player)
+{
+	if (nullptr != dynamic_cast<Character*>(player))
+	{
+		return this == dynamic_cast<Character*>(player)->GetPreHoldItem();
+	}
+
+	return false;
 }

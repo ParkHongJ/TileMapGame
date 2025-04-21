@@ -18,7 +18,7 @@ HRESULT GunBullet::Init()
 {
 	image = ImageManager::GetInstance()->FindImage("items");
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 30,30 }, CollisionMaskType::ITEM, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 30,30 }, CollisionMaskType::WORLDOBJECT, this);
 	interactState = INTERACTSTATE::INTERACT_ABLE;
 
 	//SetDrop();
@@ -44,6 +44,19 @@ void GunBullet::Release()
 
 void GunBullet::Detect(GameObject* obj)
 {
+	// 이펙트 필요
+	if (false == IsDestroyed())
+	{
+		SetDestroy();
+	}
+
+	if (false == obj->IsDestroyed())
+	{
+		if (OBJECTNAME::TILE != obj->GetObjectName())
+		{
+			obj->SetDestroy();
+		}
+	}
 }
 
 void GunBullet::Move(float TimeDelta)
@@ -130,23 +143,21 @@ void GunBullet::Move(float TimeDelta)
 	}
 }
 
-void GunBullet::SetDrop()
+void GunBullet::SetDrop(float speed, float angle)
 {
-	float angleRad = RandomRange(0.0f, 2.0f * 3.141592f); // 0 ~ 360도 (라디안)
-	float speed = RandomRange(250.0f, 450.0f);            // 속도도 랜덤
-	//float speed = 300.f;            // 속도도 랜덤
-
 	velocity =
 	{
 		//cosf(angleRad) * speed,  // 135도 (왼쪽 위)
 		//-sinf(angleRad) * speed
 
-		cosf(DEG_TO_RAD(135.f)) * speed,  // 135도 (왼쪽 위)
-		-sinf(DEG_TO_RAD(135.f)) * speed
+		cosf(DEG_TO_RAD(angle)) * speed,  // 135도 (왼쪽 위)
+		-sinf(DEG_TO_RAD(angle)) * speed
 	};
+
 	acceleration = { 0, 0 };  // 가속도
 	totalForce = { 0.f,0.f };
 
 	useGravity = true;
 	bPhysics = true;
 }
+

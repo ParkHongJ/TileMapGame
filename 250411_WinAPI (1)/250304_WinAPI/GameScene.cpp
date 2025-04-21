@@ -80,22 +80,14 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
     CameraManager::GetInstance()->Init();
  
-
-    // Collider register
-    snake = new SnakeMonster;
-    if (snake)
-    {
-        snake->Init();
-    }
-
    // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
     // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
     // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
-   ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseGold());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
+   // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder());
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI());
@@ -129,10 +121,6 @@ void GameScene::Release()
 
 void GameScene::Update(float TimeDelta)
 {
-   /* if (yellow)
-        yellow->Update(TimeDelta);*/
-    if (snake)
-        snake->Update(TimeDelta);
 
     CameraManager::GetInstance()->Update(TimeDelta);
 }
@@ -146,8 +134,4 @@ void GameScene::Render(ID2D1HwndRenderTarget* renderTarget)
     Viewport viewTile = CameraManager::GetInstance()->GetInRect();
    /* if (yellow)
         yellow->Render(renderTarget);*/
-
-    if (snake)
-        snake->Render(renderTarget);
-
 }

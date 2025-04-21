@@ -10,6 +10,7 @@
 // Add JunYong
 #include "PlayerStatus.h"
 #include "Bomb.h"
+#include "Whip.h"
 
 
 IdleState Character::idleState(IdleState::SubState::NONE);
@@ -91,10 +92,16 @@ HRESULT Character::Init()
 
     // Add Junyong
     playerStatus = new PlayerStatus();
+    holdItem = nullptr;
+    backItem = nullptr;
+    preHoldItem = nullptr;
 
+    objectRenderId = RENDER_PLAYER;
+
+    whip = new Whip();
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, whip);
     return S_OK;
 }
-
 
 void Character::InitAnimationMap()
 {
@@ -303,8 +310,6 @@ void Character::Update(float TimeDelta)
     if (!isMovingAuto)
         Move();
 
-
-
     if (!isHanging)
         ApplyGravity(TimeDelta);
 
@@ -325,34 +330,7 @@ void Character::Update(float TimeDelta)
     }
 
   
-    auto km = KeyManager::GetInstance();
-
-    // Add JunYong
-    if (km->IsOnceKeyDown('F'))
-    {
-        if (0 < playerStatus->GetBombCount())
-        {
-            if (isTouchingBottom)
-            {
-                Bomb* temp = new Bomb();
-                ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
-                FPOINT offset = { 100,0 };
-                temp->SetPos(Pos + offset);
-            }
-
-            else
-            {
-                Bomb* temp = new Bomb();
-                ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
-                FPOINT offset = { 100,0 };
-                temp->SetPos(Pos + offset);
-            }
-
-            playerStatus->MinusBombCount();
-        }
-
-    }
-
+    JunUpdate(TimeDelta);
    
     // 상태 전이 판단
     if (!isMovingAuto)
@@ -629,6 +607,8 @@ void Character::HandleAttackLogic() {
 
     switch (attack->GetCurrentSubState()) {
     case AttackState::SubState::ATTACK_WHIP:
+        whip->SetHoldItemPos(Pos, isFlip);
+        whip->Use(&currFrameInd.x);
         // TODO : 애니메이션 프레임별로 collision 검사, 채찍 아이템 render
         break;
 
@@ -639,8 +619,6 @@ void Character::HandleAttackLogic() {
     default:
         break;
     }
-
-
 }
 
 void Character::HandleInteractionLogic()
@@ -673,8 +651,8 @@ void Character::Jump()
     isOnRope = false;
     ChangeState(&idleState);
     return;
-
 }
+
 void Character::HangOnTile()
 {
     if (CheckHangOn())
@@ -797,7 +775,111 @@ bool Character::CheckHangOn()
 
 void Character::Detect(GameObject* obj)
 {
+    //if (obj == preHoldItem)
+    //{
+    //    return;
+    //}
+
     int i = 5;
+}
+
+void Character::JunUpdate(float TimeDelta)
+{
+    auto km = KeyManager::GetInstance();
+
+    // Add JunYong
+    if (km->IsOnceKeyDown('F'))
+    {
+        if (0 < playerStatus->GetBombCount())
+        {
+            FPOINT offset = { 50,0 };
+            float angle = 25.f;
+            if (true == isFlip)
+            {
+                offset.x *= -1;
+                angle = 155.f;
+            }
+
+            if (currInput.moveDownReleased || currInput.moveDown)
+            {
+                Bomb* temp = new Bomb();
+                ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
+                temp->SetPos({ Pos.x /*+ offset.x*/, Pos.y + colliderOffsetY });
+                //temp->SetDrop(0.f, angle);
+            }
+
+            else
+            {
+                Bomb* temp = new Bomb();
+                ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
+                temp->SetPos(Pos + offset);
+                temp->SetDrop(900.f, angle);
+            }
+
+            playerStatus->MinusBombCount();
+        }
+
+    }
+
+    if (km->IsOnceKeyDown('L'))
+    {
+        if (holdItem)
+        {
+            FPOINT offset = { 50,0 };
+            float angle = 25.f;
+            if (true == isFlip)
+            {
+                offset.x *= -1;
+                angle = 155.f;
+            }
+
+            holdItem->UnEquip();
+           
+            if (!currInput.moveDownReleased && !currInput.moveDown)
+            {
+                holdItem->SetDrop(600.f, angle);
+            }
+
+            else
+            {
+                holdItem->SetDrop(0.f, angle);
+            }
+
+            preHoldItem = holdItem;
+            holdItem = nullptr;
+        }
+
+        else
+        {
+            vector<GameObject*> inCircleObjects;
+
+            FPOINT center = Pos;
+            CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionRadius, &inCircleObjects);
+            for (auto& iter : inCircleObjects)
+            {
+                if (nullptr != dynamic_cast<Item*>(iter)) // Test
+                //if (OBJECTNAME::GUN == (iter)->GetObjectName()) // Test
+                {
+                    holdItem = dynamic_cast<Item*>(iter);
+                    holdItem->Equip();
+                }
+            }
+        }
+
+    }
+
+    if (km->IsOnceKeyDown('V'))
+    {
+        if (holdItem)
+        {
+            holdItem->Use();
+        }
+    }
+
+    if (holdItem)
+    {
+        holdItem->SetHoldItemPos(Pos, isFlip);
+    }
 }
 
 void Character::PlayAnimation()
@@ -845,8 +927,8 @@ void Character::PlayAnimation()
             int frame = static_cast<int>(JUMP_DOWN_START + ratio * (JUMP_DOWN_END - JUMP_DOWN_START));
             currFrameInd.x = frame;
         }
-
     }
+
     else
     {
         // 일반 애니메이션
@@ -865,16 +947,7 @@ void Character::PlayAnimation()
             break;
         }
     }
-
-
-
 }
-
-
-
-
-
-
 
 void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -925,13 +998,13 @@ void Character::ApplyGravity(float TimeDelta)
         velocity.y += gravity * TimeDelta;
         if (velocity.y > maxFallSpeed)
             velocity.y = maxFallSpeed;
-
-       
     }
+
     else if (isOnLadder || isOnRope)
     {
         isInAir = false;
     }
+
     else
     {
         velocity.y = 0.f;
