@@ -85,7 +85,7 @@ private:
 
 	// State Boolean
 	bool			     isMovingAuto;
-
+	bool			      isAttacking;
 	bool			      isCrouching;
 
 	// For Camera
@@ -227,6 +227,8 @@ public:
 	float GetYVelocity();
 
 	bool GetIsMovingAuto() const;
+	bool GetIsAttacking() { return isAttacking; }
+
 
 	void SetSpeed(float speed) { this->speed = speed; }
 

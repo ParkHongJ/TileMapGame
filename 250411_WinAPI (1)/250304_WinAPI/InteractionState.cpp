@@ -15,18 +15,22 @@ void InteractionState::Update()
     if (character->CheckHangOn())
     {
         ChangeSubState(SubState::INTERACTION_HANGON_TILE);
+        return;
     }
     else if (character->CheckCanClimbLadder())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
+        return;
     }
     else if (character->CheckCanClimbRope())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
+        return;
     }
     else if (character->CheckCanPushTile())
     {
         ChangeSubState(SubState::INTERACTION_PUSH_TILE);
+        return;
     }
     
 
