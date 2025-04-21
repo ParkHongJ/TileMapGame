@@ -165,6 +165,9 @@ void Character::InitAnimationMap()
     animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_WHIP)}] =
     { {0, 4}, {5, 4}, AnimationMode::Hold };
 
+    animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ITEM_THROW)}] =
+    { {6, 4},  {10, 4}, AnimationMode::Hold };
+
     // INTERACTION
 
     animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_CLIMB_LADDER)}] =
@@ -185,6 +188,7 @@ void Character::InitAnimationMap()
     animationMap[{INTERACTIONSTATE, static_cast<int>(InteractionState::SubState::INTERACTION_EXIT_TUNNEL)}] =
     { {6, 5},  {11, 5}, AnimationMode::Loop };
 
+    
 
 
     // SubAnim (따로 렌더해야 할 필요가 있는 애니메이션)
@@ -425,6 +429,9 @@ void Character::HandleTransitions()
 
         return;
     }
+
+    if()
+    
 
     // [5] 이동
     if ((currInput.moveLeft || currInput.moveRight) )
@@ -772,16 +779,16 @@ bool Character::CheckCanPushTile()
     Ray leftRay = { {Pos.x - 64.f, Pos.y }, {1.0f, 0.f} };
     Ray rightRay = { {Pos.x + 64.f, Pos.y}, {-1.0f, 0.f} };
 
-    if (isFlip)
-    {   
-        //CollisionManager::GetInstance()->RaycastType(leftRay, maxPushDist,hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true,1.0f);
-        return true;
-    }
-    else
-    {
-        //CollisionManager::GetInstance()->RaycastType(rightRay, maxPushDist, hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true, 1.0f);
-        return true;
-    }
+    //if (isFlip)
+    //{   
+    //    if(CollisionManager::GetInstance()->RaycastType(leftRay, maxPushDist,hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true,1.0f))
+    //        return true;
+    //}
+    //else
+    //{
+    //    if(CollisionManager::GetInstance()->RaycastType(rightRay, maxPushDist,hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true,1.0f))
+    //        return true;
+    //}
     return false;
 }
 

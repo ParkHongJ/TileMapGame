@@ -45,6 +45,7 @@ private:
 	map<std::pair<unsigned int, unsigned int>, FrameInfo> animationMap;
 
 	Image*				  playerImage;
+	Image*          playerFaintEffect; //temp
 	CharacterState*				state;
 
 
@@ -53,7 +54,7 @@ private:
 	FPOINT			     colliderSize;
 	float			  colliderOffsetY;
 
-	// Input
+	// Input 모든 Input 은 여기서 한번에 받아서 사용
 	InputIntent				currInput;
 
 

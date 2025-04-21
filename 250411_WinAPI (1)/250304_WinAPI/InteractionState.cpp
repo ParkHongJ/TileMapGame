@@ -34,7 +34,7 @@ void InteractionState::Update()
 
 void InteractionState::ChangeSubState(SubState newSubState)
 {
-    if (currentSubState == newSubState) return;
+    //if (currentSubState == newSubState) return;
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(INTERACTIONSTATE, static_cast<int>(newSubState));
 }
