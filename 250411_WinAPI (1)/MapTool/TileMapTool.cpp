@@ -55,7 +55,6 @@ void TileMapTool::Init(ID3D11Device* device)
 
     if (ObjectMetaLoader::LoadFromJson("object_meta.json"))
     {
-        int a = 10;
         LoadAtlasTexturesFromRegistry(device);
     }
 }
@@ -193,6 +192,12 @@ void TileMapTool::DrawPaletteUI()
         );
     }
 
+    if (ImGui::Button("Clear"))
+    {
+        selectedTileX = -1;
+        selectedTileY = -1;
+    }
+
     if (ImGui::Button("Save TileMap"))
     {
         SaveTileMapToFile("../250304_WinAPI/Data/hongScene.tilemap");
@@ -220,28 +225,50 @@ void TileMapTool::DrawTileMap()
 
     ImGui::SetCursorScreenPos(mapOrigin);
 
+    ImGuiIO& io = ImGui::GetIO();
+
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    ImVec2 windowOrigin = ImGui::GetCursorScreenPos();
+    ImVec2 origin = windowOrigin + cameraOffset;
+
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("OBJECT_TYPE"))
         {
             const char* droppedName = static_cast<const char*>(payload->Data);
 
-            // 1. 맵 좌표로 변환 (너 구현에 맞게!)
-            FPOINT mapPos = ConvertScreenToMap(screenMouse);  // 너만의 좌표계로!
+            FPOINT placePos;
 
             // 2. 메타 정보 찾아서 배치
             const ObjectMeta* meta = ObjectRegistry::Get().Find(droppedName);
             if (meta)
             {
-                CreateObjectOnMap(meta->name, mapPos);  // 너의 배치 함수!
-                printf("[%s] placed at %.1f, %.1f\n", droppedName, mapPos.x, mapPos.y);
+                if (bGrid)
+                {
+                    ImVec2 mouse = io.MousePos;
+                    ImVec2 local = (mouse - origin) / zoom;
+
+                    int tx = (int)floorf(local.x / tileSize);
+                    int ty = (int)floorf(local.y / tileSize);
+
+                    // 타일 중앙에 정렬해서 배치
+                    placePos.x = (tx + 0.5f) * tileSize;
+                    placePos.y = (ty + 0.5f) * tileSize;
+				}
+                else
+                {
+                    // 1. 맵 좌표로 변환 (너 구현에 맞게!)
+                    placePos = ConvertScreenToMap(screenMouse);  // 너만의 좌표계로!
+                }
+
+                CreateObjectOnMap(meta->name, placePos);
+                printf("[%s] placed at %.1f, %.1f\n", droppedName, placePos.x, placePos.y);
             }
         }
         ImGui::EndDragDropTarget();
     }
 
     // 스크롤 / 드래그 처리
-    ImGuiIO& io = ImGui::GetIO();
     if (ImGui::IsWindowHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
         cameraOffset.x += io.MouseDelta.x;
         cameraOffset.y += io.MouseDelta.y;
@@ -255,15 +282,12 @@ void TileMapTool::DrawTileMap()
         {
             zoom = 5.f;
         }
-        if (zoom <= 0.25f)
+        if (zoom <= 0.15f)
         {
-            zoom = 0.25f;
+            zoom = 0.15f;
         }
     }
 
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    ImVec2 windowOrigin = ImGui::GetCursorScreenPos();
-    ImVec2 origin = windowOrigin + cameraOffset;
 
     // 타일맵 그리기
     for (int y = 0; y < mapHeight; ++y)
@@ -409,7 +433,8 @@ void TileMapTool::SavePlacedObjectToJson(const char* path)
             { "y", obj->pos.y },
             { "width", obj->width },
             { "height", obj->height },
-            { "atlas", atlasStr }
+            { "atlas", atlasStr },
+            { "flipX", obj->flipX }
             });
     }
 
@@ -565,6 +590,11 @@ void TileMapTool::DrawObjectPalette()
         ImGui::EndGroup();
 
         ImGui::SameLine();
+
     }
+
+
+    ImGui::Checkbox("Grid", &bGrid);
+
     ImGui::End();
 }

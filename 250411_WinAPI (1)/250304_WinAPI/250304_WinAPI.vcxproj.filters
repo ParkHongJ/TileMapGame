@@ -321,6 +321,12 @@
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClCompile>
+    <ClCompile Include="ArrowTrap.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="Arrow.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -601,6 +607,12 @@
     </ClInclude>
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ArrowTrap.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="Arrow.h">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

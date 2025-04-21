@@ -427,7 +427,8 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 		transform =
 			D2D1::Matrix3x2F::Translation(-x, -y) *
 			D2D1::Matrix3x2F::Rotation(angle) *
-			D2D1::Matrix3x2F::Translation(x, y);
+			D2D1::Matrix3x2F::Translation(x, y) *
+			transform;
 	}
 
 	if (flipX)
@@ -439,16 +440,21 @@ void Image::Render(ID2D1RenderTarget* renderTarget, float x, float y, float scal
 			D2D1::Matrix3x2F::Translation(x, y) *
 			transform;
 
+	}
+
+	if (angle != 0.f || flipX)
+	{
 		renderTarget->SetTransform(transform * originalTransform);
 	}
 
 	renderTarget->DrawBitmap(imageInfo->bitmap.Get(), &destRect, alpha, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
 
-	renderTarget->SetTransform(originalTransform);
-	// Transform º¹¿ø
-	if (flipX)
+	//renderTarget->SetTransform(originalTransform);
+	
+
+	if (angle != 0.f || flipX)
 	{
-		//renderTarget->SetTransform(originalTransform);
+		renderTarget->SetTransform(originalTransform);
 	}
 }
 

@@ -41,10 +41,11 @@ void GameManager::LoadTile(const char* path)
 
 			ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_TILE, tile);
 
-			float renderX = (src.pos.x + 0.5f) * GAME_TILE_SIZE;
-			float renderY = (src.pos.y + 0.5f) * GAME_TILE_SIZE;
+			
+			float renderX = floor((src.pos.x + 0.5f) * GAME_TILE_SIZE);
+			float renderY = floor((src.pos.y + 0.5f) * GAME_TILE_SIZE);
 
-			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY }, TileType::BLOCK);
+			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY }, TileType::GROUND);
 
 			tileMap[y][x] = tile;
 		}

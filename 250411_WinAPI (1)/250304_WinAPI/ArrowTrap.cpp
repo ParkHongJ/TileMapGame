@@ -1,0 +1,81 @@
+#include "pch.h"
+#include "ArrowTrap.h"
+#include "Image.h"
+#include "CameraManager.h"
+#include "CollisionManager.h"
+#include "Arrow.h"
+HRESULT ArrowTrap::Init()
+{
+	trapImage = ImageManager::GetInstance()->FindImage("Trap");
+	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
+	Pos.x = 250.f;
+	Pos.y = 150.f;
+
+	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
+	return S_OK;
+}
+
+void ArrowTrap::Release()
+{
+}
+
+void ArrowTrap::Update(float TimeDelta)
+{
+	//아이템, 몬스터, 플레이어 이렇게 3개다.
+
+	if (isFire == false)
+	{
+		FPOINT trapTopPos = Pos;
+		trapTopPos.y -= GAME_TILE_SIZE / 2.f;
+
+		Ray ray = { trapTopPos, { -1.f, 0.f } };
+		RaycastHit out;
+
+		//Trigger On
+		if (CollisionManager::GetInstance()->RaycastMyType(ray, 200.f, out, CollisionMaskType::ITEM, true, 0.1f))
+		{
+			Fire();
+		}
+	}
+}
+
+void ArrowTrap::LateUpdate(float TimeDelta)
+{
+}
+
+void ArrowTrap::Render(ID2D1HwndRenderTarget* renderTarget)
+{
+	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+	trapImage->Render(renderTarget, cameraPos.x, cameraPos.y, objectScale, objectScale, 1, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+}
+
+void ArrowTrap::CheckCulling()
+{
+}
+
+void ArrowTrap::Fire()
+{
+	Arrow* arrow = new Arrow;
+	ObjectManager::GetInstance()->AddObject(RENDER_ITEM, arrow);
+	isFire = true;
+
+	FPOINT spawnPos = Pos;
+
+	arrow->SetDirection(true);
+	spawnPos.x -= GAME_TILE_SIZE * 0.5f;
+
+	if (isFlip)
+	{
+
+	}
+	else
+	{
+
+		//오른쪽
+	}
+
+	arrow->SetPos(spawnPos);
+	//arrow->SetDirection(isFlip);
+
+
+}

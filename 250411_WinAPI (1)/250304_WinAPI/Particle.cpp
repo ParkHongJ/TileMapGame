@@ -121,7 +121,7 @@ void PhysicsOption::Update(Particle& particle, float TimeDelta)
 
 		RaycastHit out;
 
-		if (CollisionManager::GetInstance()->RaycastAll(ray, moveLength, out))
+		if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE))
 		{
 			//충돌했으면 중력의 영향을 잠시 초기화
 			totalForce.x = 0.0f;
