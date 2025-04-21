@@ -16,22 +16,19 @@ void InteractionState::Update()
     {
         ChangeSubState(SubState::INTERACTION_HANGON_TILE);
     }
-    else if (character->GetIsOnLadder())
+    else if (character->CheckCanClimbLadder())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
     }
-    else if (character->GetIsOnRope())
+    else if (character->CheckCanClimbRope())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
     }
-    else if (character->GetIsPushingTile())
+    else if (character->CheckCanPushTile())
     {
         ChangeSubState(SubState::INTERACTION_PUSH_TILE);
     }
-    else
-    {
-        ChangeSubState(SubState::NONE); // 최소한 NONE으로 명시
-    }
+    
 
 
 

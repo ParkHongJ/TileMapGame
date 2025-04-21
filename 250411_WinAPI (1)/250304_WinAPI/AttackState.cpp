@@ -4,48 +4,12 @@
 
 void AttackState::Enter(Character* character)
 {
-    this->character = character;/*
-    ChangeSubState(SubState::ATTACK_WHIP);
-    character->SetIsAttacking(true);*/
+    this->character = character;
 }
 
 void AttackState::Update()
 {
-    //KeyManager* km = KeyManager::GetInstance();
 
-    //// 점프 입력은 공격 중에도 허용
-    //if (km->IsOnceKeyDown('Z') && !character->GetIsInAir())
-    //{
-    //    character->SetYVelocity(-character->GetJumpPower());
-    //    character->SetIsInAir(true);
-    //  
-    //}
-
-
-
-    //switch (currentSubState)
-    //{
-    //case SubState::ATTACK_WHIP:
-    //case SubState::ATTACK_ITEM_THROW:
-    //{
-    //    
-    //    if (character->GetCurrAnimEnd()) {
-    //        character->SetIsAttacking(false);
-
-    //        if (character->GetIsInAir())
-    //            character->SetAnimationFrameInfo(SUBSTATE,
-    //                character->GetYVelocity() < 0
-    //                ? static_cast<int>(SubAnim::JUMP_UP)
-    //                : static_cast<int>(SubAnim::JUMP_DOWN));
-    //        else
-    //            character->ChangeState(&Character::idleState);
-    //    }
-    //    break;
-    //}
-
-    //default:
-    //    break;
-    //}
 }
 
 
@@ -60,13 +24,13 @@ void AttackState::ChangeSubState(SubState newSubState)
 void AttackState::Exit()
 {
     character->SetFrameTime(0.0f);
-    character->SetIsAttacking(false);
 }
 
 const char* AttackState::GetSubStateName() const
 {
     switch (currentSubState) {
-    case SubState::ATTACK_WHIP:        return "ATTACK_WHIP";
+    case SubState::ATTACK_WHIP_START:        return "ATTACK_WHIP_START";
+    case SubState::ATTACK_WHIP_END:           return "ATTACK_WHIP_END";
     case SubState::ATTACK_ITEM_THROW:     return "ATTACK_ITEM_THROW";
 
     }

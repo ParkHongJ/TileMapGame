@@ -45,7 +45,8 @@ HRESULT Character::Init()
     lookUpLockTime = 1.0f;
     lookDownLockTime = 1.0f;
     
-    faintTime = 1.0f; 
+    currfaintTime = 0.0f; 
+    maxFaintTime = 2.0f;
 
     // Collision
     colliderSize = { 30.0f, 40.0f };
@@ -81,17 +82,11 @@ HRESULT Character::Init()
     // boolean
     isFlip = false;
 
-    isAttacking = false;
     isCrouching = false;
     isLookUpLocked = false;
     isLookDownLocked = false;
 
-    isOnLadder = false;
-    isOnRope = false;
-
-    isPushingTile = false;
     isMovingAuto = false;
-
 
     InitAnimationMap();
 
@@ -162,7 +157,7 @@ void Character::InitAnimationMap()
     { {7, 2}, {10, 2}, AnimationMode::Hold };
 
     // ATTACK
-    animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_WHIP)}] =
+    animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_WHIP_START)}] =
     { {0, 4}, {5, 4}, AnimationMode::Hold };
 
     animationMap[{ATTACKSTATE, static_cast<int>(AttackState::SubState::ATTACK_ITEM_THROW)}] =
@@ -420,27 +415,17 @@ void Character::HandleTransitions()
 
     CheckInterAction();
 
-   
-
 
     // [4] 공격 
-    char buf[128];
-    sprintf_s(buf, "  isAttacking 변경됨 → %s\n", isAttacking ? "true" : "false");
-    OutputDebugStringA(buf);
-
-    if (isAttacking) return;
-
-    if (currInput.attack && !isAttacking)
+    if (currInput.attack )
     {
-        isAttacking = true;
-
+        
         ChangeState(&attackState);
 
         return;
     }
 
     
-
     // [5] 이동
     if ((currInput.moveLeft || currInput.moveRight) )
     {
@@ -512,12 +497,11 @@ void Character::HandleIdleLogic() {
 
         break;
     case IdleState::SubState::IDLE_FALL_FROM_HEIGHT:
-        if (GetCurrAnimEnd())
-        {
-            isFallFromHeight = false;
-        }
+        
         break;
     case IdleState::SubState::IDLE_FAINT:
+        currfaintTime += deltaTime;
+
         
         break;
     case IdleState::SubState::IDLE_DIE:
@@ -603,16 +587,18 @@ void Character::HandleAttackLogic() {
     if (!attack) return;
 
     switch (attack->GetCurrentSubState()) {
-    case AttackState::SubState::ATTACK_WHIP:
+    case AttackState::SubState::ATTACK_WHIP_START:
         // TODO : 애니메이션 프레임별로 collision 검사, 채찍 아이템 render
+
+        break;
+    case AttackState::SubState::ATTACK_WHIP_END:
+         
         break;
 
     case AttackState::SubState::ATTACK_ITEM_THROW:
 
         break;
 
-    default:
-        break;
     }
 
 
@@ -631,6 +617,7 @@ void Character::HandleInteractionLogic()
     case InteractionState::SubState::INTERACTION_HANGON_TILE:
         break;
     case InteractionState::SubState::INTERACTION_PUSH_TILE:
+        Move();
         break;
 
     }
@@ -640,9 +627,7 @@ void Character::Jump()
 {
 
    velocity.y = -jumpPower;
-    isOnLadder = false;
     isCrouching = false;
-    isOnRope = false;
     isTouchingBottom = false;
     ChangeState(&idleState);
     return;
@@ -671,13 +656,12 @@ void Character::HandleAirAnimation()
     const int AIR_ANIM_ROW = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
     const auto& frame = currFrameInfo;
 
-    if (IsAirborne() && !isAttacking)
+    if (IsAirborne())
     {
         if (frame.startFrame.y != AIR_ANIM_ROW)
         {
             if (velocity.y < 0)
             {
-
                 currFrameInd = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame;
                 frameTime = 0.f;
 
@@ -718,23 +702,25 @@ bool Character::CheckAlmostFall()
 
     if (isFlip)
     {
-        footLeft = { Pos.x + colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
-        footRight = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+        footLeft = { Pos.x -5.f , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+        footRight = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     }
     else
     {
-        footLeft = { Pos.x - colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
-        footRight = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+        footLeft = { Pos.x +5.f , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+        footRight = { Pos.x + colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
     
     }
     
     RaycastHit hitLeft, hitRight;
 
-    bool isGroundLeft = CollisionManager::GetInstance()->RaycastType({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, CollisionMaskType::TILE,false , 1.0f );
-    bool isGroundRight = CollisionManager::GetInstance()->RaycastType({ footRight, {0.f, 1.f} }, 10.f, hitRight,CollisionMaskType::TILE, false , 1.0f);
+    bool isGroundLeft = CollisionManager::GetInstance()->RaycastType({ footLeft, {0.f, 1.f} }, 10.f, hitLeft, CollisionMaskType::TILE,true , 1.0f );
+    bool isGroundRight = CollisionManager::GetInstance()->RaycastType({ footRight, {0.f, 1.f} }, 10.f, hitRight,CollisionMaskType::TILE, true , 1.0f);
 
-    // 둘 중 하나만 떠 있으면 가장자리--
-    return (isGroundLeft ^ isGroundRight); // XOR
+    
+    
+
+    return !(isGroundLeft && isGroundRight);
 }
 
 bool Character::CheckHangOn()
@@ -796,68 +782,90 @@ bool Character::CheckCanPushTile()
     return false;
 }
 
+bool Character::CheckCanClimbLadder()
+{
+    OutputDebugStringA("==================사다리 검사중=========================");
+
+    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+
+
+    if (!interActionPQ.empty())
+    {
+
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
+        {
+            // 사다리, 로프 posX 로 플레이어 위치 조정
+
+            ChangeState(&interactionState);
+            return true; 
+        }
+        //else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+        //{
+        //    // 사다리, 로프 posX 로 플레이어 위치 조정
+
+
+        //    ChangeState(&interactionState);
+        //    return;
+        //}
+        return false;
+    }
+
+
+}
+
+bool Character::CheckCanClimbRope()
+{
+    OutputDebugStringA("==================사다리 검사중=========================");
+
+    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+
+    if (!interActionPQ.empty())
+    {
+
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+        {
+            // 사다리, 로프 posX 로 플레이어 위치 조정
+
+            ChangeState(&interactionState);
+            return true;
+        }
+        return false;
+    }
+
+}
+
 void Character::CheckInterAction()
 {
     
-    if (currInput.moveUp || isOnLadder || isOnRope)
+    if (currInput.moveUp)
     {
         // 사다리 상호작용 중 점프 가능
         if (currInput.jump && !IsAirborne())
         {
-            isOnLadder = false;
-            isOnRope = false;
             Jump();
             return;
         }
 
-        OutputDebugStringA("==================올라탈 곳 검사중=========================");
-        CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
-
-
-        if (!interActionPQ.empty())
+        if (CheckCanClimbLadder() || CheckCanClimbRope())
         {
-           
-            if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
-            {
-                // 사다리, 로프 posX 로 플레이어 위치 조정
-
-                isOnLadder = true;
-
-                ChangeState(&interactionState);
-                return;
-            }
-            else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
-            {
-                // 사다리, 로프 posX 로 플레이어 위치 조정
-
-                isOnRope = true;
-
-                ChangeState(&interactionState);
-                return;
-            }
-
+            ChangeState(&interactionState);
+            return;
         }
+        
     }
     else if (currInput.interact)
     {
         CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
         if (!interActionPQ.empty())
         {
-            // 
-
+            
             if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::DOOR)
             {
+            
                 ChangeState(&interactionState);
                 return;
             }
-            /*
-            else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
-            {
-                isOnRope = true;
-
-                ChangeState(&interactionState);
-                return;
-            }*/
+            
 
         }
     }
@@ -868,16 +876,10 @@ void Character::CheckInterAction()
         {
             // TODO : Push tile from tilemap?
 
-            isPushingTile = true;
-            
 
-
-
-
+            ChangeState(&interactionState);
+            return;
         }
-        else
-            isPushingTile = false;
-
     }
 }
 
@@ -900,7 +902,7 @@ void Character::PlayAnimation()
     frameTime = 0.f;
 
     // 공중 애니메이션일 경우
-    if (currFrameInfo.startFrame.y == 9 && IsAirborne())
+    if ( IsAirborne())
     {
         float vel = velocity.y;
 
@@ -979,7 +981,6 @@ void Character::ChangeState(CharacterState* newState)
 {
     if (state == newState)
         return; // 상태가 같으면 전이하지 않음
-
     if (state) state->Exit();
     state = newState;
     if (state) state->Enter(this);
@@ -1021,17 +1022,17 @@ void Character::CheckTileCollision()
     bool onDebug = false;
 
  // RayAll -> RayType : 타일만 레이 쏘게 하는 코드로 변경
-    isTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE ,true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::TILE, true, debugTime);
+    isTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE , onDebug, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::TILE, onDebug, debugTime);
 
-    isTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::TILE, true, debugTime);
+    isTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, onDebug, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::TILE, onDebug, debugTime);
 
-    isTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::TILE, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::TILE, true, debugTime);
+    isTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::TILE, onDebug, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::TILE, onDebug, debugTime);
 
-    isTouchingBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, CollisionMaskType::TILE, true, debugTime);
+    isTouchingBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, onDebug, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, CollisionMaskType::TILE, onDebug, debugTime);
     
      if (velocity.y < 0.f)
         isTouchingBottom = false;
@@ -1061,7 +1062,7 @@ void Character::Move()
     SetXVelocity(vx);
 
     if (!IsAirborne()) {
-        if (isCrouching || currInput.shift || isPushingTile)
+        if (isCrouching || currInput.shift || CheckCanPushTile())
             SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
         else
             SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);  
@@ -1150,19 +1151,6 @@ bool Character::CanGoY(float vy)
 
 }
 
-bool Character::PressAnyKey(void)
-{
-    KeyManager* km = KeyManager::GetInstance();
-
-    for (int key = 0; key < MAX_KEY_COUNT; ++key)
-    {
-        if (km->IsOnceKeyDown(key))
-            return true;
-    }
-    return false;
-}
-
-
 float Character::GetVelocitySize()
 {
     return sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
@@ -1203,10 +1191,6 @@ bool Character::GetCurrAnimEnd()
 bool Character::GetIsMovingAuto() const
 {
     return isMovingAuto;
-}
-void Character::SetIsMovingAuto(bool value)
-{
-    isMovingAuto = value;
 }
 
 FPOINT Character::GetHangOnTargetPos()

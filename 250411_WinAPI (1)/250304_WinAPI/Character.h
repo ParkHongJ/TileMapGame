@@ -86,14 +86,7 @@ private:
 	// State Boolean
 	bool			     isMovingAuto;
 
-	bool				    isHanging;
-	bool                  isAttacking;
 	bool			      isCrouching;
-	bool				   isOnLadder;
-	bool				     isOnRope;
-	bool				isPushingTile;
-	bool				  isOnVehicle;
-	bool			 isFallFromHeight;
 
 	// For Camera
 	bool			   isLookUpLocked;
@@ -104,7 +97,8 @@ private:
 	float				 currLockTime;
 	float			   lookUpLockTime;
 	float			 lookDownLockTime;
-	float				    faintTime;
+	float				currfaintTime;
+	float				 maxFaintTime;
 
 	// RayCast
 	FPOINT                leftHandPos;
@@ -163,6 +157,8 @@ public:
 	bool CheckAlmostFall();
 	bool CheckHangOn();
 	bool CheckCanPushTile();
+	bool CheckCanClimbLadder();
+	bool CheckCanClimbRope();
 	FPOINT GetHangOnTargetPos();
 
 
@@ -192,7 +188,7 @@ public:
 
 
 	// Gravity
-
+	bool IsAirborne() const;
 	void ApplyGravity(float TimeDelta);
 	
 	// Collision
@@ -204,7 +200,6 @@ public:
 	void HandleInput();
 	
 	// 
-	bool IsAirborne() const;
 	void OnDamage();
 
 
@@ -220,33 +215,21 @@ public:
 	bool GetIsLookUpLocked();
 	bool GetIsLookDownLocked();
 	bool GetCurrAnimEnd();
-	bool GetFallFromHeight() { return isFallFromHeight; }
 	
 	float GetCurrLockTime() { return this->currLockTime; }
 	void  SetCurrLockTime(float lockTime) { this->currLockTime = lockTime; }
 	float GetlookUpLockTime() { return this->lookUpLockTime; }
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
 
-	void SetIsAttacking(bool input) { this->isAttacking = input; }
 	
-	void SetIsOnLadder(bool value) { isOnLadder = value; }
-	bool GetIsOnLadder() const { return isOnLadder; }
-
-	void SetIsOnRope(bool value) { isOnRope = value; }
-	bool GetIsOnRope() const { return isOnRope; }
 	
 	float GetVelocitySize();
 	float GetYVelocity();
 
-
 	bool GetIsMovingAuto() const;
-	void SetIsMovingAuto(bool value);
-
-	bool GetIsPushingTile() { return isPushingTile; }
 
 	void SetSpeed(float speed) { this->speed = speed; }
 
-	bool PressAnyKey();
 
 	Character() {};
 	virtual ~Character() {};

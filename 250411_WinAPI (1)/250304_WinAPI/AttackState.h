@@ -7,7 +7,8 @@ class AttackState : public CharacterState
 public:
     enum class SubState {
         NONE,
-        ATTACK_WHIP,
+        ATTACK_WHIP_START,
+        ATTACK_WHIP_END,
         ATTACK_ITEM_THROW,
     };
 

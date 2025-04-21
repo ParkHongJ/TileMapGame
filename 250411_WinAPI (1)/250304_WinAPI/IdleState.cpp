@@ -26,18 +26,18 @@ void IdleState::Update() {
     }*/
 
 
+
+
     if (character->IsAirborne()) {
         ChangeSubState(SubState::IDLE_ONAIR);
         return;
     }
 
-
-
-        if (character->CheckAlmostFall()) {
-            ChangeSubState(SubState::IDLE_FALL_ALMOST);
-            character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
-            return;
-        }
+    if (character->CheckAlmostFall()) {
+        ChangeSubState(SubState::IDLE_FALL_ALMOST);
+        character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
+        return;
+    }
     
 
     // TOOD : 아이템을 들고 있는 IDLE 상태
