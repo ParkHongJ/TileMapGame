@@ -10,8 +10,9 @@ void IdleState::Enter(Character* character) {
 
     if (input.moveDown) ChangeSubState(SubState::IDLE_LOOKDOWN_START);
     else if (input.moveUp) ChangeSubState(SubState::IDLE_LOOKUP_START);
-    //else if (character->GetFallFromHeight()) ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
+    else if (character->IsAirborne()) ChangeSubState(SubState::IDLE_ONAIR);
     else ChangeSubState(SubState::IDLE_ALONE);
+   
 }
 
 void IdleState::Update() {
@@ -25,18 +26,22 @@ void IdleState::Update() {
     }*/
 
 
-    if (character->GetIsInAir()) {
+    if (character->IsAirborne()) {
         ChangeSubState(SubState::IDLE_ONAIR);
         return;
     }
 
-    if (currentSubState == SubState::IDLE_ALONE) {
+
+
         if (character->CheckAlmostFall()) {
             ChangeSubState(SubState::IDLE_FALL_ALMOST);
             character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
             return;
         }
-    }
+    
+
+    // TOOD : 아이템을 들고 있는 IDLE 상태
+
 
     if (input.moveUp) {
         if (!character->GetIsLookUpLocked())
@@ -91,6 +96,16 @@ void IdleState::Update() {
     {
         ChangeSubState(SubState::IDLE_ALONE);
     }
+
+    if (character->IsAirborne())
+    {
+        ChangeSubState(SubState::IDLE_ONAIR);
+    }
+    else
+    {
+        ChangeSubState(SubState::IDLE_ALONE);
+    }
+
 }
 
 void IdleState::ChangeSubState(SubState newSubState) {

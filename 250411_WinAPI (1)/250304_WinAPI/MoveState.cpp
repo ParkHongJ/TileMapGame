@@ -21,7 +21,7 @@ void MoveState::Update() {
 
 
     // 공중 상태에서는 서브 상태 변경 없음
-    if (character->GetIsInAir())
+    if (character->IsAirborne())
     {
         ChangeSubState(SubState::MOVE_ONAIR);
         return;
@@ -73,7 +73,7 @@ void MoveState::ChangeSubState(SubState newSubState)
     }
 
     // 공중에 있을 땐 상태는 바꾸되 애니메이션은 바꾸지 않는다
-    if (character->GetIsInAir() && character->GetCurrFrameInfo().startFrame.y == 9)
+    if (character->IsAirborne() && character->GetCurrFrameInfo().startFrame.y == 9)
     {
         currentSubState = newSubState;
         return;

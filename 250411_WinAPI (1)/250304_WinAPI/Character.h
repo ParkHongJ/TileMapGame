@@ -86,7 +86,6 @@ private:
 	// State Boolean
 	bool			     isMovingAuto;
 
-	bool                      isInAir;
 	bool				    isHanging;
 	bool                  isAttacking;
 	bool			      isCrouching;
@@ -195,7 +194,7 @@ public:
 	// Gravity
 
 	void ApplyGravity(float TimeDelta);
-
+	
 	// Collision
 	void CheckTileCollision();
 
@@ -205,13 +204,13 @@ public:
 	void HandleInput();
 	
 	// 
-
+	bool IsAirborne() const;
 	void OnDamage();
 
 
 
+
 	// Getter & Setter
-	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
 	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
 
 	float GetJumpPower() { return this->jumpPower; }
@@ -229,8 +228,7 @@ public:
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
 
 	void SetIsAttacking(bool input) { this->isAttacking = input; }
-	bool GetIsInAir() { return this->isInAir; }
-
+	
 	void SetIsOnLadder(bool value) { isOnLadder = value; }
 	bool GetIsOnLadder() const { return isOnLadder; }
 
@@ -240,8 +238,6 @@ public:
 	float GetVelocitySize();
 	float GetYVelocity();
 
-	bool GetIsHangOn() const;
-	void SetIsHangOn(bool value);
 
 	bool GetIsMovingAuto() const;
 	void SetIsMovingAuto(bool value);

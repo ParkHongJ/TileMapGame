@@ -80,7 +80,7 @@ HRESULT Character::Init()
 
     // boolean
     isFlip = false;
-    isInAir = false;
+
     isAttacking = false;
     isCrouching = false;
     isLookUpLocked = false;
@@ -88,7 +88,7 @@ HRESULT Character::Init()
 
     isOnLadder = false;
     isOnRope = false;
-    isHanging = false;
+
     isPushingTile = false;
     isMovingAuto = false;
 
@@ -293,16 +293,21 @@ void Character::Update(float TimeDelta)
 
     HandleInput();
 
+    // Collision 검사 후 공중에 있는지 판단
+    CheckTileCollision();
     if (!isMovingAuto)
         Move();
 
-    if (!isHanging)
+
+
+    if (!(state == &interactionState &&
+        interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE))
+    {
         ApplyGravity(TimeDelta);
 
-    // Collision 검사 후 공중에 있는지 판단
-    CheckTileCollision();
+    }
+        
 
-    isInAir = !isTouchingBottom;
 
 
     // 착지 판단 후 위치 보정
@@ -321,8 +326,6 @@ void Character::Update(float TimeDelta)
         }*/
 
 
-        velocity.y = 0.f;
-        isInAir = false;
         //return;
     }
 
@@ -366,8 +369,11 @@ void Character::Update(float TimeDelta)
     else if (state == &idleState) HandleIdleLogic();
 
     // 공중 점프 애니메이션 처리
-    if (!isHanging)
+    if (IsAirborne())
+    {
         HandleAirAnimation();
+    }
+
 
     PlayAnimation();
 
@@ -377,35 +383,38 @@ void Character::Update(float TimeDelta)
 void Character::HandleTransitions()
 {
 
-    if (currInput.jump && !isInAir)
+    if (currInput.jump && !IsAirborne())
     {
         Jump();
+        return;
     }
 
 
     // [1] 매달림 상태에서는 점프만 허용
-    if (isHanging)
+    if (state == &interactionState &&
+        interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE)
     {
         if (currInput.jump)
         {
             velocity.y = -jumpPower;
-            isInAir = true;
-            isHanging = false; // 매달림 해제
-            isOnLadder = false;
-            isOnRope = false;
             ChangeState(&idleState);
+            return;
         }
-        
-        ChangeState(&interactionState);
-        return;
 
+        return; // 매달린 상태에서는 점프 외 입력 무시
     }
+
+
+    //if (IsAirborne() && state != &interactionState && state != &attackState)
+    //{
+    //    ChangeState(&idleState);
+    //    return;
+    //}
 
     // [2] 공중에서 매달릴 수 있는지 검사
-    if (isInAir)
-    {
+    if(IsAirborne())
         HangOnTile();
-    }
+    
 
     // [3] 상호작용 있는지 검사 // 타일 밀기, 사다리, 로프 , 상인
 
@@ -430,7 +439,6 @@ void Character::HandleTransitions()
         return;
     }
 
-    if()
     
 
     // [5] 이동
@@ -444,7 +452,7 @@ void Character::HandleTransitions()
     ChangeState(&idleState);
 
     // [7] 예외를 위해 다시 한번 벽잡기 검사
-    if (isInAir)
+    if (IsAirborne())
     {
         HangOnTile();
     }
@@ -543,7 +551,7 @@ void Character::HandleMoveLogic() {
             isMovingAuto = true;
 
             targetHangOnPos = GetHangOnTargetPos();  // 목표 위치 계산
-            velocity = { 0.f, 0.f }; // 중단
+            //velocity = { 0.f, 0.f }; // 중단
         }
         break;
 
@@ -579,10 +587,9 @@ void Character::HandleMoveLogic() {
             // 목표 도착 시
             isFlip = !isFlip;
             isMovingAuto = false;
-            isHanging = true;
             isCrouching = false;
-            isInAir = true;
             ChangeState(&interactionState);
+            
         }
 
         break;
@@ -631,12 +638,12 @@ void Character::HandleInteractionLogic()
 
 void Character::Jump()
 {
-    velocity.y = -jumpPower;
-    isInAir = true;
-    isHanging = false; // 매달림 해제
+
+   velocity.y = -jumpPower;
     isOnLadder = false;
     isCrouching = false;
     isOnRope = false;
+    isTouchingBottom = false;
     ChangeState(&idleState);
     return;
 
@@ -645,13 +652,10 @@ void Character::HangOnTile()
 {
     if (CheckHangOn())
     {
-        isHanging = true;
-        velocity = { 0.0f, 0.0f };
+        velocity.y = 0.f;
         ChangeState(&interactionState);
         return;
     }
-    else
-        isHanging = false;
 }
 
 
@@ -667,7 +671,7 @@ void Character::HandleAirAnimation()
     const int AIR_ANIM_ROW = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
     const auto& frame = currFrameInfo;
 
-    if (isInAir && !isAttacking)
+    if (IsAirborne() && !isAttacking)
     {
         if (frame.startFrame.y != AIR_ANIM_ROW)
         {
@@ -798,7 +802,7 @@ void Character::CheckInterAction()
     if (currInput.moveUp || isOnLadder || isOnRope)
     {
         // 사다리 상호작용 중 점프 가능
-        if (currInput.jump && !isInAir)
+        if (currInput.jump && !IsAirborne())
         {
             isOnLadder = false;
             isOnRope = false;
@@ -896,7 +900,7 @@ void Character::PlayAnimation()
     frameTime = 0.f;
 
     // 공중 애니메이션일 경우
-    if (currFrameInfo.startFrame.y == 9 && isInAir)
+    if (currFrameInfo.startFrame.y == 9 && IsAirborne())
     {
         float vel = velocity.y;
 
@@ -958,8 +962,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n ishangOn : %d isLookDownLocked: %d Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isLookDownLocked, isCrouching, velocity.x, velocity.y
+            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n isTouchingBottom : %d IsAirborne: %d Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isTouchingBottom, IsAirborne(), velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);
@@ -983,7 +987,7 @@ void Character::ChangeState(CharacterState* newState)
 
 void Character::ApplyGravity(float TimeDelta)
 {
-    if (isInAir)
+    if (IsAirborne() && !isTouchingBottom)
     {
         float fallDist = velocity.y * TimeDelta;
 
@@ -993,14 +997,9 @@ void Character::ApplyGravity(float TimeDelta)
         if (velocity.y > maxFallSpeed)
             velocity.y = maxFallSpeed;
     }
-    else if (isOnLadder || isOnRope)
-    {
-        isInAir = false;
-    }
     else
     {
         velocity.y = 0.f;
-        isInAir = false;
     }
 }
 
@@ -1033,7 +1032,9 @@ void Character::CheckTileCollision()
 
     isTouchingBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, true, debugTime) ||
         CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, CollisionMaskType::TILE, true, debugTime);
-   
+    
+     if (velocity.y < 0.f)
+        isTouchingBottom = false;
 
     if (hitBottom1.hit && hitBottom2.hit)
         bottomHitDist = min(hitBottom1.distance, hitBottom2.distance);
@@ -1046,9 +1047,9 @@ void Character::CheckTileCollision()
 
 void Character::Move()
 {
-    if (isHanging)
+    if ((state == &interactionState &&
+        interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE))
     {
-        //velocity.x = 0.f;
         return;
     }
 
@@ -1059,7 +1060,7 @@ void Character::Move()
 
     SetXVelocity(vx);
 
-    if (!GetIsInAir()) {
+    if (!IsAirborne()) {
         if (isCrouching || currInput.shift || isPushingTile)
             SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
         else
@@ -1074,7 +1075,7 @@ void Character::Move()
     float moveDist = velocity.x * TimeDelta;
 
     // 공중에서 벽에 부딪혔을 때 이동을 막음
-    if (GetIsInAir()) {
+    if (IsAirborne()) {
         if ((velocity.x < 0 && isTouchingLeft) || (velocity.x > 0 && isTouchingRight) ) {
             velocity.x = 0.f;  // 공중에서는 이동을 멈춤
             moveDist = 0.f;    // 이동량을 0으로 설정
@@ -1199,15 +1200,6 @@ bool Character::GetCurrAnimEnd()
 }
 
 
-bool Character::GetIsHangOn() const
-{
-    return isHanging;
-}
-
-void Character::SetIsHangOn(bool value)
-{
-    isHanging = value;
-}
 bool Character::GetIsMovingAuto() const
 {
     return isMovingAuto;
@@ -1225,3 +1217,12 @@ FPOINT Character::GetHangOnTargetPos()
         return { Pos.x + colliderSize.x , Pos.y + colliderSize.y + 20.f }; // 오른쪽 끝
 }
 
+
+bool Character::IsAirborne() const
+{
+    return !isTouchingBottom &&
+        !(state == &interactionState &&
+            (interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE ||
+                interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_LADDER ||
+                interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_ROPE));
+}

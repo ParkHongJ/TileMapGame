@@ -5,13 +5,14 @@
 void InteractionState::Enter(Character* character)
 {
     this->character = character;
+    character->CheckTileCollision();
     Update();
 }
 
 void InteractionState::Update()
 {
 
-    if (character->GetIsHangOn())
+    if (character->CheckHangOn())
     {
         ChangeSubState(SubState::INTERACTION_HANGON_TILE);
     }
@@ -26,6 +27,10 @@ void InteractionState::Update()
     else if (character->GetIsPushingTile())
     {
         ChangeSubState(SubState::INTERACTION_PUSH_TILE);
+    }
+    else
+    {
+        ChangeSubState(SubState::NONE); // 최소한 NONE으로 명시
     }
 
 
