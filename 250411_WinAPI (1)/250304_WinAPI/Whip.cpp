@@ -27,6 +27,7 @@ HRESULT Whip::Init()
 
 void Whip::Update(float TimeDelta)
 {
+	bActive = false;
 	//objectRenderId = RENDER_HOLD;
 
 	//if (KeyManager::GetInstance()->IsOnceKeyDown('M'))
@@ -87,7 +88,7 @@ void Whip::Use(void* info)
 	FPOINT offset = { -50.f, 10.f }; // 충돌체 
 	FPOINT posOffset = { -50.f, -10.f }; // 채찍 이미지
 	// 태관님 GPT를 굴려주세요..
-
+	bActive = true;
 	switch (whipFrame)
 	{
 	case 0:
@@ -106,7 +107,6 @@ void Whip::Use(void* info)
 		posOffset = { 20.f, -10.f };
 		//posOffset = { -50.f, 0.f };
 		//posOffset = { 100.f, 30.f };
-
 		break;
 	case 3:
 		offset = { -50, 10.f };
@@ -116,16 +116,22 @@ void Whip::Use(void* info)
 		break;
 	case 4:
 		offset = { -50, 10.f };
+		offset = { -100000, -30000 };
+
 		//posOffset = { -50.f, 0.f };
 		//posOffset = { 100.f, 30.f };
-
 		break;
 	case 5:
-		//posOffset = { -50.f, 0.f };
+		posOffset = { -50.f, 0.f };
 		//posOffset = { 100.f, 30.f };
 		break;
 	case 6:
-		//offset = { -100000, -30000 };
+		offset = { -100000, -30000 };
+		break;
+
+	case 7:
+		break;
+	case 8:
 		break;
 	default:
 		break;

@@ -110,8 +110,7 @@ public:
 		};
 	}
 
-	virtual void SetDrop(float speed, float angle);
-
+	void SetDrop(float speed, float angle, float mass = 1.0f, FPOINT gravity = { 0, 98.0f });
 	void SetHoldItemPos(FPOINT pos, bool isFlip);
 
 	bool IsPlayerDropItem(GameObject* player);

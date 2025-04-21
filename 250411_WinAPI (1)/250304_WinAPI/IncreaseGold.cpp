@@ -32,7 +32,7 @@ HRESULT IncreaseGold::Init()
 
 void IncreaseGold::Update(float TimeDelta)
 {
-
+	DropMove(TimeDelta);
 }
 
 void IncreaseGold::Render(ID2D1HwndRenderTarget* renderTarget)
@@ -76,7 +76,7 @@ void IncreaseGold::Use()
 
 void IncreaseGold::DropMove(float TimeDelta)
 {
-
+	__super::DropMove(TimeDelta);
 }
 
 void IncreaseGold::Detect(GameObject* obj)

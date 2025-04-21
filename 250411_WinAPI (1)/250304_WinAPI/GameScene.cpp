@@ -83,11 +83,11 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
    // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
     // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
     // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseGold());
-   // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder());
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI());

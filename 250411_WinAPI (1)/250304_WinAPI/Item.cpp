@@ -331,10 +331,12 @@ void Item::DeadEvent()
 
 }
 
-void Item::SetDrop(float speed, float angle)
+void Item::SetDrop(float speed, float angle, float mass, FPOINT gravity)
 {
 	//float speed = RandomRange(250.0f, 450.0f);            // ¼Óµµµµ ·£´ý
 	//float speed = 300.f;            // ¼Óµµµµ ·£´ý
+	this->mass = mass;
+	this->gravity = gravity;
 
 	velocity =
 	{
