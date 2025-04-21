@@ -91,6 +91,7 @@ private:
 	bool			      isCrouching;
 	bool				   isOnLadder;
 	bool				     isOnRope;
+	bool				isPushingTile;
 	bool				  isOnVehicle;
 	bool			 isFallFromHeight;
 
@@ -161,6 +162,7 @@ public:
 	void CheckInterAction();
 	bool CheckAlmostFall();
 	bool CheckHangOn();
+	bool CheckCanPushTile();
 	FPOINT GetHangOnTargetPos();
 
 
@@ -242,6 +244,8 @@ public:
 
 	bool GetIsMovingAuto() const;
 	void SetIsMovingAuto(bool value);
+
+	bool GetIsPushingTile() { return isPushingTile; }
 
 	void SetSpeed(float speed) { this->speed = speed; }
 

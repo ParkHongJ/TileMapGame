@@ -89,6 +89,7 @@ HRESULT Character::Init()
     isOnLadder = false;
     isOnRope = false;
     isHanging = false;
+    isPushingTile = false;
     isMovingAuto = false;
 
 
@@ -402,9 +403,11 @@ void Character::HandleTransitions()
         HangOnTile();
     }
 
-    // [3] 상호작용 있는지 검사
+    // [3] 상호작용 있는지 검사 // 타일 밀기, 사다리, 로프 , 상인
 
     CheckInterAction();
+
+   
 
 
     // [4] 공격 
@@ -612,8 +615,8 @@ void Character::HandleInteractionLogic()
         if (!MoveY()) ChangeState(&moveState);
         break;
     case InteractionState::SubState::INTERACTION_HANGON_TILE:
-
-
+        break;
+    case InteractionState::SubState::INTERACTION_PUSH_TILE:
         break;
 
     }
@@ -759,6 +762,29 @@ bool Character::CheckHangOn()
     return leftHang || rightHang;
 }
 
+bool Character::CheckCanPushTile()
+{
+    float maxPushDist = 5.0f;
+    float debugTime = 1.0f;
+    bool debugDraw = true;
+
+    RaycastHit hitLeft, hitRight;
+    Ray leftRay = { {Pos.x - 64.f, Pos.y }, {1.0f, 0.f} };
+    Ray rightRay = { {Pos.x + 64.f, Pos.y}, {-1.0f, 0.f} };
+
+    if (isFlip)
+    {   
+        //CollisionManager::GetInstance()->RaycastType(leftRay, maxPushDist,hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true,1.0f);
+        return true;
+    }
+    else
+    {
+        //CollisionManager::GetInstance()->RaycastType(rightRay, maxPushDist, hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true, 1.0f);
+        return true;
+    }
+    return false;
+}
+
 void Character::CheckInterAction()
 {
     
@@ -823,6 +849,24 @@ void Character::CheckInterAction()
             }*/
 
         }
+    }
+
+    if (isTouchingBottom)
+    {
+        if (CheckCanPushTile())
+        {
+            // TODO : Push tile from tilemap?
+
+            isPushingTile = true;
+            
+
+
+
+
+        }
+        else
+            isPushingTile = false;
+
     }
 }
 
@@ -1009,7 +1053,7 @@ void Character::Move()
     SetXVelocity(vx);
 
     if (!GetIsInAir()) {
-        if (isCrouching || currInput.shift)
+        if (isCrouching || currInput.shift || isPushingTile)
             SetSpeed(CHARACTER_MOVE_SLOW_SPEED);
         else
             SetSpeed(CHARACTER_MOVE_DEFAULT_SPEED);  

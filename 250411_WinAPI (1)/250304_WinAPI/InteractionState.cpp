@@ -23,6 +23,10 @@ void InteractionState::Update()
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
     }
+    else if (character->GetIsPushingTile())
+    {
+        ChangeSubState(SubState::INTERACTION_PUSH_TILE);
+    }
 
 
 
@@ -30,6 +34,7 @@ void InteractionState::Update()
 
 void InteractionState::ChangeSubState(SubState newSubState)
 {
+    if (currentSubState == newSubState) return;
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(INTERACTIONSTATE, static_cast<int>(newSubState));
 }
