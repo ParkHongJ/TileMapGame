@@ -353,8 +353,8 @@
     </ClCompile>
     <ClCompile Include="Arrow.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
-      </ClCompile>
-    <ClCompile Include="SpiderMonster.cpp">
+    </ClCompile>
+    <ClCompile Include="SkeletonMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
   </ItemGroup>
@@ -664,8 +664,8 @@
     </ClInclude>
     <ClInclude Include="Arrow.h">
       <Filter>MainGame\Scene\Hong</Filter>
-      </ClInclude>
-    <ClInclude Include="SpiderMonster.h">
+    </ClInclude>
+    <ClInclude Include="SkeletonMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>

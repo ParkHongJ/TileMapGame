@@ -9,6 +9,7 @@ enum class MonsterState
 	ATTACK,
 	DEAD
 };
+class Character;
 class Monster : public GameObject
 {
 public:
@@ -25,6 +26,7 @@ public:
 	virtual void CheckItemCollision();
 	virtual void Move();
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Detect(GameObject* obj);
 
 	virtual int GetDamage() { return damage; }
 	virtual void SetDamage(int damage) { this->damage = damage; }
@@ -32,6 +34,7 @@ public:
 protected:
 
 	MonsterState monsterState;
+	Character* player;
 	
 	FPOINT dir;
 	POINT currFrame;
