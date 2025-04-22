@@ -7,7 +7,7 @@
 
 HRESULT Arrow::Init()
 {
-	arrowImage = ImageManager::GetInstance()->FindImage("Item");
+	arrowImage = ImageManager::GetInstance()->FindImage("items");
 
 	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE * 0.5f, GAME_TILE_SIZE * 0.5f }, CollisionMaskType::ITEM, this);
 

@@ -3,6 +3,8 @@
 
 class ChangeCobwebBomb : public Item
 {
+	GENERATE_BODY(Textures/items.png, 128, 128)
+
 public:
 	ChangeCobwebBomb();
 	virtual ~ChangeCobwebBomb();

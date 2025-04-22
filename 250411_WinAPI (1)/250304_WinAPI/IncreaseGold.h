@@ -3,6 +3,7 @@
 
 class IncreaseGold : public Item
 {
+	GENERATE_BODY(Textures/items.png, 128, 128)
 
 public:
 	IncreaseGold();

@@ -2,6 +2,8 @@
 #include "Item.h"
 class TreasureChest : public Item
 {
+	GENERATE_BODY(Textures/items.png, 128, 128)
+
 public:
 	TreasureChest();
 	virtual ~TreasureChest();

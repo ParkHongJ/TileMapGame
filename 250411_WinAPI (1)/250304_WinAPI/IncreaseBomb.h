@@ -2,6 +2,7 @@
 #include "Item.h"
 class IncreaseBomb : public Item
 {
+	GENERATE_BODY(Textures/items.png, 128, 128)
 public:
 	IncreaseBomb();
 	virtual ~IncreaseBomb();

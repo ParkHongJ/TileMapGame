@@ -8,6 +8,14 @@
         }
     },
     {
+        "name": "ChangeCobwebBomb",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "Character",
         "atlasPath": "Textures/char_yellow.png",
         "cellSize": {
@@ -18,6 +26,86 @@
     {
         "name": "DummyHongPlayer",
         "atlasPath": "Textures/char_lime.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "Gun",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "IncreaseBomb",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "IncreaseGold",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "Ladder1",
+        "atlasPath": "Textures/CaveTile.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "Ladder2",
+        "atlasPath": "Textures/CaveTile.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "Ladder3",
+        "atlasPath": "Textures/CaveTile.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "Ladder4",
+        "atlasPath": "Textures/CaveTile.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "SnakeMonster",
+        "atlasPath": "Textures/Monster/SnakeMonster.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "SpiderMonster",
+        "atlasPath": "Textures/Monster/SpiderMonster.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "TreasureChest",
+        "atlasPath": "Textures/items.png",
         "cellSize": {
             "x": 128,
             "y": 128

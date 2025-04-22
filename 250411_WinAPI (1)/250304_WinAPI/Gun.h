@@ -3,6 +3,8 @@
 
 class Gun : public Item
 {
+	GENERATE_BODY(Textures/items.png, 128, 128)
+
 public:
 	Gun();
 	virtual ~Gun();

@@ -2,6 +2,8 @@
 #include "Ladder.h"
 class Ladder2 : public Ladder
 {
+	GENERATE_BODY(Textures/CaveTile.png, 128, 128)
+
 public:
 	Ladder2();
 	virtual ~Ladder2();

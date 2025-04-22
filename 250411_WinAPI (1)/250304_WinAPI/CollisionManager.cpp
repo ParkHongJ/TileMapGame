@@ -49,7 +49,7 @@ void CollisionManager::Init()
     layerRayMaskMap[CollisionMaskType::MONSTER] = uint16_t(CollisionMaskType::PLAYER) |
         uint16_t(CollisionMaskType::WORLDOBJECT) | uint16_t(CollisionMaskType::TILE);
 
-    layerRayMaskMap[CollisionMaskType::ITEM] = uint16_t(CollisionMaskType::PLAYER) | uint16_t(CollisionMaskType::TILE);
+    layerRayMaskMap[CollisionMaskType::ITEM] = uint16_t(CollisionMaskType::PLAYER) /*| uint16_t(CollisionMaskType::TILE)*/;
 
     layerRayMaskMap[CollisionMaskType::TILE] = uint16_t(CollisionMaskType::PLAYER)
         | uint16_t(CollisionMaskType::MONSTER) || uint16_t(CollisionMaskType::EFFECT);
