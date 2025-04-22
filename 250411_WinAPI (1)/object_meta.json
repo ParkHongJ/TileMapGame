@@ -104,16 +104,16 @@
         }
     },
     {
-        "name": "SnakeMonster",
-        "atlasPath": "Textures/Monster/SnakeMonster.png",
+        "name": "SkeletonMonster",
+        "atlasPath": "Textures/Monster/monsters.png",
         "cellSize": {
             "x": 128,
             "y": 128
         }
     },
     {
-        "name": "SpiderMonster",
-        "atlasPath": "Textures/Monster/SpiderMonster.png",
+        "name": "SnakeMonster",
+        "atlasPath": "Textures/Monster/monsters.png",
         "cellSize": {
             "x": 128,
             "y": 128

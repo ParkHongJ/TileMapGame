@@ -25,7 +25,7 @@ public:
 	virtual void CheckPlayerCollision();
 	virtual void CheckItemCollision();
 	virtual void Move();
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 	virtual void Detect(GameObject* obj);
 
 	virtual int GetDamage() { return damage; }

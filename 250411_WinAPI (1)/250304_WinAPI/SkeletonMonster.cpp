@@ -277,7 +277,7 @@ void SkeletonMonster::Detect(GameObject* obj)
     }
 }
 
-void SkeletonMonster::Render(ID2D1HwndRenderTarget* renderTarget)
+void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 

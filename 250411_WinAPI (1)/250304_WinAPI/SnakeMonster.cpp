@@ -104,6 +104,7 @@ void SnakeMonster::Release()
 
 void SnakeMonster::Update(float TimeDelta)
 {
+    bHidden;
     CheckTileCollision();
     CheckPlayerCollision();
     CheckItemCollision();
@@ -348,7 +349,7 @@ void SnakeMonster::Detect(GameObject* obj)
     //}
 }
 
-void SnakeMonster::Render(ID2D1HwndRenderTarget* renderTarget)
+void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 

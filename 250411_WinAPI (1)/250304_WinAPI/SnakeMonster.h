@@ -21,7 +21,7 @@ public :
 	virtual void Move() override;
 	virtual void ReverseMove();
 	virtual void Detect(GameObject* obj) override;
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 private: 
 	Image* snakeImage;

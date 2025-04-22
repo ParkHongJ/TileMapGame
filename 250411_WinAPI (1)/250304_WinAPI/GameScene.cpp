@@ -118,7 +118,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
-    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
+    //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
 
     GameManager::GetInstance()->Init("hongScene");
 
