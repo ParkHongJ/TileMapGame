@@ -44,7 +44,7 @@ void Particle::Update(float TimeDelta)
 		opt->Update(*this, TimeDelta);
 }
 
-void Particle::Render(ID2D1HwndRenderTarget* rt)
+void Particle::Render(ID2D1RenderTarget* rt)
 {
 	bool customRender = false;
 
@@ -172,11 +172,11 @@ void PhysicsOption::Update(Particle& particle, float TimeDelta)
 	}
 }
 
-void PhysicsOption::Render(Particle& particle, ID2D1HwndRenderTarget* rt)
+void PhysicsOption::Render(Particle& particle, ID2D1RenderTarget* rt)
 {
 }
 
-void HomingLinearOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+void HomingLinearOption::Render(Particle& p, ID2D1RenderTarget* rt)
 {
 	if (!p.image)
 		return;
@@ -202,7 +202,7 @@ void AlphaOption::Update(Particle& p, float dt)
 	p.alpha -= lessAlpha * dt;
 }
 
-void AlphaOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+void AlphaOption::Render(Particle& p, ID2D1RenderTarget* rt)
 {
 }
 
@@ -216,7 +216,7 @@ void SizeOption::Update(Particle& p, float dt)
 	}
 }
 
-void SizeOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+void SizeOption::Render(Particle& p, ID2D1RenderTarget* rt)
 {
 }
 
@@ -251,6 +251,6 @@ void TrailOption::Update(Particle& p, float dt)
 	}
 }
 
-void TrailOption::Render(Particle& p, ID2D1HwndRenderTarget* rt)
+void TrailOption::Render(Particle& p, ID2D1RenderTarget* rt)
 {
 }

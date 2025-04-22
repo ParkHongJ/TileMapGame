@@ -3,7 +3,7 @@
 #include "Image.h"
 #include "JinScene.h"
 
-HRESULT GameOverUI::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT GameOverUI::Init(ID2D1RenderTarget* renderTarget)
 {
 	tempChar = new JinScene();
 	tempChar->Init(renderTarget);
@@ -86,7 +86,7 @@ void GameOverUI::Update(float TimeDelta)
 	}
 }
 
-void GameOverUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 {
 	//	뒷배경을 검정색으로 칠해야함
 	if (isGameOver)

@@ -12,11 +12,11 @@ private:
 
 	class Image* background;
 public:
-	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual HRESULT Init(ID2D1RenderTarget* renderTarget) override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void LateUpdate(float TimeDelta) override;
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 public:
 	HongScene() {};

@@ -374,7 +374,7 @@ void DummyHongPlayer::LateUpdate(float TimeDelta)
 	
 }
 
-void DummyHongPlayer::Render(ID2D1HwndRenderTarget* renderTarget)
+void DummyHongPlayer::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
 	DrawCenteredRect(renderTarget, cameraPos, 35.f, D2D1::ColorF::Magenta);

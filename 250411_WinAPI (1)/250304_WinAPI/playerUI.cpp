@@ -5,7 +5,7 @@
 
 //테스트 캐릭터는 Jin필터의 JinScene에 있습니다
 
-HRESULT playerUI::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT playerUI::Init(ID2D1RenderTarget* renderTarget)
 {
 	tempChar = new JinScene();
 	tempChar->Init(renderTarget);
@@ -72,7 +72,7 @@ void playerUI::Update(float TimeDelta)
 	lifeCount = tempChar->GetPlayerLife();
 }
 
-void playerUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void playerUI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if(isAlive)
 	{

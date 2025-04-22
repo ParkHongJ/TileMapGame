@@ -56,7 +56,7 @@ void Tile::LateUpdate(float TimeDelta)
 	}
 }
 
-void Tile::Render(ID2D1HwndRenderTarget* renderTarget)
+void Tile::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (tileInfo.valid)
 	{
@@ -67,7 +67,7 @@ void Tile::Render(ID2D1HwndRenderTarget* renderTarget)
 	}
 }
 
-void Tile::RenderDeco(ID2D1HwndRenderTarget* renderTarget)
+void Tile::RenderDeco(ID2D1RenderTarget* renderTarget)
 {
 	for (int i = 0; i < decos.size(); ++i)
 	{
@@ -166,7 +166,7 @@ void Tile::Destruction()
 		return;
 
 	tileInfo.valid = false;
-	SetActive(false);
 
 	GameManager::GetInstance()->GenerateDecoTile();
+	SetDestroy();
 }

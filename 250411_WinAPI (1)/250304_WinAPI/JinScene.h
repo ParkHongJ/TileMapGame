@@ -13,10 +13,10 @@ private:
 	int currency;
 	bool isAlive;
 public:
-	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual HRESULT Init(ID2D1RenderTarget* renderTarget) override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 	inline int GetPlayerLife() const { return life; };
 	inline int GetPlayerBomb() const { return bomb; };

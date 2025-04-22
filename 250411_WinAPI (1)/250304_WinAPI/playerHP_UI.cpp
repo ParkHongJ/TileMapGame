@@ -37,7 +37,7 @@ void playerHP_UI::Update(float TimeDelta)
 	
 }
 
-void playerHP_UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void playerHP_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (playerLifeImage)
 	{

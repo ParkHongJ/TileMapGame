@@ -27,7 +27,7 @@ void TestMonster::LateUpdate(float TimeDelta)
 {
 }
 
-void TestMonster::Render(ID2D1HwndRenderTarget* renderTarget)
+void TestMonster::Render(ID2D1RenderTarget* renderTarget)
 {
 
 }

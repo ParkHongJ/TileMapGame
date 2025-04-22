@@ -44,7 +44,7 @@ void Item::Update(float TimeDelta)
 	FrameUpdate(TimeDelta);
 }
 
-void Item::Render(ID2D1HwndRenderTarget* renderTarget)
+void Item::Render(ID2D1RenderTarget* renderTarget)
 {
 	//image->FrameRender(renderTarget, Pos.x, Pos.y, 0, 5); // 임의값
 }
@@ -212,8 +212,8 @@ void Item::DropMove(float TimeDelta)
 			if (velocity.Length() < 130.f)
 			{
 				velocity = { 0.f, 0.f };
-				useGravity = false;
-				bPhysics = false;
+				//useGravity = false;
+				//bPhysics = false;
 			}
 
 			// 살짝 밀기 (겹침 방지)

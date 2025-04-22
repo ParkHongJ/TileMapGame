@@ -35,7 +35,7 @@ void IncreaseGold::Update(float TimeDelta)
 	DropMove(TimeDelta);
 }
 
-void IncreaseGold::Render(ID2D1HwndRenderTarget* renderTarget)
+void IncreaseGold::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 

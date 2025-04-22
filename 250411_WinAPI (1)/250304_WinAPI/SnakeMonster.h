@@ -20,7 +20,7 @@ public :
 	virtual void CheckItemCollision() override;
 	virtual void Move() override;
 	virtual void ReverseMove();
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 	virtual void Detect(GameObject* obj) override;
 
 

@@ -43,7 +43,7 @@ void AstarTile::Update()
 {
 }
 
-void AstarTile::Render(ID2D1HwndRenderTarget* renderTarget)
+void AstarTile::Render(ID2D1RenderTarget* renderTarget)
 {
 	/*hOldBrush = (HBRUSH)SelectObject(hdc, hBrush);
 	FillRect(hdc, &rc, hBrush);
@@ -60,7 +60,7 @@ void AstarTile::SetColor(COLORREF color)
 	hBrush = CreateSolidBrush(color);
 }
 
-HRESULT AstarScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT AstarScene::Init(ID2D1RenderTarget* renderTarget)
 {
 	for (int i = 0; i < ASTAR_TILE_COUNT; i++)	// 세로반복 (y)
 	{
@@ -122,7 +122,7 @@ void AstarScene::Update(float TimeDelta)
 	}
 }
 
-void AstarScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void AstarScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	//for (int i = 0; i < ASTAR_TILE_COUNT; i++)	// 세로반복 (y)
 	//{

@@ -42,7 +42,7 @@ class CollisionManager : public Singleton<CollisionManager>
 public:
 	void Init();
 	void Update(float TimeDelta);
-	void DebugRender(ID2D1HwndRenderTarget* renderTarget);
+	void DebugRender(ID2D1RenderTarget* renderTarget);
 	void Release();
 	void Clear();
 public:

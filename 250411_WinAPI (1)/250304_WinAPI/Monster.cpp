@@ -90,7 +90,7 @@ void Monster::Move()
 {
 }
 
-void Monster::Render(ID2D1HwndRenderTarget* renderTarget)
+void Monster::Render(ID2D1RenderTarget* renderTarget)
 {
 	
 }

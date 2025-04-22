@@ -39,6 +39,12 @@ HRESULT Gun::Init()
 	//fireOffset = 
 	//SetDrop();
 
+	acceleration = { 0, 0 };  // °¡¼Óµµ
+	totalForce = { 0.f,0.f };
+
+	useGravity = true;
+
+	bPhysics = true;
 	holdOffset = { 20.f, 20.f };
 	objectName = OBJECTNAME::GUN;
 	return S_OK;
@@ -77,7 +83,7 @@ void Gun::Update(float TimeDelta)
 	//__super::Update(TimeDelta);
 }
 
-void Gun::Render(ID2D1HwndRenderTarget* renderTarget)
+void Gun::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 

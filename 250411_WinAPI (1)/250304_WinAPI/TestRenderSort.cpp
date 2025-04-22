@@ -13,7 +13,7 @@ void TestRenderSort::Update(float TimeDelta)
 {
 }
 
-void TestRenderSort::Render(ID2D1HwndRenderTarget* renderTarget)
+void TestRenderSort::Render(ID2D1RenderTarget* renderTarget)
 {
 	image->Render(renderTarget, 0, 0);
 }

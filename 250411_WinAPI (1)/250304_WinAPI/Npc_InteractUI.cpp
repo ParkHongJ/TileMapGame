@@ -2,7 +2,7 @@
 #include "Npc_InteractUI.h"
 #include "Image.h"
 
-HRESULT Npc_InteractUI::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT Npc_InteractUI::Init(ID2D1RenderTarget* renderTarget)
 {
 
 
@@ -17,6 +17,6 @@ void Npc_InteractUI::Update(float TimeDelta)
 {
 }
 
-void Npc_InteractUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void Npc_InteractUI::Render(ID2D1RenderTarget* renderTarget)
 {
 }

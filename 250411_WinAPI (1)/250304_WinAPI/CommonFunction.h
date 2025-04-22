@@ -249,3 +249,7 @@ static std::string WStringToString(const std::wstring& wstr)
 
 	return result;
 }
+inline float EaseInOut(float t)
+{
+	return t < 0.5f ? 4.f * t * t * t : 1.f - powf(-2.f * t + 2.f, 3) / 2.f;
+}

@@ -53,7 +53,7 @@ void TreasureChest::Update(float TimeDelta)
 	DropMove(TimeDelta);
 }
 
-void TreasureChest::Render(ID2D1HwndRenderTarget* renderTarget)
+void TreasureChest::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos + holdOffset;
 

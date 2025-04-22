@@ -7,8 +7,10 @@
 #include "GameManager.h"
 #include "CameraManager.h"
 #include "ArrowTrap.h"
+#include "NiddleTrap.h"
+#include "HeavyBlock.h"
 
-HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT HongScene::Init(ID2D1RenderTarget* renderTarget)
 {
 	CollisionManager::GetInstance()->Init();
 	CollisionManager::GetInstance()->Clear();
@@ -16,6 +18,7 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ObjectManager::GetInstance()->ClearObjects();
 
 	ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("Niddle", L"Textures/floor_cave.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
@@ -24,14 +27,15 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("Rubble", L"Textures/fx_rubble.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
 	ImageManager::GetInstance()->AddImage("Trap", L"Textures/floormisc.png", renderTarget);
-	ImageManager::GetInstance()->AddImage("Item", L"Textures/items.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("items", L"Textures/items.png", renderTarget);
 	background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
 	GameManager::GetInstance()->Init("hongScene");
 
 	//ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
 
-	//ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new ArrowTrap);
+	//ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new NiddleTrap);
+	ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new HeavyBlock);
 	return S_OK;
 }
 
@@ -55,7 +59,7 @@ void HongScene::LateUpdate(float TimeDelta)
 	//ObjectManager::GetInstance()->LateUpdate(TimeDelta);
 }
 
-void HongScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void HongScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	//ObjectManager::GetInstance()->Render(renderTarget);
 	

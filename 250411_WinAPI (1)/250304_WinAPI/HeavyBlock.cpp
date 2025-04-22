@@ -1,59 +1,36 @@
 #include "pch.h"
-#include "HongParticle.h"
+#include "HeavyBlock.h"
 #include "CommonFunction.h"
-#include "CollisionManager.h"
 #include "Collider.h"
+#include "CollisionManager.h"
 #include "CameraManager.h"
 #include "Image.h"
-HRESULT HongParticle::Init()
+
+HRESULT HeavyBlock::Init()
 {
-	float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
-	float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
+	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
 
-	velocity =
-	{
-		sinf(angleRad) * speed,
-		-cosf(angleRad) * speed  // 135도 (왼쪽 위)
-	};
-	acceleration = { 0, 0 };  // 가속도
-	totalForce = { 0.f,0.f };
+	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
+	heavyBlockImage = ImageManager::GetInstance()->FindImage("Trap");
+	Pos.x = 650.f;
+	Pos.y = 230.f;
 
+	bPhysics = false;
 	useGravity = true;
-	bPhysics = true;
-
-
-	float effectScale = 30.f / ATLAS_TILE_SIZE;
-	scale = { effectScale, effectScale };
-
-	blood = ImageManager::GetInstance()->FindImage("Effect");
-    return S_OK;
+	return S_OK;
 }
 
-void HongParticle::Release()
+void HeavyBlock::Release()
 {
 }
 
-void HongParticle::Update(float TimeDelta)
+void HeavyBlock::Update(float TimeDelta)
 {
-	/*lifeTime -= TimeDelta * 0.1f;
-	if (lifeTime <= 0.f)
+	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_ADD))
 	{
-		SetActive(false);
+		bPhysics = !bPhysics;
+		totalForce = { 0.f,0.f };
 	}
-	else
-	{
-		scale.x -= TimeDelta * 0.1f;
-		scale.y -= TimeDelta * 0.1f;
-
-		if (scale.x <= 0.f)
-		{
-			scale.x = 0.f;
-		}
-		if (scale.y <= 0.f)
-		{
-			scale.y = 0.f;
-		}
-	}*/
 
 	if (bPhysics)
 	{
@@ -68,11 +45,12 @@ void HongParticle::Update(float TimeDelta)
 		acceleration = totalForce / mass;
 		velocity += acceleration * TimeDelta;
 
-		FPOINT moveVec = { velocity.x * TimeDelta, velocity.y * TimeDelta };
-		FPOINT nextPos = { Pos.x + moveVec.x, Pos.y + moveVec.y };
+		FPOINT moveVec = velocity * TimeDelta;
+		FPOINT nextPos = Pos + moveVec;
 
 		Ray ray;
 		ray.origin = Pos;
+		ray.origin.y += GAME_TILE_SIZE * 0.5f;
 		ray.direction = moveVec.Normalized();
 
 		float moveLength = moveVec.Length();
@@ -81,7 +59,7 @@ void HongParticle::Update(float TimeDelta)
 
 		RaycastHit out;
 
-		if (CollisionManager::GetInstance()->RaycastAll(ray, moveLength, out))
+		if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE))
 		{
 			//충돌했으면 중력의 영향을 잠시 초기화
 			totalForce.x = 0.0f;
@@ -105,7 +83,7 @@ void HongParticle::Update(float TimeDelta)
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
 			velocity = Reflect(velocity, hitNormal.Normalized());
-						
+
 			velocity *= bounciness;
 
 			const float STOP_THRESHOLD = 100.f;
@@ -120,8 +98,6 @@ void HongParticle::Update(float TimeDelta)
 			if (velocity.Length() < STOP_THRESHOLD && velocity.y > 0.f)
 			{
 				velocity = { 0.f, 0.f };
-				useGravity = false;
-				bPhysics = false;
 			}
 			Pos = out.point + hitNormal * 0.5f;
 		}
@@ -132,12 +108,12 @@ void HongParticle::Update(float TimeDelta)
 	}
 }
 
-void HongParticle::Render(ID2D1RenderTarget* renderTarget)
+void HeavyBlock::LateUpdate(float TimeDelta)
 {
-	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+}
 
-	blood->Render(renderTarget, cameraPos.x, cameraPos.y, scale.x, scale.y, 0, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
-
-	wstring velocityText = L"x : " + to_wstring(velocity.x);
-	DrawD2DText(renderTarget, velocityText.c_str(), cameraPos.x, cameraPos.y + 15.f);
+void HeavyBlock::Render(ID2D1RenderTarget* renderTarget)
+{
+	FPOINT cameraPos = CameraManager::GetInstance()->GetPos();
+	heavyBlockImage->Render(renderTarget, cameraPos.x, cameraPos.y, objectScale, objectScale, 0, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 }

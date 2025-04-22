@@ -32,7 +32,7 @@ void Ladder::Update(float TimeDelta)
 
 }
 
-void Ladder::Render(ID2D1HwndRenderTarget* renderTarget)
+void Ladder::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 	// 0 ~ 4까지가 최대, 2는 뺄까

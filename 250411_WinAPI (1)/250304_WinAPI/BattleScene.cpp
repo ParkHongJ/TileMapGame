@@ -3,7 +3,7 @@
 #include "Image.h"
 #include "CommonFunction.h"
 
-HRESULT BattleScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT BattleScene::Init(ID2D1RenderTarget* renderTarget)
 {
 	SetClientRect(g_hWnd, WINSIZE_X, WINSIZE_Y);
 
@@ -37,7 +37,7 @@ void BattleScene::Update(float TimeDelta)
 {
 }
 
-void BattleScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void BattleScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	backGround->Render(renderTarget, 0.f, 0.f);
 }

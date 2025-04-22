@@ -33,7 +33,7 @@ void Rope::Update(float TimeDelta)
     CurFrameY = 12;
 }
 
-void Rope::Render(ID2D1HwndRenderTarget* renderTarget)
+void Rope::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
     image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 12, objectScale.x, objectScale.y); // юсюг╟╙

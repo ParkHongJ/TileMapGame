@@ -33,7 +33,7 @@ void GunBullet::Update(float TimeDelta)
 
 }
 
-void GunBullet::Render(ID2D1HwndRenderTarget* renderTarget)
+void GunBullet::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 14, objectScale.x, objectScale.y);

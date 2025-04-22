@@ -54,7 +54,7 @@ void Button::Update(float TimeDelta)
 	}
 }
 
-void Button::Render(ID2D1HwndRenderTarget* renderTarget)
+void Button::Render(ID2D1RenderTarget* renderTarget)
 {
 	switch (state)
 	{

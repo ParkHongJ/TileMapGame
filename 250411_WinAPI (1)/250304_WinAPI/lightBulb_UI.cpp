@@ -19,7 +19,7 @@ void lightBulb_UI::Update(float TimeDelta)
 
 }
 
-void lightBulb_UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void lightBulb_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (image)
 		image->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);

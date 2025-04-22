@@ -20,6 +20,6 @@ void ShopInteractUI::Update(float TimeDelta)
 {
 }
 
-void ShopInteractUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void ShopInteractUI::Render(ID2D1RenderTarget* renderTarget)
 {
 }

@@ -1111,7 +1111,7 @@ void Character::PlayAnimation()
     }
 }
 
-void Character::Render(ID2D1HwndRenderTarget* renderTarget)
+void Character::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 

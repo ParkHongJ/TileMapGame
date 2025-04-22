@@ -148,6 +148,8 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="Rope.cpp" />
+    <ClCompile Include="HeavyBlock.cpp" />
+    <ClCompile Include="NiddleTrap.cpp" />
     <ClCompile Include="SpiderMonster.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
@@ -238,6 +240,8 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="Rope.h" />
+    <ClInclude Include="HeavyBlock.h" />
+    <ClInclude Include="NiddleTrap.h" />
     <ClInclude Include="SpiderMonster.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />

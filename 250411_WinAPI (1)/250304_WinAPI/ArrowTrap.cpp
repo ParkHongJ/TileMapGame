@@ -51,7 +51,7 @@ void ArrowTrap::LateUpdate(float TimeDelta)
 {
 }
 
-void ArrowTrap::Render(ID2D1HwndRenderTarget* renderTarget)
+void ArrowTrap::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
 	trapImage->Render(renderTarget, cameraPos.x, cameraPos.y, -objectScale, objectScale, 1, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);

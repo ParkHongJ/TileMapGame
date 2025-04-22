@@ -81,7 +81,7 @@ void Arrow::LateUpdate(float TimeDelta)
 {
 }
 
-void Arrow::Render(ID2D1HwndRenderTarget* renderTarget)
+void Arrow::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
 

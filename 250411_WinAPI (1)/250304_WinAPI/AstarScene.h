@@ -53,7 +53,7 @@ public:
 	HRESULT Init(int idX, int idY);
 	virtual void Release();
 	virtual void Update();
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Render(ID2D1RenderTarget* renderTarget);
 
 	void SetColor(COLORREF color);
 	void SetType(AstarTileType type) { this->type = type; }
@@ -79,10 +79,10 @@ class AstarScene : public Scene
 	vector<AstarTile*> closeList;
 
 public:
-	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual HRESULT Init(ID2D1RenderTarget* renderTarget) override;
 	virtual void Release() override;
 	virtual void Update(float TimeDelta) override;
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 	void FindPath();
 	void AddOpenList(AstarTile* currTile);

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Scene.h"
 
-HRESULT Scene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT Scene::Init(ID2D1RenderTarget* renderTarget)
 {
 	return E_NOTIMPL;
 }
@@ -14,7 +14,7 @@ void Scene::Update(float TimeDelta)
 {
 }
 
-void Scene::Render(ID2D1HwndRenderTarget* renderTarget)
+void Scene::Render(ID2D1RenderTarget* renderTarget)
 {
 }
 

@@ -120,7 +120,7 @@ GameObject* ObjectManager::FindAbleInteractObject(GameObject* obj)
 }
 
 
-void ObjectManager::Render(ID2D1HwndRenderTarget* renderTarget)
+void ObjectManager::Render(ID2D1RenderTarget* renderTarget)
 {
 	for (auto& iter : renderObjects)
 	{

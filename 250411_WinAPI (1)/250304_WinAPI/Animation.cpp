@@ -91,7 +91,7 @@ void Animation::UpdateEvent()
 	PreElapseTime = CurElapseTime;
 }
 
-void Animation::Render(ID2D1HwndRenderTarget* renderTarget)
+void Animation::Render(ID2D1RenderTarget* renderTarget)
 {
 	//image->FrameRender(renderTarget, 300, 300, CurFrame, CurFrameY/*, IsFlip*/);
 	//image->Render(renderTarget, 300, 300);

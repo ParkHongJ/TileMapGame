@@ -22,7 +22,7 @@ void Journal_1::Update(float TimeDelta)
 {
 }
 
-void Journal_1::Render(ID2D1HwndRenderTarget* renderTarget)
+void Journal_1::Render(ID2D1RenderTarget* renderTarget)
 {
     if(isInteract)
     {
