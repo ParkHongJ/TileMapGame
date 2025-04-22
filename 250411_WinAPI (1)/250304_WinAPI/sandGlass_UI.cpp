@@ -21,5 +21,5 @@ void sandGlass_UI::Update(float TimeDelta)
 void sandGlass_UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (image)
-		image->Render(renderTarget, Pos.x, Pos.y);
+		image->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 }

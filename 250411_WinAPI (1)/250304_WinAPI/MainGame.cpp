@@ -139,7 +139,7 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			SceneManager::GetInstance()->ChangeScene("ÁØ¿ë");
 			break;
 		case 'w': case 'W':
-			SceneManager::GetInstance()->ChangeScene("playerUI");
+			//SceneManager::GetInstance()->ChangeScene("playerUI");
 			break;
 
 		//case '1':

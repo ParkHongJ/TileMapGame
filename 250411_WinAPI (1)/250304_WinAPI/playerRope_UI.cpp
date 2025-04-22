@@ -21,11 +21,14 @@ void playerRope_UI::Release()
 
 void playerRope_UI::Update(float TimeDelta)
 {
+	UI::Update(TimeDelta);
 	//playerRope_value = playerStat->GetRopeCount();
+	if (KeyManager::GetInstance()->IsOnceKeyDown('R'))
+		RequestOpaqueChange();
 }
 
 void playerRope_UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (playerRopeImage)
-		playerRopeImage->Render(renderTarget, Pos.x, Pos.y);
+		playerRopeImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 }

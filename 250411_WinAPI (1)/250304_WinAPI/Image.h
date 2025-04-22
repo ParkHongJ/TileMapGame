@@ -81,7 +81,7 @@ public:
 	HRESULT Init(ID2D1RenderTarget* renderTarget, const wchar_t* filePath, int maxFrameX, int maxFrameY);
 	void Render(ID2D1RenderTarget* renderTarget, 
 		float x = 0.f, float y = 0.f, 
-		float scaleX = 1.0f, float scaleY = 1.0f);
+		float scaleX = 1.0f, float scaleY = 1.0f, float opacity = 1.0f);
 
 	void Render(ID2D1RenderTarget* renderTarget,
 		float x, float y,

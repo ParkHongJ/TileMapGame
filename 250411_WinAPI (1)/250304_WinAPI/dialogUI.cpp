@@ -8,7 +8,7 @@ HRESULT dialogUI::Init()
     imageArrow = ImageManager::GetInstance()->FindImage("TextDialogArrow");
     Pos = { WINSIZE_X / 2.0f, (WINSIZE_Y / 2.0f) - (imageBox->GetHeight() / 2.0f) };
     arrowPos = { Pos.x, WINSIZE_Y/2.0f};
-    isInteract = true;
+    isInteract = false;
     return S_OK;
 }
 

@@ -82,6 +82,9 @@
     <Filter Include="MainGame\Scene\Jin\Journal">
       <UniqueIdentifier>{e6c18105-8e33-4479-bfec-da67667b50b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Jin\Shop">
+      <UniqueIdentifier>{856b2a87-3f85-4885-b4ca-57f155249dc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -320,6 +323,9 @@
     </ClCompile>
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ShopKeeper.cpp">
+      <Filter>MainGame\Scene\Jin\Shop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -601,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ShopKeeper.h">
+      <Filter>MainGame\Scene\Jin\Shop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

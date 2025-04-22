@@ -45,7 +45,7 @@ HRESULT GameOverUI::Init(ID2D1HwndRenderTarget* renderTarget)
 	selectBoxIndex = 1;
 	selectBoxMovefloat = 45.0f;
 
-	imageRatio = ResolutionRatio(*GameOver_journalRearImage);
+	imageRatio = ResolutionRatio(GameOver_journalRearImage);
 
 	return S_OK;
 }
@@ -138,11 +138,11 @@ void GameOverUI::Render(ID2D1HwndRenderTarget* renderTarget)
 	}
 }
 
-FPOINT GameOverUI::ResolutionRatio(Image image)
+FPOINT GameOverUI::ResolutionRatio(Image* image)
 {
 	FPOINT ratio = { 0.0f, 0.0f };
-	ratio.x = WINSIZE_X / static_cast<float>(image.GetWidth());
-	ratio.y = WINSIZE_Y / static_cast<float>(image.GetHeight());
+	ratio.x = WINSIZE_X / static_cast<float>(image->GetWidth());
+	ratio.y = WINSIZE_Y / static_cast<float>(image->GetHeight());
 
 	return ratio;
 }

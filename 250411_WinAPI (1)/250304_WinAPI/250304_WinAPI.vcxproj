@@ -203,6 +203,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShopInteractUI.cpp" />
+    <ClCompile Include="ShopKeeper.cpp" />
     <ClCompile Include="SnakeMonster.cpp" />
     <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TestAnimationObject.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShopInteractUI.h" />
+    <ClInclude Include="ShopKeeper.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SnakeMonster.h" />
     <ClInclude Include="TaeScene.h" />

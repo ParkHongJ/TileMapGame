@@ -43,7 +43,7 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 	inline void SetDrawGameOverUI(bool setValue) { isGameOver = setValue; };
-	FPOINT ResolutionRatio(Image image);
+	FPOINT ResolutionRatio(Image* image);
 	void MoveBox(float destY);
 };
 
