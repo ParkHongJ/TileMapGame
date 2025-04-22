@@ -88,6 +88,9 @@
     <Filter Include="MainGame\Scene\Jin\Shop">
       <UniqueIdentifier>{856b2a87-3f85-4885-b4ca-57f155249dc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Rope">
+      <UniqueIdentifier>{40dbf96b-8dec-44b7-9059-c3b15f5ef844}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -353,9 +356,12 @@
     </ClCompile>
     <ClCompile Include="Arrow.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="SpiderMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="Rope.cpp">
+      <Filter>MainGame\Scene\Yong\Rope</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -664,9 +670,12 @@
     </ClInclude>
     <ClInclude Include="Arrow.h">
       <Filter>MainGame\Scene\Hong</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="SpiderMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="Rope.h">
+      <Filter>MainGame\Scene\Yong\Rope</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

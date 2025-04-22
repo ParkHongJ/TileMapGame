@@ -8,6 +8,7 @@
 #include "Gun.h"
 #include "Whip.h"
 #include "IncreaseBomb.h"
+#include "Rope.h"
 
 HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -26,12 +27,14 @@ HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
     //Test = new TestAnimationObject();
     //Test->Init();
-    ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
-   // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
-   // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+   // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
+   //// ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
+   //// ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
+   // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
+   // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
+   // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Rope());
     
     return S_OK;
 }

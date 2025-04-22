@@ -94,8 +94,6 @@ void Item::UnEquip(void* info)
 	objectRenderId = RENDER_ITEM;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::ITEM, CollisionMaskType::WORLDOBJECT, this);
 	bPhysics = true;
-
-
 	//movePower = { 500.f, 300.f }; // Test
 }
 
