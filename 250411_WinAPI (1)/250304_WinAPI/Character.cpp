@@ -378,12 +378,12 @@ void Character::HandleTransitions()
     }
 
     // 공중에서도 공격 가능하게 예외처리
- /*   if (IsAirborne() && currInput.attack && !isAttacking)
-    {
-        isAttacking = true;
-        ChangeState(&attackState);
-        return;
-    }*/
+       if (IsAirborne() && currInput.attack && !isAttacking)
+        {
+            isAttacking = true;
+            ChangeState(&attackState);
+            return;
+        }
 
     // [2] 공중에서 매달릴 수 있는지 검사
     if (IsAirborne() && !isAttacking &&
@@ -709,7 +709,7 @@ void Character::HandleAirAnimation()
 
     
 
-    if (IsAirborne())
+    if (IsAirborne() && !isAttacking)
     {
         if (frame.startFrame.y != AIR_ANIM_ROW)
         {
@@ -1047,7 +1047,7 @@ void Character::PlayAnimation()
     frameTime = 0.f;
 
     // 공중 애니메이션일 경우
-    if (IsAirborne() && !isFallFromHeight)
+    if (IsAirborne() && !isFallFromHeight && !isAttacking)
     {
         float vel = velocity.y;
 
