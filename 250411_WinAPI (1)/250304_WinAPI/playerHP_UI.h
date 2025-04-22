@@ -11,21 +11,15 @@ private:
 	Image* playerLifeRunsOutImage;
 	int playerHP_value;
 	bool isAlive;
-	/*float defaultOpacity;	//투명화 관련 기능 전부 U 클래스로 옮김
-	float opacityDuraion;
-	float opacityTimer;
-	bool isOpaque;*/
 
 public:
 	virtual HRESULT Init() override;
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;
-
-	/*void SetOpaque();
-	void DisableOpaque();*/
-
+	
 	playerHP_UI() {};
+	playerHP_UI(ID2D1HwndRenderTarget* renderTarget);
 	virtual ~playerHP_UI() {};
 };
 

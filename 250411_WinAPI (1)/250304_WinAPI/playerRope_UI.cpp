@@ -3,6 +3,12 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 
+playerRope_UI::playerRope_UI(ID2D1HwndRenderTarget* renderTarget)
+{
+	if (renderTarget)
+		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF::White);
+}
+
 HRESULT playerRope_UI::Init()
 {
 	playerRopeImage = ImageManager::GetInstance()->FindImage("playerRopeImage");
@@ -30,5 +36,9 @@ void playerRope_UI::Update(float TimeDelta)
 void playerRope_UI::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (playerRopeImage)
+	{
 		playerRopeImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
+		std::wstring hpText = std::to_wstring(playerRope_value);
+		RenderText(renderTarget, hpText, Pos.x + 15, Pos.y + 5);
+	}
 }

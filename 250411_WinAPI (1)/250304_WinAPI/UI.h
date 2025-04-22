@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include <d2d1.h>
+#include <dwrite.h>
+#include <wrl/client.h>
 
 enum class UI_Status
 {
@@ -22,6 +25,9 @@ protected:
 	float opacityTimer;
 	bool isOpaque;
 	bool requestOpaqueChange;
+	Microsoft::WRL::ComPtr<IDWriteFactory> writeFactory;
+	Microsoft::WRL::ComPtr<IDWriteTextFormat> textFormat;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> textColorBrush;
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
@@ -33,6 +39,10 @@ public:
 	inline void RequestOpaqueChange() { requestOpaqueChange = true; };
 
 	FPOINT ResolutionRatio();
+
+	HRESULT InitTextRenderer(ID2D1HwndRenderTarget* renderTarget, const wchar_t* fontFamily, float fontSize, D2D1::ColorF color);
+	void RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& text, float x, float y);
+	void RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& text, D2D1_RECT_F layoutRect);
 
 	UI();
 	virtual ~UI() {};
