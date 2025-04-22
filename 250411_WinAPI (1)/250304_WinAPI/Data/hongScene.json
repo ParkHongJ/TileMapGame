@@ -1,10 +1,20 @@
 [
     {
         "atlas": "Textures/char_lime.png",
+        "flipX": false,
         "height": 128.0,
         "name": "DummyHongPlayer",
         "width": 128.0,
         "x": 836.0,
         "y": 697.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "ArrowTrap",
+        "width": 128.0,
+        "x": 192.0,
+        "y": 320.0
     }
 ]

@@ -72,6 +72,7 @@ void GameManager::LoadObject(const char* path)
 		float y = item.value("y", 0.0f);
 		float w = item.value("width", 0.0f);
 		float h = item.value("height", 0.0f);
+		bool flipX = item.value("flipX", false);
 
 		// 생성
 		GameObject* obj = ObjectFactory::Get().Create(name);
@@ -85,10 +86,12 @@ void GameManager::LoadObject(const char* path)
 		float gx = x / tileSize;
 		float gy = y / tileSize;
 
-		float gameTileSize = 64.f;
+		float gameTileSize = GAME_TILE_SIZE;
+		
 		// 게임 좌표계로 변환 (필요시 다시 픽셀로 곱하거나 절대 좌표 계산)
 		FPOINT worldPos = { gx * gameTileSize, gy * gameTileSize };
 		obj->SetPos(worldPos);
+		obj->SetFlip(flipX);
 
 		// 월드에 추가
 		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, obj);

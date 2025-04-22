@@ -76,5 +76,8 @@ private:
     ImVec2 dragOffset;
 
     bool bGrid = false;
+
+    ToolGameObject* contextTarget = nullptr;
+
 };
 

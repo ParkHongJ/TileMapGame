@@ -27,10 +27,10 @@ void Arrow::Update(float TimeDelta)
 
 	if (bHit == false)
 	{
+		FPOINT trapTopPos = Pos;
 		if (isFlip)
 		{
 			//¿ÞÂÊ
-			FPOINT trapTopPos = Pos;
 			trapTopPos.x -= GAME_TILE_SIZE * 0.25f;
 
 			Ray ray = { trapTopPos, { -1.f, 0.f } };
@@ -49,7 +49,6 @@ void Arrow::Update(float TimeDelta)
 		else
 		{
 			//¿À¸¥ÂÊ
-			FPOINT trapTopPos = Pos;
 			trapTopPos.x += GAME_TILE_SIZE * 0.25f;
 
 			Ray ray = { trapTopPos, { 1.f, 0.f } };
@@ -64,8 +63,6 @@ void Arrow::Update(float TimeDelta)
 			{
 				Pos.x += moveSpeed * TimeDelta;
 			}
-
-			Pos.x += moveSpeed * TimeDelta;
 		}
 	}
 	else

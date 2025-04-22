@@ -21,6 +21,5 @@ private:
 
 
 	bool isFire = false;
-	bool isFlip = false;
 };
 

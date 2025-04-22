@@ -31,7 +31,7 @@ HRESULT HongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 
 	//ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
 
-	ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new ArrowTrap);
+	//ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new ArrowTrap);
 	return S_OK;
 }
 

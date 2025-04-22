@@ -349,6 +349,9 @@ void TileMapTool::DrawTileMap()
 
         ImGui::SetCursorScreenPos(min);
         std::string id = "##obj_" + std::to_string(objId); // 고유 ID
+
+        std::string popupId = "ObjectPopup##" + std::to_string(objId);
+
         ImGui::InvisibleButton(id.c_str(), max - min);
         ImGui::SetCursorScreenPos(cursorBackup);
 
@@ -359,6 +362,24 @@ void TileMapTool::DrawTileMap()
             draggingObject = obj;
             isDragging = true;
             dragOffset = io.MousePos - screenPos;
+        }
+
+        if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+        {
+            ImGui::OpenPopup(popupId.c_str());
+            contextTarget = obj;  // 현재 팝업 대상 기록!
+        }
+
+        if (ImGui::BeginPopup(popupId.c_str()))
+        {
+            if (contextTarget)  // 꼭 체크!
+            {
+                if (ImGui::MenuItem("FlipX"))
+                {
+                    contextTarget->flipX = !contextTarget->flipX;
+                }
+            }
+            ImGui::EndPopup();
         }
 
         ImVec2 atlas = GetTextureSize(texture);
@@ -375,6 +396,11 @@ void TileMapTool::DrawTileMap()
             (float)((0 + 1) * obj->width) / atlasW,
             (float)((0 + 1) * obj->height) / atlasH
         );
+
+        if (obj->flipX)
+        {
+            std::swap(uv0.x, uv1.x);  // 좌우 반전
+        }
 
         drawList->AddImage((ImTextureID)(uintptr_t)texture, min, max, uv0, uv1);
         

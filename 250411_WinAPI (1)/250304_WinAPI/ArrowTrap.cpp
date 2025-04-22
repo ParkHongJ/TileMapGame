@@ -8,8 +8,8 @@ HRESULT ArrowTrap::Init()
 {
 	trapImage = ImageManager::GetInstance()->FindImage("Trap");
 	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
-	Pos.x = 250.f;
-	Pos.y = 150.f;
+	//Pos.x = 250.f;
+	//Pos.y = 150.f;
 
 	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
 	return S_OK;
@@ -28,8 +28,16 @@ void ArrowTrap::Update(float TimeDelta)
 		FPOINT trapTopPos = Pos;
 		trapTopPos.y -= GAME_TILE_SIZE / 2.f;
 
-		Ray ray = { trapTopPos, { -1.f, 0.f } };
 		RaycastHit out;
+		Ray ray;
+		if (bFlipX == false)
+		{
+			ray = { trapTopPos, { 1.f, 0.f } };
+		}
+		else
+		{
+			ray = { trapTopPos, { -1.f, 0.f } };
+		}
 
 		//Trigger On
 		if (CollisionManager::GetInstance()->RaycastMyType(ray, 200.f, out, CollisionMaskType::ITEM, true, 0.1f))
@@ -46,7 +54,7 @@ void ArrowTrap::LateUpdate(float TimeDelta)
 void ArrowTrap::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
-	trapImage->Render(renderTarget, cameraPos.x, cameraPos.y, objectScale, objectScale, 1, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+	trapImage->Render(renderTarget, cameraPos.x, cameraPos.y, -objectScale, objectScale, 1, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 }
 
 void ArrowTrap::CheckCulling()
@@ -61,21 +69,19 @@ void ArrowTrap::Fire()
 
 	FPOINT spawnPos = Pos;
 
-	arrow->SetDirection(true);
-	spawnPos.x -= GAME_TILE_SIZE * 0.5f;
 
-	if (isFlip)
+	if (bFlipX)
 	{
-
+		spawnPos.x -= GAME_TILE_SIZE * 0.5f;
 	}
 	else
 	{
-
 		//¿À¸¥ÂÊ
+		spawnPos.x += GAME_TILE_SIZE * 0.5f;
 	}
 
 	arrow->SetPos(spawnPos);
-	//arrow->SetDirection(isFlip);
+	arrow->SetDirection(bFlipX);
 
 
 }
