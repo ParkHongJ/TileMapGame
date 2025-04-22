@@ -49,7 +49,7 @@ HRESULT Character::Init()
     currfaintTime = 0.0f;
     currFaintFrameInd = {0, 13} ;
     currFaintFrameInfo = { {0, 13},{11, 13}, AnimationMode::Loop };
-    maxFaintTime = 2.0f;
+    maxFaintTime = 5.0f;
 
 	// Collision
 	colliderSize = { 30.0f, 40.0f };
@@ -79,6 +79,9 @@ HRESULT Character::Init()
 	speed = 300.f;
 	attackSpeed = 3.0f;
 	attackRate = 0.3f;
+
+
+    faintBounceTime = 0;
 
     // boolean
     isFlip = false;
@@ -215,6 +218,7 @@ void Character::SetAnimationFrameInfo(unsigned int stateClassNum, unsigned int s
 			currFrameInfo.endFrame.y != it->second.endFrame.y ||
 			currFrameInfo.mode != it->second.mode)
 		{
+            
 			currFrameInd = it->second.startFrame;
 			frameTime = 0.f;
 
@@ -316,13 +320,11 @@ void Character::Update(float TimeDelta)
         ApplyGravity(TimeDelta);
     }
 
-    // 착지 판단 후 위치 보정
     
 
-    auto km = KeyManager::GetInstance();
    
     // 공중 점프 애니메이션 처리
-    if (IsAirborne() && state != &attackState)
+    if (IsAirborne() && !isFallFromHeight && state != &attackState)
     {
         HandleAirAnimation();
     }
@@ -333,26 +335,19 @@ void Character::Update(float TimeDelta)
 void Character::HandleTransitions()
 {
     auto km = KeyManager::GetInstance();
-    if (km->IsStayKeyDown('Q'))
+ 
+    if (isFaint || isFallFromHeight)
     {
-        isFaint = true;
         ChangeState(&idleState);
         return;
     }
-    else if(km->IsOnceKeyUp('Q'))
-    {
-        currFaintFrameInd = { 0,13 };
-        isFaint = false;
-    }
-
 
     // [3] 상호작용
     CheckInterAction();
 
-
-
     if (currInput.jump && !IsAirborne())
     {
+        
         Jump();
         return;
     }
@@ -381,18 +376,30 @@ void Character::HandleTransitions()
     }
 
     // 공중에서도 공격 가능하게 예외처리
-    if (IsAirborne() && currInput.attack && !isAttacking)
+ /*   if (IsAirborne() && currInput.attack && !isAttacking)
     {
         isAttacking = true;
         ChangeState(&attackState);
         return;
-    }
+    }*/
 
     // [2] 공중에서 매달릴 수 있는지 검사
     if (IsAirborne() && !isAttacking &&
         !(state == &interactionState) && !(interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_LADDER)
         ) {
         HangOnTile();
+    }
+
+    if (isAttacking)
+    {
+        if (GetCurrAnimEnd())
+        {
+            isAttacking = false;
+        }
+        else
+        {
+            return; // 아직 공격 중이면 다른 상태 전이 안 됨
+        }
     }
 
     // [4] 공격
@@ -403,8 +410,7 @@ void Character::HandleTransitions()
         return;
     }
 
-    if (isAttacking)
-        return;
+    
 
     // [5] 이동
     if (!(state == &interactionState) &&
@@ -433,6 +439,7 @@ void Character::HandleIdleLogic() {
     if (!idle) return;
 
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+    interActionPQ = {};
 
 	switch (idle->GetCurrentSubState()) {
 	case IdleState::SubState::IDLE_LOOKUP_START:
@@ -479,26 +486,65 @@ void Character::HandleIdleLogic() {
 
         break;
     case IdleState::SubState::IDLE_FALL_FROM_HEIGHT:
+      
+        if (!IsAirborne())
+        {
+         
+            if (faintBounceTime == 0)
+            {
+                velocity.y = -200.f;
+          
+                if(currFrameInd.x <= 1)
+                currFrameInd.x++;
+            }
+             else if (faintBounceTime == 1)
+            {
+                velocity.y = -70.f;
+           
+                if (currFrameInd.x <= 3)
+                currFrameInd.x++;
+
+
+            }
+            else
+            {
+                isFallFromHeight = false;
+                velocity.y = 0.f;
+                isFaint = true;
+             }
+            faintBounceTime++;
+        
+        }
         
         break;
     case IdleState::SubState::IDLE_FAINT:
+       
+        frameTime += deltaTime;
+
         currfaintTime += deltaTime;
 
-        if (currfaintTime < ANIMATION_FRAME_TIME)
+        if (currfaintTime >= maxFaintTime)
+        {
+            currfaintTime = 0.f;
+            frameTime = 0.f;
+            isFaint = false;
+            ChangeState(&idleState);
+        }
+
+        if (frameTime < 0.075f)
         {
             return;
         }
 
-        currfaintTime = 0.f;
+        frameTime = 0.f;
        
-            currFaintFrameInd.x++;
+        currFaintFrameInd.x++;
 
-            if (currFaintFrameInd.x > currFaintFrameInfo.endFrame.x)
-                currFaintFrameInd.x = currFaintFrameInfo.startFrame.x;
-            break;
+        if (currFaintFrameInd.x > currFaintFrameInfo.endFrame.x)
+            currFaintFrameInd.x = currFaintFrameInfo.startFrame.x;
+        break;
 
         
-        break;
     case IdleState::SubState::IDLE_DIE:
         break;
     }
@@ -580,6 +626,7 @@ void Character::HandleMoveLogic() {
 void Character::HandleAttackLogic() {
 	AttackState* attack = dynamic_cast<AttackState*>(state);
 	if (!attack) return;
+    interActionPQ = {};
 
     switch (attack->GetCurrentSubState()) {
     case AttackState::SubState::ATTACK_WHIP:
@@ -587,10 +634,10 @@ void Character::HandleAttackLogic() {
         whip->SetHoldItemPos(Pos, isFlip);
         whip->Use(&currFrameInd.x);
         
-        
-        if (GetCurrAnimEnd())
+        if (( GetCurrAnimEnd()) )
         {
             isAttacking = false;
+            ChangeState(&idleState);
         }
         break;
 
@@ -624,6 +671,9 @@ void Character::HandleInteractionLogic()
 
 void Character::Jump()
 {
+    faintBounceTime = 0;
+    isFaint = false;
+    isFallFromHeight = false;
     velocity.y = -jumpPower;
     isCrouching = false;
     isTouchingBottom = false;
@@ -654,6 +704,8 @@ void Character::HandleAirAnimation()
 {
     const int AIR_ANIM_ROW = animationMap[{SUBSTATE, static_cast<int>(SubAnim::JUMP_UP)}].startFrame.y;
     const auto& frame = currFrameInfo;
+
+    
 
     if (IsAirborne())
     {
@@ -993,7 +1045,7 @@ void Character::PlayAnimation()
     frameTime = 0.f;
 
     // 공중 애니메이션일 경우
-    if ( IsAirborne())
+    if (IsAirborne() && !isFallFromHeight)
     {
         float vel = velocity.y;
 
@@ -1033,8 +1085,11 @@ void Character::PlayAnimation()
 
         bool hasVerticalInput = currInput.moveUp || currInput.moveDown;
 
-        if (isClimbing && !hasVerticalInput)
+        if (isClimbing && !hasVerticalInput )
             return; // 입력이 없으면 프레임 진행 중단
+
+        if (isFallFromHeight) return;
+
 
         // 일반 애니메이션
         switch (currFrameInfo.mode)
@@ -1062,8 +1117,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n isCrouching : %d islookdown: %d currLockTime : %f Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isCrouching, isLookDownLocked,currLockTime, velocity.x, velocity.y
+            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n isFallFromHeight : %d isFaint: %d currfaintTime : %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isFallFromHeight, isFaint,currfaintTime, velocity.x, velocity.y
             );
 
 		OutputDebugStringA(buf);
@@ -1075,7 +1130,7 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     }
     if (playerFaintEffect)
     {
-        if (isFaint && state == &idleState && idleState.GetCurrentSubState() == IdleState::SubState::IDLE_FAINT)
+        if (isFaint )
         {
             playerFaintEffect->FrameRender(renderTarget, pos.x, pos.y - 20.f, currFaintFrameInd.x, currFaintFrameInd.y);
         }
@@ -1103,25 +1158,26 @@ void Character::ApplyGravity(float TimeDelta)
         if (velocity.y > maxFallSpeed)
             velocity.y = maxFallSpeed;
     }
-    else
+    else if(!IsAirborne())
     {
-        if (isTouchingBottom && bottomHitDist < 2.0f)
-        {
-            // 바닥 위로 위치 보정
-            Pos.y += bottomHitDist - colliderOffsetY + colliderSize.y / 2.f;
+
+        // 착지 판단 후 위치 보정
+        //if (isTouchingBottom && bottomHitDist < 2.0f)
+        //{
+        //    // 바닥 위로 위치 보정
+        //    Pos.y += bottomHitDist - colliderOffsetY + colliderSize.y / 2.f;
 
             // 위치 보정과 동시에 낙사 판정
 
-            if (velocity.y > 100.f)
+            if (velocity.y > 1000.f)
             {
-              // isFallFromHeight = true;
-
-               // ChangeState(&idleState);
+               isFallFromHeight = true;
+               ChangeState(&idleState);
             }
-            //return;
-        }
+        /*}*/
 
-        velocity.y = 0.f;
+            velocity.y = 0.f;
+
     }
 }
 

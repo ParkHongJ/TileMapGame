@@ -78,6 +78,7 @@ private:
 	FrameInfo		    currFrameInfo;
 	POINT			currFaintFrameInd;
 	FrameInfo		currFaintFrameInfo;
+	int8_t			  faintBounceTime;
 
 	// Gravity
 	float					  gravity;
@@ -250,7 +251,7 @@ public:
 	bool GetIsAttacking() { return isAttacking; }
 
 	bool GetIsFaint() { return isFaint; }
-
+	float GetCurrFaintTime() { return currfaintTime; }
 
 	void SetSpeed(float speed) { this->speed = speed; }
 

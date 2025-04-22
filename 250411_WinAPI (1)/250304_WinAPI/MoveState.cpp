@@ -5,14 +5,14 @@
 void MoveState::Enter(Character* character)
 {
     this->character = character;
- 
 
+    
 }
 
 void MoveState::Update() {
     InputIntent input = character->GetCurrInputIntent();
     
-
+   
     if (character->GetIsMovingAuto())
     {
         ChangeSubState(SubState::MOVE_HANGON_AUTO);
