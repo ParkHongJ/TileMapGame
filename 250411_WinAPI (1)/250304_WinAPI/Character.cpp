@@ -26,6 +26,8 @@ HRESULT Character::Init()
     playerFaintEffect = ImageManager::GetInstance()->FindImage("Tae_Player");
     state =  &Character::idleState;
     state->Enter(this);
+
+    objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
   
     SetPos({ 200 / 2,0});
 
@@ -55,7 +57,7 @@ HRESULT Character::Init()
 
 	// Collision
 	colliderSize = { 30.0f, 40.0f };
-	colliderOffsetY = 25.f;
+	colliderOffsetY = 0.f;
 	collider = new BoxCollider(
 		{ 0.0f , colliderOffsetY },     // Offset
 		{ colliderSize.x, colliderSize.y },  // 
@@ -1134,7 +1136,7 @@ void Character::Render(ID2D1RenderTarget* renderTarget)
     {
         if (isFaint )
         {
-            playerFaintEffect->FrameRender(renderTarget, pos.x, pos.y - 20.f, currFaintFrameInd.x, currFaintFrameInd.y, objectScale.x, objectScale.y);
+            playerFaintEffect->FrameRender(renderTarget, pos.x, pos.y - 20.f, currFaintFrameInd.x, currFaintFrameInd.y, objectScale.x, objectScale.y );
         }
     }
 }

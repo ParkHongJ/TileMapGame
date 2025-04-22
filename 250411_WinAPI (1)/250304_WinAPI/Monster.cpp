@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Monster.h"
+#include "Character.h"
 //#include "CollisionManager.h"
 
 Monster::Monster()
 {
+	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE , GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 }
 
 Monster::~Monster()
@@ -13,6 +15,7 @@ Monster::~Monster()
 HRESULT Monster::Init()
 {
 	monsterState = MonsterState::IDLE;
+	player = new Character();
 	damage = 0;
 	monsterHP = 0;
 	dir = { -1,-1 };
@@ -62,6 +65,12 @@ HRESULT Monster::Init()
 
 void Monster::Release()
 {
+	if (player)
+	{
+		player->Release();
+		delete player;
+		player = nullptr;
+	}
 }
 
 void Monster::Update(float TimeDelta)
@@ -97,5 +106,4 @@ void Monster::Render(ID2D1RenderTarget* renderTarget)
 
 void Monster::Detect(GameObject* obj)
 {
-
 }

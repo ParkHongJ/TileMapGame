@@ -151,6 +151,7 @@
     <ClCompile Include="HeavyBlock.cpp" />
     <ClCompile Include="NiddleTrap.cpp" />
     <ClCompile Include="SpiderMonster.cpp" />
+    <ClCompile Include="SkeletonMonster.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="ChangeCobwebBomb.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="HeavyBlock.h" />
     <ClInclude Include="NiddleTrap.h" />
     <ClInclude Include="SpiderMonster.h" />
+    <ClInclude Include="SkeletonMonster.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="ChangeCobwebBomb.h" />

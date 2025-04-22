@@ -357,7 +357,7 @@
     <ClCompile Include="Arrow.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
-    <ClCompile Include="SpiderMonster.cpp">
+    <ClCompile Include="SkeletonMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
     <ClCompile Include="Rope.cpp">
@@ -677,7 +677,7 @@
     <ClInclude Include="Arrow.h">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
-    <ClInclude Include="SpiderMonster.h">
+    <ClInclude Include="SkeletonMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
     <ClInclude Include="Rope.h">

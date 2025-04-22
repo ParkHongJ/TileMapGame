@@ -20,6 +20,8 @@ HRESULT HyoScene::Init(ID2D1RenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage(
 		"testCamera", L"Image/textCamera.png", renderTarget);
 
+	ImageManager::GetInstance()->AddImage("Skeleton_Monster", L"Textures/Monster/SpiderMonster.png", 16, 16, renderTarget);
+
 	// ¹è°æ
 	for (int i = 0; i < TILE_COUNT; i++)
 	{
