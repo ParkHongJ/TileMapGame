@@ -74,7 +74,7 @@ void BoxCollider::DebugRender(ID2D1RenderTarget* rt)
     //임시 코드
     FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
 
-	DrawCenteredRect(rt, cameraPos, Scale.x / 2.f, D2D1::ColorF(D2D1::ColorF::Green));
+	DrawCenteredRect(rt, cameraPos, Scale, D2D1::ColorF(D2D1::ColorF::Green));
 }
 
 bool BoxCollider::CheckCollisionWithCircle(FPOINT center, float radius) const

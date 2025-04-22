@@ -56,6 +56,9 @@ public:
 	inline const bool IsAbleCol() const { return this->bAbleCol; }
 
 	void TakeCollision(float coolTime);
+
+	inline void SetFlip(bool bFlipX) { this->bFlipX = bFlipX; }
+
 protected:
 	// 오브젝트 이름 (4.20 추가)
 	OBJECTNAME objectName;
@@ -83,6 +86,8 @@ protected:
 	// 콜라이더 만들 오브젝트인데 충돌 금지일 때 끄기
 	bool bAbleCol = false;
 
+	// 좌우반전. 이게맞나?
+	bool bFlipX = false;
 public:
 	template<typename T>
 	T* GetType() 

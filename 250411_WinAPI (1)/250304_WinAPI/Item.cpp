@@ -143,8 +143,11 @@ void Item::DropMove(float TimeDelta)
 		FPOINT moveVec = { velocity.x * TimeDelta, velocity.y * TimeDelta };
 		FPOINT nextPos = { Pos.x + moveVec.x, Pos.y + moveVec.y };
 
+		FPOINT direction = moveVec.Normalized();
+
+		float radius = 50.f;
 		Ray ray;
-		ray.origin = Pos;
+		ray.origin = Pos + direction * radius;
 		ray.direction = moveVec.Normalized();
 
 		float moveLength = moveVec.Length();
@@ -172,8 +175,7 @@ void Item::DropMove(float TimeDelta)
 			else
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
-			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
-			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
+			velocity = Reflect(velocity, hitNormal.Normalized());
 
 			velocity *= bounciness;
 
@@ -187,7 +189,7 @@ void Item::DropMove(float TimeDelta)
 				velocity.y = 0.f;
 
 			// 보정 위치
-			Pos += ray.direction * hitDistance;
+			//Pos += ray.direction * hitDistance;
 
 			ClampVector(velocity, 350.f);
 
@@ -200,7 +202,8 @@ void Item::DropMove(float TimeDelta)
 
 			// 살짝 밀기 (겹침 방지)
 
-			Pos = out.point + hitNormal * 0.5f;
+			//Pos = out.point + hitNormal * 0.5f;
+			Pos = out.point - direction * radius;
 		}
 		else
 		{

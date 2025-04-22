@@ -35,13 +35,32 @@ void Tile::Update(float TimeDelta)
 {
 }
 
+void Tile::LateUpdate(float TimeDelta)
+{
+	float scale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
+	float tileDrawSize = ATLAS_TILE_SIZE * scale;
+
+	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
+	const float margin = 48.f; // 여유 픽셀
+
+	if (cameraPos.x + tileDrawSize < -margin || cameraPos.x > WINSIZE_X + margin ||
+		cameraPos.y + tileDrawSize < -margin || cameraPos.y > WINSIZE_Y + margin)
+	{
+		bHidden = true; // 화면 바깥이면 그리지 않음
+	}
+	else
+	{
+		bHidden = false;
+	}
+}
+
 void Tile::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	if (tileInfo.valid)
 	{
 		//collider->DebugRender(renderTarget);
 		FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
-		tileImage->Render(renderTarget, cameraPos.x, cameraPos.y, tileScale, tileScale, tileInfo.atlasX, tileInfo.atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+		tileImage->Render(renderTarget, floor(cameraPos.x), floor(cameraPos.y), tileScale, tileScale, tileInfo.atlasX, tileInfo.atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 		RenderDeco(renderTarget);
 	}
 }
@@ -83,8 +102,9 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType typ
 
 	if (type != BORDER && valid)
 	{
-		//collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, this);
 		collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
+		
+
 		tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
 	}
 	else

@@ -386,37 +386,36 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
 
 bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime)
 {
-	bool found = false;
-	RaycastHit closestHit;
-	closestHit.distance = maxDist;
+    bool found = false;
+    RaycastHit closestHit;
+    closestHit.distance = maxDist;
 
-	uint8_t mask;
+    uint16_t mask = layerRayMaskMap[maskType];
 
-	mask = layerRayMaskMap[maskType];
-
-	for (const auto& pair2 : layerCollisionMap)
-	{
-		// 검사 해야하는 레이어라면
-		if (mask & uint8_t(pair2.first))
-		{
-			for (auto& iter : layerCollisionMap[maskType])
-			{
-				for (auto& iter2 : pair2.second)
-				{
-					RaycastHit temp;
-					if (iter2->Raycast(ray, maxDist, temp))
-					{
-						if (temp.distance < closestHit.distance)
-						{
-							closestHit = temp;
-							closestHit.collider = iter2;
-							found = true;
-						}
-					}
-				}
-			}
-		}
-	}
+    for (const auto& pair : layerCollisionMap)
+    {
+        uint16_t type = uint16_t(pair.first);
+        // 검사 해야하는 레이어라면
+        if (mask & type)
+        {
+            for (auto& iter : layerCollisionMap[pair.first])
+            {
+                //for (auto& iter2 : pair2.second)
+                {
+                    RaycastHit temp;
+                    if (iter->Raycast(ray, maxDist, temp))
+                    {
+                        if (temp.distance < closestHit.distance)
+                        {
+                            closestHit = temp;
+                            closestHit.collider = iter;
+                            found = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     if (found)
         hitOut = closestHit;

@@ -6,6 +6,11 @@ class HongScene : public Scene
 private:
 	float FrameTime = 0.f;
 	int currentFrame = 0;
+
+	
+	class ArrowTrap* arrowTrap;
+
+	class Image* background;
 public:
 	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget) override;
 	virtual void Release() override;

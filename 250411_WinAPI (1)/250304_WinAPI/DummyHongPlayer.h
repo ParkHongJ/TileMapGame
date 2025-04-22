@@ -101,6 +101,7 @@ private:
 		};
 	}
 
+	class BoxCollider* collider;
 };
 
 

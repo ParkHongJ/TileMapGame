@@ -1,5 +1,13 @@
 [
     {
+        "name": "ArrowTrap",
+        "atlasPath": "Textures/floormisc.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "Character",
         "atlasPath": "Textures/char_yellow.png",
         "cellSize": {

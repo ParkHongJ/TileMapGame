@@ -17,6 +17,7 @@ struct ToolGameObject
     float width;
     float height;
     std::wstring atlas;
+    bool flipX = false;
 };
 class TileMapTool
 {
@@ -73,5 +74,10 @@ private:
     ToolGameObject* draggingObject = nullptr;
     bool isDragging = false;
     ImVec2 dragOffset;
+
+    bool bGrid = false;
+
+    ToolGameObject* contextTarget = nullptr;
+
 };
 
