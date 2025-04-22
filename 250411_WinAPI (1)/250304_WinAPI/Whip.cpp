@@ -86,30 +86,26 @@ void Whip::Use(void* info)
 	// 그에 맞는 콜리전 갱신 or 프레임 한 번에만 콜리전?
 	// 근데 이거 플레이어 프레임이랑 1대1대응 아니고 보정해야되네
 	whipFrame = (*(int*)info);
-	FPOINT posOffset = { 0.f, 30.f }; // 채찍 이미지
+	FPOINT posOffset = { 0.f, 0.f }; // 채찍 이미지
 	bActive = true;
 	switch (whipFrame)
 	{
 	case 0:
-		//offset = { -50.f, 10.f };
-		posOffset = {-30.f, -30.f};
+		posOffset = {-50.f, -20.f};
 		isHit = false;
-		//posOffset = { 100.f, 30.f };
 		break;
 	case 1:
-		posOffset = { -30.f, -30.f };
-		//posOffset = { -50.f, 0.f };
-		//posOffset = { 100.f, 30.f };
+		posOffset = { -30.f, -20.f };
+
 
 		break;
 	case 2:
-		posOffset = { 20.f, -10.f };
-		//posOffset = { -50.f, 0.f };
-		//posOffset = { 100.f, 30.f };
+		posOffset = { 10.f, 10.f };
 		break;
 	case 3:
-		//posOffset = { -50.f, 0.f };
-		//posOffset = { 100.f, 30.f };
+
+		posOffset = { 30.f, 20.f };
+
 		if (!isHit)
 		{
 			Ray ray;
@@ -120,7 +116,7 @@ void Whip::Use(void* info)
 				ray.direction = { -1.f,0.f };
 			}
 
-			float moveLength = 300.f;
+			float moveLength = 100.f;
 			RaycastHit out;
 
 			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::MONSTER, this, true, 1.f))
@@ -131,6 +127,8 @@ void Whip::Use(void* info)
 
 		break;
 	case 4:
+		posOffset = { 50.f, 30.f };
+
 		if (!isHit)
 		{
 			Ray ray;
@@ -141,7 +139,7 @@ void Whip::Use(void* info)
 				ray.direction = { -1.f,0.f };
 			}
 
-			float moveLength = 300.f;
+			float moveLength = 100.f;
 			RaycastHit out;
 
 			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::MONSTER, this, true, 1.f))
@@ -153,8 +151,9 @@ void Whip::Use(void* info)
 		//posOffset = { -50.f, 0.f };
 		//posOffset = { 100.f, 30.f };
 		break;
-	case 5:
-		posOffset = { -50.f, 0.f };
+	case 5: // 여까지 안오넹
+		//posOffset = { 150.f, -20.f };
+
 		//posOffset = { 100.f, 30.f };
 		break;
 	case 6:

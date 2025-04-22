@@ -96,7 +96,7 @@ HRESULT Character::Init()
 	objectRenderId = RENDER_PLAYER;
 
 	whip = new Whip();
-	ObjectManager::GetInstance()->AddObject(RENDER_HOLD, whip);
+	ObjectManager::GetInstance()->AddObject(RENDER_ITEM, whip);
 	return S_OK;
 }
 
