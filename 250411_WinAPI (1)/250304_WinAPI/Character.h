@@ -7,7 +7,7 @@
 #include "AttackState.h"
 #include "InteractionState.h"
 
-#define ANIMSTATE 5
+#define SUBSTATE 5
 #define TOLERANCE 2.0f
 
 class BoxCollider;
@@ -17,6 +17,7 @@ enum class SubAnim {
 	NONE,
 	JUMP_UP,
 	JUMP_DOWN,
+	HURT_BIRD,
 };
 
 struct InputIntent {
@@ -32,6 +33,7 @@ struct InputIntent {
 	bool attack = false;
 	bool interact = false;
 	bool shift = false;
+	bool bomb = false;
 
 	bool hasMovement() const { return moveLeft || moveRight; }
 };
@@ -43,6 +45,7 @@ private:
 	map<std::pair<unsigned int, unsigned int>, FrameInfo> animationMap;
 
 	Image*				  playerImage;
+	Image*          playerFaintEffect; //temp
 	CharacterState*				state;
 
 
@@ -51,13 +54,15 @@ private:
 	FPOINT			     colliderSize;
 	float			  colliderOffsetY;
 
-
+	// Input 모든 Input 은 여기서 한번에 받아서 사용
 	InputIntent				currInput;
 
 
-	//Item*				     currItem;
+	// Item*				 currItem;
 
 	// Stat
+
+	int8_t					   health;
 
 	float						speed;
 	float				  attackSpeed;
@@ -65,11 +70,13 @@ private:
 	FPOINT				     velocity;
 
 
+	// Render
 	bool					   isFlip;
 	float					frameTime;
 	POINT				 currFrameInd;
 	FrameInfo		    currFrameInfo;
-
+	POINT			currFaintFrameInd;
+	FrameInfo		currFaintFrameInfo;
 
 	// Gravity
 	float					  gravity;
@@ -78,26 +85,23 @@ private:
 	float			    bottomHitDist;
 
 
-
 	// State Boolean
 	bool			     isMovingAuto;
-
-	bool                      isInAir;
-	bool				    isHanging;
-	bool                  isAttacking;
+	bool			      isAttacking;
 	bool			      isCrouching;
-	bool				   isOnLadder;
-	bool				     isOnRope;
-	bool				  isOnVehicle;
+	bool					isFaint;
 
 	// For Camera
 	bool			   isLookUpLocked;
 	bool			 isLookDownLocked;
 
+
+	// Time lvalues
 	float				 currLockTime;
 	float			   lookUpLockTime;
 	float			 lookDownLockTime;
-
+	float				currfaintTime;
+	float				 maxFaintTime;
 
 	// RayCast
 	FPOINT                leftHandPos;
@@ -111,6 +115,7 @@ private:
 	// AutoHaningMove
 	FPOINT            targetHangOnPos;
 
+
 	// Interaction
 
 	priority_queue<pair<float, GameObject*>>            interActionPQ;
@@ -118,7 +123,7 @@ private:
 	float							            	interactionOffset;
 
 
-
+	// Static State
 public:
 	static IdleState					idleState;
 	static MoveState					moveState;
@@ -151,8 +156,12 @@ public:
 	// 
 	void Jump();
 	void HangOnTile();
+	void CheckInterAction();
 	bool CheckAlmostFall();
 	bool CheckHangOn();
+	bool CheckCanPushTile();
+	bool CheckCanClimbLadder();
+	bool CheckCanClimbRope();
 	FPOINT GetHangOnTargetPos();
 
 
@@ -170,7 +179,6 @@ public:
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
 
-
 	// HFSM
 	void HandleTransitions();
 
@@ -183,11 +191,10 @@ public:
 
 
 	// Gravity
-
+	bool IsAirborne() const;
 	void ApplyGravity(float TimeDelta);
-
+	
 	// Collision
-
 	void CheckTileCollision();
 
 
@@ -195,17 +202,17 @@ public:
 	const InputIntent& GetCurrInputIntent() { return currInput; }
 	void HandleInput();
 	
+	// 
+	void OnDamage();
 
 
-	// Setter
 
-	void SetIsInAir(bool isInAir) { this->isInAir = isInAir; }
+
+	// Getter & Setter
 	void SetJumpPower(float jumpPower) { this->jumpPower = jumpPower; }
 
 	float GetJumpPower() { return this->jumpPower; }
 	float GetSpeed() { return this->speed; }
-
-
 
 	bool GetIsCrouching() { return isCrouching; }
 	bool GetIsLookUpLocked();
@@ -217,27 +224,19 @@ public:
 	float GetlookUpLockTime() { return this->lookUpLockTime; }
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
 
-	void SetIsAttacking(bool input) { this->isAttacking = input; }
-	bool GetIsInAir() { return this->isInAir; }
-
-	void SetIsOnLadder(bool value) { isOnLadder = value; }
-	bool GetIsOnLadder() const { return isOnLadder; }
-
-	void SetIsOnRope(bool value) { isOnRope = value; }
-	bool GetIsOnRope() const { return isOnRope; }
+	
 	
 	float GetVelocitySize();
 	float GetYVelocity();
 
-	bool GetIsHangOn() const;
-	void SetIsHangOn(bool value);
-
 	bool GetIsMovingAuto() const;
-	void SetIsMovingAuto(bool value);
+	bool GetIsAttacking() { return isAttacking; }
+
+	bool GetIsFaint() { return isFaint; }
+
 
 	void SetSpeed(float speed) { this->speed = speed; }
 
-	bool PressAnyKey();
 
 	Character() {};
 	virtual ~Character() {};

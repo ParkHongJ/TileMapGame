@@ -9,39 +9,59 @@ void IdleState::Enter(Character* character) {
     InputIntent input = character->GetCurrInputIntent();
 
     if (input.moveDown) ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+    else if (character->GetIsCrouching()) ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
     else if (input.moveUp) ChangeSubState(SubState::IDLE_LOOKUP_START);
+    else if (character->IsAirborne()) ChangeSubState(SubState::IDLE_ONAIR);
     else ChangeSubState(SubState::IDLE_ALONE);
+   
 }
 
 void IdleState::Update() {
 
     InputIntent input = character->GetCurrInputIntent();
 
-    
-    //if (character->GetIsHangOn()) return;
+    /*if (character->GetFallFromHeight())
+    {
+        ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
+        return;
+    }*/
 
-
-    if (character->GetIsInAir()) {
+    if (character->IsAirborne()) {
         ChangeSubState(SubState::IDLE_ONAIR);
         return;
     }
 
-    if (currentSubState == SubState::IDLE_ALONE) {
-        if (character->CheckAlmostFall()) {
-            ChangeSubState(SubState::IDLE_FALL_ALMOST);
-            character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
+    if (character->GetIsFaint())
+    {
+        ChangeSubState(SubState::IDLE_FAINT);
+        return;
+    }
+
+
+    if (character->CheckAlmostFall()) {
+        ChangeSubState(SubState::IDLE_FALL_ALMOST);
+        character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
+        return;
+    }
+    
+    // TOOD : 아이템을 들고 있는 IDLE 상태
+
+    if (input.moveUp) 
+    {
+        if (!character->GetIsLookUpLocked())
+        {
+            ChangeSubState(SubState::IDLE_LOOKUP_START);
+            return;
+        }
+        else
+        {
+            ChangeSubState(SubState::IDLE_LOOKUP_STOP);
             return;
         }
     }
-
-    if (input.moveUp) {
-        if (!character->GetIsLookUpLocked())
-            ChangeSubState(SubState::IDLE_LOOKUP_START);
-        else
-            ChangeSubState(SubState::IDLE_LOOKUP_STOP);
-    }
     else if (input.moveUpReleased) {
         ChangeSubState(SubState::IDLE_LOOKUP_RELEASE);
+        return;
     }
 
     if(input.moveDown)
@@ -55,11 +75,10 @@ void IdleState::Update() {
         // 이미 START 상태면 애니메이션 끝날 때까지 대기
         if (currentSubState == SubState::IDLE_LOOKDOWN_START)
         {
-            if (character->GetCurrAnimEnd())
+            if (character->GetIsLookDownLocked())
             {
                 ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
             }
-            return;
         }
 
         // STOP 상태면 그대로 유지
@@ -78,13 +97,26 @@ void IdleState::Update() {
     else if (input.moveDownReleased)
     {
         ChangeSubState(SubState::IDLE_LOOKDOWN_RELEASE);
+        return;
     }
+ 
 
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
         currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
-        character->GetCurrAnimEnd()) {
+        character->GetCurrAnimEnd()) 
+    {
         ChangeSubState(SubState::IDLE_ALONE);
     }
+
+    if ( character->IsAirborne())
+    {
+        ChangeSubState(SubState::IDLE_ONAIR);
+    }
+    else
+    {
+        ChangeSubState(SubState::IDLE_ALONE);
+    }
+
 }
 
 void IdleState::ChangeSubState(SubState newSubState) {
@@ -92,7 +124,7 @@ void IdleState::ChangeSubState(SubState newSubState) {
         OutputDebugStringA("[Warning] Attempted to change to SubState::NONE!\n");
         return;
     }
-    currentSubState = newSubState;
+     currentSubState = newSubState;
     character->SetAnimationFrameInfo(IDLESTATE, static_cast<unsigned int>(newSubState));
 }
 
@@ -113,7 +145,7 @@ const char* IdleState::GetSubStateName() const {
     case SubState::IDLE_ONPET_LOOKUP:     return "IDLE_ONPET_LOOKUP";
     case SubState::IDLE_ONPET_LOOKDOWN:   return "IDLE_ONPET_LOOKDOWN";
     case SubState::IDLE_FALL_ALMOST:      return "IDLE_FALL_ALMOST";
-    case SubState::IDLE_HURT:             return "IDLE_HURT";
+    case SubState::IDLE_FALL_FROM_HEIGHT:             return "IDLE_HURT";
     case SubState::IDLE_DIE:              return "IDLE_DIE";
     case SubState::IDLE_ONAIR:              return "IDLE_ONAIR";
     case SubState::NONE: default:         return "NONE";

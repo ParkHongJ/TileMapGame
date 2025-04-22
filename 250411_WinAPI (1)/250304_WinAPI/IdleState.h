@@ -14,11 +14,13 @@ public:
         IDLE_LOOKDOWN_START,
         IDLE_LOOKDOWN_STOP,
         IDLE_LOOKDOWN_RELEASE,
+        IDLE_PICKUP_ITEM,
         IDLE_ONPET,
         IDLE_ONPET_LOOKUP,
         IDLE_ONPET_LOOKDOWN,
         IDLE_FALL_ALMOST,
-        IDLE_HURT,
+        IDLE_FALL_FROM_HEIGHT,
+        IDLE_FAINT,
         IDLE_DIE
     };
 

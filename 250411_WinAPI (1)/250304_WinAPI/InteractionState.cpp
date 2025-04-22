@@ -5,24 +5,34 @@
 void InteractionState::Enter(Character* character)
 {
     this->character = character;
+    character->CheckTileCollision();
     Update();
 }
 
 void InteractionState::Update()
 {
 
-    if (character->GetIsHangOn())
+    if (character->CheckHangOn())
     {
         ChangeSubState(SubState::INTERACTION_HANGON_TILE);
+        return;
     }
-    else if (character->GetIsOnLadder())
+    else if (character->CheckCanClimbLadder())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
+        return;
     }
-    else if (character->GetIsOnRope())
+    else if (character->CheckCanClimbRope())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
+        return;
     }
+    else if (character->CheckCanPushTile())
+    {
+        ChangeSubState(SubState::INTERACTION_PUSH_TILE);
+        return;
+    }
+    
 
 
 
@@ -30,6 +40,7 @@ void InteractionState::Update()
 
 void InteractionState::ChangeSubState(SubState newSubState)
 {
+    //if (currentSubState == newSubState) return;
     currentSubState = newSubState;
     character->SetAnimationFrameInfo(INTERACTIONSTATE, static_cast<int>(newSubState));
 }
@@ -49,7 +60,7 @@ const char* InteractionState::GetSubStateName() const {
     case SubState::INTERACTION_EXIT_TUNNEL:  return "INTERACTION_EXIT_TUNNEL";
     case SubState::INTERACTION_EXIT_LEVEL:   return "INTERACTION_EXIT_LEVEL";
     case SubState::INTERACTION_HOLD_ITEM:    return "INTERACTION_HOLD_ITEM";
-    case SubState::INTERACTION_PUSH_ITEM:    return "INTERACTION_PUSH_ITEM";
+    case SubState::INTERACTION_PUSH_TILE:    return "INTERACTION_PUSH_ITEM";
     case SubState::INTERACTION_HANGON_TILE:    return "INTERACTION_HANGON_TILE";
     }
 }
