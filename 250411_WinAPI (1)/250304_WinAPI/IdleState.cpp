@@ -20,11 +20,11 @@ void IdleState::Update() {
 
     InputIntent input = character->GetCurrInputIntent();
 
-    /*if (character->GetFallFromHeight())
+    if (character->GetFallFromHeight())
     {
         ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
         return;
-    }*/
+    }
 
     if (character->IsAirborne()) {
         ChangeSubState(SubState::IDLE_ONAIR);

@@ -91,6 +91,7 @@ private:
 	bool			      isAttacking;
 	bool			      isCrouching;
 	bool					isFaint;
+	bool			isFallFromHeight;
 
 	// For Camera
 	bool			   isLookUpLocked;
@@ -239,7 +240,7 @@ public:
 	void  SetCurrLockTime(float lockTime) { this->currLockTime = lockTime; }
 	float GetlookUpLockTime() { return this->lookUpLockTime; }
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
-
+	bool GetFallFromHeight() { return isFallFromHeight; }
 	
 	
 	float GetVelocitySize();

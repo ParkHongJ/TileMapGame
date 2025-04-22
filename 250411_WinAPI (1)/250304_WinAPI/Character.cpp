@@ -72,8 +72,8 @@ HRESULT Character::Init()
 	rightHandPos = { Pos.x + colliderSize.x / 2, Pos.y };
 	targetHangOnPos = { 0.f, 0.f };
 	interActionPQ = {};
-	interactionRadius = 25.f;
-	interactionOffset = 40.f;
+	interactionRadius = 1.f;
+	interactionOffset = 30.f;
 
 	// settings
 	speed = 300.f;
@@ -312,25 +312,12 @@ void Character::Update(float TimeDelta)
     if (!(state == &interactionState &&
         interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE))
     {
+
         ApplyGravity(TimeDelta);
     }
 
     // 착지 판단 후 위치 보정
-    if (isTouchingBottom && velocity.y > 0 && bottomHitDist < 2.0f)
-    {
-        // 바닥 위로 위치 보정
-        Pos.y += bottomHitDist - colliderOffsetY + colliderSize.y / 2.f;
-
-        // 위치 보정과 동시에 낙사 판정
-
-        /*if (velocity.y > 1500.f)
-        {
-            isFallFromHeight = true;
-
-            ChangeState(&idleState);
-        }*/
-        //return;
-    }
+    
 
     auto km = KeyManager::GetInstance();
    
@@ -402,12 +389,11 @@ void Character::HandleTransitions()
     }
 
     // [2] 공중에서 매달릴 수 있는지 검사
-    if (IsAirborne() && !isAttacking)
-    {
+    if (IsAirborne() && !isAttacking &&
+        !(state == &interactionState) && !(interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_LADDER)
+        ) {
         HangOnTile();
-        return;
     }
-
 
     // [4] 공격
     if (currInput.attack)
@@ -433,7 +419,9 @@ void Character::HandleTransitions()
         ChangeState(&idleState);
 
     // [7] 예외처리
-    if (IsAirborne() && !isAttacking) {
+    if (IsAirborne() && !isAttacking &&
+        !(state == &interactionState) && !(interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_LADDER)
+        ) {
         HangOnTile();
     }
 }
@@ -525,6 +513,8 @@ void Character::HandleMoveLogic() {
 	currLockTime = 0.0f;
 	isLookDownLocked = false;
 	isLookUpLocked = false;
+
+    interActionPQ = {};
 
 	// 현재 서브상태에 따른 처리
 	switch (move->GetCurrentSubState()) {
@@ -797,11 +787,8 @@ bool Character::CheckCanClimbLadder()
 
     if (!interActionPQ.empty())
     {
-        
         if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
         {
-            
-          
             return true; 
         }
     }
@@ -809,23 +796,21 @@ bool Character::CheckCanClimbLadder()
     return false;
 }
 
-bool Character::CheckCanClimbRope()
-{
-    OutputDebugStringA("==================사다리 검사중=========================");
-
-    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
-
-    if (!interActionPQ.empty())
-    {
-        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
-        {
-            // 사다리, 로프 posX 로 플레이어 위치 조정
-            //ChangeState(&interactionState);
-            return true;
-        }
-        return false;
-    }
-}
+//bool Character::CheckCanClimbRope()
+//{
+//    OutputDebugStringA("==================사다리 검사중=========================");
+//
+//    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+//
+//    if (!interActionPQ.empty())
+//    {
+//        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+//        {
+//            return true;
+//        }
+//        return false;
+//    }
+//}
 
 void Character::CheckInterAction()
 {
@@ -839,9 +824,19 @@ void Character::CheckInterAction()
         }
         if (!CheckHangOn())
         {
-            if ((CheckCanClimbLadder() || CheckCanClimbRope()))
+            if ((CheckCanClimbLadder()))
             {
                 ChangeState(&interactionState);
+                return;
+            }
+        /*    else if (CheckCanClimbRope())
+            {
+                ChangeState(&interactionState);
+                return;
+            }*/
+            else
+            {
+                ChangeState(&idleState);
                 return;
             }
         }        
@@ -1041,7 +1036,6 @@ void Character::PlayAnimation()
         if (isClimbing && !hasVerticalInput)
             return; // 입력이 없으면 프레임 진행 중단
 
-
         // 일반 애니메이션
         switch (currFrameInfo.mode)
         {
@@ -1111,6 +1105,22 @@ void Character::ApplyGravity(float TimeDelta)
     }
     else
     {
+        if (isTouchingBottom && bottomHitDist < 2.0f)
+        {
+            // 바닥 위로 위치 보정
+            Pos.y += bottomHitDist - colliderOffsetY + colliderSize.y / 2.f;
+
+            // 위치 보정과 동시에 낙사 판정
+
+            if (velocity.y > 100.f)
+            {
+              // isFallFromHeight = true;
+
+               // ChangeState(&idleState);
+            }
+            //return;
+        }
+
         velocity.y = 0.f;
     }
 }

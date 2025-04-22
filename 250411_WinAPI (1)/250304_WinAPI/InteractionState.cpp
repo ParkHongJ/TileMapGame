@@ -22,11 +22,11 @@ void InteractionState::Update()
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
         return;
     }
-    else if (character->CheckCanClimbRope())
+   /* else if (character->CheckCanClimbRope())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
         return;
-    }
+    }*/
     else if (character->CheckCanPushTile())
     {
         ChangeSubState(SubState::INTERACTION_PUSH_TILE);
