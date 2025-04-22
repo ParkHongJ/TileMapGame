@@ -25,7 +25,8 @@
 #include "Ladder3.h"
 #include "Ladder4.h"
 #include "CameraManager.h"
-#include "snakeMonster.h"
+#include "SnakeMonster.h"
+#include "SpiderMonster.h"
 #include "playerHP_UI.h"
 #include "playerGold_UI.h"
 #include "goldBackground_UI.h"
@@ -58,7 +59,8 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
     ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
-    ImageManager::GetInstance()->AddImage("Snake_Monster", L"Image/monster.png",16,16, renderTarget);
+    ImageManager::GetInstance()->AddImage("Snake_Monster", L"Textures/Monster/SnakeMonster.png",16,16, renderTarget);
+    ImageManager::GetInstance()->AddImage("Spider_Monster", L"Textures/Monster/SpiderMonster.png", 16, 16, renderTarget);
     ImageManager::GetInstance()->AddImage("GameOverPage", L"Textures/UI/Journal/journal_back.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
@@ -91,7 +93,6 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     // ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new TestRenderSort());
     // ObjectManager::GetInstance()->AddObject(RENDER_BACKGROUND, new TestYongSceneBackGround());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Gun());
-    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseGold());
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new TreasureChest());
@@ -113,6 +114,7 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
+    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SpiderMonster());
 
     return S_OK;
 }

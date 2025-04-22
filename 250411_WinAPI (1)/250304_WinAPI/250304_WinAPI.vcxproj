@@ -147,6 +147,7 @@
     <ClCompile Include="ArrowTrap.cpp" />
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
+    <ClCompile Include="SpiderMonster.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="ChangeCobwebBomb.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="ArrowTrap.h" />
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
+    <ClInclude Include="SpiderMonster.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="ChangeCobwebBomb.h" />
