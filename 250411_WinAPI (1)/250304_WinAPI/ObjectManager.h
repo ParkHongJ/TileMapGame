@@ -44,5 +44,6 @@ private:
     unsigned int nextId;
     //unsigned int nextTileId;
     //unsigned int nextInteractId;
+
 };
 

@@ -198,7 +198,20 @@ void Gun::Fire()
 		GunBullet* temp = new GunBullet();
 		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, temp);
 		
-		temp->SetPos(Pos + offset);
+		float spreadRadius = 30.f;
+
+		// 원 안의 랜덤 위치
+		float randAngle = RandomRange(0.f, 360.f); // 도 단위
+		float randDist = RandomRange(0.f, spreadRadius);
+
+		float rad = randAngle * (3.141592f / 180.f);
+		FPOINT randomOffset = {
+			cosf(rad) * randDist,
+			sinf(rad) * randDist
+		};
+
+		FPOINT spawnPos = Pos + offset + randomOffset;
+		temp->SetPos(spawnPos);
 
 		if (isFlip)
 		{

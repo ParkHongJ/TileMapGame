@@ -56,6 +56,6 @@ private:
 	float fadeSpeed = 1.0f;
 
 	bool lastWasFadeOut = false;
-	ID2D1Bitmap* blueTexture = nullptr; // 파란색 비트맵
+	//ID2D1Bitmap* blueTexture = nullptr; // 파란색 비트맵
 };
 

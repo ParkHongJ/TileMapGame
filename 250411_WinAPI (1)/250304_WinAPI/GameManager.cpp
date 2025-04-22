@@ -19,7 +19,7 @@ void GameManager::ReleaseStage()
 
 }
 
-void GameManager::LoadTile(const char* path)
+void GameManager::LoadTile(const char* path, bool isCave = false)
 {
 	FILE* fp = fopen(path, "rb");
 	if (!fp) return;
@@ -46,13 +46,13 @@ void GameManager::LoadTile(const char* path)
 			float renderY = floor((src.pos.y + 0.5f) * GAME_TILE_SIZE);
 
 			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY }, TileType::GROUND);
-
+			tile->SetCaveRender(isCave);
 			tileMap[y][x] = tile;
 		}
 	}
 }
 
-void GameManager::LoadObject(const char* path)
+void GameManager::LoadObject(const char* path, bool isCave)
 {
 	std::ifstream in(path);
 	if (!in.is_open())
@@ -89,13 +89,13 @@ void GameManager::LoadObject(const char* path)
 		float gameTileSize = GAME_TILE_SIZE;
 		
 		// 게임 좌표계로 변환 (필요시 다시 픽셀로 곱하거나 절대 좌표 계산)
+		// 월드에 추가
 		FPOINT worldPos = { gx * gameTileSize, gy * gameTileSize };
 		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, obj);
 		
 		obj->SetPos(worldPos);
 		obj->SetFlip(flipX);
-
-		// 월드에 추가
+		obj->SetCaveRender(isCave);
 	}
 
 	printf("Loaded objects from: %s\n", path);
@@ -171,6 +171,14 @@ void GameManager::GenerateDecoTile()
 	}
 }
 
+void GameManager::CreateCaveRendertarget(ID2D1RenderTarget* mainRT)
+{
+	mainRT->CreateCompatibleRenderTarget(
+		D2D1::SizeF(WINSIZE_X, WINSIZE_Y),
+		&caveRenderTarget
+	);
+}
+
 void GameManager::Init(const char* path)
 {
 	string scenePath = "Data/" + string(path);
@@ -183,6 +191,22 @@ void GameManager::Init(const char* path)
 	GenerateBorderTile();
 	//TODO 임시
 	LoadObject(objectPath.c_str());
+	GenerateCave(path);
+}
+
+void GameManager::GenerateCave(const char* path)
+{
+	string scenePath = "Data/" + string(path);
+
+	string tilePath = scenePath + ".tilemap";
+	string objectPath = scenePath + ".json";
+
+
+}
+
+ID2D1BitmapRenderTarget* GameManager::GetCaveRenderTarget()
+{
+	return caveRenderTarget.Get();
 }
 
 bool GameManager::IsTileValid(int x, int y)
