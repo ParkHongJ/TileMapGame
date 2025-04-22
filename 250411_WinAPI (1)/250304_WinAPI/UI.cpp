@@ -10,6 +10,9 @@ HRESULT UI::Init()
 
 void UI::Release()
 {
+	textColorBrush.Reset();
+	textFormat.Reset();
+	writeFactory.Reset();
 }
 
 void UI::Update(float TimeDelta)
@@ -55,6 +58,67 @@ FPOINT UI::ResolutionRatio()
 	ratio.y = WINSIZE_Y / static_cast<float>(standardImage->GetHeight());
 
 	return ratio;
+}
+
+HRESULT UI::InitTextRenderer(ID2D1HwndRenderTarget* renderTarget, const wchar_t* fontFamily, float fontSize, D2D1::ColorF color)
+{
+	if (!renderTarget)
+		return E_FAIL;
+
+	HRESULT hr = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		&writeFactory
+	);
+	if (FAILED(hr)) return hr;
+
+	hr = writeFactory->CreateTextFormat(
+		fontFamily,
+		nullptr,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		fontSize,
+		L"ko-KR",
+		&textFormat
+	);
+	if (FAILED(hr)) return hr;
+
+	hr = renderTarget->CreateSolidColorBrush(
+		color,
+		&textColorBrush
+	);
+
+	return hr;
+}
+
+void UI::RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& text, float x, float y)
+{
+	if (renderTarget && textFormat && textColorBrush)
+	{
+		D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 200.0f, y + 50.0f); // 텍스트 영역 설정
+		renderTarget->DrawText(
+			text.c_str(),
+			text.length(),
+			textFormat.Get(),
+			layoutRect,
+			textColorBrush.Get()
+		);
+	}
+}
+
+void UI::RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& text, D2D1_RECT_F layoutRect)
+{
+	if (renderTarget && textFormat && textColorBrush)
+	{
+		renderTarget->DrawText(
+			text.c_str(),
+			text.length(),
+			textFormat.Get(),
+			layoutRect,
+			textColorBrush.Get()
+		);
+	}
 }
 
 UI::UI()

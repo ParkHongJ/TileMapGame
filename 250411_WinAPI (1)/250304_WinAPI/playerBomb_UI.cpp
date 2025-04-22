@@ -3,6 +3,12 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 
+playerBomb_UI::playerBomb_UI(ID2D1HwndRenderTarget* renderTarget)
+{
+	if(renderTarget)
+		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF::White);
+}
+
 HRESULT playerBomb_UI::Init()
 {
 	playerBombImage = ImageManager::GetInstance()->FindImage("playerBombImage");
@@ -31,5 +37,10 @@ void playerBomb_UI::Update(float TimeDelta)
 void playerBomb_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (playerBombImage)
+	{
 		playerBombImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
+		std::wstring hpText = std::to_wstring(playerBomb_value);
+		RenderText(renderTarget, hpText, Pos.x + 15, Pos.y + 5);
+	}
 }
+
