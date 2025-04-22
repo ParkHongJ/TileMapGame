@@ -10,6 +10,14 @@ struct Ray {
 	FPOINT direction; // 반드시 정규화된 방향
 };
 
+//namespace std {
+//	template <>
+//	struct hash<CollisionMaskType> {
+//		size_t operator()(const CollisionMaskType& type) const {
+//			return static_cast<size_t>(type);
+//		}
+//	};
+
 struct DebugRay
 {
 	FPOINT origin;
@@ -47,7 +55,10 @@ public:
 	void BoxAll();
 	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, bool debugDraw = false, float debugTime = 0.0f, GameObject* ignoreObject = nullptr);
 	bool RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw = false, float debugTime = 0.0f);
-	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType,bool debugDraw = false, float debugTime = 0.0f);
+	bool RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw = false, float debugTime = 0.0f);
+
+	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw = false, float debugTime = 0.0f);
+	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw = false, float debugTime = 0.0f);
 
 	bool GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects);
 	bool GetObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects);
@@ -64,8 +75,8 @@ private:
 
 private:
 	unordered_map<CollisionMaskType, unordered_set<Collider*>> layerCollisionMap;
-	unordered_map<CollisionMaskType, uint8_t> layerMaskMap;
-	unordered_map<CollisionMaskType, uint8_t> layerRayMaskMap;
+	unordered_map<CollisionMaskType, uint16_t> layerMaskMap;
+	unordered_map<CollisionMaskType, uint16_t> layerRayMaskMap;
 
 	vector<Collider*> colliders;
 	vector<DebugRay> debugRays;

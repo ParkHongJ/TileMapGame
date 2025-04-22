@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "GameObject.h"
+#include "CameraManager.h"
 
 HRESULT GameObject::Init()
 {
@@ -27,6 +28,17 @@ void GameObject::Render(ID2D1HwndRenderTarget* renderTarget)
 
 void GameObject::CheckCulling()
 {
+	//Viewport viewPort = CameraManager::GetInstance()->GetInRect();
+
+	//if (viewPort.left > Pos.x + objectScale.x || viewPort.right < Pos.x - objectScale.x
+	//	|| viewPort.top > Pos.y + objectScale.y || viewPort.bottom < Pos.y - objectScale.y)
+	//{
+	//	bHidden = true;
+	//	return;
+	//}
+
+	//bHidden = false;
+	//if(WINSZE_X)
 	// 카메라 컬링 예상
 }
 
@@ -44,7 +56,7 @@ void GameObject::UpdateAbleCollider(float TimeDelta)
 }
 
 GameObject::GameObject() : bActive(true), bDestroy(false), bHidden(false), 
-Pos({0.f,0.f}), objectRenderId(RENDER_TILE), interactState(INTERACTSTATE::INTERACT_UNABLE)
+Pos({0.f,0.f}), objectRenderId(RENDER_TILE), interactState(INTERACTSTATE::INTERACT_UNABLE), objectScale({0.f,0.f})
 {
 
 }

@@ -82,6 +82,9 @@
     <Filter Include="MainGame\Scene\Jin\Journal">
       <UniqueIdentifier>{e6c18105-8e33-4479-bfec-da67667b50b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\Pitfall">
+      <UniqueIdentifier>{a2b10e7e-f06c-4728-ba4f-db3934fc9f15}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MainGame\Scene\Jin\Shop">
       <UniqueIdentifier>{856b2a87-3f85-4885-b4ca-57f155249dc6}</UniqueIdentifier>
     </Filter>
@@ -323,6 +326,24 @@
     </ClCompile>
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Pitfall.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeCobwebBomb.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder1.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder2.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder3.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClCompile>
+    <ClCompile Include="Ladder4.cpp">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
     </ClCompile>
     <ClCompile Include="ShopKeeper.cpp">
       <Filter>MainGame\Scene\Jin\Shop</Filter>
@@ -613,6 +634,24 @@
     </ClInclude>
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Pitfall.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeCobwebBomb.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder1.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder2.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder3.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
+    </ClInclude>
+    <ClInclude Include="Ladder4.h">
+      <Filter>MainGame\Scene\Yong\Labber</Filter>
     </ClInclude>
     <ClInclude Include="ShopKeeper.h">
       <Filter>MainGame\Scene\Jin\Shop</Filter>

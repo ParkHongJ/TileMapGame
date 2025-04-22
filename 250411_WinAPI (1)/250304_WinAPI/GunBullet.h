@@ -16,7 +16,7 @@ public:
 	virtual void Detect(GameObject* obj) override;
 
 	void Move(float TimeDelta);
-	void SetDrop();
+	void SetDrop(float speed, float angle);
 
 	float RandomRange(float min, float max)
 	{

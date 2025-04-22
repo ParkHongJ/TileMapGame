@@ -24,6 +24,7 @@ public:
 	virtual void Use() override; // 사용
 	virtual void Use(void* info) override;
 	virtual void Detect(GameObject* obj) override;
+	virtual void DeadEvent();
 
 	// 던지거나 죽으면서 뱉으면 DropMove로 움직여보자.
 	virtual void DropMove(float TimeDelta) override;

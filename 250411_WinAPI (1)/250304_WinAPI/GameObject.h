@@ -10,7 +10,7 @@ enum class INTERACTSTATE
 
 enum class OBJECTNAME
 {
-	PLAYER, MONSTER, ITEM, LADDER, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR
+	PLAYER, MONSTER, ITEM, LADDER, TILE, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR
 };
 
 class Collider;
@@ -60,9 +60,7 @@ public:
 	inline void SetFlip(bool bFlipX) { this->bFlipX = bFlipX; }
 
 protected:
-	// 오브젝트 이름 (4.20 추가)
-	OBJECTNAME objectName;
-
+	FPOINT objectScale;
 	// 렌더 분기.
 	RENDERORDER	objectRenderId;
 
@@ -85,6 +83,8 @@ protected:
 
 	// 콜라이더 만들 오브젝트인데 충돌 금지일 때 끄기
 	bool bAbleCol = false;
+protected:
+	OBJECTNAME objectName;
 
 	// 좌우반전. 이게맞나?
 	bool bFlipX = false;

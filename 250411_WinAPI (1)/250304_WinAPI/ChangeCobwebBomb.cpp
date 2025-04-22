@@ -1,84 +1,78 @@
 #include "pch.h"
 #include "Image.h"
 #include "Collider.h"
-#include "IncreaseBomb.h"
+#include "ChangeCobwebBomb.h"
 #include "Character.h"
 #include "CameraManager.h"
+ChangeCobwebBomb::ChangeCobwebBomb()
+{
+}
 
-IncreaseBomb::IncreaseBomb()
+ChangeCobwebBomb::~ChangeCobwebBomb()
 {
 
 }
 
-IncreaseBomb::~IncreaseBomb()
-{
-
-}
-
-HRESULT IncreaseBomb::Init()
+HRESULT ChangeCobwebBomb::Init()
 {
 	dropImage = ImageManager::GetInstance()->FindImage("items");
 	holdImage = ImageManager::GetInstance()->FindImage("items");
 
-	Pos = { 500, 300 };
+	Pos = { 800, 300 };
 
 	//BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, this);
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, CollisionMaskType::ITEM, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
-	interactState = INTERACTSTATE::INTERACT_UNABLE;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
 	return S_OK;
 }
 
-void IncreaseBomb::Update(float TimeDelta)
+void ChangeCobwebBomb::Update(float TimeDelta)
 {
 	DropMove(TimeDelta);
 }
 
-void IncreaseBomb::Render(ID2D1HwndRenderTarget* renderTarget)
+void ChangeCobwebBomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 2); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 2, 2, 0.75f, 0.75f); // 임의값
 }
 
-void IncreaseBomb::Release()
+void ChangeCobwebBomb::Release()
 {
 }
 
-void IncreaseBomb::Equip()
+void ChangeCobwebBomb::Equip()
 {
 }
 
-void IncreaseBomb::Equip(void* info)
+void ChangeCobwebBomb::Equip(void* info)
 {
 	itemState = ItemState::STATE_EQUIP;
 	PlayerStatus* desc = (PlayerStatus*)info;
-	desc->GetInfo()->bombCount += 3;
+	desc->GetInfo()->IsCobweb = true;
 }
 
-void IncreaseBomb::UnEquip()
+void ChangeCobwebBomb::UnEquip()
 {
-
 }
 
-void IncreaseBomb::UnEquip(void* info)
+void ChangeCobwebBomb::UnEquip(void* info)
 {
-
 }
 
-void IncreaseBomb::Use()
+void ChangeCobwebBomb::Use()
 {
-
 }
 
-void IncreaseBomb::DropMove(float TimeDelta)
+void ChangeCobwebBomb::DropMove(float TimeDelta)
 {
-
 }
 
-void IncreaseBomb::Detect(GameObject* obj)
+void ChangeCobwebBomb::Detect(GameObject* obj)
 {
 	if (auto player = obj->GetType<Character>())
 	{

@@ -25,7 +25,7 @@ HRESULT Gun::Init()
 
 	moveDir = { 0,1 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, CollisionMaskType::WORLDOBJECT, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ALWAYS;
@@ -33,32 +33,48 @@ HRESULT Gun::Init()
 
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 3;
-	bulletCnt = 5;
+	bulletCnt = 100;
 	fireImage = ImageManager::GetInstance()->FindImage("fx_big");
 
 	fireOffset = { 100.f, 0.f };
 	frameSpeed = 60.f;
 	//fireOffset = 
-	SetDrop();
+	//SetDrop();
+
+	holdOffset = { 0.f, 20.f };
+	objectName = OBJECTNAME::GUN;
 	return S_OK;
 }
 
 void Gun::Update(float TimeDelta)
 {
-	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
-	{
-		Use();
-	}
-
 	fireCoolTime -= TimeDelta;
-	FrameUpdate(TimeDelta);
 	if (fireCoolTime <= 0.f)
 	{
 		fireCoolTime = 0.f;
 	}
 
-	// 
+	if (0.f >= fireCoolTime)
+	{
+		if (KeyManager::GetInstance()->IsOnceKeyDown(VK_SPACE))
+		{
+			Use();
+		}
+	}
+
+	FrameUpdate(TimeDelta);
+
 	__super::DropMove(TimeDelta);
+
+	if (isFlip)
+	{
+		fireOffset.x = -100.f;
+	}
+
+	else
+	{
+		fireOffset.x = 100.f;
+	}
 	//__super::Update(TimeDelta);
 }
 
@@ -69,10 +85,10 @@ void Gun::Render(ID2D1HwndRenderTarget* renderTarget)
 	//if (ItemState::STATE_EQUIP == itemState)
 	if (isFire)
 	{
-		fireImage->FrameRender(renderTarget, cameraPos.x + fireOffset.x, cameraPos.y + fireOffset.y, fireCurFrameX, 0, 0.5f, 0.5f); // 임의값
+		fireImage->FrameRender(renderTarget, cameraPos.x + fireOffset.x, cameraPos.y + fireOffset.y, fireCurFrameX, 0, 0.5f, 0.5f, isFlip); // 임의값
 	}
 
-	holdImage->FrameRender(renderTarget, cameraPos.x , cameraPos.y , curFrameIndexX, curFrameIndexY); // 임의값
+	holdImage->FrameRender(renderTarget, cameraPos.x , cameraPos.y , curFrameIndexX, curFrameIndexY, 0.75f, 0.75f, isFlip); // 임의값
 	//else
 	{
 		//dropImage->FrameRender(renderTarget, Pos.x, Pos.y, curFrameIndexX, curFrameIndexY); // 임의값
@@ -101,7 +117,7 @@ void Gun::Equip(GameObject* owner)
 void Gun::UnEquip()
 {
 	__super::UnEquip();
-	SetDrop();
+	//SetDrop();
 }
 
 void Gun::UnEquip(void* info)
@@ -118,7 +134,6 @@ void Gun::Use()
 		isFire = true;
 		Fire();
 	}
-	//Pos = { 1000, 1000 }; // Test
 }
 
 void Gun::Use(void* info)
@@ -136,10 +151,20 @@ void Gun::Use(void* info)
 
 void Gun::Detect(GameObject* obj)
 {
-	objectRenderId = RENDER_HOLD;
-	interactState = INTERACTSTATE::INTERACT_UNABLE;
-	//__super::Detect(obj);
+	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
+	{
+		return;
+	}
 
+	if (OBJECTNAME::TILE == obj->GetObjectName())
+	{
+		return;
+	}
+
+	obj->SetDestroy();
+	//objectRenderId = RENDER_HOLD;
+	//interactState = INTERACTSTATE::INTERACT_UNABLE;
+	//__super::Detect(obj);
 }
 
 void Gun::FrameUpdate(float TimeDelta)
@@ -158,14 +183,34 @@ void Gun::FrameUpdate(float TimeDelta)
 
 void Gun::Fire()
 {
+	FPOINT offset = { 150.f,0.f };
+
+	if (isFlip)
+	{
+		offset.x *= -1;
+	}
+
+	float angle = 30.f; // 30 ~ -30
+
 	for (int i = 0; i < 5; ++i)
 	{
 		GunBullet* temp = new GunBullet();
 		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, temp);
-		temp->SetPos(Pos);
-		temp->SetDrop();
+		
+		temp->SetPos(Pos + offset);
+
+		if (isFlip)
+		{
+			temp->SetDrop(1300.f, angle + 180.f);
+		}
+
+		else
+		{
+			temp->SetDrop(1300.f, angle);
+		}
+		
+		angle -= 15.f;
 	}
-	
 	//fx_big
 }
 

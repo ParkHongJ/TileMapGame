@@ -5,6 +5,7 @@ struct PlayerStatusInfo
 	unsigned int playerMaxHP;
 	unsigned int bombCount;
 	unsigned int gold;
+	bool IsCobweb;
 	//unsigned int ropeCount;
 }typedef PLAYERSTATUSDESC;
 
@@ -44,6 +45,9 @@ public:
 
 	inline const unsigned int GetGold() const { return info.gold; };
 	inline void SetGold(unsigned int gold) { info.gold = gold; };
+
+	inline const bool IsCobweb() const { return info.IsCobweb; };
+
 
 	inline PLAYERSTATUSDESC* GetInfo() { return &info; };
 

@@ -14,12 +14,10 @@ public:
 	virtual void Release() override;
 	virtual void Detect(GameObject* obj) override;
 
-	void InstallLadder(FPOINT pos, int cnt);
-private:
+protected:
 	Image* image;
 	int CurFrameX;
 	int CurFrameY;
 	int MaxFrameX;
-
 };
 
