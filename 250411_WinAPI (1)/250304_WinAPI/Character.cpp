@@ -359,6 +359,11 @@ void Character::HandleTransitions()
     }
 
 
+    // [3] 상호작용
+    CheckInterAction();
+
+
+
     if (currInput.jump && !IsAirborne())
     {
         Jump();
@@ -403,8 +408,6 @@ void Character::HandleTransitions()
         return;
     }
 
-    // [3] 상호작용
-    CheckInterAction();
 
     // [4] 공격
     if (currInput.attack)
@@ -418,14 +421,16 @@ void Character::HandleTransitions()
         return;
 
     // [5] 이동
-    if ((currInput.moveLeft || currInput.moveRight))
+    if (!(state == &interactionState) &&
+        (currInput.moveLeft || currInput.moveRight))
     {
         ChangeState(&moveState);
         return;
     }
 
     // [6] 기본 유휴
-    ChangeState(&idleState);
+    if (!(state == &interactionState))
+        ChangeState(&idleState);
 
     // [7] 예외처리
     if (IsAirborne() && !isAttacking) {
@@ -614,12 +619,14 @@ void Character::HandleInteractionLogic()
     switch (inter->GetCurrentSubState()) {
     case InteractionState::SubState::INTERACTION_CLIMB_LADDER:
     case InteractionState::SubState::INTERACTION_CLIMB_ROPE:
-        if (!MoveY()) ChangeState(&moveState);
+        MoveY();
+        //if (!MoveY()) 
+            //ChangeState(&moveState);
         break;
     case InteractionState::SubState::INTERACTION_HANGON_TILE:
         break;
     case InteractionState::SubState::INTERACTION_PUSH_TILE:
-        Move();
+        //Move();
         break;
 
 	}
@@ -790,13 +797,11 @@ bool Character::CheckCanClimbLadder()
 
     if (!interActionPQ.empty())
     {
-
-       // return false;
+        
         if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
         {
-            // 사다리, 로프 posX 로 플레이어 위치 조정
-            int i = 5;
-            //ChangeState(&interactionState);
+            
+          
             return true; 
         }
     }
@@ -836,12 +841,12 @@ void Character::CheckInterAction()
         {
             if ((CheckCanClimbLadder() || CheckCanClimbRope()))
             {
-                //ChangeState(&interactionState);
+                ChangeState(&interactionState);
                 return;
             }
         }        
     }
-    else if (currInput.interact)
+   /* else if (currInput.interact)
     {
         CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
         if (!interActionPQ.empty())
@@ -853,7 +858,7 @@ void Character::CheckInterAction()
                 return;
             }
         }
-    }
+    }*/
 
     if (isTouchingBottom)
     {
@@ -1025,6 +1030,18 @@ void Character::PlayAnimation()
     }
     else
     {
+        // 사다리 상호작용
+        bool isClimbing =
+            state == &interactionState &&
+            (interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_LADDER ||
+                interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_ROPE);
+
+        bool hasVerticalInput = currInput.moveUp || currInput.moveDown;
+
+        if (isClimbing && !hasVerticalInput)
+            return; // 입력이 없으면 프레임 진행 중단
+
+
         // 일반 애니메이션
         switch (currFrameInfo.mode)
         {
@@ -1151,6 +1168,12 @@ void Character::Move()
     {
         return;
     }
+    if ((state == &interactionState &&
+        interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_CLIMB_LADDER))
+    {
+        return;
+    }
+
 
 
 	float vx = 0.f;
@@ -1219,6 +1242,7 @@ bool Character::MoveY()
 
     if (CanGoY(vy)) {
 
+        velocity.y = vy;
         Pos.y += velocity.y * TimeDelta;
         return true;
     }
@@ -1241,6 +1265,8 @@ bool Character::CanGoY(float vy)
         if(it->GetObjectName() == OBJECTNAME::LADDER ||
            it->GetObjectName() == OBJECTNAME::ROPE )
         {
+            Pos.x = it->GetPos().x; // 사다리 중앙 정렬
+
             inCircleObjects.clear();
             inCircleObjects.shrink_to_fit();
             return true;
