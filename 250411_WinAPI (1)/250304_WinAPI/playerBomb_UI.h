@@ -17,7 +17,7 @@ public:
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 	playerBomb_UI() {};
-	playerBomb_UI(ID2D1HwndRenderTarget* renderTarget);
+	playerBomb_UI(ID2D1RenderTarget* renderTarget);
 
 };
 

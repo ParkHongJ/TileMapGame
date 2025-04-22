@@ -3,7 +3,7 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 
-playerHP_UI::playerHP_UI(ID2D1HwndRenderTarget* renderTarget)
+playerHP_UI::playerHP_UI(ID2D1RenderTarget* renderTarget)
 {
 	if (renderTarget)
 	{

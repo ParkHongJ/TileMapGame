@@ -60,7 +60,7 @@ FPOINT UI::ResolutionRatio()
 	return ratio;
 }
 
-HRESULT UI::InitTextRenderer(ID2D1HwndRenderTarget* renderTarget, const wchar_t* fontFamily, float fontSize, D2D1::ColorF color)
+HRESULT UI::InitTextRenderer(ID2D1RenderTarget* renderTarget, const wchar_t* fontFamily, float fontSize, D2D1::ColorF color)
 {
 	if (!renderTarget)
 		return E_FAIL;
@@ -92,7 +92,7 @@ HRESULT UI::InitTextRenderer(ID2D1HwndRenderTarget* renderTarget, const wchar_t*
 	return hr;
 }
 
-void UI::RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& text, float x, float y)
+void UI::RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, float x, float y)
 {
 	if (renderTarget && textFormat && textColorBrush)
 	{
@@ -107,7 +107,7 @@ void UI::RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& tex
 	}
 }
 
-void UI::RenderText(ID2D1HwndRenderTarget* renderTarget, const std::wstring& text, D2D1_RECT_F layoutRect)
+void UI::RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, D2D1_RECT_F layoutRect)
 {
 	if (renderTarget && textFormat && textColorBrush)
 	{

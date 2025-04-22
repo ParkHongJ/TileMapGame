@@ -16,6 +16,6 @@ public:
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 	playerRope_UI() {};
-	playerRope_UI(ID2D1HwndRenderTarget* renderTarget);
+	playerRope_UI(ID2D1RenderTarget* renderTarget);
 };
 

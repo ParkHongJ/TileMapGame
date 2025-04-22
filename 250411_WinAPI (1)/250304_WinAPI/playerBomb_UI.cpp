@@ -3,7 +3,7 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 
-playerBomb_UI::playerBomb_UI(ID2D1HwndRenderTarget* renderTarget)
+playerBomb_UI::playerBomb_UI(ID2D1RenderTarget* renderTarget)
 {
 	if(renderTarget)
 		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF::White);

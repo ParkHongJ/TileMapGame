@@ -19,7 +19,7 @@ public:
 	virtual void Release() override;
 	
 	playerHP_UI() {};
-	playerHP_UI(ID2D1HwndRenderTarget* renderTarget);
+	playerHP_UI(ID2D1RenderTarget* renderTarget);
 	virtual ~playerHP_UI() {};
 };
 

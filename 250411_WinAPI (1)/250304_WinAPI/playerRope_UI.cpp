@@ -3,7 +3,7 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 
-playerRope_UI::playerRope_UI(ID2D1HwndRenderTarget* renderTarget)
+playerRope_UI::playerRope_UI(ID2D1RenderTarget* renderTarget)
 {
 	if (renderTarget)
 		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF::White);

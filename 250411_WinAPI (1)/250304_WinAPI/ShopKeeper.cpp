@@ -16,6 +16,6 @@ void ShopKeeper::Update(float TimeDelta)
 {
 }
 
-void ShopKeeper::Render(ID2D1HwndRenderTarget* renderTarget)
+void ShopKeeper::Render(ID2D1RenderTarget* renderTarget)
 {
 }
