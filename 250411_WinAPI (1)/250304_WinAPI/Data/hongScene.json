@@ -1,20 +1,101 @@
 [
     {
-        "atlas": "Textures/char_lime.png",
+        "atlas": "Textures/char_yellow.png",
         "flipX": false,
         "height": 128.0,
-        "name": "DummyHongPlayer",
+        "name": "Character",
         "width": 128.0,
-        "x": 836.0,
-        "y": 697.0
+        "x": 1216.0,
+        "y": 448.0
     },
     {
-        "atlas": "Textures/floormisc.png",
+        "atlas": "Textures/Monster/SnakeMonster.png",
         "flipX": false,
         "height": 128.0,
-        "name": "ArrowTrap",
+        "name": "SnakeMonster",
         "width": 128.0,
-        "x": 192.0,
-        "y": 320.0
+        "x": 1600.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "Gun",
+        "width": 128.0,
+        "x": 1344.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "ChangeCobwebBomb",
+        "width": 128.0,
+        "x": 1472.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "IncreaseBomb",
+        "width": 128.0,
+        "x": 1856.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "IncreaseGold",
+        "width": 128.0,
+        "x": 1984.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/CaveTile.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "Ladder1",
+        "width": 128.0,
+        "x": 1088.0,
+        "y": 448.0
+    },
+    {
+        "atlas": "Textures/CaveTile.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "Ladder2",
+        "width": 128.0,
+        "x": 1088.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/CaveTile.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "Ladder3",
+        "width": 128.0,
+        "x": 1088.0,
+        "y": 704.0
+    },
+    {
+        "atlas": "Textures/CaveTile.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "Ladder4",
+        "width": 128.0,
+        "x": 1088.0,
+        "y": 832.0
+    },
+    {
+        "atlas": "Textures/Monster/SpiderMonster.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SpiderMonster",
+        "width": 128.0,
+        "x": 2240.0,
+        "y": 576.0
     }
 ]

@@ -90,11 +90,12 @@ void GameManager::LoadObject(const char* path)
 		
 		// 게임 좌표계로 변환 (필요시 다시 픽셀로 곱하거나 절대 좌표 계산)
 		FPOINT worldPos = { gx * gameTileSize, gy * gameTileSize };
+		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, obj);
+		
 		obj->SetPos(worldPos);
 		obj->SetFlip(flipX);
 
 		// 월드에 추가
-		ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_ITEM, obj);
 	}
 
 	printf("Loaded objects from: %s\n", path);
