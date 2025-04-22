@@ -34,7 +34,7 @@ void ChangeCobwebBomb::Update(float TimeDelta)
 	DropMove(TimeDelta);
 }
 
-void ChangeCobwebBomb::Render(ID2D1HwndRenderTarget* renderTarget)
+void ChangeCobwebBomb::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 

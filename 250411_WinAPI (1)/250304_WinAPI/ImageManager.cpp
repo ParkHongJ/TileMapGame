@@ -39,7 +39,7 @@ void ImageManager::Release()
 	ReleaseInstance();
 }
 
-Image* ImageManager::AddImage(string key, const wchar_t* filePath, ID2D1HwndRenderTarget* renderTarget)
+Image* ImageManager::AddImage(string key, const wchar_t* filePath, ID2D1RenderTarget* renderTarget)
 {
 	Image* image = nullptr;
 	image = FindImage(key);
@@ -109,7 +109,7 @@ Image* ImageManager::AddImage(string key, const wchar_t* filePath, ID2D1HwndRend
 //	return image;
 //}
 
-Image* ImageManager::AddImage(string key, const wchar_t* filePath, int maxFrameX, int maxFrameY, ID2D1HwndRenderTarget* renderTarget)
+Image* ImageManager::AddImage(string key, const wchar_t* filePath, int maxFrameX, int maxFrameY, ID2D1RenderTarget* renderTarget)
 {
 	Image* image = nullptr;
 	image = FindImage(key);

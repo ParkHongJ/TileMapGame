@@ -107,7 +107,7 @@ void TestHyoBackGround::Update(float TimeDelta)
 	}
 }
 
-void TestHyoBackGround::Render(ID2D1HwndRenderTarget* renderTarget)
+void TestHyoBackGround::Render(ID2D1RenderTarget* renderTarget)
 {
 	Viewport viewTile = CameraManager::GetInstance()->GetInRect();
 	//if (rc.right > WINSIZE_X || rc.left < 0 || rc.top < 0 || rc.bottom > WINSIZE_Y) continue; 

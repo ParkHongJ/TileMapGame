@@ -7,6 +7,7 @@
 #include "PlayerStatus.h"
 #include "ParticleManager.h"
 #include "Particle.h"
+#include "Tile.h"
 
 Bomb::Bomb()
 {
@@ -66,7 +67,7 @@ void Bomb::Update(float TimeDelta)
 	}
 }
 
-void Bomb::Render(ID2D1HwndRenderTarget* renderTarget)
+void Bomb::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
@@ -247,7 +248,9 @@ void Bomb::Explosion()
 
 	for (auto& iter : temp)
 	{
-		iter->SetDestroy();
+		if (Tile* tile = dynamic_cast<Tile*>(iter))
+			tile->Destruction();
+		//iter->SetDestroy();
 	}
 
 	SetDestroy();

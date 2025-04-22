@@ -9,7 +9,7 @@
 #include "Whip.h"
 #include "IncreaseBomb.h"
 
-HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT YongScene::Init(ID2D1RenderTarget* renderTarget)
 {
 
     ImageManager::GetInstance()->AddImage(
@@ -51,7 +51,7 @@ void YongScene::Update(float TimeDelta)
     //Test->Update(TimeDelta);
 }
 
-void YongScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void YongScene::Render(ID2D1RenderTarget* renderTarget)
 {
    // backGround->Render(renderTarget, 0, 0);
    // Test->Render(renderTarget);

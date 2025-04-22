@@ -16,6 +16,6 @@ void Obj_InterectUI::Update(float TimeDelta)
 {
 }
 
-void Obj_InterectUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void Obj_InterectUI::Render(ID2D1RenderTarget* renderTarget)
 {
 }

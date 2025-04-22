@@ -78,7 +78,7 @@ void HyoCharacter::Update(float TimeDelta)
 	CameraManager::GetInstance()->SetLookingState(isLookUp, isLookDown);
 }
 
-void HyoCharacter::Render(ID2D1HwndRenderTarget* renderTarget)
+void HyoCharacter::Render(ID2D1RenderTarget* renderTarget)
 {
 	/*testBackGround->Render(renderTarget, backGroundPos.x + CameraManager::GetInstance()->GetPos().x,
 		backGroundPos.y + CameraManager::GetInstance()->GetPos().y);*/

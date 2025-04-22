@@ -43,7 +43,7 @@ void Whip::Update(float TimeDelta)
 	//FrameUpdate(TimeDelta);
 }
 
-void Whip::Render(ID2D1HwndRenderTarget* renderTarget)
+void Whip::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 

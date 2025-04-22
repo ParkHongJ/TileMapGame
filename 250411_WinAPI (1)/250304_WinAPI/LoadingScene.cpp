@@ -2,7 +2,7 @@
 #include "LoadingScene.h"
 #include "Image.h"
 
-HRESULT LoadingScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT LoadingScene::Init(ID2D1RenderTarget* renderTarget)
 {
 	/*bg = ImageManager::GetInstance()->AddImage("·Îµù_1",
 		L"image/loading.bmp", 852, 480);*/
@@ -18,7 +18,7 @@ void LoadingScene::Update(float TimeDelta)
 {
 }
 
-void LoadingScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void LoadingScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	//if (bg)
 		//bg->Render(hdc);

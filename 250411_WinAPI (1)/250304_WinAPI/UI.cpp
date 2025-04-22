@@ -29,7 +29,7 @@ void UI::Update(float TimeDelta)
 	}
 }
 
-void UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void UI::Render(ID2D1RenderTarget* renderTarget)
 {
 }
 

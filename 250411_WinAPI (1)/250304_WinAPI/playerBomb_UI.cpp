@@ -28,7 +28,7 @@ void playerBomb_UI::Update(float TimeDelta)
 
 }
 
-void playerBomb_UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void playerBomb_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (playerBombImage)
 		playerBombImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);

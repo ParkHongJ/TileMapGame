@@ -5,7 +5,7 @@ class Particle
 public:
 	void Init(string imageStr, FPOINT pos, float angle, float size, float lifeTime, int atlasX, int atlasY);
 	virtual void Update(float TimeDelta) ;
-	virtual void Render(ID2D1HwndRenderTarget* rt);
+	virtual void Render(ID2D1RenderTarget* rt);
 	virtual void Release();
 
 	bool IsEnd() const { return isEnd; }
@@ -30,7 +30,7 @@ public:
 
 	virtual bool HandlesRender() const { return false; } // ±âº»Àº false
 	virtual void Update(Particle& particle, float dt) = 0;
-	virtual void Render(Particle& particle, ID2D1HwndRenderTarget* rt) {}
+	virtual void Render(Particle& particle, ID2D1RenderTarget* rt) {}
 	virtual ~IParticleOption() = default;
 };
 
@@ -57,7 +57,7 @@ public:
 
 	void Init(FPOINT velocity, float bounciness);
 	virtual void Update(Particle& particle, float TimeDelta) override;
-	virtual void Render(Particle& particle, ID2D1HwndRenderTarget* rt) override;
+	virtual void Render(Particle& particle, ID2D1RenderTarget* rt) override;
 };
 
 class HomingLinearOption : public IParticleOption
@@ -99,7 +99,7 @@ public:
 			p.isEnd = true;
 	}
 
-	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+	void Render(Particle& p, ID2D1RenderTarget* rt) override;
 };
 
 class AlphaOption : public IParticleOption
@@ -113,7 +113,7 @@ public:
 	bool HandlesRender() const override { return false; }
 	void Update(Particle& p, float dt) override;
 
-	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+	void Render(Particle& p, ID2D1RenderTarget* rt) override;
 };
 
 class SizeOption : public IParticleOption
@@ -127,7 +127,7 @@ public:
 	bool HandlesRender() const override { return false; }
 	void Update(Particle& p, float dt) override;
 
-	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+	void Render(Particle& p, ID2D1RenderTarget* rt) override;
 };
 
 class TrailOption : public IParticleOption
@@ -143,5 +143,5 @@ public:
 	bool HandlesRender() const override { return false; }
 	void Update(Particle& p, float dt) override;
 
-	void Render(Particle& p, ID2D1HwndRenderTarget* rt) override;
+	void Render(Particle& p, ID2D1RenderTarget* rt) override;
 };

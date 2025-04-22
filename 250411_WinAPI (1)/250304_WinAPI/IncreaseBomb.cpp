@@ -36,7 +36,7 @@ void IncreaseBomb::Update(float TimeDelta)
 	DropMove(TimeDelta);
 }
 
-void IncreaseBomb::Render(ID2D1HwndRenderTarget* renderTarget)
+void IncreaseBomb::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 

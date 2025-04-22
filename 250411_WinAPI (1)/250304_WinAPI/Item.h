@@ -27,7 +27,7 @@ public:
 public:
 	virtual HRESULT Init();
 	virtual void Update(float TimeDelta);
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Render(ID2D1RenderTarget* renderTarget);
 	virtual void Release();
 	/// <summary>
 	/// 장착하고 바로 먹어지면 Equip(info)로 내부 처리 + 바로 UnEquip 해보기.

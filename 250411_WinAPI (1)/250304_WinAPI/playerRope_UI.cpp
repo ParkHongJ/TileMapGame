@@ -27,7 +27,7 @@ void playerRope_UI::Update(float TimeDelta)
 		RequestOpaqueChange();
 }
 
-void playerRope_UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void playerRope_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (playerRopeImage)
 		playerRopeImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);

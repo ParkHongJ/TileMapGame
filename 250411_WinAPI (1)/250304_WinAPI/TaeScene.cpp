@@ -11,7 +11,7 @@
 #include "ObjectManager.h"
 
 
-HRESULT TaeScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT TaeScene::Init(ID2D1RenderTarget* renderTarget)
 {
   
     /*backGround = new Image();
@@ -72,7 +72,7 @@ void TaeScene::Update(float TimeDelta)
 
 }
 
-void TaeScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void TaeScene::Render(ID2D1RenderTarget* renderTarget)
 {
 
     if (yellow)

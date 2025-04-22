@@ -286,7 +286,7 @@ void SnakeMonster::ReverseMove()
         Pos.x += dir.x * moveSpeed * time;
 }
 
-void SnakeMonster::Render(ID2D1HwndRenderTarget* renderTarget)
+void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 

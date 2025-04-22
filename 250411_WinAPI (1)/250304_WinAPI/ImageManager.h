@@ -25,7 +25,7 @@ public:
 	void Release();
 
 	Image* AddImage(string key, const wchar_t* filePath,
-		ID2D1HwndRenderTarget* renderTarget);
+		ID2D1RenderTarget* renderTarget);
 
 	//Legacy
 	/*Image* AddImage(string key, const wchar_t* filePath,
@@ -34,7 +34,7 @@ public:
 		COLORREF transColor = FALSE);*/
 
 	Image* AddImage(string key, const wchar_t* filePath, 
-		int maxFrameX, int maxFrameY, ID2D1HwndRenderTarget* renderTarget);
+		int maxFrameX, int maxFrameY, ID2D1RenderTarget* renderTarget);
 
 	void DeleteImage(string key);
 	Image* FindImage(string key);

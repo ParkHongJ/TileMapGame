@@ -33,10 +33,10 @@ private:
 	bool isAlive;
 
 public:
-	virtual HRESULT Init(ID2D1HwndRenderTarget* renderTarget);
+	virtual HRESULT Init(ID2D1RenderTarget* renderTarget);
 	virtual void Release();		
 	virtual void Update(float TimeDelta);
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Render(ID2D1RenderTarget* renderTarget);
 
 	inline void SetLifeCount(int setValue) { lifeCount = setValue; if (lifeCount <= 0) lifeCount = 0; };
 	inline void SetBombCount(int setValue) { bombCount = setValue; };

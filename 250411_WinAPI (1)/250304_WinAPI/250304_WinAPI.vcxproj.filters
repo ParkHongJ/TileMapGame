@@ -353,9 +353,15 @@
     </ClCompile>
     <ClCompile Include="Arrow.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="SpiderMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
+    <ClCompile Include="NiddleTrap.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="HeavyBlock.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -664,9 +670,15 @@
     </ClInclude>
     <ClInclude Include="Arrow.h">
       <Filter>MainGame\Scene\Hong</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="SpiderMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
+    </ClInclude>
+    <ClInclude Include="NiddleTrap.h">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="HeavyBlock.h">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

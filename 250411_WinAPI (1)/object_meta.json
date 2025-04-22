@@ -40,6 +40,14 @@
         }
     },
     {
+        "name": "HeavyBlock",
+        "atlasPath": "Textures/floormisc.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "IncreaseBomb",
         "atlasPath": "Textures/items.png",
         "cellSize": {
@@ -82,6 +90,14 @@
     {
         "name": "Ladder4",
         "atlasPath": "Textures/CaveTile.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "NiddleTrap",
+        "atlasPath": "Textures/floor_cave.png",
         "cellSize": {
             "x": 128,
             "y": 128

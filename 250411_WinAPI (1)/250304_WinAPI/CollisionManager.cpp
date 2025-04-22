@@ -135,7 +135,7 @@ void CollisionManager::Clear()
     }
 }
 
-void CollisionManager::DebugRender(ID2D1HwndRenderTarget* renderTarget)
+void CollisionManager::DebugRender(ID2D1RenderTarget* renderTarget)
 {
 #ifdef _DEBUG
 	for (auto& collider : colliders)

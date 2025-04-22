@@ -12,7 +12,7 @@ public:
 	virtual void Release();					
 	virtual void Update(float TimeDelta);	
 	virtual void LateUpdate(float TimeDelta);
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget);
+	virtual void Render(ID2D1RenderTarget* renderTarget);
 
 public:
 	virtual void Detect(GameObject* obj);

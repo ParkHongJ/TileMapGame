@@ -169,7 +169,7 @@ void SpiderMonster::ReverseMove()
 {
 }
 
-void SpiderMonster::Render(ID2D1HwndRenderTarget* renderTarget)
+void SpiderMonster::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 

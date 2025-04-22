@@ -19,7 +19,7 @@ Scene* SceneManager::nextScene = nullptr;
 //	return 0;
 //}
 
-void SceneManager::Init(ID2D1HwndRenderTarget* renderTarget)
+void SceneManager::Init(ID2D1RenderTarget* renderTarget)
 {
 	this->renderTarget = renderTarget;
 }
@@ -64,7 +64,7 @@ void SceneManager::LateUpdate(float TimeDelta)
 	}
 }
 
-void SceneManager::Render(ID2D1HwndRenderTarget* renderTarget)
+void SceneManager::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (currentScene)
 	{

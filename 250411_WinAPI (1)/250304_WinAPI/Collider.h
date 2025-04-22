@@ -6,7 +6,7 @@ class CollisionManager;
 struct Ray;
 struct RaycastHit;
 
-// WorldObject, Player, Monster, Item, Tile, Effect
+// WorldObject, Player, Monster, Item, Tile, Effect, Pushable
 
 enum class ColliderType
 {
@@ -23,7 +23,8 @@ enum class CollisionMaskType : uint16_t
 	ITEM = 1 << 3,
 	TILE = 1 << 4,
 	EFFECT = 1 << 5,
-	PLAYERATTACK = 1 << 6
+	PLAYERATTACK = 1 << 6,
+	PUSHABLE = 1 << 7, // 이게맞나?
 };
 
 class Collider

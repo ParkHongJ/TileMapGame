@@ -7,7 +7,7 @@
 #include "CameraManager.h"
 #include "TestHyoBackGround.h"
 
-HRESULT HyoScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT HyoScene::Init(ID2D1RenderTarget* renderTarget)
 {
 
 	background = ImageManager::GetInstance()->FindImage("Hyo_BackGround");
@@ -60,7 +60,7 @@ void HyoScene::Update(float TimeDelta)
 	                               
 }    
 
-void HyoScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void HyoScene::Render(ID2D1RenderTarget* renderTarget)
 {  
 	Viewport viewTile = CameraManager::GetInstance()->GetInRect();
 

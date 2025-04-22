@@ -18,7 +18,7 @@ void AnimationManager::Update(float TimeDelta)
 	}
 }
 
-void AnimationManager::Render(ID2D1HwndRenderTarget* renderTarget)
+void AnimationManager::Render(ID2D1RenderTarget* renderTarget)
 {
 	Animations[CurAnimKey]->Render(renderTarget);
 }

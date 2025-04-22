@@ -26,7 +26,7 @@ void Ladder3::Update(float TimeDelta)
 {
 }
 
-void Ladder3::Render(ID2D1HwndRenderTarget* renderTarget)
+void Ladder3::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
     image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 4, 2); // ÀÓÀÇ°ª

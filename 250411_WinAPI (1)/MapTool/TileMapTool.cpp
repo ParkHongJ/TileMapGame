@@ -377,6 +377,7 @@ void TileMapTool::DrawTileMap()
                 if (ImGui::MenuItem("FlipX"))
                 {
                     contextTarget->flipX = !contextTarget->flipX;
+                    contextTarget = nullptr;
                 }
             }
             ImGui::EndPopup();
@@ -580,6 +581,13 @@ void TileMapTool::DrawObjectPalette()
 
     ImGui::Begin("Object Palette");
 
+
+
+    const float buttonSize = 64.f;  // 버튼 크기
+    const float padding = 4.f;      // 버튼 간 여백
+    const float totalWidth = buttonSize + padding;
+
+
     for (const auto& pair : ObjectRegistry::Get().GetAll())
     {
         const std::string& name = pair.first;
@@ -595,6 +603,16 @@ void TileMapTool::DrawObjectPalette()
         ImVec2 uv0 = ImVec2(0.0f, 0.0f);
         ImVec2 uv1 = ImVec2((float)meta.cellWidth / atlasSize.x, (float)meta.cellHeight / atlasSize.y); // ← 2048 고정 해상도 기준
 
+
+        // 다음 위치 계산
+        float nextX = ImGui::GetCursorPosX() + totalWidth;
+        float regionRight = ImGui::GetContentRegionAvail().x;
+
+        if (nextX + buttonSize > regionRight)
+            ImGui::NewLine();  // 줄 바꿈
+        else
+            ImGui::SameLine(); // 옆으로 계속
+
         ImGui::BeginGroup();
 
         ImTextureID textureId = reinterpret_cast<uintptr_t>(texture);
@@ -602,6 +620,8 @@ void TileMapTool::DrawObjectPalette()
         {
             selectedObjectName = name;
         }
+
+       
 
         // 드래그 시작
         if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
@@ -612,6 +632,7 @@ void TileMapTool::DrawObjectPalette()
         }
 
         ImGui::Text("%s", name.c_str());
+
 
         ImGui::EndGroup();
 

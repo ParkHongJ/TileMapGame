@@ -48,7 +48,7 @@ HRESULT MainGame::Init()
 	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 
 
-	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/char_lemon.png", m_pRenderTarget.Get());
+	backBuffer = ImageManager::GetInstance()->AddImage("BackBuffer", L"Textures/back.png", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
@@ -107,6 +107,22 @@ void MainGame::Update()
 	ObjectManager::GetInstance()->Update(deltaTime);
 	CollisionManager::GetInstance()->Update(deltaTime);
 	ParticleManager::GetInstance()->Update(deltaTime);
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_ADD)) // 한 번만
+	{
+		fadeState = (lastWasFadeOut ? FadeState::FadeIn : FadeState::FadeOut);
+		fadeT = 0.0f;
+		lastWasFadeOut = !lastWasFadeOut;
+	}
+	if (fadeState != FadeState::None)
+	{
+		fadeT += deltaTime * fadeSpeed;
+		if (fadeT >= 1.0f)
+		{
+			fadeT = 1.0f;
+			fadeState = FadeState::None;
+		}
+	}
 }
 
 void MainGame::LateUpdate()
@@ -205,6 +221,12 @@ HRESULT MainGame::InitD2D()
 
 	m_pFactory->CreateHwndRenderTarget(rtProps, hwndRTProps, &m_pRenderTarget);
 
+	// [2] 중간 렌더타겟 생성 (메모리용 비트맵 기반)
+	m_pRenderTarget->CreateCompatibleRenderTarget(
+		D2D1::SizeF(WINSIZE_X, WINSIZE_Y),
+		&m_pIntermediateRT
+	);
+
 	// 브러시 (예: 기본 색)
 	m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &GBrush);
 
@@ -233,46 +255,135 @@ HRESULT MainGame::InitD2D()
 		);
 	}
 
+	D2D1_SIZE_U size = D2D1::SizeU(WINSIZE_X, WINSIZE_Y);
+	D2D1_BITMAP_PROPERTIES props = {};
+	props.pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
+	props.dpiX = 96.0f;
+	props.dpiY = 96.0f;
+
+	std::vector<DWORD> pixels(WINSIZE_X * WINSIZE_Y, 0xFF0000FF); // 파란색 RGBA
+
+	m_pRenderTarget->CreateBitmap(
+		size,
+		pixels.data(),
+		WINSIZE_X * 4, // pitch
+		&props,
+		&blueTexture
+	);
+
 	return S_OK;
 }
 
 void MainGame::BeginDraw()
 {
-	m_pRenderTarget->BeginDraw();
+	ID2D1RenderTarget* pRT1 = m_pIntermediateRT;
 
-	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
+	pRT1->BeginDraw();
+
+	pRT1->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
+
+	/*m_pRenderTarget->BeginDraw();
+
+	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));*/
 }
 
 void MainGame::Draw()
 {
-	//이게 맵이라고 생각해
-	//backBuffer->Render(m_pRenderTarget.Get(), 0, 0, 0.5f, 0.5f, 0.f, 0.f);
+	ID2D1RenderTarget* pRT1 = m_pIntermediateRT;
 
-	SceneManager::GetInstance()->Render(m_pRenderTarget.Get());
-	ObjectManager::GetInstance()->Render(m_pRenderTarget.Get());
-	ParticleManager::GetInstance()->Render(m_pRenderTarget.Get());
 
-	// Legacy
-	//// 백버퍼에 먼저 복사
-	//HDC hBackBufferDC = backBuffer->GetMemDC();
+	SceneManager::GetInstance()->Render(pRT1);
+	ObjectManager::GetInstance()->Render(pRT1);
+	ParticleManager::GetInstance()->Render(pRT1);
 
-	//SceneManager::GetInstance()->Render(hBackBufferDC);
-	CollisionManager::GetInstance()->DebugRender(m_pRenderTarget.Get());
-	TimerManager::GetInstance()->Render(m_pRenderTarget.Get());
-	//wsprintf(szText, TEXT("Mouse X : %d, Y : %d"), g_ptMouse.x, g_ptMouse.y);
-	//TextOut(hBackBufferDC, 20, 60, szText, wcslen(szText));
+	CollisionManager::GetInstance()->DebugRender(pRT1);
+	TimerManager::GetInstance()->Render(pRT1);
 
-	//// 백버퍼에 있는 내용을 메인 hdc에 복사
-	//backBuffer->Render(hdc);
 }
 
 void MainGame::EndDraw()
 {
-	HRESULT hr = m_pRenderTarget->EndDraw();
+	//HRESULT hr = m_pRenderTarget->EndDraw();
+	ID2D1RenderTarget* pRT1 = m_pIntermediateRT;
+	
+	HRESULT hr = pRT1->EndDraw();
 
 	if (hr == D2DERR_RECREATE_TARGET)
 	{
 		m_pRenderTarget.Reset();
 		Init(); // 다시 생성
+	}
+
+	// 1. 중간 렌더타겟의 결과를 비트맵으로 추출
+	ComPtr<ID2D1Bitmap> finalBitmap;
+	HRESULT hrBitmap = m_pIntermediateRT->GetBitmap(&finalBitmap);
+
+	if (SUCCEEDED(hrBitmap))
+	{
+		m_pRenderTarget->BeginDraw();
+
+		float t = EaseInOut(fadeT);
+
+		float scaleFinal, alphaFinal;
+		float scaleBlue, alphaBlue;
+
+		if (fadeState == FadeState::FadeOut || (fadeState == FadeState::None && lastWasFadeOut))
+		{
+			// ▶ final → blue (사라지고 등장)
+			scaleFinal = 1.0f + 0.5f * t;   // 커짐
+			alphaFinal = 1.0f - t;
+
+			scaleBlue = 0.9f + 0.1f * t;   // 커짐
+			alphaBlue = t;
+		}
+		else if (fadeState == FadeState::None && !lastWasFadeOut)
+		{
+			// 정상 상태 (원래 씬): 아무 변화 없음
+			scaleFinal = 1.0f;
+			alphaFinal = 1.0f;
+
+			scaleBlue = 1.0f;
+			alphaBlue = 0.0f;
+		}
+		else
+		{
+			// ◀ blue → final (사라지고 등장)
+			scaleFinal = 1.5f - 0.5f * t;   // 작아짐
+			alphaFinal = t;
+
+			scaleBlue = 1.0f - 0.1f * t;   // 작아짐
+			alphaBlue = 1.0f - t;
+		}
+
+
+		D2D1_POINT_2F center = D2D1::Point2F(WINSIZE_X * 0.5f, WINSIZE_Y * 0.5f);
+		{
+			D2D1::Matrix3x2F transform =
+				D2D1::Matrix3x2F::Translation(-center.x, -center.y) *
+				D2D1::Matrix3x2F::Scale(scaleFinal, scaleFinal) *
+				D2D1::Matrix3x2F::Translation(center.x, center.y);
+
+			m_pRenderTarget->SetTransform(transform);
+
+			m_pRenderTarget->DrawBitmap(
+				finalBitmap.Get(),
+				D2D1::RectF(0, 0, WINSIZE_X, WINSIZE_Y),
+				alphaFinal,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+			);
+		}
+
+		{
+			backBuffer->Render(m_pRenderTarget.Get(), center.x, center.y, scaleBlue, scaleBlue, alphaBlue);
+		}
+		
+
+		hr = m_pRenderTarget->EndDraw();
+
+		if (hr == D2DERR_RECREATE_TARGET)
+		{
+			m_pRenderTarget.Reset();
+			Init();
+		}
 	}
 }

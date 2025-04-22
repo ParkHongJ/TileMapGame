@@ -3,7 +3,7 @@
 #include "Image.h"
 
 //테스트용 캐릭터 Colin
-HRESULT JinScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT JinScene::Init(ID2D1RenderTarget* renderTarget)
 {
     ImageManager::GetInstance()->AddImage("tempColin", TEXT("image/character/char_Colin/Colin.png"), renderTarget);
     tempImage = ImageManager::GetInstance()->FindImage("tempColin");
@@ -31,7 +31,7 @@ void JinScene::Update(float TimeDelta)
         life--;
 }
 
-void JinScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void JinScene::Render(ID2D1RenderTarget* renderTarget)
 {
     if (tempImage)
     {

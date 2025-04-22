@@ -17,6 +17,6 @@ void DoorInteractUI::Update(float TimeDelta)
 {
 }
 
-void DoorInteractUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void DoorInteractUI::Render(ID2D1RenderTarget* renderTarget)
 {
 }

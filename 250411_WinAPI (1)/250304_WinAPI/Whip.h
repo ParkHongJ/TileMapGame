@@ -9,7 +9,7 @@ public:
 public:
 	virtual HRESULT Init() override;
 	virtual void Update(float TimeDelta) override;
-	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 	virtual void Release() override;
 	/// <summary>
 	/// 장착하고 바로 먹어지면 Equip(info)로 내부 처리 + 바로 UnEquip 해보기.

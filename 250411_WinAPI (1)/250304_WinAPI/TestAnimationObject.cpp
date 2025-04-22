@@ -132,7 +132,7 @@ void TestAnimationObject::Update(float TimeDelta)
 	}
 }
 
-void TestAnimationObject::Render(ID2D1HwndRenderTarget* renderTarget)
+void TestAnimationObject::Render(ID2D1RenderTarget* renderTarget)
 {
 	image->FrameRender(renderTarget, Pos.x, Pos.y, 0, 0);
 

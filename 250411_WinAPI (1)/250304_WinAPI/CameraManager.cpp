@@ -18,7 +18,7 @@ HRESULT CameraManager::Init()
 
 	yOffset = 0.0f;
 	currYOffset = 0.0f;
-	yOffsetSpeed = 15.0f;
+	yOffsetSpeed = 5.0f;
 
 	isLookUp = false;
 	isLookDown = false;

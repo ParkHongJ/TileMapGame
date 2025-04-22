@@ -26,7 +26,7 @@ void ParticleManager::Update(float TimeDelta)
 	}
 }
 
-void ParticleManager::Render(ID2D1HwndRenderTarget* rt)
+void ParticleManager::Render(ID2D1RenderTarget* rt)
 {
 	for (auto& particle : activeParticles)
 	{

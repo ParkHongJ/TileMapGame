@@ -20,7 +20,7 @@ void dialogUI::Update(float TimeDelta)
 {
 }
 
-void dialogUI::Render(ID2D1HwndRenderTarget* renderTarget)
+void dialogUI::Render(ID2D1RenderTarget* renderTarget)
 {
     if(isInteract)
     {

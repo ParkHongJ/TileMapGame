@@ -27,7 +27,7 @@ void playerGold_UI::Update(float TimeDelta)
 		RequestOpaqueChange();
 }
 
-void playerGold_UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void playerGold_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (playerGoldImage)
 		playerGoldImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);

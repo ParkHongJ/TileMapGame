@@ -40,7 +40,7 @@ void TimerManager::Update(const wstring& timerKey)
 	}
 }
 
-void TimerManager::Render(ID2D1HwndRenderTarget* renderTarget)
+void TimerManager::Render(ID2D1RenderTarget* renderTarget)
 {
 	map<wstring, Timer*>::iterator iter = timers.find(L"60Frame");
 	if (iter != timers.end())

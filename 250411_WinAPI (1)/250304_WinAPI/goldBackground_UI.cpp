@@ -18,7 +18,7 @@ void goldBackground_UI::Update(float TimeDelta)
 {
 }
 
-void goldBackground_UI::Render(ID2D1HwndRenderTarget* renderTarget)
+void goldBackground_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (image)
 		image->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
