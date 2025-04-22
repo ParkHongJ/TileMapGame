@@ -34,6 +34,28 @@ HRESULT Monster::Init()
 	isDamaged = false;
 	isFlip = false;
 
+	isTileTouchingLeft = false;
+	isTileTouchingRight = false;
+	isTileTouchingTop = false;
+	isTileTouchingLeftBottom = false;
+	isTileTouchingRightBottom = false;
+
+	hasBottomTile = true;
+
+	isPlayerTouchingLeft = false;
+	isPlayerTouchingRight = false;
+	isPlayerTouchingTop = false;
+	isPlayerTouchingBottom = false;
+	isPlayerTouchingCenterTop = false;
+
+	isItemTouchingLeft = false;
+	isItemTouchingRight = false;
+	isItemTouchingTop = false;
+	isItemTouchingBottom = false;
+
+	meetPlayerLeft = false;
+	meetPlayerRight = false;
+
 	return S_OK;
 }
 

@@ -3,11 +3,11 @@
 
 class BoxCollider;
 class Image;
-class BatMonster : public Monster
+class SpiderMonster : public Monster
 {
 public:
-	BatMonster();
-	~BatMonster();
+	SpiderMonster();
+	~SpiderMonster();
 
 	virtual HRESULT Init() override;
 	virtual void Release() override;
@@ -21,8 +21,8 @@ public:
 	virtual void Render(ID2D1HwndRenderTarget* renderTarget) override;
 
 private:
-	Image* batImage;
-	BoxCollider* batCollider = nullptr;
+	Image* spiderImage;
+	BoxCollider* spiderCollider = nullptr;
 	FPOINT colliderSize;
 	float colliderOffsetY;
 };

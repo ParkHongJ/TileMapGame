@@ -321,7 +321,7 @@
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClCompile>
-    <ClCompile Include="BatMonster.cpp">
+    <ClCompile Include="SpiderMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
   </ItemGroup>
@@ -605,7 +605,7 @@
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClInclude>
-    <ClInclude Include="BatMonster.h">
+    <ClInclude Include="SpiderMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>

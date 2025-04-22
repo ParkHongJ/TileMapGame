@@ -35,6 +35,7 @@ protected:
 	
 	FPOINT dir;
 	POINT currFrame;
+	FrameInfo IdleFrameInfo;
 	FrameInfo moveFrameInfo;
 	FrameInfo attackFrameInfo;
 	FrameInfo attackMoveInfo;
