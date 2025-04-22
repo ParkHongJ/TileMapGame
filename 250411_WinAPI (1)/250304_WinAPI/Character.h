@@ -75,6 +75,8 @@ private:
 	float					frameTime;
 	POINT				 currFrameInd;
 	FrameInfo		    currFrameInfo;
+	POINT			currFaintFrameInd;
+	FrameInfo		currFaintFrameInfo;
 
 	// Gravity
 	float					  gravity;
@@ -87,6 +89,7 @@ private:
 	bool			     isMovingAuto;
 	bool			      isAttacking;
 	bool			      isCrouching;
+	bool					isFaint;
 
 	// For Camera
 	bool			   isLookUpLocked;
@@ -228,6 +231,8 @@ public:
 
 	bool GetIsMovingAuto() const;
 	bool GetIsAttacking() { return isAttacking; }
+
+	bool GetIsFaint() { return isFaint; }
 
 
 	void SetSpeed(float speed) { this->speed = speed; }

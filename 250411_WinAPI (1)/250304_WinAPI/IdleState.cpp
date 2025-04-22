@@ -31,6 +31,13 @@ void IdleState::Update() {
         return;
     }
 
+    if (character->GetIsFaint())
+    {
+        ChangeSubState(SubState::IDLE_FAINT);
+        return;
+    }
+
+
     if (character->CheckAlmostFall()) {
         ChangeSubState(SubState::IDLE_FALL_ALMOST);
         character->SetAnimationFrameInfo(IDLESTATE, static_cast<int>(SubState::IDLE_FALL_ALMOST));
@@ -68,11 +75,10 @@ void IdleState::Update() {
         // 이미 START 상태면 애니메이션 끝날 때까지 대기
         if (currentSubState == SubState::IDLE_LOOKDOWN_START)
         {
-            if (character->GetCurrAnimEnd())
+            if (character->GetIsLookDownLocked())
             {
                 ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
             }
-            return;
         }
 
         // STOP 상태면 그대로 유지

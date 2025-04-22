@@ -20,7 +20,7 @@ InteractionState Character::interactionState(InteractionState::SubState::NONE);
 HRESULT Character::Init()
 {
     playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
-
+    playerFaintEffect = ImageManager::GetInstance()->FindImage("Tae_Player");
     state =  &Character::idleState;
     state->Enter(this);
   
@@ -45,7 +45,9 @@ HRESULT Character::Init()
     lookUpLockTime = 1.0f;
     lookDownLockTime = 1.0f;
     
-    currfaintTime = 0.0f; 
+    currfaintTime = 0.0f;
+    currFaintFrameInd = {0, 13} ;
+    currFaintFrameInfo = { {0, 13},{11, 13}, AnimationMode::Loop };
     maxFaintTime = 2.0f;
 
     // Collision
@@ -85,7 +87,7 @@ HRESULT Character::Init()
     isCrouching = false;
     isLookUpLocked = false;
     isLookDownLocked = false;
-
+    isFaint = false;
     isMovingAuto = false;
 
     InitAnimationMap();
@@ -360,6 +362,20 @@ void Character::Update(float TimeDelta)
 
 void Character::HandleTransitions()
 {
+    auto km = KeyManager::GetInstance();
+    if (km->IsStayKeyDown('Q'))
+    {
+        isFaint = true;
+        ChangeState(&idleState);
+        return;
+    }
+    else if(km->IsOnceKeyUp('Q'))
+    {
+        currFaintFrameInd = { 0,13 };
+        isFaint = false;
+    }
+
+
     if (currInput.jump && !IsAirborne())
     {
         Jump();
@@ -491,6 +507,19 @@ void Character::HandleIdleLogic() {
         break;
     case IdleState::SubState::IDLE_FAINT:
         currfaintTime += deltaTime;
+
+        if (currfaintTime < ANIMATION_FRAME_TIME)
+        {
+            return;
+        }
+
+        currfaintTime = 0.f;
+       
+            currFaintFrameInd.x++;
+
+            if (currFaintFrameInd.x > currFaintFrameInfo.endFrame.x)
+                currFaintFrameInd.x = currFaintFrameInfo.startFrame.x;
+            break;
 
         
         break;
@@ -708,7 +737,7 @@ bool Character::CheckAlmostFall()
 
 bool Character::CheckHangOn()
 {
-    float maxHangDist = 5.0f;
+    float maxHangDist = 8.0f;
     float debugTime = 1.0f;
     bool debugDraw = true;
 
@@ -782,14 +811,6 @@ bool Character::CheckCanClimbLadder()
             //ChangeState(&interactionState);
            // return true; 
         }
-        //else if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
-        //{
-        //    // 사다리, 로프 posX 로 플레이어 위치 조정
-
-
-        //    ChangeState(&interactionState);
-        //    return;
-        //}
     }
 }
 
@@ -813,7 +834,7 @@ bool Character::CheckCanClimbRope()
 
 void Character::CheckInterAction()
 {
-    if (currInput.moveUp)
+    if (currInput.moveUp && !isMovingAuto)
     {
         // 사다리 상호작용 중 점프 가능
         if (currInput.jump && !IsAirborne())
@@ -934,8 +955,8 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         char buf[256];
         sprintf_s(buf,
-            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n isCrouching : %d isLookUpLocked: %d currLockTime : %f Velocity : x = %f y = %f",
-            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isCrouching, isLookUpLocked,currLockTime, velocity.x, velocity.y
+            "▶ Render Frame: (%d,%d)\n▶ State: %s  \n isCrouching : %d islookdown: %d currLockTime : %f Velocity : x = %f y = %f",
+            currFrameInd.x, currFrameInd.y, state->GetSubStateName(), isCrouching, isLookDownLocked,currLockTime, velocity.x, velocity.y
             );
 
         OutputDebugStringA(buf);
@@ -944,6 +965,13 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
     if (playerImage)
     {
         playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, isFlip);
+    }
+    if (playerFaintEffect)
+    {
+        if (isFaint && state == &idleState && idleState.GetCurrentSubState() == IdleState::SubState::IDLE_FAINT)
+        {
+            playerFaintEffect->FrameRender(renderTarget, pos.x, pos.y - 20.f, currFaintFrameInd.x, currFaintFrameInd.y);
+        }
     }
 }
 
@@ -1022,6 +1050,12 @@ void Character::Move()
     {
         return;
     }
+
+    if ((state == &idleState && idleState.GetCurrentSubState() == IdleState::SubState::IDLE_FAINT))
+    {
+        return;
+    }
+
 
     float vx = 0.f;
     if (currInput.moveLeft)       vx = -GetSpeed();
