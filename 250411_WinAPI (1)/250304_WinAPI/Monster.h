@@ -42,6 +42,7 @@ protected:
 	FrameInfo moveFrameInfo;
 	FrameInfo attackFrameInfo;
 	FrameInfo attackMoveInfo;
+	FrameInfo attackMoveStartInfo;
 	FrameInfo currFrameInfo;
 
 	int damage;

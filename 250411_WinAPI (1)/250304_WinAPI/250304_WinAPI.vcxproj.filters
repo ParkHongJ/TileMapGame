@@ -369,6 +369,9 @@
     <ClCompile Include="HeavyBlock.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
     </ClCompile>
+    <ClCompile Include="BossMonster.cpp">
+      <Filter>MainGame\Scene\Hyo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -688,6 +691,9 @@
     </ClInclude>
     <ClInclude Include="HeavyBlock.h">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonster.h">
+      <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

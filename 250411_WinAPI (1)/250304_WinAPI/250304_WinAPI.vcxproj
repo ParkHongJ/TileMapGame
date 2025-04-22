@@ -147,6 +147,7 @@
     <ClCompile Include="ArrowTrap.cpp" />
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
+    <ClCompile Include="BossMonster.cpp" />
     <ClCompile Include="Rope.cpp" />
     <ClCompile Include="HeavyBlock.cpp" />
     <ClCompile Include="NiddleTrap.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="ArrowTrap.h" />
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
+    <ClInclude Include="BossMonster.h" />
     <ClInclude Include="Rope.h" />
     <ClInclude Include="HeavyBlock.h" />
     <ClInclude Include="NiddleTrap.h" />
