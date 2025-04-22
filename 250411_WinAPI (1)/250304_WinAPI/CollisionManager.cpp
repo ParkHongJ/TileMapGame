@@ -63,25 +63,6 @@ void CollisionManager::Init()
 
 void CollisionManager::Update(float TimeDelta)
 {
-	//for (auto& collider : colliders)
-	//{
-	//	collider->Update(TimeDelta);
-	//}
-
-    for (auto collider = colliders.begin(); collider != colliders.end();)
-    {
-        if (true == (*collider)->GetOwner()->IsDestroyed())
-        {
-            collider = colliders.erase(collider);
-        }
-
-        else
-        {
-            (*collider)->Update(TimeDelta);
-            ++collider;
-        }
-    }
-
     for (auto& test : layerCollisionMap)
     {
         for (auto iter = test.second.begin(); iter != test.second.end();)
@@ -97,7 +78,6 @@ void CollisionManager::Update(float TimeDelta)
                 ++iter;
             }
         }
-
     }
 
     for (int i = 0; i < debugRays.size(); )
@@ -299,6 +279,8 @@ void CollisionManager::ColMaskAABB()
                 {
                     for (auto& iter2 : dest.second)
                     {
+                        // z가 다르다고?
+                        // continue;
                         bool bCollision = CollisionAABB(iter, iter2);
 
                         if (bCollision)

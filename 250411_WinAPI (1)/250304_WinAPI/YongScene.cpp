@@ -9,6 +9,7 @@
 #include "Whip.h"
 #include "IncreaseBomb.h"
 #include "Rope.h"
+#include "RopeController.h"
 
 HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
@@ -34,7 +35,8 @@ HRESULT YongScene::Init(ID2D1HwndRenderTarget* renderTarget)
    // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Whip());
    // ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
 
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Rope());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Rope());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new RopeController());
     
     return S_OK;
 }
