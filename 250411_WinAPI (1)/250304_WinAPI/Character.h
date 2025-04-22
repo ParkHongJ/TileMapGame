@@ -78,6 +78,7 @@ private:
 	FrameInfo		    currFrameInfo;
 	POINT			currFaintFrameInd;
 	FrameInfo		currFaintFrameInfo;
+	int8_t			  faintBounceTime;
 
 	// Gravity
 	float					  gravity;
@@ -91,6 +92,7 @@ private:
 	bool			      isAttacking;
 	bool			      isCrouching;
 	bool					isFaint;
+	bool			isFallFromHeight;
 
 	// For Camera
 	bool			   isLookUpLocked;
@@ -239,7 +241,7 @@ public:
 	void  SetCurrLockTime(float lockTime) { this->currLockTime = lockTime; }
 	float GetlookUpLockTime() { return this->lookUpLockTime; }
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
-
+	bool GetFallFromHeight() { return isFallFromHeight; }
 	
 	
 	float GetVelocitySize();
@@ -249,7 +251,7 @@ public:
 	bool GetIsAttacking() { return isAttacking; }
 
 	bool GetIsFaint() { return isFaint; }
-
+	float GetCurrFaintTime() { return currfaintTime; }
 
 	void SetSpeed(float speed) { this->speed = speed; }
 

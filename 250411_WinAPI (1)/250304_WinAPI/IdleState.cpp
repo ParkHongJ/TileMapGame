@@ -7,8 +7,9 @@ void IdleState::Enter(Character* character) {
     this->character = character;
 
     InputIntent input = character->GetCurrInputIntent();
-
-    if (input.moveDown) ChangeSubState(SubState::IDLE_LOOKDOWN_START);
+    if (character->GetFallFromHeight()) ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
+    else if (character->GetIsFaint()) ChangeSubState(SubState::IDLE_FAINT);
+    else if (input.moveDown) ChangeSubState(SubState::IDLE_LOOKDOWN_START);
     else if (character->GetIsCrouching()) ChangeSubState(SubState::IDLE_LOOKDOWN_STOP);
     else if (input.moveUp) ChangeSubState(SubState::IDLE_LOOKUP_START);
     else if (character->IsAirborne()) ChangeSubState(SubState::IDLE_ONAIR);
@@ -20,11 +21,16 @@ void IdleState::Update() {
 
     InputIntent input = character->GetCurrInputIntent();
 
-    /*if (character->GetFallFromHeight())
+    if (input.moveLeft || input.moveRight) character->ChangeState(&Character::moveState);
+
+    if (character->GetFallFromHeight())
     {
         ChangeSubState(SubState::IDLE_FALL_FROM_HEIGHT);
         return;
-    }*/
+    }
+
+    
+
 
     if (character->IsAirborne()) {
         ChangeSubState(SubState::IDLE_ONAIR);
@@ -101,12 +107,15 @@ void IdleState::Update() {
     }
  
 
+
     if ((currentSubState == SubState::IDLE_LOOKDOWN_RELEASE ||
         currentSubState == SubState::IDLE_LOOKUP_RELEASE) &&
         character->GetCurrAnimEnd()) 
     {
         ChangeSubState(SubState::IDLE_ALONE);
     }
+
+
 
     if ( character->IsAirborne())
     {
@@ -145,9 +154,9 @@ const char* IdleState::GetSubStateName() const {
     case SubState::IDLE_ONPET_LOOKUP:     return "IDLE_ONPET_LOOKUP";
     case SubState::IDLE_ONPET_LOOKDOWN:   return "IDLE_ONPET_LOOKDOWN";
     case SubState::IDLE_FALL_ALMOST:      return "IDLE_FALL_ALMOST";
-    case SubState::IDLE_FALL_FROM_HEIGHT:             return "IDLE_HURT";
+    case SubState::IDLE_FALL_FROM_HEIGHT:             return "IDLE_FALL_FROM_HEIGHT";
     case SubState::IDLE_DIE:              return "IDLE_DIE";
     case SubState::IDLE_ONAIR:              return "IDLE_ONAIR";
-    case SubState::NONE: default:         return "NONE";
+    case SubState::IDLE_FAINT: default:         return "IDLE_FAINT";
     }
 }
