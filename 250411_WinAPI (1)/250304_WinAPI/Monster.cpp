@@ -56,6 +56,7 @@ HRESULT Monster::Init()
 	meetPlayerLeft = false;
 	meetPlayerRight = false;
 
+	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 	return S_OK;
 }
 
@@ -92,4 +93,9 @@ void Monster::Move()
 void Monster::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	
+}
+
+void Monster::Detect(GameObject* obj)
+{
+
 }

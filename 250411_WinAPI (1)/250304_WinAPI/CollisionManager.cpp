@@ -49,7 +49,7 @@ void CollisionManager::Init()
     layerRayMaskMap[CollisionMaskType::MONSTER] = uint16_t(CollisionMaskType::PLAYER) |
         uint16_t(CollisionMaskType::WORLDOBJECT) | uint16_t(CollisionMaskType::TILE);
 
-    layerRayMaskMap[CollisionMaskType::ITEM] = uint16_t(CollisionMaskType::PLAYER) /*| uint16_t(CollisionMaskType::TILE)*/;
+    layerRayMaskMap[CollisionMaskType::ITEM] = uint16_t(CollisionMaskType::PLAYER) | uint16_t(CollisionMaskType::TILE);
 
     layerRayMaskMap[CollisionMaskType::TILE] = uint16_t(CollisionMaskType::PLAYER)
         | uint16_t(CollisionMaskType::MONSTER) || uint16_t(CollisionMaskType::EFFECT);
@@ -246,20 +246,58 @@ void CollisionManager::BoxAll()
 
 void CollisionManager::ColMaskAABB()
 {
-    for (const auto& pair : layerCollisionMap)
-    {
-        uint16_t mask = layerMaskMap[pair.first];
+   // set<
+    set<pair<CollisionMaskType, CollisionMaskType>> Set; // 되려나
 
-        for (const auto& pair2 : layerCollisionMap)
+    for (const auto& temp : layerCollisionMap)
+    {
+        uint16_t mask = layerMaskMap[temp.first];
+
+        for (const auto& dest : layerCollisionMap)
         {
             // 검사 해야하는 레이어라면
-            uint16_t type = uint16_t(pair2.first);
 
+            //if (uint16_t(pair.first) & uint16_t(pair2.first))
+            //{
+            //    continue;
+            //}
+
+            uint16_t type = uint16_t(dest.first); 
+            
             if (mask & type)
             {
-                for (auto& iter : pair.second)
+                
+                if (temp.first < dest.first)
                 {
-                    for (auto& iter2 : pair2.second)
+                    if (Set.end() == Set.find({ temp.first, dest.first }))
+                    {
+                        Set.emplace(temp.first, dest.first);
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+                    
+                }
+
+                else
+                {
+					if (Set.end() == Set.find({ dest.first, temp.first }))
+					{
+						Set.emplace(dest.first, temp.first);
+					}
+
+					else
+					{
+						continue;
+					}
+                }
+               
+                //Set.
+                for (auto& iter : temp.second)
+                {
+                    for (auto& iter2 : dest.second)
                     {
                         bool bCollision = CollisionAABB(iter, iter2);
 

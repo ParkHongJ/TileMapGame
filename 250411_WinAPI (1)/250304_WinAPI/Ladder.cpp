@@ -14,6 +14,7 @@ Ladder::Ladder()
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 120, 1100}, CollisionMaskType::ITEM, this);
 	interactState = INTERACTSTATE::INTERACT_ABLE;
 	objectName = OBJECTNAME::LADDER;
+	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 }
 
 Ladder::~Ladder()

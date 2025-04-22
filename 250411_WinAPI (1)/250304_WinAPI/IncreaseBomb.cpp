@@ -40,7 +40,7 @@ void IncreaseBomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 2); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 2, objectScale.x, objectScale.y); // 임의값
 }
 
 void IncreaseBomb::Release()

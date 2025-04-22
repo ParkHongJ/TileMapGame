@@ -119,8 +119,8 @@ void SnakeMonster::Update(float TimeDelta)
         dir.x *= -1;
         hasBottomTile = true;
         Move();
-      
     }
+
     // 왼쪽으로 가는데 밑에 타일이 없을 때 
     else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0)
     {
@@ -296,12 +296,12 @@ void SnakeMonster::Render(ID2D1HwndRenderTarget* renderTarget)
         {
             if (dir.x > 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y,true);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
 
@@ -309,13 +309,28 @@ void SnakeMonster::Render(ID2D1HwndRenderTarget* renderTarget)
         {
             if (dir.x > 0 && meetPlayerRight)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0 && meetPlayerLeft)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, true);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
     }
+}
+
+void SnakeMonster::Detect(GameObject* obj)
+{
+    int i = 5;
+    //if (auto player = obj->GetType<Character>())
+    //{
+    //    
+    //    SetDestroy();
+    //}
+
+    //else if (auto player = obj->GetType<Character>())
+    //{
+
+    //}
 }

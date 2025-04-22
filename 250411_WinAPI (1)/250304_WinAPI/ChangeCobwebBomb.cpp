@@ -6,6 +6,7 @@
 #include "CameraManager.h"
 ChangeCobwebBomb::ChangeCobwebBomb()
 {
+	
 }
 
 ChangeCobwebBomb::~ChangeCobwebBomb()
@@ -21,7 +22,7 @@ HRESULT ChangeCobwebBomb::Init()
 	Pos = { 800, 300 };
 
 	//BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, this);
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 70, 70 }, CollisionMaskType::ITEM, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 40, 40 }, CollisionMaskType::ITEM, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
@@ -38,7 +39,7 @@ void ChangeCobwebBomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 2, 2, 0.75f, 0.75f); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 2, 2, objectScale.x * 0.75f, objectScale.y * 0.75f); // 임의값
 }
 
 void ChangeCobwebBomb::Release()

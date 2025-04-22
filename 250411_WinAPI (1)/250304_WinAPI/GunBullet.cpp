@@ -18,8 +18,9 @@ HRESULT GunBullet::Init()
 {
 	image = ImageManager::GetInstance()->FindImage("items");
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 30,30 }, CollisionMaskType::WORLDOBJECT, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 20,20 }, CollisionMaskType::WORLDOBJECT, this);
 	interactState = INTERACTSTATE::INTERACT_ABLE;
+	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 
 	//SetDrop();
 	return S_OK;
@@ -35,7 +36,7 @@ void GunBullet::Update(float TimeDelta)
 void GunBullet::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
-	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 14);
+	image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 14, objectScale.x, objectScale.y);
 }
 
 void GunBullet::Release()
@@ -54,6 +55,7 @@ void GunBullet::Detect(GameObject* obj)
 	{
 		if (OBJECTNAME::TILE != obj->GetObjectName())
 		{
+			// °¡¶ó
 			obj->SetDestroy();
 		}
 	}

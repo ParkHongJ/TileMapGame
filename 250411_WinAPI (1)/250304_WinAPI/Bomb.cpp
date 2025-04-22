@@ -70,7 +70,7 @@ void Bomb::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameIndexX, curFrameIndexY);
+	holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameIndexX, curFrameIndexY, objectScale.x, objectScale.y);
 
 	//if (ItemState::STATE_EQUIP == itemState)
 	//{
@@ -157,7 +157,8 @@ void Bomb::DropMove(float TimeDelta)
 		RaycastHit out;
 
 		//if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
-			if (CollisionManager::GetInstance()->RaycastMyType(ray, moveLength, out, CollisionMaskType::ITEM, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		//if (CollisionManager::GetInstance()->RaycastMyType(ray, moveLength, out, CollisionMaskType::ITEM, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
 		{
 			if (IsCobweb)
 			{

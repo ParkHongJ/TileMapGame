@@ -20,6 +20,8 @@ InteractionState Character::interactionState(InteractionState::SubState::NONE);
 
 HRESULT Character::Init()
 {
+    objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
+
     playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
     playerFaintEffect = ImageManager::GetInstance()->FindImage("Tae_Player");
     state =  &Character::idleState;
@@ -1060,13 +1062,13 @@ void Character::Render(ID2D1HwndRenderTarget* renderTarget)
 
     if (playerImage)
     {
-        playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, isFlip);
+        playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, objectScale.x, objectScale.y, isFlip);
     }
     if (playerFaintEffect)
     {
         if (isFaint && state == &idleState && idleState.GetCurrentSubState() == IdleState::SubState::IDLE_FAINT)
         {
-            playerFaintEffect->FrameRender(renderTarget, pos.x, pos.y - 20.f, currFaintFrameInd.x, currFaintFrameInd.y);
+            playerFaintEffect->FrameRender(renderTarget, pos.x, pos.y - 20.f, currFaintFrameInd.x, currFaintFrameInd.y, objectScale.x, objectScale.y);
         }
     }
 }
@@ -1151,7 +1153,6 @@ void Character::Move()
     {
         return;
     }
-
 
 	float vx = 0.f;
 	if (currInput.moveLeft)       vx = -GetSpeed();

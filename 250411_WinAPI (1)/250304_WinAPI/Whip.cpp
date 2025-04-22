@@ -47,7 +47,7 @@ void Whip::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, whipFrame, 12, 0.75f, 0.75f, isFlip); // 임의값
+	holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, whipFrame, 12, objectScale.x * 0.75f, objectScale.y * 0.75f, isFlip); // 임의값
 }
 
 void Whip::Release()
@@ -96,15 +96,13 @@ void Whip::Use(void* info)
 		break;
 	case 1:
 		posOffset = { -30.f, -20.f };
-
-
 		break;
 	case 2:
-		posOffset = { 10.f, 10.f };
+		posOffset = { 0.f, -10.f };
 		break;
 	case 3:
 
-		posOffset = { 30.f, 20.f };
+		posOffset = { 20.f, 10.f };
 
 		if (!isHit)
 		{
@@ -127,8 +125,7 @@ void Whip::Use(void* info)
 
 		break;
 	case 4:
-		posOffset = { 50.f, 30.f };
-
+		posOffset = { 40.f, 20.f };
 		if (!isHit)
 		{
 			Ray ray;
@@ -147,7 +144,6 @@ void Whip::Use(void* info)
 				isHit = true;
 			}
 		}
-
 		//posOffset = { -50.f, 0.f };
 		//posOffset = { 100.f, 30.f };
 		break;

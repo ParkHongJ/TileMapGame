@@ -25,7 +25,7 @@ HRESULT TreasureChest::Init()
 	Pos = { 700, 100 };
 
 	//BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, this);
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, CollisionMaskType::ITEM,this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, CollisionMaskType::WORLDOBJECT,this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ALWAYS;
@@ -57,7 +57,7 @@ void TreasureChest::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos + holdOffset;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 0, 0.75f, 0.75f, isFlip); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 0, objectScale.x, objectScale.y, isFlip); // 임의값
 }
 
 void TreasureChest::Release()

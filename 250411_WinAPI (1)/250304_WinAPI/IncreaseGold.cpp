@@ -22,7 +22,7 @@ HRESULT IncreaseGold::Init()
 
 	Pos = { 800, 100 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 40 }, CollisionMaskType::ITEM, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 20 }, CollisionMaskType::ITEM, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
@@ -39,7 +39,7 @@ void IncreaseGold::Render(ID2D1HwndRenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 0, 0.5f, 0.5f); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 0, objectScale.x * 0.5f, objectScale.y * 0.5f); // 임의값
 }
 
 void IncreaseGold::Release()

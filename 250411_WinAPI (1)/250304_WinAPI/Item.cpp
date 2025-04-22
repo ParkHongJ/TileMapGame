@@ -14,6 +14,8 @@ itemState(ItemState::STATE_UNEQUIP), startFrameIndexX(0), startFrameIndexY(0), e
 {
 	objectRenderId = RENDER_ITEM;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
+	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
+	bPhysics = true;
 }
 
 Item::~Item()
@@ -65,7 +67,7 @@ void Item::Equip(void* info)
 	ChangeState(ItemState::STATE_EQUIP);
 	objectRenderId = RENDER_HOLD;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM, this);
-
+	bPhysics = false;
 }
 
 void Item::Equip(GameObject* owner)
@@ -73,8 +75,7 @@ void Item::Equip(GameObject* owner)
 	ChangeState(ItemState::STATE_EQUIP);
 	objectRenderId = RENDER_HOLD;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM, this);
-
-
+	bPhysics = false;
 }
 
 void Item::UnEquip()
@@ -82,6 +83,7 @@ void Item::UnEquip()
 	ChangeState(ItemState::STATE_UNEQUIP);
 	objectRenderId = RENDER_ITEM;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::ITEM, CollisionMaskType::WORLDOBJECT, this);
+	bPhysics = true;
 
 	//movePower = { 500.f, 300.f }; // Test
 }
@@ -91,6 +93,7 @@ void Item::UnEquip(void* info)
 	ChangeState(ItemState::STATE_UNEQUIP);
 	objectRenderId = RENDER_ITEM;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::ITEM, CollisionMaskType::WORLDOBJECT, this);
+	bPhysics = true;
 
 
 	//movePower = { 500.f, 300.f }; // Test
@@ -359,8 +362,14 @@ void Item::SetDrop(float speed, float angle, float mass, FPOINT gravity)
 
 void Item::SetHoldItemPos(FPOINT pos, bool isFlip)
 {
-	SetPos(pos + holdOffset);
 	this->isFlip = isFlip;
+	FPOINT Temp = holdOffset;
+	if (isFlip)
+	{
+		Temp.x *= -1;
+	}
+	SetPos(pos + Temp);
+	
 }
 
 bool Item::IsPlayerDropItem(GameObject* player)

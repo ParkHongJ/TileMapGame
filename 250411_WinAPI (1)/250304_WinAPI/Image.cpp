@@ -518,10 +518,10 @@ void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int f
 	float fh = static_cast<float>(imageInfo->frameHeight);
 
 	D2D1_RECT_F destRect = D2D1::RectF(
-		x - fw * scaleX / 2.0f,
-		y - fh * scaleY / 2.0f,
-		x + fw * scaleX / 2.0f,
-		y + fh * scaleY / 2.0f
+		x - fw * scaleX,
+		y - fh * scaleY,
+		x + fw * scaleX,
+		y + fh * scaleY
 	);
 
 	D2D1_RECT_F srcRect = D2D1::RectF(

@@ -177,24 +177,24 @@ void SpiderMonster::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         if (monsterHP == 1 && monsterState == MonsterState::IDLE)
         {
-            spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, false);
+            spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
         }
 
         if (monsterHP == 1 && monsterState == MonsterState::ATTACKMOVE)
         {
-            spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, false);
+            spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
         }
 
         if (monsterHP == 1 && monsterState == MonsterState::MOVE)
         {
             if (dir.x > 0)
             {
-                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, false);
+                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0)
             {
-                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, true);
+                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
 
@@ -202,12 +202,12 @@ void SpiderMonster::Render(ID2D1HwndRenderTarget* renderTarget)
         {
             if (dir.x > 0 && meetPlayerRight)
             {
-                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, false);
+                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0 && meetPlayerLeft)
             {
-                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, true);
+                spiderImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
     }
