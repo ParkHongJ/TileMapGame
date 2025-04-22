@@ -16,6 +16,7 @@ void lightBulb_UI::Release()
 
 void lightBulb_UI::Update(float TimeDelta)
 {
+
 }
 
 void lightBulb_UI::Render(ID2D1HwndRenderTarget* renderTarget)
