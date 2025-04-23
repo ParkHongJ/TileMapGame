@@ -250,8 +250,15 @@ void Bomb::Explosion()
 	for (auto& iter : temp)
 	{
 		if (Tile* tile = dynamic_cast<Tile*>(iter))
+		{
 			tile->Destruction();
-		//iter->SetDestroy();
+		}
+			
+		else
+		{
+			iter->SetDestroy();
+		}
+		//
 	}
 
 	SetDestroy();

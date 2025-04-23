@@ -56,6 +56,7 @@ void GunBullet::Detect(GameObject* obj)
 		if (OBJECTNAME::TILE != obj->GetObjectName())
 		{
 			// °¡¶ó
+			
 			obj->SetDestroy();
 		}
 	}

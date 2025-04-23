@@ -11,6 +11,7 @@
 #include "PlayerStatus.h"
 #include "Bomb.h"
 #include "Whip.h"
+#include "RopeController.h"
 
 
 IdleState Character::idleState(IdleState::SubState::NONE);
@@ -109,6 +110,7 @@ HRESULT Character::Init()
 
     ObjectManager::GetInstance()->SetPlayer(this);
     objectRenderId = RENDER_PLAYER;
+
 	return S_OK;
 }
 
@@ -844,7 +846,7 @@ bool Character::CheckCanClimbLadder()
 
     if (!interActionPQ.empty())
     {
-        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER || interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
         {
             return true; 
         }
@@ -1030,6 +1032,15 @@ void Character::JunUpdate(float TimeDelta)
 		}
 	}
 
+    if (km->IsOnceKeyDown('I'))
+    {
+        RopeController* temp = new RopeController();
+        ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
+        temp->Shoot(Pos);
+    }
+
+    
+    
 	if (holdItem)
 	{
 		holdItem->SetHoldItemPos(Pos, isFlip);
