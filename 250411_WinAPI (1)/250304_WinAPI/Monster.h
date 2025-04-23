@@ -25,8 +25,9 @@ public:
 	virtual void CheckPlayerCollision();
 	virtual void CheckItemCollision();
 	virtual void Move();
-	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 	virtual void Detect(GameObject* obj);
+	virtual void DeadEvent(float TimeDelta);
+	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 	virtual int GetDamage() { return damage; }
 	virtual void SetDamage(int damage) { this->damage = damage; }
@@ -42,6 +43,8 @@ protected:
 	FrameInfo moveFrameInfo;
 	FrameInfo attackFrameInfo;
 	FrameInfo attackMoveInfo;
+	FrameInfo attackMoveStartInfo;
+	FrameInfo deadFrameInfo;
 	FrameInfo currFrameInfo;
 
 	int damage;
@@ -49,6 +52,7 @@ protected:
 	float moveSpeed;
 	float gravity = 1000.f; // 중력 가속도 (픽셀/sec^2)
 	float maxFallSpeed = 800.f; // 최대 낙하 속도
+	float deadElipsedTime = 0.0f;
 	//float jumpPower = 500.0f;
 	//bool isInAir;
 

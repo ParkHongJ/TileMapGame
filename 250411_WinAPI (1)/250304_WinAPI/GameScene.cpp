@@ -27,6 +27,7 @@
 #include "CameraManager.h"
 #include "SnakeMonster.h"
 #include "SkeletonMonster.h"
+#include "BossMonster.h"
 #include "playerHP_UI.h"
 #include "playerGold_UI.h"
 #include "goldBackground_UI.h"
@@ -61,6 +62,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Snake_Monster", L"Textures/Monster/monsters.png",16,16, renderTarget);
     ImageManager::GetInstance()->AddImage("Skeleton_Monster", L"Textures/Monster/monsters.png", 16, 16, renderTarget);
+    ImageManager::GetInstance()->AddImage("Boss_Monster", L"Textures/Monster/boss.png", 8, 8, renderTarget);
     ImageManager::GetInstance()->AddImage("GameOverPage", L"Textures/UI/Journal/journal_back.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
@@ -118,7 +120,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
-    //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
+    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
 
     GameManager::GetInstance()->Init("hongScene");
 

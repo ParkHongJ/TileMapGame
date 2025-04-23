@@ -10,6 +10,7 @@
 
 SkeletonMonster::SkeletonMonster()
 {
+    int i = 5;
 }
 
 SkeletonMonster::~SkeletonMonster()
@@ -30,17 +31,19 @@ HRESULT SkeletonMonster::Init()
         CollisionMaskType::MONSTER, this
     );
 
-    SetPos({ 600,230 });
+    SetPos({ 600,220 });
     monsterHP = 1;
     damage = 1;
     moveSpeed = 80.0f;
     monsterState = MonsterState::IDLE;
+    deadElipsedTime = 0.0f;
 
     currFrame = { 0,0 };
    /* IdleFrameInfo = { {8,2},{8,2} };
     attackMoveInfo = { {8,2 }, { 12,2 }};*/
     moveFrameInfo = { {5,2},{13,2} };
     attackFrameInfo = { {5,2},{13,2} };
+    deadFrameInfo = { {4,2},{0,2} };
     dir = { 1,1 };
     currFrameInfo = { {0,0},{0,0} };
 
@@ -59,7 +62,7 @@ void SkeletonMonster::Update(float TimeDelta)
     CheckItemCollision();
 
     // 벽 안 만났을 때 
-    if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom)
+    if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom && monsterState != MonsterState::DEAD)
     {
         monsterState = MonsterState::MOVE;
         meetPlayerLeft = false;
@@ -68,7 +71,7 @@ void SkeletonMonster::Update(float TimeDelta)
         Move();
     }
     //벽 만났을 때 Update
-    else if (isTileTouchingRight || isTileTouchingLeft)
+    else if (isTileTouchingRight || isTileTouchingLeft && monsterState != MonsterState::DEAD)
     {
         monsterState = MonsterState::MOVE;
         dir.x *= -1;
@@ -76,7 +79,7 @@ void SkeletonMonster::Update(float TimeDelta)
     }
 
     // 오른쪽으로 가는데 밑에 타일이 없을 때 
-    if (!isTileTouchingRightBottom && !hasBottomTile && dir.x > 0)
+    if (!isTileTouchingRightBottom && !hasBottomTile && dir.x > 0 && monsterState != MonsterState::DEAD)
     {
         monsterState = MonsterState::MOVE;
         dir.x *= -1;
@@ -85,7 +88,7 @@ void SkeletonMonster::Update(float TimeDelta)
 
     }
     // 왼쪽으로 가는데 밑에 타일이 없을 때 
-    else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0)
+    else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0 && monsterState != MonsterState::DEAD)
     {
         monsterState = MonsterState::MOVE;
         dir.x *= -1;
@@ -94,7 +97,7 @@ void SkeletonMonster::Update(float TimeDelta)
     }
 
     // Player 만났을 때 Update , 데미지도 포함 
-    if (dir.x < 0 && isPlayerTouchingLeft)
+    if (dir.x < 0 && isPlayerTouchingLeft && monsterState != MonsterState::DEAD)
     {
         monsterState = MonsterState::ATTACK;
         meetPlayerLeft = true;
@@ -106,14 +109,22 @@ void SkeletonMonster::Update(float TimeDelta)
         meetPlayerRight = true;
     }
 
+    if (monsterState == MonsterState::DEAD)
+    {
+        DeadEvent(TimeDelta);
+    }
+
     //Player가 위에서 밟았을 때, 아이템과 충돌했을 때  데미지 닳기 
    /* if (!isPlayerTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingBottom && isPlayerTouchingCenterTop)
     {
         monsterHP--;
     }*/
 
-    if (monsterHP == 0)
-        monsterState = MonsterState::DEAD;
+    /*if (monsterState == MonsterState::DEAD)
+    { 
+		SetDestroy();
+    }*/
+       
 
     FrameUpdate(TimeDelta);
  
@@ -171,8 +182,23 @@ void SkeletonMonster::FrameUpdate(float TimeDelta)
             currFrame.y = attackFrameInfo.startFrame.y;
             elipsedTime = 0;
         }
+    }
 
+    if (monsterState == MonsterState::DEAD)
+    {
+        currFrameInfo = deadFrameInfo;
 
+        if (elipsedTime > 1.0f)
+        {
+            currFrame.x--;
+            
+            if (currFrame.x < deadFrameInfo.endFrame.x)
+            {
+                currFrame.x = deadFrameInfo.endFrame.x;
+            }
+            currFrame.y = deadFrameInfo.endFrame.y;
+            elipsedTime = 0;
+        }
     }
 }
 
@@ -265,15 +291,39 @@ void SkeletonMonster::ReverseMove()
 void SkeletonMonster::Detect(GameObject* obj)
 {
     FPOINT playerPos = player->GetPos();
+    
 
-    if (auto player = obj->GetType<Character>() && isPlayerTouchingTop)
+    if (auto player = obj->GetType<Character>())
     {
-        SetDestroy();
+
+        playerPos = player->GetPos();
+        float playerPosBottom = playerPos.y + 20;
+        float monsterPosTop = Pos.y;
+
+        if (/*playerPosBottom < monsterPosTop &&*/ monsterState != MonsterState::DEAD)
+        {
+            monsterState = MonsterState::DEAD;
+            deadElipsedTime = 0.0f;
+        }
+
     }
 
     else if (auto player = obj->GetType<Character>())
     {
 
+    }
+}
+
+void SkeletonMonster::DeadEvent(float TimeDelta)
+{
+    deadElipsedTime += TimeDelta;
+    if (monsterState == MonsterState::DEAD)
+    {
+        if (deadElipsedTime > 1.5f)
+        {
+            SetDestroy();
+        }
+            
     }
 }
 
@@ -304,6 +354,19 @@ void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
             }
 
             if (dir.x < 0 && meetPlayerLeft)
+            {
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+            }
+        }
+
+        if (monsterState == MonsterState::DEAD)
+        {
+            if (dir.x > 0)
+            {
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+            }
+
+            if (dir.x < 0)
             {
                 skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }

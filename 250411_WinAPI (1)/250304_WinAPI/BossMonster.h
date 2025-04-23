@@ -3,13 +3,13 @@
 
 class BoxCollider;
 class Image;
-class SkeletonMonster : public Monster
+class BossMonster : public Monster
 {
-	GENERATE_BODY(Textures/Monster/monsters.png, 128, 128)
+	GENERATE_BODY(Textures/Monster/boss.png, 128, 128)
 
 public:
-	SkeletonMonster();
-	~SkeletonMonster();
+	BossMonster();
+	~BossMonster();
 
 	virtual HRESULT Init() override;
 	virtual void Release() override;
@@ -21,12 +21,23 @@ public:
 	virtual void Move() override;
 	virtual void ReverseMove();
 	virtual void Detect(GameObject* obj) override;
-	virtual void DeadEvent(float TimeDelta) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 private:
-	Image* skeletonImage;
-	BoxCollider* skeletonCollider = nullptr;
+	Image* bossImage;
+	BoxCollider* bossCollider = nullptr;
 	FPOINT colliderSize;
 	float colliderOffsetY;
+
+
+	FPOINT playerPos;
+	FPOINT playerHeight;
+	FPOINT playerPosLeftBottom;
+	FPOINT playerPosRightBottom;
+	float playerPosBottom;
+
+	FPOINT monsterPosLeftTop;
+	FPOINT monsterPosRightTop;
+	float monsterPosTop;
 };
+

@@ -66,8 +66,11 @@ void CameraManager::Update( float TimeDelta)
 	pos.x = -(target.x) + offset.x;
 	pos.y = -(target.y) + offset.y + currYOffset;
 
-	float x = -(TILEMAPTOOL_X - WINSIZE_X);
-	float y = -(TILEMAPTOOL_Y - WINSIZE_Y);
+	//float x = -(TILEMAPTOOL_X - WINSIZE_X);
+	//float y = -(TILEMAPTOOL_Y - WINSIZE_Y);
+
+	float x = -(2000 - WINSIZE_X);
+	float y = -(1000 - WINSIZE_Y);
 
 	if (pos.x < x) pos.x = x;
 	if (pos.x > -x) pos.x = -x;

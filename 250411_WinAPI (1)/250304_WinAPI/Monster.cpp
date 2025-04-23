@@ -107,3 +107,7 @@ void Monster::Render(ID2D1RenderTarget* renderTarget)
 void Monster::Detect(GameObject* obj)
 {
 }
+
+void Monster::DeadEvent(float TimeDelta)
+{
+}
