@@ -327,9 +327,6 @@
     <ClCompile Include="DoorInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClCompile>
-    <ClCompile Include="ShopInteractUI.cpp">
-      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
-    </ClCompile>
     <ClCompile Include="ChangeCobwebBomb.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
@@ -377,6 +374,8 @@
     </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>MainGame\Scene</Filter>
+    <ClCompile Include="ShopInteractUI.cpp">
+      <Filter>MainGame\Scene\Jin\Shop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -656,9 +655,6 @@
     <ClInclude Include="DoorInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClInclude>
-    <ClInclude Include="ShopInteractUI.h">
-      <Filter>MainGame\Scene\Jin\InteractUI</Filter>
-    </ClInclude>
     <ClInclude Include="ChangeCobwebBomb.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
@@ -706,6 +702,8 @@
     </ClInclude>
     <ClInclude Include="StartScene.h">
       <Filter>MainGame\Scene</Filter>
+    <ClInclude Include="ShopInteractUI.h">
+      <Filter>MainGame\Scene\Jin\Shop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

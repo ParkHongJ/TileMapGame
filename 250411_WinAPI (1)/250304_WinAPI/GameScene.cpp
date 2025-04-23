@@ -37,6 +37,8 @@
 #include "lightBulb_UI.h"
 #include "Journal_1.h"
 #include "dialogUI.h"
+#include "ShopInteractUI.h"
+#include "ShopKeeper.h"
 
 HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 {
@@ -72,6 +74,8 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("goldBackgroundImage", L"Textures/UI/Hud/currencyBackground.png", renderTarget);
     ImageManager::GetInstance()->AddImage("sandGlassImage", L"Textures/UI/Hud/sandGlass.png", renderTarget);
     ImageManager::GetInstance()->AddImage("lightBulbImage", L"Textures/UI/Hud/lightBulb.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("shopDialogBox", L"Textures/UI/Menu/shopDialogBox.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("shopKeeper", L"Textures/Entities/People/shopkeeper.png", 6, 7, renderTarget);
 
    // fx_big
     ImageManager::GetInstance()->AddImage("fx_big", L"Textures/fx_big.png", 4, 4, renderTarget);
@@ -112,14 +116,22 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Ladder4());
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new ChangeCobwebBomb());
 
+
+    //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
+    //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
+
+    GameManager::GetInstance()->Init("hongScene");
+
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI(renderTarget));
-    ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());
+   // ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new sandGlass_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new lightBulb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerRope_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new ShopInteractUI(renderTarget));
+    ObjectManager::GetInstance()->AddObject(RENDER_NPC, new ShopKeeper());
 
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());

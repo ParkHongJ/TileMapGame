@@ -6,6 +6,8 @@ class ShopKeeper : public GameObject
 {
 private:
 	Image* shopkeeprImage;
+	FPOINT playerPos;
+	bool bPlayerPos_IsLeftSide;
 public:
 	virtual HRESULT Init() override;
 	virtual void Release() override;
