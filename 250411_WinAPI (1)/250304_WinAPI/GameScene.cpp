@@ -107,8 +107,8 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new ChangeCobwebBomb());
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI(renderTarget));
-    ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new sandGlass_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new lightBulb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerRope_UI(renderTarget));

@@ -3,6 +3,14 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 
+playerGold_UI::playerGold_UI(ID2D1RenderTarget* renderTarget)
+{
+	if (renderTarget)
+	{
+		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF(D2D1::ColorF::White, defaultOpacity));
+	}
+}
+
 HRESULT playerGold_UI::Init()
 {
 	playerGoldImage = ImageManager::GetInstance()->FindImage("playerGoldImage");
@@ -11,6 +19,7 @@ HRESULT playerGold_UI::Init()
 
 	playerStat = new PlayerStatus();
 	playerGold_value = playerStat->GetGold();
+	pastGold_value = playerGold_value;
 
 	return S_OK;
 }
@@ -23,12 +32,20 @@ void playerGold_UI::Update(float TimeDelta)
 {
 	UI::Update(TimeDelta);
 	playerGold_value = playerStat->GetGold();
-	if (KeyManager::GetInstance()->IsOnceKeyDown('G'))
+	//if (KeyManager::GetInstance()->IsOnceKeyDown('G'))
+	if(pastGold_value != playerGold_value)
+	{
 		RequestOpaqueChange();
+		pastGold_value = playerGold_value;
+	}
 }
 
 void playerGold_UI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (playerGoldImage)
+	{
 		playerGoldImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
+		std::wstring hpText = std::to_wstring(playerGold_value);
+		RenderText(renderTarget, hpText, Pos.x + 20, Pos.y - 10);
+	}
 }

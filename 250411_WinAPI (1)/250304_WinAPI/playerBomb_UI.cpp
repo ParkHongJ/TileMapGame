@@ -14,6 +14,7 @@ HRESULT playerBomb_UI::Init()
 	playerBombImage = ImageManager::GetInstance()->FindImage("playerBombImage");
 	playerStat = new PlayerStatus();
 	playerBomb_value = playerStat->GetBombCount();
+	pastBomb_value = playerBomb_value;
 	Pos = { WINSIZE_X * (3.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
 
 	return S_OK;
@@ -29,8 +30,12 @@ void playerBomb_UI::Update(float TimeDelta)
 
 	playerBomb_value = playerStat->GetBombCount();
 	//if(playerStat->pickedTheBomb || useTheBomb)
- 	if (KeyManager::GetInstance()->IsOnceKeyDown('B'))
+ 	//if (KeyManager::GetInstance()->IsOnceKeyDown('B'))
+	if (playerBomb_value != pastBomb_value)
+	{
 		RequestOpaqueChange();
+		pastBomb_value = playerBomb_value;
+	}
 
 }
 

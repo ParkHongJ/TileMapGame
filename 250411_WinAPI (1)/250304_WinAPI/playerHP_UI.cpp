@@ -18,6 +18,7 @@ HRESULT playerHP_UI::Init()
 
 	playerStat = new PlayerStatus();
 	playerHP_value = playerStat->GetPlayerMaxHP();
+	pastHP_value = playerHP_value;
 	Pos = { WINSIZE_X * (1.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
 
 	isAlive = true;
@@ -34,9 +35,11 @@ void playerHP_UI::Update(float TimeDelta)
 		isAlive = false;
 	
 	//if(playerStat->PicktheHP || LostTheHP)
-	if (KeyManager::GetInstance()->IsOnceKeyDown('H'))
+	//if (KeyManager::GetInstance()->IsOnceKeyDown('H'))
+	if(playerHP_value != pastHP_value)
 	{
 		RequestOpaqueChange();
+		pastHP_value = playerHP_value;
 	}
 	
 }

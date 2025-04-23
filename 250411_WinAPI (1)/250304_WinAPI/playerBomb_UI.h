@@ -9,6 +9,7 @@ private:
 	PlayerStatus* playerStat;
 	Image* playerBombImage;
 	int playerBomb_value;
+	int pastBomb_value;
 
 public:
 	virtual HRESULT Init();

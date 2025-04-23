@@ -10,6 +10,7 @@ private:
 	Image* playerLifeImage;
 	Image* playerLifeRunsOutImage;
 	int playerHP_value;
+	int pastHP_value;
 	bool isAlive;
 
 public:
