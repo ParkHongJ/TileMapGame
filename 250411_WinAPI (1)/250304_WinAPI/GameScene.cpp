@@ -39,6 +39,7 @@
 #include "dialogUI.h"
 #include "ShopInteractUI.h"
 #include "ShopKeeper.h"
+#include "SkeletonItem.h"
 
 HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 {
@@ -97,6 +98,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("Trap", L"Textures/floormisc.png", renderTarget);
 
     ImageManager::GetInstance()->AddImage("Effect", L"Textures/fx_small.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("Rubble", L"Textures/fx_rubble.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
 
     background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
@@ -145,6 +147,9 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
+
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new SkeletonItem());
+
 
    // GameManager::GetInstance()->Init("hongScene");
 

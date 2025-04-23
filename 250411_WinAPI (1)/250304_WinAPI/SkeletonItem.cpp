@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TreasureChest.h"
+#include "SkeletonItem.h"
 #include "Image.h"
 #include "Collider.h"
 #include "PlayerStatus.h"
@@ -11,22 +11,22 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 
-TreasureChest::TreasureChest()
+SkeletonItem::SkeletonItem()
 {
 }
 
-TreasureChest::~TreasureChest()
+SkeletonItem::~SkeletonItem()
 {
 }
 
-HRESULT TreasureChest::Init()
+HRESULT SkeletonItem::Init()
 {
 	dropImage = ImageManager::GetInstance()->FindImage("items");
 	holdImage = ImageManager::GetInstance()->FindImage("items");
 
-	Pos = { 700, 100 };
+	Pos = { 500, 100 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 100,100 }, CollisionMaskType::WORLDOBJECT,this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 50 }, CollisionMaskType::WORLDOBJECT,this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ALWAYS;
@@ -35,69 +35,69 @@ HRESULT TreasureChest::Init()
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 0;
 
-	holdOffset = { 0.f, -10.f };
+	holdOffset = { 50.f, 0.f };
 	return S_OK;
 }
 
-void TreasureChest::Update(float TimeDelta)
+void SkeletonItem::Update(float TimeDelta)
 {
-	if (isFlip)
-	{
-		holdOffset.x = -30.f;
-	}
+	//if (isFlip)
+	//{
+	//	holdOffset.x = -50.f;
+	//}
 
-	else
-	{
-		holdOffset.x = 30.f;
-	}
+	//else
+	//{
+	//	holdOffset.x = 50.f;
+	//}
 
 	DropMove(TimeDelta);
 }
 
-void TreasureChest::Render(ID2D1RenderTarget* renderTarget)
+void SkeletonItem::Render(ID2D1RenderTarget* renderTarget)
 {
-	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos + holdOffset;
+	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 0, objectScale.x, objectScale.y, isFlip); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 3, objectScale.x, objectScale.y, isFlip); // 임의값
 }
 
-void TreasureChest::Release()
+void SkeletonItem::Release()
 {
 
 }
 
-void TreasureChest::Equip()
+void SkeletonItem::Equip()
 {
 	__super::Equip();
 }
 
-void TreasureChest::Equip(void* info)
+void SkeletonItem::Equip(void* info)
 {
 }
 
-void TreasureChest::Equip(GameObject* owner)
+void SkeletonItem::Equip(GameObject* owner)
 {
 	__super::Equip(owner);
 }
 
-void TreasureChest::UnEquip()
+void SkeletonItem::UnEquip()
 {
 }
 
-void TreasureChest::UnEquip(void* info)
+void SkeletonItem::UnEquip(void* info)
 {
 }
 
-void TreasureChest::Use()
+void SkeletonItem::Use()
 {
 
 }
 
-void TreasureChest::Use(void* info)
+void SkeletonItem::Use(void* info)
 {
 }
 
-void TreasureChest::Detect(GameObject* obj)
+void SkeletonItem::Detect(GameObject* obj)
 {
 	if (auto temp = obj->GetType<Tile>())
 	{
@@ -118,12 +118,12 @@ void TreasureChest::Detect(GameObject* obj)
 	//}
 }
 
-void TreasureChest::DeadEvent()
+void SkeletonItem::DeadEvent()
 {
 	for (int i = 0; i < 5; i++)
 	{
 		FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
-		Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 0.15f, 4, 1);
+		Particle* particle = ParticleManager::GetInstance()->GetParticle("Rubble", Pos + randPos, 0.f, 30.f, 0.15f, 6, 1);
 
 		PhysicsOption* physicsOp = new PhysicsOption;
 		SizeOption* sizeOp = new SizeOption(0.04f);
@@ -164,7 +164,7 @@ void TreasureChest::DeadEvent()
 	SetDestroy();
 }
 
-void TreasureChest::DropMove(float TimeDelta)
+void SkeletonItem::DropMove(float TimeDelta)
 {
 	if (bPhysics)
 	{
@@ -252,10 +252,10 @@ void TreasureChest::DropMove(float TimeDelta)
 	}
 }
 
-void TreasureChest::DropMoveX(float TimeDelta)
+void SkeletonItem::DropMoveX(float TimeDelta)
 {
 }
 
-void TreasureChest::DropMoveY(float TimeDelta)
+void SkeletonItem::DropMoveY(float TimeDelta)
 {
 }

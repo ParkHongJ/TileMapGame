@@ -5,6 +5,8 @@
 #include "Collider.h"
 #include "CollisionManager.h"
 #include "Monster.h"
+#include "ParticleManager.h"
+#include "Particle.h"
 
 Whip::Whip()
 {
@@ -101,7 +103,6 @@ void Whip::Use(void* info)
 		posOffset = { 0.f, -10.f };
 		break;
 	case 3:
-
 		posOffset = { 20.f, 10.f };
 
 		if (!isHit)
@@ -121,8 +122,52 @@ void Whip::Use(void* info)
 			{
 				isHit = true;
 			}
-		}
 
+			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::WORLDOBJECT, this, true, 1.f))
+			{
+				isHit = true; // 되려나
+			}
+
+			if (isHit)
+			{
+				//for (int i = 0; i < 5; i++)
+				{
+					//FPOINT randPos = { RandomRange(0, 10.f), RandomRange(-10, 10.f) };
+					Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos /*+ randPos*/, 0.f, 50.f, 0.15f, 3, 6);
+
+					PhysicsOption* physicsOp = new PhysicsOption;
+					SizeOption* sizeOp = new SizeOption(0.04f);
+					TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.f);
+
+					//float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+					float angleRad = RandomRange(0.0f, 3.141592f * 2.0f); // 0 ~ 360도
+					//float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
+					float speed = RandomRange(850.f, 1175.0f);            // 속도도 랜덤
+
+					velocity =
+					{
+						sinf(angleRad) * speed,
+						-cosf(angleRad) * speed  // 135도 (왼쪽 위)
+					};
+
+					physicsOp->Init(velocity, 0.3f);
+					//physicsOp->Init(velocity, 0.5f);
+
+					particle->AddParticleOption(physicsOp);
+					particle->AddParticleOption(sizeOp);
+					particle->AddParticleOption(trailOp);
+				}
+
+				{
+					float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+					FPOINT randPos = { RandomRange(-100, 100.f), RandomRange(-100, 100.f) };
+
+					Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, angleRad, 105.f, 1.f, 1, 2);
+					AlphaOption* alphaOp = new AlphaOption(5.0f);
+					particle->AddParticleOption(alphaOp);
+				}
+			}
+		}
 		break;
 	case 4:
 		posOffset = { 40.f, 20.f };
@@ -142,6 +187,11 @@ void Whip::Use(void* info)
 			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::MONSTER, this, true, 1.f))
 			{
 				isHit = true;
+			}
+
+			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::WORLDOBJECT, this, true, 1.f))
+			{
+				isHit = true; // 되려나
 			}
 		}
 		//posOffset = { -50.f, 0.f };

@@ -72,6 +72,14 @@
         }
     },
     {
+        "name": "IncreaseRopeCnt",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "Ladder1",
         "atlasPath": "Textures/CaveTile.png",
         "cellSize": {
@@ -106,6 +114,14 @@
     {
         "name": "NiddleTrap",
         "atlasPath": "Textures/floor_cave.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "SkeletonItem",
+        "atlasPath": "Textures/items.png",
         "cellSize": {
             "x": 128,
             "y": 128
