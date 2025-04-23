@@ -10,7 +10,7 @@ enum class INTERACTSTATE
 
 enum class OBJECTNAME
 {
-	PLAYER, MONSTER, ITEM, LADDER, TILE, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR
+	PLAYER, MONSTER, ITEM, LADDER, TILE, WHIP, GUN, ROPE, KEY, DOOR, BOMB, INCREASEBOMB, GOLDBAR, HEAVYBLOCK
 };
 
 class Collider;
@@ -63,6 +63,8 @@ public:
 
 	void SetCaveRender(bool bCaveRender) { isCave = bCaveRender; }
 	bool IsCaveRender() { return isCave; }
+
+	virtual bool OnPush(FPOINT dir, float strength) { return false; }
 
 protected:
 	bool isCave = false;

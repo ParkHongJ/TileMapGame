@@ -16,10 +16,15 @@ public:
 	void GenerateBorderTile();
 	void GenerateDecoTile();
 
+	void GenerateDecoTile(int tileX, int tileY);
+	void UpdateAdjacentDecoTiles(int tileX, int tileY);
 	void CreateCaveRendertarget(ID2D1RenderTarget* mainRT);
 	void Init(const char* path);
 	void GenerateCave(const char* path);
 	ID2D1BitmapRenderTarget* GetCaveRenderTarget();
+
+	void DestructionTile(const FPOINT& tilePos);
+	bool HasTile(int x, int y);
 private:
 	bool IsTileValid(int x, int y, bool isCave = false);
 

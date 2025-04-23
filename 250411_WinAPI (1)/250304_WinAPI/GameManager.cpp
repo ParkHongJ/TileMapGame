@@ -197,6 +197,56 @@ void GameManager::GenerateDecoTile()
 	}
 }
 
+void GameManager::GenerateDecoTile(int tileX, int tileY)
+{
+	//좌
+	if (IsTileValid(tileX - 1, tileY) == false)
+	{
+		bool hasTileAbove = !IsTileValid(tileX, tileY - 1);
+
+		tileMap[tileY][tileX]->CreateDecoTile(DecoDirection::LEFT, hasTileAbove);
+	}
+	//우
+	if (IsTileValid(tileX + 1, tileY) == false)
+	{
+		bool hasTileAbove = !IsTileValid(tileX, tileY - 1);
+
+		tileMap[tileY][tileX]->CreateDecoTile(DecoDirection::RIGHT, hasTileAbove);
+	}
+	//상
+	if (IsTileValid(tileX, tileY - 1) == false)
+	{
+		tileMap[tileY][tileX]->CreateDecoTile(DecoDirection::TOP);
+	}
+	//하
+	if (IsTileValid(tileX, tileY + 1) == false)
+	{
+		tileMap[tileY][tileX]->CreateDecoTile(DecoDirection::DOWN);
+	}
+}
+
+void GameManager::UpdateAdjacentDecoTiles(int tileX, int tileY)
+{
+	// 중심 포함 + 4방향
+	constexpr int offsetX[4] = { -1, 1, 0, 0 };
+	constexpr int offsetY[4] = { 0, 0, -1, 1 };
+
+	for (int i = 0; i < 4; ++i)
+	{
+		int nx = tileX + offsetX[i];
+		int ny = tileY + offsetY[i];
+
+		if (nx < 0 || nx >= 40 || ny < 0 || ny >= 32)
+			continue;
+
+		if (IsTileValid(nx, ny) == false) continue;
+		if (!tileMap[ny][nx]) continue;
+
+		// 새로 주변 조건 검사해서 다시 생성
+		GenerateDecoTile(nx, ny);
+	}
+}
+
 void GameManager::CreateCaveRendertarget(ID2D1RenderTarget* mainRT)
 {
 	mainRT->CreateCompatibleRenderTarget(
@@ -236,6 +286,28 @@ void GameManager::GenerateCave(const char* path)
 ID2D1BitmapRenderTarget* GameManager::GetCaveRenderTarget()
 {
 	return caveRenderTarget.Get();
+}
+
+void GameManager::DestructionTile(const FPOINT& tilePos)
+{
+	int tileIndexX, tileIndexY;
+	tileIndexX = static_cast<int>(tilePos.x / GAME_TILE_SIZE);
+	tileIndexY = static_cast<int>(tilePos.y / GAME_TILE_SIZE);
+
+	if (tileMap[tileIndexY][tileIndexX]->IsValid() == false)
+		return;
+
+	tileMap[tileIndexY][tileIndexX]->SetValid(false);
+	
+	UpdateAdjacentDecoTiles(tileIndexX, tileIndexY);
+}
+
+bool GameManager::HasTile(int x, int y)
+{
+	if (x < 0 || x >= 40 || y < 0 || y >= 32)
+		return false;
+
+	return tileMap[y][x]->IsValid();
 }
 
 bool GameManager::IsTileValid(int x, int y, bool isCave)

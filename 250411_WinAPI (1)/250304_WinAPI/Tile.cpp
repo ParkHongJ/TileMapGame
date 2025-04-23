@@ -12,6 +12,7 @@ HRESULT Tile::Init()
 	decos.resize((int)DecoDirection::RIGHT);
 	objectName = OBJECTNAME::TILE;
 	interactState = INTERACTSTATE::INTERACT_UNABLE;
+
 	return S_OK;
 }
 
@@ -105,7 +106,6 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType typ
 	if (type != BORDER && valid)
 	{
 		collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
-		
 
 		tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
 	}
@@ -165,8 +165,7 @@ void Tile::Destruction()
 	if (tileType == TileType::BORDER)
 		return;
 
-	tileInfo.valid = false;
+	GameManager::GetInstance()->DestructionTile(Pos);
 
-	GameManager::GetInstance()->GenerateDecoTile();
 	SetDestroy();
 }

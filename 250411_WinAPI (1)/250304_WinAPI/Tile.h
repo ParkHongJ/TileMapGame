@@ -53,6 +53,7 @@ public:
 	void CreateDecoTile(DecoDirection dir, bool hasTileAbove = false);
 
 	inline bool IsValid() { return tileInfo.valid; }
+	void SetValid(bool bValid) { tileInfo.valid = bValid; }
 
 	//타일이 터져요
 	void Destruction();

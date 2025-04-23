@@ -159,6 +159,10 @@ private:
 	float holdItemHitTime = 0.f;
 	float holdItemHitMaxTime = 0.1f;
 
+	// Add Hong
+	GameObject* interactionObject = nullptr;
+	const float maxPushDelay = 0.55f;
+	float pushDelay = maxPushDelay;
 public:
 	inline Item* GetPreHoldItem() { return preHoldItem; };
 //Add JunYong
