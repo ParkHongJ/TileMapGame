@@ -86,6 +86,9 @@ HRESULT GameScene::Init(ID2D1HwndRenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("Effect", L"Textures/fx_small.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
 
+
+
+
     GameManager::GetInstance()->Init("hongScene");
 
 

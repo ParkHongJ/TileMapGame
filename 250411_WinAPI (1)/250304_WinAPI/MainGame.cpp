@@ -15,6 +15,8 @@
 #include "TaeScene.h"
 #include "JinScene.h"
 #include "YongScene.h"
+#include "StartScene.h"
+#include "PlayerSelectScene.h"
 #include "GameScene.h"
 #include "ObjectRegister.h"
 #include "ParticleManager.h"
@@ -39,7 +41,8 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("홍준", new HongScene());
 	SceneManager::GetInstance()->AddScene("효진", new HyoScene());
 	SceneManager::GetInstance()->AddScene("진석", new JinScene());
-	SceneManager::GetInstance()->AddScene("태관", new TaeScene());
+	SceneManager::GetInstance()->AddScene("시작", new StartScene());
+	SceneManager::GetInstance()->AddScene("선택", new PlayerSelectScene());
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 	SceneManager::GetInstance()->AddScene("게임", new GameScene());
 	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
@@ -54,12 +57,15 @@ HRESULT MainGame::Init()
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
-		"Tae_Player", TEXT("Textures/char_yellow.png"), 16, 16, m_pRenderTarget.Get());
+		"Tae_Player", TEXT("Textures/char_white.png"), 16, 16, m_pRenderTarget.Get());
+
+
 
 	//SceneManager::GetInstance()->ChangeScene("효진");
-	SceneManager::GetInstance()->ChangeScene("게임");
+	//SceneManager::GetInstance()->ChangeScene("게임");
 	//SceneManager::GetInstance()->ChangeScene("준용");
-	
+
+	SceneManager::GetInstance()->ChangeScene("시작");
 
 	//Legacy
 	//hdc = GetDC(g_hWnd);
@@ -143,14 +149,17 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			//SceneManager::GetInstance()->ChangeScene("playerUI");
 			break;
 
-		//case '1':
-		//	SceneManager::GetInstance()->ChangeScene("태관");
+		case '1':
+			SceneManager::GetInstance()->ChangeScene("시작");
 			break;
 		case '3':
 			SceneManager::GetInstance()->ChangeScene("홍준");
 			break;
 		case '4':
 			SceneManager::GetInstance()->ChangeScene("효진");
+			break;
+
+		case VK_RETURN:
 			break;
 		}
 

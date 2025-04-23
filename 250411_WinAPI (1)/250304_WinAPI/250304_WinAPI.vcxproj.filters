@@ -363,6 +363,12 @@
     <ClCompile Include="Rope.cpp">
       <Filter>MainGame\Scene\Yong\Rope</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerSelectScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -676,6 +682,12 @@
     </ClInclude>
     <ClInclude Include="Rope.h">
       <Filter>MainGame\Scene\Yong\Rope</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSelectScene.h">
+      <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>MainGame\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
