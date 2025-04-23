@@ -255,6 +255,8 @@ public:
 
 	void SetSpeed(float speed) { this->speed = speed; }
 
+	void InitCharacter(const char* input);
+
 
 	Character() {};
 	virtual ~Character() {};

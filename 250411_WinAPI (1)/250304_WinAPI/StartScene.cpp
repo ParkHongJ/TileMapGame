@@ -17,7 +17,7 @@ HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("Char_Menu", L"Textures/menu_charsel.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("Char_Menu_Disp", L"Textures/menu_disp.png",1,3, renderTarget);
 	ImageManager::GetInstance()->AddImage("Char_Menu_Door", L"Textures/menu_chardoor.png",2,2, renderTarget);
-
+	ImageManager::GetInstance()->AddImage("Char_Button", L"Textures/char_button.png",1,1, renderTarget);
 
 
 

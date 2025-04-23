@@ -8,13 +8,24 @@
 HRESULT PlayerSelectScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
 
+    characterKeys = {
+    "char_yellow", "char_white", "char_violet", "char_red", "char_pink",
+    "char_orange", "char_olive", "char_magenta", "char_lime", "char_lemon",
+    "char_khaki", "char_iris", "char_hired", "char_green", "char_gray",
+    "char_gold", "char_eggchild", "char_cyan", "char_cinnabar", "char_cerulean",
+    "char_blue", "char_black"
+    };
 
+
+
+    displayCharacter = ImageManager::GetInstance()->FindImage("char_yellow");
     blackbg = ImageManager::GetInstance()->FindImage("BlackBG");
     charMenu = ImageManager::GetInstance()->FindImage("Char_Menu");
 
     buttonZ = ImageManager::GetInstance()->FindImage("Buttons");
     buttonESC = ImageManager::GetInstance()->FindImage("Buttons");
 
+    selectButtonRight =selectButtonLeft = ImageManager::GetInstance()->FindImage("Char_Button");
 
     charDoorBack2 = charDoorBack = charDoor = ImageManager::GetInstance()->FindImage("Char_Menu_Door");
     charMenuTopBack = charMenuTop = charMenuBottom = ImageManager::GetInstance()->FindImage("Char_Menu_Disp");
@@ -23,21 +34,27 @@ HRESULT PlayerSelectScene::Init(ID2D1HwndRenderTarget* renderTarget)
     fumeEffect = ImageManager::GetInstance()->FindImage("FumeEffect");
 
     flamePos = { 208,158 };
-
+    currFilp = false;
     doorY = 180;
     sceneOpacity = 1.0f;
     screencharMenuScale = { {1080 / 1920.f }, {500 / 1080.f} };
     charMenuPos = { WINSIZE_X / 2, WINSIZE_Y / 2 };
     screenTopBottomScale = { {450/1408.f},{ 225/768.f} };
 
+    selectButtonLeftPos = {262, 184};
+    selectButtonRightPos = {374, 184,};
 
-
+    newCharCome = false;
     isFadingOut = false;
     fadeTimer = 0.0f;
     flameFrameIndex = 1;
+    selectedNum = 0;
 
-
-
+    newCharCome = false;
+    currCharInd = { 0,0 };
+    charSelectBuffTime = 0.4f;
+    currSelectBuffTime = 0.0f;
+    displayCharacterPos = { 321,180 };
 
     DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&pDWriteFactory));
 
@@ -104,6 +121,86 @@ void PlayerSelectScene::Update(float TimeDelta)
         }
     }
 
+    if (currSelectBuffTime > 0.0f)
+    {
+        currSelectBuffTime -= TimeDelta;
+    }
+
+
+
+    if (currSelectBuffTime <= 0.0f && !isSwitchingCharacter)
+    {
+        if (km->IsOnceKeyDown(VK_LEFT))
+        {
+            selectedNum = (selectedNum + 1) % characterKeys.size();
+            displayCharacter = ImageManager::GetInstance()->FindImage(characterKeys[selectedNum]);
+            isSwitchingCharacter = true;
+            switchToLeft = true;
+            currCharInd = { 1, 0 }; // 달리기 시작 프레임
+            runAnimTimer = 0.0f;
+            currFilp = true;
+            selectButtonLeftOffset = -selectButtonInputAmplitude;
+            selectButtonInputTimerL = selectButtonInputDuration;
+            currSelectBuffTime = charSelectBuffTime;  // 쿨타임 리셋
+        }
+
+        if (km->IsOnceKeyDown(VK_RIGHT))
+        {
+            selectedNum = (selectedNum - 1 + characterKeys.size()) % characterKeys.size();
+            displayCharacter = ImageManager::GetInstance()->FindImage(characterKeys[selectedNum]);
+            isSwitchingCharacter = true;
+            switchToLeft = false;
+            currCharInd = { 1, 0 }; // 달리기 시작 프레임
+            runAnimTimer = 0.0f;
+            currFilp = false;
+            selectButtonRightOffset = +selectButtonInputAmplitude;
+            selectButtonInputTimerR = selectButtonInputDuration;
+            currSelectBuffTime = charSelectBuffTime;  // 쿨타임 리셋
+        }
+    }
+
+
+
+    if (isSwitchingCharacter) {
+        runAnimTimer += TimeDelta;
+
+        // 도착 체크 먼저
+        if (newCharCome && (
+            (currFilp && displayCharacterPos.x - 321 <= -TimeDelta * 500.f) ||
+            (!currFilp && displayCharacterPos.x - 321 >= TimeDelta * 500.f))) {
+
+            displayCharacterPos.x = 321;
+            currCharInd = { 0, 0 };
+            isSwitchingCharacter = false;
+            newCharCome = false;
+            currSelectBuffTime = charSelectBuffTime;
+            return;
+        }
+
+        // 도착 안 했으면 이동
+        displayCharacterPos.x += TimeDelta * (currFilp ? -500.f : 500.f);
+
+        if (runAnimTimer >= runFrameTime) {
+            runAnimTimer = 0.0f;
+            currCharInd.x++;
+
+            if (currCharInd.x == 4) {
+                selectedNum = switchToLeft ?
+                    (selectedNum + 1) % characterKeys.size() :
+                    (selectedNum - 1 + characterKeys.size()) % characterKeys.size();
+
+                displayCharacter = ImageManager::GetInstance()->FindImage(characterKeys[selectedNum]);
+                newCharCome = true;
+                displayCharacterPos.x = currFilp ? 500 : 200;
+            }
+        }
+    }
+
+
+
+    selectButtonOscillateTime += TimeDelta;
+
+
 
     if (!buttonZ)
     {
@@ -117,6 +214,25 @@ void PlayerSelectScene::Update(float TimeDelta)
             doorY = doorTargetY;
         }
     }
+
+
+
+    if (selectButtonInputTimerL > 0.0f)
+    {
+        selectButtonInputTimerL -= TimeDelta;
+        float t = 1.0f - (selectButtonInputTimerL / selectButtonInputDuration);
+        selectButtonLeftOffset *= (1.0f - t);
+    }
+    else selectButtonLeftOffset = 0.0f;
+
+    if (selectButtonInputTimerR > 0.0f)
+    {
+        selectButtonInputTimerR -= TimeDelta;
+        float t = 1.0f - (selectButtonInputTimerR / selectButtonInputDuration);
+        selectButtonRightOffset *= (1.0f - t);
+    }
+    else selectButtonRightOffset = 0.0f;
+
 
 
     globalTime2 += TimeDelta;
@@ -211,9 +327,17 @@ void PlayerSelectScene::Render(ID2D1HwndRenderTarget* renderTarget)
     {
         blackbg->Render(renderTarget, charMenuPos.x, charMenuPos.y, 1.0f, 1.0f);
     }
+   
     if (charDoorBack2)
     {
         charDoorBack2->FrameRender(renderTarget, 319, 180, 1, 1, 0.28f, 0.25f, sceneOpacity);
+    }
+    if (!buttonZ && displayCharacter)
+    {
+
+        displayCharacter->FrameRender(renderTarget, displayCharacterPos.x, displayCharacterPos.y, currCharInd.x, currCharInd.y, 0.4f, 0.4f, currFilp);
+        charMenu->Render(renderTarget, charMenuPos.x, charMenuPos.y, screencharMenuScale.x, screencharMenuScale.y, sceneOpacity);
+
     }
     if (charDoorBack)
     {
@@ -261,6 +385,26 @@ void PlayerSelectScene::Render(ID2D1HwndRenderTarget* renderTarget)
     if (buttonZ)
     {
         buttonZ->FrameRender(renderTarget,319, 180, 0, 9, 0.15f, 0.15f, sceneOpacity);
+    }
+
+    if (!buttonZ)
+    {
+        float oscillateOffset = sin(selectButtonOscillateTime * 7.0f) * selectButtonOscillateAmplitude;
+
+        if (selectButtonLeft)
+        {
+            float x = selectButtonLeftPos.x - oscillateOffset - selectButtonLeftOffset;
+            selectButtonLeft->FrameRender(renderTarget, x, selectButtonLeftPos.y, 0, 0, 0.4f, 0.4f, sceneOpacity, true);
+        }
+
+       
+
+        if (selectButtonRight)
+        {
+            float x = selectButtonRightPos.x + oscillateOffset + selectButtonRightOffset;
+            selectButtonRight->FrameRender(renderTarget, x, selectButtonRightPos.y, 0, 0, 0.4f, 0.4f, sceneOpacity, false);
+        }
+
     }
 
 

@@ -20,10 +20,9 @@ InteractionState Character::interactionState(InteractionState::SubState::NONE);
 
 HRESULT Character::Init()
 {
+    playerFaintEffect = playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
     objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 
-    playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
-    playerFaintEffect = ImageManager::GetInstance()->FindImage("Tae_Player");
     state =  &Character::idleState;
     state->Enter(this);
   
@@ -108,6 +107,14 @@ HRESULT Character::Init()
 	ObjectManager::GetInstance()->AddObject(RENDER_ITEM, whip);
 	return S_OK;
 }
+
+
+void Character::InitCharacter(const char* input)
+{
+    playerFaintEffect = playerImage = ImageManager::GetInstance()->FindImage(input);
+    whip->SetImage(input);
+}
+
 
 void Character::InitAnimationMap()
 {
@@ -1387,6 +1394,7 @@ bool Character::GetIsMovingAuto() const
 {
 	return isMovingAuto;
 }
+
 
 FPOINT Character::GetHangOnTargetPos()
 {

@@ -28,6 +28,11 @@ HRESULT Item::Init()
 	return S_OK;
 }
 
+void Item::SetImage(const char* input)
+{
+	holdImage= ImageManager::GetInstance()->FindImage(input);
+}
+
 void Item::Update(float TimeDelta)
 {
 	DropMove(TimeDelta);
