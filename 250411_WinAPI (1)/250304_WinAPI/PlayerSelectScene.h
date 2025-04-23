@@ -7,7 +7,6 @@
 class Image;
 
 
-
 class PlayerSelectScene : public Scene
 {
 private:
@@ -28,18 +27,54 @@ private:
 	Image* torchEffectBack;
 	Image* torchEffectFront;
 	Image* fumeEffect;
+	Image* selectButtonLeft;
+	Image* selectButtonRight;
+
+
+	Image* displayCharacter;
+	FPOINT displayCharacterPos;
+	POINT currCharInd;
+
+	FPOINT selectButtonLeftPos;
+	FPOINT selectButtonRightPos;
 
 
 	FPOINT flamePos;
+	std::vector<std::string> characterKeys;
 
+	float charSelectBuffTime;
+	float currSelectBuffTime;
 
+	
+	float selectButtonOscillateTime = 0.0f;             // 시간 누적용
+	float selectButtonOscillateAmplitude = 2.0f;
+	float selectButtonLeftOffset = 0.0f;
+	float selectButtonRightOffset = 0.0f;
+	float selectButtonInputDuration = 0.15f;
+	float selectButtonInputTimerL = 0.0f;
+	float selectButtonInputTimerR = 0.0f;
+	float selectButtonInputAmplitude = 10.0f;
+
+	bool isSwitchingCharacter = false;
+	bool switchToLeft = false;
+	float runAnimTimer = 0.0f;
+	float runFrameTime = 0.08f;
+	float switchRunSpeed = 200.0f; // 초당 이동 픽셀
+
+	enum class SwitchPhase { None, RunOut, RunIn };
+	SwitchPhase switchPhase = SwitchPhase::None;
+
+	int switchDirection = 0; // -1: 왼쪽, 1: 오른쪽
+	bool newCharCome;
+
+	bool currFilp;
 	bool isDoorOpening = false;
 	float doorStartY = 180.0f;
 	float doorTargetY = 0.0f;
 	float doorMoveDuration = 1.0f; // 1초 동안 이동
 	float doorMoveTimer = 0.0f;
 
-
+	uint8_t selectedNum;
 
 	FPOINT charMenuPos;
 

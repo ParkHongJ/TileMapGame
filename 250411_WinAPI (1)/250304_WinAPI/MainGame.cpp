@@ -58,6 +58,28 @@ HRESULT MainGame::Init()
 
 	ImageManager::GetInstance()->AddImage(
 		"Tae_Player", TEXT("Textures/char_yellow.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_black", TEXT("Textures/char_black.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_blue", TEXT("Textures/char_blue.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_cerulean", TEXT("Textures/char_cerulean.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_cinnabar", TEXT("Textures/char_cinnabar.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_cyan", TEXT("Textures/char_cyan.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_eggchild", TEXT("Textures/char_eggchild.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_gold", TEXT("Textures/char_gold.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_gray", TEXT("Textures/char_gray.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_green", TEXT("Textures/char_green.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_hired", TEXT("Textures/char_hired.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_iris", TEXT("Textures/char_iris.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_khaki", TEXT("Textures/char_khaki.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_lemon", TEXT("Textures/char_lemon.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_lime", TEXT("Textures/char_lime.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_magenta", TEXT("Textures/char_magenta.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_olive", TEXT("Textures/char_olive.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_orange", TEXT("Textures/char_orange.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_pink", TEXT("Textures/char_pink.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_red", TEXT("Textures/char_red.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_violet", TEXT("Textures/char_violet.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_white", TEXT("Textures/char_white.png"), 16, 16, m_pRenderTarget.Get());
+	ImageManager::GetInstance()->AddImage("char_yellow", TEXT("Textures/char_yellow.png"), 16, 16, m_pRenderTarget.Get());
 
 
 

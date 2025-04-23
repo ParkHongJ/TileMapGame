@@ -26,6 +26,7 @@ public:
 
 public:
 	virtual HRESULT Init();
+	virtual void SetImage(const char * input);
 	virtual void Update(float TimeDelta);
 	virtual void Render(ID2D1RenderTarget* renderTarget);
 	virtual void Release();
