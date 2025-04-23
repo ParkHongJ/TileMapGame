@@ -148,11 +148,13 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BossMonster.cpp" />
+    <ClCompile Include="IncreaseRopeCnt.cpp" />
     <ClCompile Include="PlayerSelectScene.cpp" />
     <ClCompile Include="Rope.cpp" />
     <ClCompile Include="RopeController.cpp" />
     <ClCompile Include="HeavyBlock.cpp" />
     <ClCompile Include="NiddleTrap.cpp" />
+    <ClCompile Include="SkeletonItem.cpp" />
     <ClCompile Include="SkeletonMonster.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
@@ -243,11 +245,13 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BossMonster.h" />
+    <ClInclude Include="IncreaseRopeCnt.h" />
     <ClInclude Include="PlayerSelectScene.h" />
     <ClInclude Include="Rope.h" />
     <ClInclude Include="RopeController.h" />
     <ClInclude Include="HeavyBlock.h" />
     <ClInclude Include="NiddleTrap.h" />
+    <ClInclude Include="SkeletonItem.h" />
     <ClInclude Include="SkeletonMonster.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />

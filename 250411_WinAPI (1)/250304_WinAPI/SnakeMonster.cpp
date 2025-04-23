@@ -7,6 +7,9 @@
 #include "Collider.h"
 #include "TimerManager.h"
 #include "Character.h"
+#include "ParticleManager.h"
+#include "Particle.h"
+#include "Tile.h"
 
 SnakeMonster::SnakeMonster()
 {
@@ -324,6 +327,43 @@ void SnakeMonster::Detect(GameObject* obj)
         if (playerPosBottom < monsterPosTop)
         {
             SetDestroy();
+            for (int i = 0; i < 5; i++)
+            {
+                FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 0.15f, 4, 1);
+
+                PhysicsOption* physicsOp = new PhysicsOption;
+                SizeOption* sizeOp = new SizeOption(0.04f);
+                TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
+
+                //float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+                float angleRad = RandomRange(0.0f, 3.141592f * 2.0f); // 0 ~ 360µµ
+                //float speed = RandomRange(350.f, 375.0f);            // ¼Óµµµµ ·£´ý
+                float speed = RandomRange(850.f, 1175.0f);            // ¼Óµµµµ ·£´ý
+
+                velocity =
+                {
+                    sinf(angleRad) * speed,
+                    -cosf(angleRad) * speed  // 135µµ (¿ÞÂÊ À§)
+                };
+
+                physicsOp->Init(velocity, 0.3f);
+                //physicsOp->Init(velocity, 0.5f);
+
+                particle->AddParticleOption(physicsOp);
+                particle->AddParticleOption(sizeOp);
+                particle->AddParticleOption(trailOp);
+            }
+
+            {
+                float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+                FPOINT randPos = { RandomRange(-100, 100.f), RandomRange(-100, 100.f) };
+
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, angleRad, 105.f, 1.f, 1, 2);
+
+                AlphaOption* alphaOp = new AlphaOption(5.0f);
+                particle->AddParticleOption(alphaOp);
+            }
         }
        
 	}

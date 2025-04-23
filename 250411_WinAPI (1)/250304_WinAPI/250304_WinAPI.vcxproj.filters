@@ -368,15 +368,21 @@
     </ClCompile>
     <ClCompile Include="BossMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="PlayerSelectScene.cpp">
       <Filter>MainGame\Scene</Filter>
     </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>MainGame\Scene</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseRopeCnt.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletonItem.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -697,7 +703,7 @@
     </ClInclude>
     <ClInclude Include="BossMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="PlayerSelectScene.h">
       <Filter>MainGame\Scene</Filter>
     </ClInclude>
@@ -706,6 +712,12 @@
     </ClInclude>
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseRopeCnt.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletonItem.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

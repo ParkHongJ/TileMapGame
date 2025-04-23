@@ -1041,10 +1041,7 @@ void Character::JunUpdate(float TimeDelta)
             temp->Shoot(Pos);
             playerStatus->MinusRopeCount();
         }
-
     }
-
-    
     
 	if (holdItem)
 	{
@@ -1086,6 +1083,7 @@ void Character::PlayAnimation()
 			int frame = static_cast<int>(JUMP_UP_START + ratio * (JUMP_UP_END - JUMP_UP_START));
 			currFrameInd.x = frame;
 		}
+
 		else // ÇÏ°­ Áß
 		{
 			ratio = vel / jumpPower;
