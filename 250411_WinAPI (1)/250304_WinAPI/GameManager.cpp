@@ -171,36 +171,27 @@ void GameManager::GenerateDecoTile()
 				tileMap[y][x]->CreateDecoTile(DecoDirection::DOWN);
 			}
 
-
-
-
-
-			/*if (IsTileValid(x - 1, y, true) == false)
+			if (IsTileValid(x - 1, y, true) == false)
 			{
 				bool hasTileAbove = !IsTileValid(x, y - 1, true);
-				caveTileMap[y][x]->CreateDecoTile(DecoDirection::LEFT, hasTileAbove);
+				//caveTileMap[y][x]->CreateDecoTile(DecoDirection::LEFT, hasTileAbove);
 			}
-
 			
 			if (IsTileValid(x + 1, y, true) == false)
 			{
 				bool hasTileAbove = !IsTileValid(x, y - 1, true);
-				caveTileMap[y][x]->CreateDecoTile(DecoDirection::RIGHT, hasTileAbove);
+				//caveTileMap[y][x]->CreateDecoTile(DecoDirection::RIGHT, hasTileAbove);
 			}
-
-			
 
 			if (IsTileValid(x, y - 1, true) == false)
 			{
-				caveTileMap[y][x]->CreateDecoTile(DecoDirection::TOP);
+				//caveTileMap[y][x]->CreateDecoTile(DecoDirection::TOP);
 			}
-
-			
 
 			if (IsTileValid(x, y + 1, true) == false)
 			{
-				caveTileMap[y][x]->CreateDecoTile(DecoDirection::DOWN);
-			}*/
+				//caveTileMap[y][x]->CreateDecoTile(DecoDirection::DOWN);
+			}
 
 		}
 	}
@@ -224,7 +215,7 @@ void GameManager::Init(const char* path)
 	LoadTile(tilePath.c_str());
 	//TODO юс╫ц
 	LoadObject(objectPath.c_str());
-	GenerateCave(path);
+	//GenerateCave(path);
 
 	GenerateDecoTile();
 	GenerateBorderTile();
