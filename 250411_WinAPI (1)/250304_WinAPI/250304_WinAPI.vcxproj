@@ -148,6 +148,7 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BossMonster.cpp" />
+    <ClCompile Include="PlayerSelectScene.cpp" />
     <ClCompile Include="Rope.cpp" />
     <ClCompile Include="RopeController.cpp" />
     <ClCompile Include="HeavyBlock.cpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="ShopInteractUI.cpp" />
     <ClCompile Include="ShopKeeper.cpp" />
     <ClCompile Include="SnakeMonster.cpp" />
+    <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="TaeScene.cpp" />
     <ClCompile Include="TestAnimationObject.cpp" />
     <ClCompile Include="TestMonster.cpp" />
@@ -241,6 +243,7 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BossMonster.h" />
+    <ClInclude Include="PlayerSelectScene.h" />
     <ClInclude Include="Rope.h" />
     <ClInclude Include="RopeController.h" />
     <ClInclude Include="HeavyBlock.h" />
@@ -314,6 +317,7 @@
     <ClInclude Include="ShopKeeper.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SnakeMonster.h" />
+    <ClInclude Include="StartScene.h" />
     <ClInclude Include="TaeScene.h" />
     <ClInclude Include="TestAnimationObject.h" />
     <ClInclude Include="TestMonster.h" />

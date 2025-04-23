@@ -371,6 +371,12 @@
     </ClCompile>
     <ClCompile Include="BossMonster.cpp">
       <Filter>MainGame\Scene\Hyo</Filter>
+      </ClCompile>
+    <ClCompile Include="PlayerSelectScene.cpp">
+      <Filter>MainGame\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>MainGame\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -694,6 +700,12 @@
     </ClInclude>
     <ClInclude Include="BossMonster.h">
       <Filter>MainGame\Scene\Hyo</Filter>
+      </ClInclude>
+    <ClInclude Include="PlayerSelectScene.h">
+      <Filter>MainGame\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>MainGame\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

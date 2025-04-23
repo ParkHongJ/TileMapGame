@@ -562,6 +562,54 @@ void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int f
 	}
 }
 
+void Image::FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, float scaleX, float scaleY, float opacity, bool isFlip)
+{
+	if (!imageInfo->bitmap) return;
+
+	float fw = static_cast<float>(imageInfo->frameWidth);
+	float fh = static_cast<float>(imageInfo->frameHeight);
+
+	D2D1_RECT_F destRect = D2D1::RectF(
+		x - fw * scaleX,
+		y - fh * scaleY,
+		x + fw * scaleX,
+		y + fh * scaleY
+	);
+
+	D2D1_RECT_F srcRect = D2D1::RectF(
+		frameX * fw,
+		frameY * fh,
+		(frameX + 1) * fw,
+		(frameY + 1) * fh
+	);
+
+	D2D1::Matrix3x2F originalTransform;
+	renderTarget->GetTransform(&originalTransform);
+
+	if (isFlip)
+	{
+		D2D1::Matrix3x2F flip =
+			D2D1::Matrix3x2F::Translation(-x, -y) *
+			D2D1::Matrix3x2F::Scale(-1.0f, 1.0f) *
+			D2D1::Matrix3x2F::Translation(x, y);
+
+		renderTarget->SetTransform(flip * originalTransform);
+	}
+
+	renderTarget->DrawBitmap(
+		imageInfo->bitmap.Get(),
+		&destRect,
+		opacity,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		&srcRect
+	);
+
+	if (isFlip)
+	{
+		renderTarget->SetTransform(originalTransform);
+	}
+}
+
 void Image::Release()
 {
 	if (imageInfo)
