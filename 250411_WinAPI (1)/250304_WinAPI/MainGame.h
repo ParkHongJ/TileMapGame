@@ -38,7 +38,7 @@ private:
 	ComPtr<ID2D1HwndRenderTarget> m_pRenderTarget;
 	
 	ID2D1BitmapRenderTarget* m_pIntermediateRT = nullptr;
-
+	
 	wchar_t szText[128];
 	Image* backBuffer;
 
@@ -50,12 +50,11 @@ private:
 		FadeOut,   // final → blue
 		FadeIn     // blue → final
 	};
-
 	FadeState fadeState = FadeState::None;
 	float fadeT = 0.0f;
 	float fadeSpeed = 1.0f;
 
 	bool lastWasFadeOut = false;
-	ID2D1Bitmap* blueTexture = nullptr; // 파란색 비트맵
+	//ID2D1Bitmap* blueTexture = nullptr; // 파란색 비트맵
 };
 

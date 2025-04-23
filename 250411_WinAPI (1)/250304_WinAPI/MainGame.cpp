@@ -18,7 +18,7 @@
 #include "GameScene.h"
 #include "ObjectRegister.h"
 #include "ParticleManager.h"
-
+#include "GameManager.h"
 
 HRESULT MainGame::Init()
 {
@@ -26,6 +26,8 @@ HRESULT MainGame::Init()
 
 	if (FAILED(InitD2D()))
 		return E_FAIL;
+
+	GameManager::GetInstance()->CreateCaveRendertarget(m_pIntermediateRT);
 
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
@@ -130,6 +132,7 @@ void MainGame::LateUpdate()
 {
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	ObjectManager::GetInstance()->LateUpdate(deltaTime);
+
 }
 
 void MainGame::Render()
@@ -264,13 +267,13 @@ HRESULT MainGame::InitD2D()
 
 	std::vector<DWORD> pixels(WINSIZE_X * WINSIZE_Y, 0xFF0000FF); // 파란색 RGBA
 
-	m_pRenderTarget->CreateBitmap(
-		size,
-		pixels.data(),
-		WINSIZE_X * 4, // pitch
-		&props,
-		&blueTexture
-	);
+	//m_pRenderTarget->CreateBitmap(
+	//	size,
+	//	pixels.data(),
+	//	WINSIZE_X * 4, // pitch
+	//	&props,
+	//	&blueTexture
+	//);
 
 	return S_OK;
 }
@@ -283,9 +286,13 @@ void MainGame::BeginDraw()
 
 	pRT1->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
 
-	/*m_pRenderTarget->BeginDraw();
 
-	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));*/
+	ID2D1RenderTarget* caveRT = GameManager::GetInstance()->GetCaveRenderTarget();
+
+	// caveRT에 동굴 미리 렌더링
+	caveRT->BeginDraw();
+	caveRT->Clear(D2D1::ColorF(D2D1::ColorF::Black));  // 배경
+
 }
 
 void MainGame::Draw()
@@ -317,6 +324,7 @@ void MainGame::EndDraw()
 
 	// 1. 중간 렌더타겟의 결과를 비트맵으로 추출
 	ComPtr<ID2D1Bitmap> finalBitmap;
+	ComPtr<ID2D1Bitmap> caveBitmap;
 	HRESULT hrBitmap = m_pIntermediateRT->GetBitmap(&finalBitmap);
 
 	if (SUCCEEDED(hrBitmap))
@@ -375,10 +383,25 @@ void MainGame::EndDraw()
 		}
 
 		{
-			backBuffer->Render(m_pRenderTarget.Get(), center.x, center.y, scaleBlue, scaleBlue, alphaBlue);
+			D2D1::Matrix3x2F transform =
+				D2D1::Matrix3x2F::Translation(-center.x, -center.y) *
+				D2D1::Matrix3x2F::Scale(scaleBlue, scaleBlue) *
+				D2D1::Matrix3x2F::Translation(center.x, center.y);
+
+			m_pRenderTarget->SetTransform(transform);
+
+			GameManager::GetInstance()->GetCaveRenderTarget()->EndDraw();
+			GameManager::GetInstance()->GetCaveRenderTarget()->GetBitmap(&caveBitmap);
+			
+			m_pRenderTarget->DrawBitmap(
+				caveBitmap.Get(),
+				D2D1::RectF(0, 0, WINSIZE_X, WINSIZE_Y),
+				alphaBlue,
+				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
+			);
 		}
 		
-
+		
 		hr = m_pRenderTarget->EndDraw();
 
 		if (hr == D2DERR_RECREATE_TARGET)

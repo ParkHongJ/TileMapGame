@@ -11,17 +11,21 @@ public:
 	void Release();
 	void ReleaseStage();
 
-	void LoadTile(const char* path);
-	void LoadObject(const char* path);
+	void LoadTile(const char* path, bool isCave = false);
+	void LoadObject(const char* path, bool isCave = false);
 	void GenerateBorderTile();
 	void GenerateDecoTile();
 
+	void CreateCaveRendertarget(ID2D1RenderTarget* mainRT);
 	void Init(const char* path);
+	void GenerateCave(const char* path);
+	ID2D1BitmapRenderTarget* GetCaveRenderTarget();
 private:
-	bool IsTileValid(int x, int y);
+	bool IsTileValid(int x, int y, bool isCave = false);
 
 private:
-	//나중에 게임매니저로 빼든해야한다.
 	Tile* tileMap[36][44];
+	Tile* caveTileMap[36][44];
+	ComPtr<ID2D1BitmapRenderTarget> caveRenderTarget;
 };
 

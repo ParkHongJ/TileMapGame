@@ -2,6 +2,7 @@
 #include "ObjectManager.h"
 #include "GameObject.h"
 #include "Character.h"
+#include "GameManager.h"
 #include <queue>
 
 ObjectManager::ObjectManager()
@@ -126,7 +127,14 @@ void ObjectManager::Render(ID2D1RenderTarget* renderTarget)
 	{
 		for (auto& iter2 : iter)
 		{
-			iter2->Render(renderTarget);
+			if (iter2->IsCaveRender())
+			{
+				iter2->Render(GameManager::GetInstance()->GetCaveRenderTarget());
+			}
+			else
+			{
+				iter2->Render(renderTarget);
+			}
 		}
 
 		iter.clear();

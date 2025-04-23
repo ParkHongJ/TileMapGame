@@ -60,7 +60,13 @@ public:
 	inline void SetFlip(bool bFlipX) { this->bFlipX = bFlipX; }
 
 	const FPOINT& GetVelocity() { return velocity; }
+
+	void SetCaveRender(bool bCaveRender) { isCave = bCaveRender; }
+	bool IsCaveRender() { return isCave; }
+
 protected:
+	bool isCave = false;
+
 	FPOINT objectScale;
 	// ·»´õ ºÐ±â.
 	RENDERORDER	objectRenderId;
