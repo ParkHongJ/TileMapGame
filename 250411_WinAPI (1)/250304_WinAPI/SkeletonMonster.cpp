@@ -188,11 +188,14 @@ void SkeletonMonster::FrameUpdate(float TimeDelta)
     {
         currFrameInfo = deadFrameInfo;
 
-        if (elipsedTime > 1.0f)
+        if (elipsedTime > 0.1f)
         {
-            currFrame.x--;
-            
-            if (currFrame.x < deadFrameInfo.endFrame.x)
+            if (currFrame.x > deadFrameInfo.endFrame.x)
+            {
+                currFrame.x--;
+            }
+
+            else
             {
                 currFrame.x = deadFrameInfo.endFrame.x;
             }
@@ -319,7 +322,7 @@ void SkeletonMonster::DeadEvent(float TimeDelta)
     deadElipsedTime += TimeDelta;
     if (monsterState == MonsterState::DEAD)
     {
-        if (deadElipsedTime > 1.5f)
+        if (deadElipsedTime > 2.0f)
         {
             SetDestroy();
         }
