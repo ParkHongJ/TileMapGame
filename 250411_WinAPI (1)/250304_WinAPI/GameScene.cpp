@@ -63,6 +63,13 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("Border", L"Textures/border_main.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Snake_Monster", L"Textures/Monster/monsters.png",16,16, renderTarget);
     ImageManager::GetInstance()->AddImage("Skeleton_Monster", L"Textures/Monster/monsters.png", 16, 16, renderTarget);
+
+    ImageManager::GetInstance()->AddImage("GameOver_journalRear", L"Textures/UI/Journal/journal_back.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("GameOver_journalFront", L"Textures/UI/Journal/journal_top_gameover.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("GameOver_journalSelectBox", L"Textures/UI/Journal/journal_select.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("GameOver_characterSticker", L"Textures/UI/Journal/journal_stickers/yellow.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("GameOver_journalBack", L"Textures/UI/journal/Journal_back.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("GameOver_journalClip", L"Textures/UI/Journal/journal_Clip.png", renderTarget);
     ImageManager::GetInstance()->AddImage("GameOverPage", L"Textures/UI/Journal/journal_back.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLife", L"Textures/UI/Hud/playerLife.png", renderTarget);
     ImageManager::GetInstance()->AddImage("playerLifeRunsOut", L"Textures/UI/Hud/playerLIfeRunsOut.png", renderTarget);
@@ -95,6 +102,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 
 
 
+
     CameraManager::GetInstance()->Init();
  
    // ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new TestAnimationObject());
@@ -119,13 +127,14 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI(renderTarget));
    // ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerGold_UI(renderTarget));
-    ObjectManager::GetInstance()->AddObject(RENDER_UI, new sandGlass_UI());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new sandGlass_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new lightBulb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerRope_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new ShopInteractUI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_NPC, new ShopKeeper());
+
 
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());

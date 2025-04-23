@@ -8,7 +8,6 @@
 #include "AstarScene.h"
 #include "LoadingScene.h"
 #include "CollisionManager.h"
-#include "GameOverUI.h"
 #include "PlayerUI.h"
 #include "HongScene.h"
 #include "HyoScene.h"
@@ -43,7 +42,6 @@ HRESULT MainGame::Init()
 	SceneManager::GetInstance()->AddScene("준용", new YongScene());
 	SceneManager::GetInstance()->AddScene("게임", new GameScene());
 	SceneManager::GetInstance()->AddScene("playerUI", new playerUI());
-	SceneManager::GetInstance()->AddScene("GameOverUI", new GameOverUI());
 
 	//SceneManager::GetInstance()->AddLoadingScene("로딩_1", new LoadingScene());
 

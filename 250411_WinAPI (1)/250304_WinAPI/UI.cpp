@@ -73,14 +73,14 @@ HRESULT UI::InitTextRenderer(ID2D1RenderTarget* renderTarget, const wchar_t* fon
 	if (FAILED(hr)) return hr;
 
 	hr = writeFactory->CreateTextFormat(
-		fontFamily,
-		nullptr,
-		DWRITE_FONT_WEIGHT_NORMAL,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		fontSize,
-		L"ko-KR",
-		&textFormat
+        L"Tekton-Bold",  // 또는 "Tekton Pro", "Arial", 원하는 폰트 이름
+        NULL,
+        DWRITE_FONT_WEIGHT_BOLD,
+        DWRITE_FONT_STYLE_NORMAL,
+        DWRITE_FONT_STRETCH_NORMAL,
+        fontSize,  // 폰트 크기
+        L"en-us",
+        &textFormat
 	);
 	if (FAILED(hr)) return hr;
 
