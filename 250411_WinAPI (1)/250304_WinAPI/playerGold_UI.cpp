@@ -2,12 +2,14 @@
 #include "playerGold_UI.h"
 #include "Image.h"
 #include "PlayerStatus.h"
+#include "ObjectManager.h"
+#include "Character.h"
 
 playerGold_UI::playerGold_UI(ID2D1RenderTarget* renderTarget)
 {
 	if (renderTarget)
 	{
-		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF(D2D1::ColorF::White, defaultOpacity));
+		InitTextRenderer(renderTarget, L"Consolas", 20.0f, D2D1::ColorF(D2D1::ColorF::White));
 	}
 }
 
@@ -17,7 +19,7 @@ HRESULT playerGold_UI::Init()
 
 	Pos = { WINSIZE_X * (18.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
 
-	playerStat = new PlayerStatus();
+	playerStat = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus();
 	playerGold_value = playerStat->GetGold();
 	pastGold_value = playerGold_value;
 
@@ -46,6 +48,6 @@ void playerGold_UI::Render(ID2D1RenderTarget* renderTarget)
 	{
 		playerGoldImage->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 		std::wstring hpText = std::to_wstring(playerGold_value);
-		RenderText(renderTarget, hpText, Pos.x + 20, Pos.y - 10);
+		RenderText(renderTarget, hpText, Pos.x + 20, Pos.y - 10, defaultOpacity);
 	}
 }
