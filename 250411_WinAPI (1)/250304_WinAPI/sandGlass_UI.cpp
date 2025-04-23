@@ -35,6 +35,7 @@ void sandGlass_UI::Render(ID2D1RenderTarget* renderTarget)
 	{
 		image->Render(renderTarget, Pos.x, Pos.y, 1.0f, 1.0f, defaultOpacity);
 		std::wstring hpText = std::to_wstring(playTime);
-		RenderText(renderTarget, hpText, WINSIZE_X/2.0f, WINSIZE_Y/2.0f, defaultOpacity);
+		//RenderText(renderTarget, hpText, WINSIZE_X / 2.0f, WINSIZE_Y / 2.0f, defaultOpacity);
+		//RenderText(renderTarget, hpText, WINSIZE_X/2.0f, WINSIZE_Y/2.0f, defaultOpacity);
 	}
 }
