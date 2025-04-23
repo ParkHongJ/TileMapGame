@@ -7,18 +7,23 @@
 
 HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 {
+	// UI (TaeGwan)
 	ImageManager::GetInstance()->AddImage("Menu_Title", L"Textures/UI/Menu/menu_title.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("Menu_Title_Char", L"Textures/UI/Menu/menu_titlegal.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("BlackBG", L"Textures/UI/Menu/blackbg.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("TorchEffect", L"Textures/fx_small.png", 8, 8, renderTarget);
 	ImageManager::GetInstance()->AddImage("FumeEffect", L"Textures/fx_small.png", 8, 8, renderTarget);
+	ImageManager::GetInstance()->AddImage("Enter_Icon", L"Textures/hud_controller_buttons.png", 10, 10, renderTarget);
 
+	
 	menu_title = ImageManager::GetInstance()->FindImage("Menu_Title");
 	menu_title_char = ImageManager::GetInstance()->FindImage("Menu_Title_Char");
 	blackbg = ImageManager::GetInstance()->FindImage("BlackBG");
 	torchEffectBack = ImageManager::GetInstance()->FindImage("TorchEffect");
 	torchEffectFront = ImageManager::GetInstance()->FindImage("TorchEffect");
 	fumeEffect = ImageManager::GetInstance()->FindImage("FumeEffect");
+	enter = ImageManager::GetInstance()->FindImage("Enter_Icon");
+
 
 	screenTitleScale = { {1080 / 1920.f }, {500 / 1080.f} };
 	screenCharScale = { {500 / 1024.f}, {500 / 1024.f} };
@@ -32,6 +37,28 @@ HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	fadeTimer = 0.0f;
 	opacity = 1.0f;
 	flameFrameIndex = 1;
+
+
+
+	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&pDWriteFactory));
+
+	pDWriteFactory->CreateTextFormat(
+		L"Segoe UI",                // 폰트
+		NULL,
+		DWRITE_FONT_WEIGHT_REGULAR,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		32.0f,                      // 크기
+		L"ko-kr",
+		&pTextFormat
+	);
+
+	pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+	// 텍스트 브러시
+	renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &pWhiteBrush);
+
 
 	return S_OK;
 }
@@ -136,22 +163,64 @@ void StartScene::LateUpdate(float TimeDelta) {}
 
 void StartScene::Render(ID2D1HwndRenderTarget* renderTarget)
 {
-	if (blackbg) blackbg->Render(renderTarget, menuTitlePos.x, menuTitlePos.y, 1.0f, 1.0f, 1.0f);
-	if (menu_title) menu_title->Render(renderTarget, menuTitlePos.x, menuTitlePos.y, screenTitleScale.x, screenTitleScale.y, opacity);
-	if (torchEffectBack) {
-		for (auto& tp : torchParticles) {
+	if (blackbg) 
+		blackbg->Render(renderTarget, menuTitlePos.x, menuTitlePos.y, 1.0f, 1.0f, 1.0f);
+
+	if (menu_title) 
+		menu_title->Render(renderTarget, menuTitlePos.x, menuTitlePos.y, screenTitleScale.x, screenTitleScale.y, opacity);
+
+	if (torchEffectBack) 
+	{
+		for (auto& tp : torchParticles) 
+		{
 			torchEffectFront->FrameRender(renderTarget, tp.pos.x, tp.pos.y, tp.frameIndex, 0, tp.scale, tp.scale,tp.opacity, false);
 		}
 	}
-	if (menu_title_char) menu_title_char->Render(renderTarget, menuTitleCharPos.x, menuTitleCharPos.y, screenCharScale.x, screenCharScale.y, opacity);
-	if (torchEffectFront) {
-		for (auto& f : fumes) {
+
+	if (menu_title_char)
+		menu_title_char->Render(renderTarget, menuTitleCharPos.x, menuTitleCharPos.y, screenCharScale.x, screenCharScale.y, opacity);
+
+	if (torchEffectFront) 
+	{
+		for (auto& f : fumes) 
+		{
 			fumeEffect->FrameRender(renderTarget, f.pos.x, f.pos.y, 1, 2, f.scale, f.scale,f.opacity, false);
 		}
-		for (auto& tp : torchParticles) {
+		for (auto& tp : torchParticles) 
+		{
 			torchEffectFront->FrameRender(renderTarget, tp.pos.x, tp.pos.y, tp.frameIndex, 0, tp.scale, tp.scale,tp.opacity, false);
 		}
 	}
+
+	const wchar_t* text = L"Press      to Begin";
+
+	float alpha = 0.5f + 0.5f * sin(globalTime * 2.0f); // 0 ~ 1 사이 반짝임
+	pWhiteBrush->SetOpacity(alpha * opacity);
+
+	D2D1_RECT_F layoutRect = D2D1::RectF(
+		500, 380, 500 + 400, 380 + 100
+	);
+
+
+	renderTarget->DrawText(
+		text,
+		wcslen(text),
+		pTextFormat,
+		&layoutRect,
+		pWhiteBrush,
+		D2D1_DRAW_TEXT_OPTIONS_NONE,
+		DWRITE_MEASURING_MODE_NATURAL
+	);
+
+	if (enter)
+	{
+		enter->FrameRender(renderTarget, 677, 430, 1, 9, 0.15f, 0.15f, alpha);
+	}
+
+
+
+
+
 }
 
 bool StartScene::returnIsSceneEnd()

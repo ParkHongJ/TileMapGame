@@ -1,5 +1,8 @@
 #pragma once
 #include "Scene.h"
+#include <dwrite.h>
+#pragma comment(lib, "dwrite.lib")
+
 
 struct TorchParticle {
 	D2D1_POINT_2F pos;
@@ -36,6 +39,9 @@ private:
 	Image* torchEffectFront;
 	Image* fumeEffect;
 
+	Image* enter;
+
+
 	FPOINT menuTitlePos;
 	FPOINT menuTitleCharPos;
 	FPOINT flamePos;
@@ -62,6 +68,12 @@ private:
 	bool isFadingOut = false;
 	float fadeTimer = 0.0f;            // 현재까지 경과 시간
 	const float fadeDuration = 1.0f;   // 페이드 총 시간 (1초)
+
+
+	// 멤버 변수
+	IDWriteFactory* pDWriteFactory = nullptr;
+	IDWriteTextFormat* pTextFormat = nullptr;
+	ID2D1SolidColorBrush* pWhiteBrush = nullptr;
 
 
 public:
