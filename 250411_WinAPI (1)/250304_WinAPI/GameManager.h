@@ -21,10 +21,11 @@ public:
 	void GenerateCave(const char* path);
 	ID2D1BitmapRenderTarget* GetCaveRenderTarget();
 private:
-	bool IsTileValid(int x, int y);
+	bool IsTileValid(int x, int y, bool isCave = false);
 
 private:
 	Tile* tileMap[36][44];
+	Tile* caveTileMap[36][44];
 	ComPtr<ID2D1BitmapRenderTarget> caveRenderTarget;
 };
 

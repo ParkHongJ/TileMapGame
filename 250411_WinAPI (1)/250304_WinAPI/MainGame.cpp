@@ -132,6 +132,7 @@ void MainGame::LateUpdate()
 {
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
 	ObjectManager::GetInstance()->LateUpdate(deltaTime);
+
 }
 
 void MainGame::Render()
@@ -285,9 +286,13 @@ void MainGame::BeginDraw()
 
 	pRT1->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
 
-	/*m_pRenderTarget->BeginDraw();
 
-	m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));*/
+	ID2D1RenderTarget* caveRT = GameManager::GetInstance()->GetCaveRenderTarget();
+
+	// caveRT¿¡ µ¿±¼ ¹Ì¸® ·»´õ¸µ
+	caveRT->BeginDraw();
+	caveRT->Clear(D2D1::ColorF(D2D1::ColorF::Black));  // ¹è°æ
+
 }
 
 void MainGame::Draw()
@@ -385,6 +390,7 @@ void MainGame::EndDraw()
 
 			m_pRenderTarget->SetTransform(transform);
 
+			GameManager::GetInstance()->GetCaveRenderTarget()->EndDraw();
 			GameManager::GetInstance()->GetCaveRenderTarget()->GetBitmap(&caveBitmap);
 			
 			m_pRenderTarget->DrawBitmap(
@@ -393,10 +399,9 @@ void MainGame::EndDraw()
 				alphaBlue,
 				D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
 			);
-			//backBuffer->Render(m_pRenderTarget.Get(), center.x, center.y, scaleBlue, scaleBlue, alphaBlue);
 		}
 		
-
+		
 		hr = m_pRenderTarget->EndDraw();
 
 		if (hr == D2DERR_RECREATE_TARGET)

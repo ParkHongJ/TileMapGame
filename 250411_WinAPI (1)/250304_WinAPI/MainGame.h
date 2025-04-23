@@ -38,7 +38,7 @@ private:
 	ComPtr<ID2D1HwndRenderTarget> m_pRenderTarget;
 	
 	ID2D1BitmapRenderTarget* m_pIntermediateRT = nullptr;
-
+	
 	wchar_t szText[128];
 	Image* backBuffer;
 
@@ -50,7 +50,6 @@ private:
 		FadeOut,   // final ¡æ blue
 		FadeIn     // blue ¡æ final
 	};
-
 	FadeState fadeState = FadeState::None;
 	float fadeT = 0.0f;
 	float fadeSpeed = 1.0f;

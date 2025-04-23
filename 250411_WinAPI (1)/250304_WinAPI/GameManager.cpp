@@ -19,7 +19,7 @@ void GameManager::ReleaseStage()
 
 }
 
-void GameManager::LoadTile(const char* path, bool isCave = false)
+void GameManager::LoadTile(const char* path, bool isCave)
 {
 	FILE* fp = fopen(path, "rb");
 	if (!fp) return;
@@ -41,13 +41,20 @@ void GameManager::LoadTile(const char* path, bool isCave = false)
 
 			ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_TILE, tile);
 
-			
 			float renderX = floor((src.pos.x + 0.5f) * GAME_TILE_SIZE);
 			float renderY = floor((src.pos.y + 0.5f) * GAME_TILE_SIZE);
 
 			tile->InitTile(src.atlasX, src.atlasY, src.valid, { renderX , renderY }, TileType::GROUND);
 			tile->SetCaveRender(isCave);
-			tileMap[y][x] = tile;
+			
+			if (isCave)
+			{
+				caveTileMap[y][x] = tile;
+			}
+			else
+			{
+				tileMap[y][x] = tile;
+			}
 		}
 	}
 }
@@ -147,25 +154,53 @@ void GameManager::GenerateDecoTile()
 				bool hasTileAbove = !IsTileValid(x, y - 1);
 				tileMap[y][x]->CreateDecoTile(DecoDirection::LEFT, hasTileAbove);
 			}
-
 			//우
 			if (IsTileValid(x + 1, y) == false)
 			{
 				bool hasTileAbove = !IsTileValid(x, y - 1);
 				tileMap[y][x]->CreateDecoTile(DecoDirection::RIGHT, hasTileAbove);
 			}
-
 			//상
 			if (IsTileValid(x, y - 1) == false)
 			{
 				tileMap[y][x]->CreateDecoTile(DecoDirection::TOP);
 			}
-
 			//하
 			if (IsTileValid(x, y + 1) == false)
 			{
 				tileMap[y][x]->CreateDecoTile(DecoDirection::DOWN);
 			}
+
+
+
+
+
+			/*if (IsTileValid(x - 1, y, true) == false)
+			{
+				bool hasTileAbove = !IsTileValid(x, y - 1, true);
+				caveTileMap[y][x]->CreateDecoTile(DecoDirection::LEFT, hasTileAbove);
+			}
+
+			
+			if (IsTileValid(x + 1, y, true) == false)
+			{
+				bool hasTileAbove = !IsTileValid(x, y - 1, true);
+				caveTileMap[y][x]->CreateDecoTile(DecoDirection::RIGHT, hasTileAbove);
+			}
+
+			
+
+			if (IsTileValid(x, y - 1, true) == false)
+			{
+				caveTileMap[y][x]->CreateDecoTile(DecoDirection::TOP);
+			}
+
+			
+
+			if (IsTileValid(x, y + 1, true) == false)
+			{
+				caveTileMap[y][x]->CreateDecoTile(DecoDirection::DOWN);
+			}*/
 
 		}
 	}
@@ -187,21 +222,24 @@ void GameManager::Init(const char* path)
 	string objectPath = scenePath + ".json";
 
 	LoadTile(tilePath.c_str());
-	GenerateDecoTile();
-	GenerateBorderTile();
 	//TODO 임시
 	LoadObject(objectPath.c_str());
 	GenerateCave(path);
+
+	GenerateDecoTile();
+	GenerateBorderTile();
 }
 
 void GameManager::GenerateCave(const char* path)
 {
-	string scenePath = "Data/" + string(path);
+	string scenePath = "Data/" + /*string(path)*/ string("caveScene");
 
 	string tilePath = scenePath + ".tilemap";
 	string objectPath = scenePath + ".json";
 
 
+	LoadTile(tilePath.c_str(), true);
+	LoadObject(objectPath.c_str(), true);
 }
 
 ID2D1BitmapRenderTarget* GameManager::GetCaveRenderTarget()
@@ -209,13 +247,23 @@ ID2D1BitmapRenderTarget* GameManager::GetCaveRenderTarget()
 	return caveRenderTarget.Get();
 }
 
-bool GameManager::IsTileValid(int x, int y)
+bool GameManager::IsTileValid(int x, int y, bool isCave)
 {
 	if (x < 0 || x >= 40 || y < 0 || y >= 32)
 		return true;
 
-	if (tileMap[y][x] == nullptr)
-		return false;
+	if (isCave)
+	{
+		if (caveTileMap[y][x] == nullptr)
+			return false;
 
-	return tileMap[y][x]->IsValid();
+		return caveTileMap[y][x]->IsValid();
+	}
+	else
+	{
+		if (tileMap[y][x] == nullptr)
+			return false;
+
+		return tileMap[y][x]->IsValid();
+	}
 }
