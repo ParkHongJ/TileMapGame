@@ -9,6 +9,7 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 #include "Image.h"
+#include "GameManager.h"
 HRESULT DummyHongPlayer::Init()
 {
 	len1 = elbow.Length();
@@ -407,6 +408,8 @@ void DummyHongPlayer::Render(ID2D1RenderTarget* renderTarget)
 		int y = CurrentIndex / 4;
 		img->FrameRender(renderTarget, cameraPos.x, cameraPos.y, x, y);
 	}
+
+	
 }
 
 void DummyHongPlayer::SolveIK2Bone(FPOINT root, FPOINT& elbow, FPOINT& hand, const FPOINT& target, float len1, float len2)

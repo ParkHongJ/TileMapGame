@@ -26,7 +26,6 @@ enum class DecoDirection
 	LEFT,
 	RIGHT
 };
-
 struct DecoInfo
 {
 	DecoDirection dir;

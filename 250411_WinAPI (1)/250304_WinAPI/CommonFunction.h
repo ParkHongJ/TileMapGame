@@ -159,6 +159,19 @@ inline void DrawCenteredRect(ID2D1RenderTarget* rt, FPOINT center, FPOINT scale,
 	rt->DrawRectangle(rect, tempBrush.Get(), thickness);
 }
 
+inline void DrawLine(ID2D1RenderTarget* rt, FPOINT from, FPOINT to, D2D1::ColorF color, float thickness = 1.0f)
+{
+	ComPtr<ID2D1SolidColorBrush> tempBrush;
+	rt->CreateSolidColorBrush(color, &tempBrush);
+
+	rt->DrawLine(
+		{ from.x, from.y },
+		{ to.x,to.y },
+		tempBrush.Get(),
+		thickness  // ¼± µÎ²²
+	);
+}
+
 inline float RandomRange(float min, float max)
 {
 	float r = (float)rand() / RAND_MAX; // 0.0 ~ 1.0

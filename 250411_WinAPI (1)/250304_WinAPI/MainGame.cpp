@@ -111,12 +111,13 @@ void MainGame::Update()
 	CollisionManager::GetInstance()->Update(deltaTime);
 	ParticleManager::GetInstance()->Update(deltaTime);
 
-	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_ADD)) // 한 번만
+	if (false) // 한 번만
 	{
 		fadeState = (lastWasFadeOut ? FadeState::FadeIn : FadeState::FadeOut);
 		fadeT = 0.0f;
 		lastWasFadeOut = !lastWasFadeOut;
 	}
+
 	if (fadeState != FadeState::None)
 	{
 		fadeT += deltaTime * fadeSpeed;

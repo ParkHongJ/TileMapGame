@@ -61,6 +61,10 @@ using namespace std;
 #define INTERACTIONSTATE 3
 
 
+typedef struct tagIPOINT
+{
+    int x, y;
+}IPOINT;
 
 typedef struct tagFPOINT
 {

@@ -19,7 +19,7 @@ private:
 		totalForce.x += force.x;
 		totalForce.y += force.y;
 	}
-
+	void UpdatePhysics(float TimeDelta);
 private:
 	float objectScale;
 	class BoxCollider* collider;
@@ -29,7 +29,8 @@ private:
 	FPOINT velocity;
 	FPOINT acceleration = { 0, 0 };  // 가속도
 	float mass = 1.0f;
-	FPOINT gravity = { 0, 90.8f };  // 중력
+	//FPOINT gravity = { 0, 90.8f };  // 중력
+	FPOINT gravity = { 0, 9.8f };  // 중력
 	bool bPhysics = false;
 	FPOINT totalForce = { 0, 0 };
 	float bounciness = 0.8f;
@@ -37,5 +38,16 @@ private:
 	bool useGravity;
 	bool bGround = false;
 
+	struct JumpNode* start;
+	struct JumpNode* end;
+	std::vector<struct JumpNode*> paths;
+
+
+
+	int pathIndex = 0;
+
+	float speed = 100.f;
+	float jumpPower = -2000.f;
+	bool bJumping = false;
 };
 

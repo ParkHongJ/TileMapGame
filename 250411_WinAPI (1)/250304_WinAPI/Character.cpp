@@ -831,7 +831,7 @@ bool Character::CheckHangOn()
 
 bool Character::CheckCanPushTile()
 {
-    float maxPushDist = 5.0f;
+    float maxPushDist = 2.0f;
     float debugTime = 1.0f;
     bool debugDraw = true;
 
