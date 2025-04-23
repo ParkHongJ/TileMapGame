@@ -36,6 +36,7 @@ private:
 	float shakeY = 1.f;
 
 	FPOINT curPos;
+	FPOINT curOffset;
 
 public: 
 	HRESULT Init();

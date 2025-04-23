@@ -34,6 +34,8 @@ void CameraManager::Update( float TimeDelta)
 	//target = playerPos;
 	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
 
+	ShakeUpdate(TimeDelta);
+
 	if (isLookUp && !isLookDown)
 	{
 		yOffset = 600.0f;
@@ -63,6 +65,8 @@ void CameraManager::Update( float TimeDelta)
 	pos.x = -(target.x) + offset.x;
 	pos.y = -(target.y) + offset.y + currYOffset;
 
+	offset = curOffset;
+
 	//float x = -(TILEMAPTOOL_X - WINSIZE_X);
 	//float y = -(TILEMAPTOOL_Y - WINSIZE_Y);
 
@@ -91,10 +95,11 @@ void CameraManager::ShakeUpdate(float TimeDelta)
 	float offsetX = ((rand() % 200) / 100.0f - 1.0f) * shakePower;
 	float offsetY = ((rand() % 200) / 100.0f - 1.0f) * shakePower;
 	
-	if (shakeTime >= 0.0f)
+	curOffset = offset;
+
+	if (shakeTime > 0.0f)
 	{
-		curPos = pos;
-		pos += {offsetX, offsetY};
+		offset += {offsetX, offsetY};
 		shakeTime -= TimeDelta;
 	}
 

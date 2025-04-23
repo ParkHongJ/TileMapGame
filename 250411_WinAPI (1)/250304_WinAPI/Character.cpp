@@ -1044,7 +1044,7 @@ void Character::JunUpdate(float TimeDelta)
             playerStatus->MinusRopeCount();
         }
     }
-    
+
 	if (holdItem)
 	{
 		holdItem->SetHoldItemPos(Pos, isFlip);

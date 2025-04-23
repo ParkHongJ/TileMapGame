@@ -244,6 +244,8 @@ void Bomb::FrameUpdate(float TimeDelta)
 
 void Bomb::Explosion()
 {
+	//CameraManager::GetInstance()->
+	CameraManager::GetInstance()->CameraShake(0.5f, 30.f);
 	vector<GameObject*> temp;
 	CollisionManager::GetInstance()->GetObjectsInCircle(Pos, 200.f, &temp);
 
