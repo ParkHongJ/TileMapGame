@@ -222,7 +222,7 @@ void BossMonster::CheckTileCollision()
 
 void BossMonster::CheckPlayerCollision()
 {
-    float maxDist = 100.0f;
+    float maxDist = 200.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -255,44 +255,56 @@ void BossMonster::CheckItemCollision()
 
 void BossMonster::MeetPlayer()
 {
-    if (monsterState == MonsterState::ATTACK)
-    {
-        meetPlayer = false;
-        return;
-    }
+    bool inAir = !isTileTouchingLeftBottom && !isTileTouchingRight;
 
-    if ((isPlayerTouchingRight || isPlayerTouchingLeft) && isTileTouchingLeftBottom && isTileTouchingRightBottom && !meetPlayer/*&& monsterState!=MonsterState::ATTACKMOVE*/)
+    if (/*(isPlayerTouchingRight || isPlayerTouchingLeft) && */isTileTouchingLeftBottom && isTileTouchingRightBottom && !meetPlayer/*&& monsterState!=MonsterState::ATTACKMOVE*/)
     {        
         //meetPlayer = true;
 
-        if (isPlayerTouchingRight /*&& dir.x > 0 && !isPlayerTouchingLeft*/)
+        if (isPlayerTouchingRight && !meetPlayer/*&& dir.x > 0 && !isPlayerTouchingLeft*/)
         {
             dir.x = 1;
             monsterState = MonsterState::ATTACKMOVE;
             MoveJumpStart(300.f, 60.f);
             meetPlayer = true;
         }
-        else if (isPlayerTouchingLeft /*&& dir.x < 0 && !isPlayerTouchingRight*/)
+        else if (isPlayerTouchingLeft && !meetPlayer /*&& dir.x < 0 && !isPlayerTouchingRight*/)
         {
             dir.x = -1;
             monsterState = MonsterState::ATTACKMOVE;
             MoveJumpStart(300.f, 120.f);
             meetPlayer = true;
         }
+        else if (!inAir)
+            meetPlayer = false;
 
-        if (monsterState == MonsterState::ATTACKMOVE && isPlayerTouchingRight)
+        // 점프 하고 난 직후에 플레이어를 만났을 때 
+        if (monsterState == MonsterState::ATTACKMOVE && isPlayerTouchingRight && !inAir)
         {
             dir.x = 1;
             monsterState == MonsterState::ATTACK;
+			meetPlayer = true;
             Move();
         }
-        else if (monsterState == MonsterState::ATTACKMOVE && isPlayerTouchingRight)
+        else if (monsterState == MonsterState::ATTACKMOVE && isPlayerTouchingRight && !inAir)
         {
             dir.x = -1;
             monsterState == MonsterState::ATTACK;
+            meetPlayer = true;
             Move();
         }
-
+        else if (monsterState == MonsterState::ATTACKMOVE && !isPlayerTouchingRight && !isPlayerTouchingLeft)
+        {
+            meetPlayer = false;
+            monsterState = MonsterState::MOVE;
+        }
+        
+        // 공격 이후에는 무조건 MOVE로 변경 
+        if (monsterState == MonsterState::ATTACK && !isPlayerTouchingRight && !isPlayerTouchingLeft)
+        {
+            meetPlayer = false;
+            monsterState = MonsterState::MOVE;
+        }
     }
    
 
