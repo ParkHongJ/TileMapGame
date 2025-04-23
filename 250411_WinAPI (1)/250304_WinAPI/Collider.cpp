@@ -6,15 +6,15 @@
 //임시
 #include "CameraManager.h"
 
-Collider::Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject)
-	: Offset(_Offset), Scale(_Scale), Owner(OwnerObject), Pos({ 0.f, 0.f })
+Collider::Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject, ORDER_Z zOrder)
+	: Offset(_Offset), Scale(_Scale), Owner(OwnerObject), Pos({ 0.f, 0.f }), valueZ(zOrder)
 {
 	//순서보장 확실히 필요하다.
 	CollisionManager::GetInstance()->Register(this);
 }
 
-Collider::Collider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject)
-    : Offset(_Offset), Scale(_Scale), Owner(OwnerObject), Pos({ 0.f, 0.f })
+Collider::Collider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject, ORDER_Z zOrder)
+    : Offset(_Offset), Scale(_Scale), Owner(OwnerObject), Pos({ 0.f, 0.f }), valueZ(zOrder)
 {
     //순서보장 확실히 필요하다.
     this->maskType = maskType;

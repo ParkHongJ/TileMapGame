@@ -280,7 +280,11 @@ void CollisionManager::ColMaskAABB()
                     for (auto& iter2 : dest.second)
                     {
                         // z가 다르다고?
-                        // continue;
+                        if (iter->GetValueZ() != iter2->GetValueZ())
+                        {
+                            continue;
+                        }
+
                         bool bCollision = CollisionAABB(iter, iter2);
 
                         if (bCollision)
@@ -333,6 +337,7 @@ void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, 
 
 bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& outHit, bool debugDraw, float debugTime, GameObject* ignoreObject)
 {
+    // Don't use this function
     bool found = false;
     RaycastHit closestHit;
     closestHit.distance = maxDist;
@@ -345,7 +350,6 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
 
         if (col->Owner == ignoreObject)
         {
-
             continue;
         }
         RaycastHit temp;
@@ -373,7 +377,7 @@ bool CollisionManager::RaycastAll(const Ray& ray, float maxDist, RaycastHit& out
     return found;
 }
 
-bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime)
+bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime, ORDER_Z zOrder)
 {
     bool found = false;
     RaycastHit closestHit;
@@ -384,6 +388,11 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
         if (!col) continue;
 
         if (col->Owner == nullptr) continue;
+
+        if (zOrder != col->GetValueZ())
+        {
+            continue;
+        }
 
         RaycastHit temp;
         if (col->Raycast(ray, maxDist, temp))
@@ -410,7 +419,7 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
     return found;
 }
 
-bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw, float debugTime)
+bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw, float debugTime, ORDER_Z zOrder)
 {
     bool found = false;
     RaycastHit closestHit;
@@ -422,6 +431,11 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
         if (!col) continue;
 
         if (col->Owner == nullptr) continue;
+
+        if (zOrder != col->GetValueZ())
+        {
+            continue;
+        }
 
         RaycastHit temp;
         if (col->Raycast(ray, maxDist, temp))
@@ -456,7 +470,7 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
     return false;
 }
 
-bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime)
+bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw, float debugTime, ORDER_Z zOrder)
 {
     bool found = false;
     RaycastHit closestHit;
@@ -472,7 +486,7 @@ bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& 
 		{
 			for (auto& iter : layerCollisionMap[pair.first])
 			{
-				//for (auto& iter2 : pair2.second)
+				if(zOrder == iter->GetValueZ())
 				{
 					RaycastHit temp;
 					if (iter->Raycast(ray, maxDist, temp))
@@ -502,7 +516,7 @@ bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& 
     return found;
 }
 
-bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw, float debugTime)
+bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw, float debugTime, ORDER_Z zOrder)
 {
     bool found = false;
     RaycastHit closestHit;
@@ -520,6 +534,11 @@ bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& 
             for (auto& iter : layerCollisionMap[pair.first])
             {
 				RaycastHit temp;
+                if (zOrder != iter->GetValueZ())
+                {
+                    continue;
+                }
+
 				if (iter->Raycast(ray, maxDist, temp))
 				{
 					if (temp.distance < closestHit.distance)

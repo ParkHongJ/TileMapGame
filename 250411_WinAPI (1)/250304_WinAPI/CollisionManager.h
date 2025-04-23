@@ -54,11 +54,11 @@ public:
 	bool CollisionSphere(Collider* collider1, Collider* collider2);
 	void BoxAll();
 	bool RaycastAll(const Ray& ray, float maxDist, RaycastHit& hitOut, bool debugDraw = false, float debugTime = 0.0f, GameObject* ignoreObject = nullptr);
-	bool RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw = false, float debugTime = 0.0f);
-	bool RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw = false, float debugTime = 0.0f);
+	bool RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw = false, float debugTime = 0.0f, ORDER_Z zOrder = Z_DEFAULT);
+	bool RaycastType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw = false, float debugTime = 0.0f, ORDER_Z zOrder = Z_DEFAULT);
 
-	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw = false, float debugTime = 0.0f);
-	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw = false, float debugTime = 0.0f);
+	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, bool debugDraw = false, float debugTime = 0.0f, ORDER_Z zOrder = Z_DEFAULT);
+	bool RaycastMyType(const Ray& ray, float maxDist, RaycastHit& hitOut, CollisionMaskType maskType, GameObject* obj, bool debugDraw = false, float debugTime = 0.0f, ORDER_Z zOrder = Z_DEFAULT);
 
 	bool GetObjectsInCircle(FPOINT center, float radius, vector<GameObject*>* inCircleObjects);
 	bool GetObjectsInCircle(GameObject* owner, float radius, priority_queue<pair<float, GameObject*>>& inCircleObjects);

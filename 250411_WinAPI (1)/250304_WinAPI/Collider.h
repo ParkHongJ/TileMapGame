@@ -8,6 +8,12 @@ struct RaycastHit;
 
 // WorldObject, Player, Monster, Item, Tile, Effect
 
+enum ORDER_Z
+{
+	Z_DEFAULT,
+	Z_CAVE
+};
+
 enum class ColliderType
 {
 	NONE, 
@@ -31,8 +37,8 @@ class Collider
 	friend CollisionManager;
 
 public:
-	Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject);
-	Collider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject);
+	Collider(FPOINT _Offset, FPOINT _Scale, GameObject* OwnerObject, ORDER_Z zOrder = Z_DEFAULT);
+	Collider(FPOINT _Offset, FPOINT _Scale, CollisionMaskType maskType, GameObject* OwnerObject, ORDER_Z zOrder = Z_DEFAULT);
 	virtual ~Collider();
 
 	void Release() {};
@@ -59,6 +65,9 @@ public:
 
 	inline void SetOffset(FPOINT offset) { this->Offset = offset; };
 
+	inline ORDER_Z GetValueZ() const { return valueZ; }
+	inline void SetValueZ(ORDER_Z zOrder) { valueZ = zOrder; }
+
 protected:
 	FPOINT Pos;
 	FPOINT Offset;
@@ -66,6 +75,7 @@ protected:
 	GameObject* Owner;
 	ColliderType Type;
 	CollisionMaskType maskType;
+	ORDER_Z valueZ;
 };
 
 class BoxCollider : public Collider
