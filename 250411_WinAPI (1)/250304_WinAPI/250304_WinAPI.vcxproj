@@ -148,9 +148,10 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="Rope.cpp" />
+    <ClCompile Include="RopeController.cpp" />
     <ClCompile Include="HeavyBlock.cpp" />
     <ClCompile Include="NiddleTrap.cpp" />
-    <ClCompile Include="SpiderMonster.cpp" />
+    <ClCompile Include="SkeletonMonster.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="ChangeCobwebBomb.cpp" />
@@ -204,7 +205,6 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
-    <ClCompile Include="Pitfall.cpp" />
     <ClCompile Include="playerBomb_UI.cpp" />
     <ClCompile Include="playerGold_UI.cpp" />
     <ClCompile Include="playerHP_UI.cpp" />
@@ -240,9 +240,10 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="Rope.h" />
+    <ClInclude Include="RopeController.h" />
     <ClInclude Include="HeavyBlock.h" />
     <ClInclude Include="NiddleTrap.h" />
-    <ClInclude Include="SpiderMonster.h" />
+    <ClInclude Include="SkeletonMonster.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="ChangeCobwebBomb.h" />
@@ -299,7 +300,6 @@
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Pitfall.h" />
     <ClInclude Include="playerBomb_UI.h" />
     <ClInclude Include="playerGold_UI.h" />
     <ClInclude Include="playerHP_UI.h" />

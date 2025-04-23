@@ -3,13 +3,13 @@
 
 class BoxCollider;
 class Image;
-class SpiderMonster : public Monster
+class SkeletonMonster : public Monster
 {
-	GENERATE_BODY(Textures/Monster/SpiderMonster.png, 128, 128)
+	GENERATE_BODY(Textures/Monster/monsters.png, 128, 128)
 
 public:
-	SpiderMonster();
-	~SpiderMonster();
+	SkeletonMonster();
+	~SkeletonMonster();
 
 	virtual HRESULT Init() override;
 	virtual void Release() override;
@@ -20,11 +20,12 @@ public:
 	virtual void CheckItemCollision() override;
 	virtual void Move() override;
 	virtual void ReverseMove();
+	virtual void Detect(GameObject* obj) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 private:
-	Image* spiderImage;
-	BoxCollider* spiderCollider = nullptr;
+	Image* skeletonImage;
+	BoxCollider* skeletonCollider = nullptr;
 	FPOINT colliderSize;
 	float colliderOffsetY;
 };

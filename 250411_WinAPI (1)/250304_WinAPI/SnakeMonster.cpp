@@ -6,6 +6,7 @@
 #include "CameraManager.h"
 #include "Collider.h"
 #include "TimerManager.h"
+#include "Character.h"
 
 SnakeMonster::SnakeMonster()
 {
@@ -18,6 +19,7 @@ SnakeMonster::~SnakeMonster()
 HRESULT SnakeMonster::Init()
 {
     snakeImage = ImageManager::GetInstance()->FindImage("Snake_Monster");
+    player = new Character();
 
     //snakeCollider = new BoxCollider(
     //    { 20.0f , 15.0f },     // Offset
@@ -31,8 +33,8 @@ HRESULT SnakeMonster::Init()
     //    CollisionMaskType::MONSTER,this
     //);
 
-    colliderSize = { 100.0f, 50.0f };
-    colliderOffsetY = 30.f;
+    colliderSize = { 50.0f, 30.0f };
+    colliderOffsetY = 10.f;
 
     snakeCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -82,15 +84,27 @@ HRESULT SnakeMonster::Init()
 	meetPlayerLeft = false;
 	meetPlayerRight = false;
 
+    playerPos = player->GetPos();
+    playerPosBottom = playerPos.y + 128 / 2;
+    playerPosLeftBottom = { playerPos.x - 128 / 2, playerPosBottom };
+    playerPosRightBottom = { playerPos.x + 128 / 2,playerPosBottom };
+   
+    monsterPosTop = Pos.y - 128 / 2;
+	monsterPosLeftTop = { Pos.x - 128 / 2,monsterPosTop };
+	monsterPosRightTop = { Pos.x + 128 / 2, monsterPosTop };
+   
+
     return S_OK;
 }
 
 void SnakeMonster::Release()
 {
+    __super::Release();
 }
 
 void SnakeMonster::Update(float TimeDelta)
 {
+    bHidden;
     CheckTileCollision();
     CheckPlayerCollision();
     CheckItemCollision();
@@ -144,10 +158,10 @@ void SnakeMonster::Update(float TimeDelta)
     }
 
 	//Player가 위에서 밟았을 때, 아이템과 충돌했을 때  데미지 닳기 
-    if ((!isPlayerTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingBottom && isPlayerTouchingCenterTop) || isItemTouchingLeft || isItemTouchingRight || isItemTouchingBottom || isItemTouchingTop)
+   /* if (!isPlayerTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingBottom && isPlayerTouchingCenterTop)
     {
         monsterHP--;
-    }
+    }*/
 
     if (monsterHP == 0)
         monsterState = MonsterState::DEAD;
@@ -190,9 +204,7 @@ void SnakeMonster::FrameUpdate(float TimeDelta)
             }
             currFrame.y = attackFrameInfo.startFrame.y;
             elipsedTime = 0;
-        }
-
-            
+        }                    
     }
 }
 
@@ -210,19 +222,19 @@ void SnakeMonster::CheckTileCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isTileTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, true, debugTime)/* ||
+    isTileTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, false, debugTime)/* ||
        CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime)*/;
 
-    isTileTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, true, debugTime) /*||
+    isTileTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, false, debugTime) /*||
         CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime)*/;
 
-    isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, true, debugTime);
-    isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, true, debugTime);
+    isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
 }
 
 void SnakeMonster::CheckPlayerCollision()
 {
-    float maxDist = 20.0f;
+    float maxDist = 5.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -235,11 +247,11 @@ void SnakeMonster::CheckPlayerCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, true, debugTime) ||
-       CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, false, debugTime) ||
+       CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, false, debugTime);
 
     isPlayerTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, true, debugTime) ||
         CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, true, debugTime);
@@ -262,14 +274,14 @@ void SnakeMonster::CheckItemCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, true, debugTime);
+    isItemTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, true, debugTime);
+    isItemTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, true, debugTime);
+    isItemTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, false, debugTime);
 }
 
 void SnakeMonster::Move()
@@ -286,17 +298,68 @@ void SnakeMonster::ReverseMove()
         Pos.x += dir.x * moveSpeed * time;
 }
 
+void SnakeMonster::Detect(GameObject* obj)
+{
+
+    /*if ((playerPosBottom == monsterPosTop) && (playerPosRightBottom.x > monsterPosLeftTop.x) && (playerPosRightBottom.x < monsterPosRightTop.x))
+    {
+        isTouchingTop = true;
+    }*/
+
+    /*if (playerPosBottom == monsterPosTop)
+    {
+        isTouchingTop = true;
+    }*/
+
+   /* float playerPosRight = 
+    float playerPosTop =
+    float playerPosBottom = */
+
+    if (auto player = obj->GetType<Character>())
+	{
+        playerPos = player->GetPos();
+        float playerPosBottom = playerPos.y + 20;
+        float monsterPosTop = Pos.y;
+
+        if (playerPosBottom < monsterPosTop)
+        {
+            SetDestroy();
+        }
+       
+	}
+
+	else if (auto player = obj->GetType<Character>())
+	{
+        
+	}
+
+    //if (playerPos.y + 128 == Pos.y - 128)
+    //{
+    //    if (auto player = obj->GetType<Character>())
+    //    {
+    //        // Equip(player->GetPlayerStatus());
+    //        SetDestroy();
+    //    }
+
+    //    else if (auto player = obj->GetType<Character>())
+    //    {
+
+    //    }
+    //   
+    //}
+}
+
 void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 
     if (snakeImage)
     {
-        if (monsterHP == 1 && monsterState == MonsterState::MOVE)
+        if (/*monsterHP == 1 && */monsterState == MonsterState::MOVE)
         {
             if (dir.x > 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y,false);
             }
 
             if (dir.x < 0)
@@ -305,7 +368,7 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
             }
         }
 
-        if (monsterHP == 1 && monsterState == MonsterState::ATTACK)
+        if (/*monsterHP == 1 && */monsterState == MonsterState::ATTACK)
         {
             if (dir.x > 0 && meetPlayerRight)
             {
@@ -320,17 +383,3 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
     }
 }
 
-void SnakeMonster::Detect(GameObject* obj)
-{
-    int i = 5;
-    //if (auto player = obj->GetType<Character>())
-    //{
-    //    
-    //    SetDestroy();
-    //}
-
-    //else if (auto player = obj->GetType<Character>())
-    //{
-
-    //}
-}

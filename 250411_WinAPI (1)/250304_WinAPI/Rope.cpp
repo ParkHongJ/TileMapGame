@@ -7,7 +7,7 @@
 
 Rope::Rope()
 {
-    objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
+    objectScale = { GAME_TILE_SIZE / (ATLAS_TILE_SIZE * 1.25f), GAME_TILE_SIZE / (ATLAS_TILE_SIZE * 1.25f) };
 }
 
 Rope::~Rope()
@@ -25,18 +25,16 @@ HRESULT Rope::Init()
 
 void Rope::Update(float TimeDelta)
 {
-    if (KeyManager::GetInstance()->IsOnceKeyDown('A'))
-    {
-
-    }
-    CurFrameX = 0;
-    CurFrameY = 12;
+    //if (KeyManager::GetInstance()->IsOnceKeyDown('A'))
+    //{
+    //    //if()
+    //}
 }
 
 void Rope::Render(ID2D1RenderTarget* renderTarget)
 {
     FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
-    image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 12, objectScale.x, objectScale.y); // 임의값
+    image->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameX, curFrameY, objectScale.x, objectScale.y); // 임의값
 }
 
 void Rope::Release()

@@ -201,6 +201,7 @@ void ObjectManager::ClearObjects()
 	}
 
 	objects.clear();
+	player = nullptr;
 }
 
 ObjectManager::~ObjectManager()

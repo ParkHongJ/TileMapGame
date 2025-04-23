@@ -27,6 +27,7 @@ public:
     void ClearObjects();
     void AddObject(RENDERORDER renderId, GameObject* obj);
     void AddObject(unsigned int id, RENDERORDER renderId, GameObject* obj);
+    void SetPlayer(Character* obj) { player = obj;};
     void ReplaceObject(unsigned int id, GameObject* obj);
     bool RemoveObject(unsigned int id);
 
