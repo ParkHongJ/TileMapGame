@@ -10,13 +10,16 @@ public:
 	virtual void LateUpdate(float TimeDelta);		// 프레임 단위로 게임 로직 실행(데이터 계산)
 	virtual void Render(ID2D1RenderTarget* renderTarget);	// 프레임 단위로 출력(이미지, 텍스트 등)
 
+	virtual void Detect(GameObject* obj) override;
+
+	virtual bool OnPush(FPOINT dir, float strength) override;
 private:
 	void AddForce(const FPOINT& force)
 	{
 		totalForce.x += force.x;
 		totalForce.y += force.y;
 	}
-
+	void UpdatePhysics(float TimeDelta);
 private:
 	float objectScale;
 	class BoxCollider* collider;
@@ -26,12 +29,25 @@ private:
 	FPOINT velocity;
 	FPOINT acceleration = { 0, 0 };  // 가속도
 	float mass = 1.0f;
+	//FPOINT gravity = { 0, 90.8f };  // 중력
 	FPOINT gravity = { 0, 9.8f };  // 중력
 	bool bPhysics = false;
 	FPOINT totalForce = { 0, 0 };
-	float bounciness = 0.15f;
+	float bounciness = 0.8f;
 
 	bool useGravity;
+	bool bGround = false;
 
+	struct JumpNode* start;
+	struct JumpNode* end;
+	std::vector<struct JumpNode*> paths;
+
+
+
+	int pathIndex = 0;
+
+	float speed = 100.f;
+	float jumpPower = -2000.f;
+	bool bJumping = false;
 };
 

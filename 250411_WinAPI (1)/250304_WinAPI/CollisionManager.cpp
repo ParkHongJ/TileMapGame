@@ -118,7 +118,7 @@ void CollisionManager::Clear()
 void CollisionManager::DebugRender(ID2D1RenderTarget* renderTarget)
 {
 #ifdef _DEBUG
-	for (auto& collider : colliders)
+	/*for (auto& collider : colliders)
 	{
 		collider->DebugRender(renderTarget);
 	}
@@ -129,7 +129,7 @@ void CollisionManager::DebugRender(ID2D1RenderTarget* renderTarget)
         {
             iter->DebugRender(renderTarget);
         }
-    }
+    }*/
 
     // Debug Ray ½Ã°¢È­
     for (const auto& ray : debugRays)
@@ -432,6 +432,9 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
 
         if (col->Owner == nullptr) continue;
 
+        if (col->Owner == obj)
+            continue;
+
         if (zOrder != col->GetValueZ())
         {
             continue;
@@ -453,8 +456,8 @@ bool CollisionManager::RaycastType(const Ray& ray, float maxDist, RaycastHit& hi
     if (found)
     {
         hitOut = closestHit;
-        obj->Detect(dest);
-        dest->Detect(obj);
+        //obj->Detect(dest);
+        //dest->Detect(obj);
     }
         
 

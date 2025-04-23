@@ -670,10 +670,22 @@ void Character::HandleInteractionLogic()
     case InteractionState::SubState::INTERACTION_HANGON_TILE:
         break;
     case InteractionState::SubState::INTERACTION_PUSH_TILE:
-
-
-
-
+        if (isFlip)
+        {
+            if (!CheckCanPushTile() || currInput.moveLeftReleased)
+            {
+                pushDelay = maxPushDelay;
+                ChangeState(&idleState);
+            }
+        }
+        else
+        {
+            if (!CheckCanPushTile() || currInput.moveRightReleased)
+            {
+                pushDelay = maxPushDelay;
+                ChangeState(&idleState);
+            }
+        }
         //Move();
         break;
 
@@ -821,24 +833,39 @@ bool Character::CheckHangOn()
 
 bool Character::CheckCanPushTile()
 {
-    float maxPushDist = 5.0f;
+    float maxPushDist = 2.0f;
     float debugTime = 1.0f;
     bool debugDraw = true;
 
     RaycastHit hitLeft, hitRight;
-    Ray leftRay = { {Pos.x - 64.f, Pos.y }, {1.0f, 0.f} };
-    Ray rightRay = { {Pos.x + 64.f, Pos.y}, {-1.0f, 0.f} };
+    Ray leftRay = { {Pos.x - 64.f, Pos.y }, {-1.0f, 0.f} };
+    Ray rightRay = { {Pos.x + 64.f, Pos.y}, {1.0f, 0.f} };
 
-    //if (isFlip)
-    //{   
-    //    if(CollisionManager::GetInstance()->RaycastType(leftRay, maxPushDist,hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true,1.0f))
-    //        return true;
-    //}
-    //else
-    //{
-    //    if(CollisionManager::GetInstance()->RaycastType(rightRay, maxPushDist,hitLeft, /*CollisionMaskType:: 밀수 있는 타일*/, true,1.0f))
-    //        return true;
-    //}
+    if (isFlip)
+    {   
+        //홍준 수정
+        if (CollisionManager::GetInstance()->RaycastType(leftRay, maxPushDist, hitLeft, CollisionMaskType::TILE, true, 1.0f))
+        {
+            GameObject* hitObject = hitLeft.collider->GetOwner();
+            if (hitObject->GetObjectName() == OBJECTNAME::HEAVYBLOCK)
+            {
+                interactionObject = hitObject;
+                return true;
+            }
+        }
+    }
+    else
+    {
+        if (CollisionManager::GetInstance()->RaycastType(rightRay, maxPushDist, hitRight, CollisionMaskType::TILE, true, 1.0f))
+        {
+            GameObject* hitObject = hitRight.collider->GetOwner();
+            if (hitObject->GetObjectName() == OBJECTNAME::HEAVYBLOCK)
+            {
+                interactionObject = hitObject;
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -920,13 +947,50 @@ void Character::CheckInterAction()
 
     if (isTouchingBottom)
     {
-        if (CheckCanPushTile())
+        if (CheckCanPushTile() && (currInput.moveLeft || currInput.moveRight))
         {
-            // TODO : Push tile from tilemap?
+            float timeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+            
+            pushDelay -= timeDelta;
+            
+            // 진짜 밀기
+            if (pushDelay > 0.f)
+            {
+                interactionObject = nullptr;
+                return;
+            }
 
+            // TODO : Push tile from tilemap?
+            
+            if (interactionObject != nullptr)
+            {
+                FPOINT dir;
+                float pushStrength = 30.f;
+
+                if (isFlip)
+                {
+                    //왼쪽
+                    dir = { -1.f,0.f };
+                }
+                else
+                {
+                    //오른쪽
+                    dir = { 1.f,0.f };
+                }
+
+                if (interactionObject->OnPush(dir, pushStrength))
+                {
+                    Pos.x += dir.x * pushStrength * timeDelta;
+                    interactionObject = nullptr;
+                }
+            }
 
             ChangeState(&interactionState);
             return;
+        }
+        else
+        {
+            pushDelay = maxPushDelay;
         }
     }
 }

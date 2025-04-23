@@ -29,10 +29,10 @@ void ObjectManager::AddObject(RENDERORDER renderId, GameObject* obj)
 	
 	objects.emplace(++nextId, obj);
 
-	if (renderId == RENDERORDER::RENDER_PLAYER)
-	{
-		player = (Character*)obj;
-	}
+	//if (renderId == RENDERORDER::RENDER_PLAYER)
+	//{
+	//	player = (Character*)obj;
+	//}
 }
 
 void ObjectManager::AddObject(unsigned int id, RENDERORDER renderId, GameObject* obj)
@@ -48,10 +48,10 @@ void ObjectManager::AddObject(unsigned int id, RENDERORDER renderId, GameObject*
 	
 	objects.emplace(id, obj);
 
-	if (renderId == RENDERORDER::RENDER_PLAYER)
-	{
-		player = (Character*)obj;
-	}
+	//if (renderId == RENDERORDER::RENDER_PLAYER)
+	//{
+	//	player = (Character*)obj;
+	//}
 }
 
 void ObjectManager::ReplaceObject(unsigned int id, GameObject* obj)

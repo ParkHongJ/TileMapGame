@@ -66,16 +66,31 @@ void CameraManager::Update( float TimeDelta)
 	pos.x = -(target.x) + offset.x;
 	pos.y = -(target.y) + offset.y + currYOffset;
 
-	//float x = -(TILEMAPTOOL_X - WINSIZE_X);
-	//float y = -(TILEMAPTOOL_Y - WINSIZE_Y);
+	float mapWidth = 44 * GAME_TILE_SIZE;   // 2112
+	float mapHeight = 36 * GAME_TILE_SIZE;  // 1728
 
-	float x = -(2000 - WINSIZE_X);
-	float y = -(1000 - WINSIZE_Y);
+	float halfViewW = 1080 * 0.5f; // 540
+	float halfViewH = 500 * 0.5f;  // 250
+
+	float minX = -(mapWidth - halfViewW); // -1572
+	float maxX = 0.0f;
+
+	float minY = -(mapHeight - halfViewH); // -1478
+	float maxY = 0.0f;
+
+	if (pos.x < minX) pos.x = minX;
+	if (pos.x > maxX) pos.x = maxX;
+
+	if (pos.y < minY) pos.y = minY;
+	if (pos.y > maxY) pos.y = maxY;
+
+	/*float x = -(TILEMAPTOOL_X - WINSIZE_X);
+	float y = -(TILEMAPTOOL_Y - WINSIZE_Y);
 
 	if (pos.x < x) pos.x = x;
 	if (pos.x > -x) pos.x = -x;
 	if (pos.y < y) pos.y = y;
-	if (pos.y > -y) pos.y = -y;
+	if (pos.y > -y) pos.y = -y;*/
 
 	/*ViewPort.left = -pos.x;
 	ViewPort.top = -pos.y;
