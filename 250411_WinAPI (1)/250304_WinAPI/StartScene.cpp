@@ -5,7 +5,7 @@
 #include "Image.h"
 #define D3DX_PI 3.141592f
 
-HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT StartScene::Init(ID2D1RenderTarget* renderTarget)
 {
 	ImageManager::GetInstance()->AddImage("Menu_Title", L"Textures/UI/Menu/menu_title.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("Menu_Title_Char", L"Textures/UI/Menu/menu_titlegal.png", renderTarget);
@@ -134,7 +134,7 @@ void StartScene::Update(float TimeDelta)
 
 void StartScene::LateUpdate(float TimeDelta) {}
 
-void StartScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void StartScene::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (blackbg) blackbg->Render(renderTarget, menuTitlePos.x, menuTitlePos.y, 1.0f, 1.0f, 1.0f);
 	if (menu_title) menu_title->Render(renderTarget, menuTitlePos.x, menuTitlePos.y, screenTitleScale.x, screenTitleScale.y, opacity);

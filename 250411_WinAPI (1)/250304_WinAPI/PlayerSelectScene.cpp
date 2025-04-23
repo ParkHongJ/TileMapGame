@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "PlayerSelectScene.h"
 
-HRESULT PlayerSelectScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT PlayerSelectScene::Init(ID2D1RenderTarget* renderTarget)
 {
     return S_OK;
 }
@@ -18,6 +18,6 @@ void PlayerSelectScene::LateUpdate(float TimeDelta)
 {
 }
 
-void PlayerSelectScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void PlayerSelectScene::Render(ID2D1RenderTarget* renderTarget)
 {
 }
