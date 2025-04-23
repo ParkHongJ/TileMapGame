@@ -330,9 +330,6 @@
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClCompile>
-    <ClCompile Include="Pitfall.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ChangeCobwebBomb.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
@@ -361,6 +358,9 @@
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClCompile>
     <ClCompile Include="Rope.cpp">
+      <Filter>MainGame\Scene\Yong\Rope</Filter>
+    </ClCompile>
+    <ClCompile Include="RopeController.cpp">
       <Filter>MainGame\Scene\Yong\Rope</Filter>
     </ClCompile>
     <ClCompile Include="NiddleTrap.cpp">
@@ -650,9 +650,6 @@
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\InteractUI</Filter>
     </ClInclude>
-    <ClInclude Include="Pitfall.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ChangeCobwebBomb.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
@@ -681,6 +678,9 @@
       <Filter>MainGame\Scene\Hyo</Filter>
     </ClInclude>
     <ClInclude Include="Rope.h">
+      <Filter>MainGame\Scene\Yong\Rope</Filter>
+    </ClInclude>
+    <ClInclude Include="RopeController.h">
       <Filter>MainGame\Scene\Yong\Rope</Filter>
     </ClInclude>
     <ClInclude Include="NiddleTrap.h">

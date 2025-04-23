@@ -104,10 +104,11 @@ HRESULT Character::Init()
 	backItem = nullptr;
 	preHoldItem = nullptr;
 
-	objectRenderId = RENDER_PLAYER;
-
 	whip = new Whip();
 	ObjectManager::GetInstance()->AddObject(RENDER_ITEM, whip);
+
+    ObjectManager::GetInstance()->SetPlayer(this);
+    objectRenderId = RENDER_PLAYER;
 	return S_OK;
 }
 
