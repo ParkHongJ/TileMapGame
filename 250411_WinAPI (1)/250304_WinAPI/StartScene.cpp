@@ -13,7 +13,13 @@ HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("BlackBG", L"Textures/UI/Menu/blackbg.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("TorchEffect", L"Textures/fx_small.png", 8, 8, renderTarget);
 	ImageManager::GetInstance()->AddImage("FumeEffect", L"Textures/fx_small.png", 8, 8, renderTarget);
-	ImageManager::GetInstance()->AddImage("Enter_Icon", L"Textures/hud_controller_buttons.png", 10, 10, renderTarget);
+	ImageManager::GetInstance()->AddImage("Buttons", L"Textures/hud_controller_buttons.png", 10, 10, renderTarget);
+	ImageManager::GetInstance()->AddImage("Char_Menu", L"Textures/menu_charsel.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("Char_Menu_Disp", L"Textures/menu_disp.png",1,3, renderTarget);
+	ImageManager::GetInstance()->AddImage("Char_Menu_Door", L"Textures/menu_chardoor.png",2,2, renderTarget);
+
+
+
 
 	
 	menu_title = ImageManager::GetInstance()->FindImage("Menu_Title");
@@ -22,7 +28,7 @@ HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	torchEffectBack = ImageManager::GetInstance()->FindImage("TorchEffect");
 	torchEffectFront = ImageManager::GetInstance()->FindImage("TorchEffect");
 	fumeEffect = ImageManager::GetInstance()->FindImage("FumeEffect");
-	enter = ImageManager::GetInstance()->FindImage("Enter_Icon");
+	enter = ImageManager::GetInstance()->FindImage("Buttons");
 
 
 	screenTitleScale = { {1080 / 1920.f }, {500 / 1080.f} };
@@ -43,15 +49,16 @@ HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&pDWriteFactory));
 
 	pDWriteFactory->CreateTextFormat(
-		L"Segoe UI",                // 폰트
+		L"Tekton-Bold",  // 또는 "Tekton Pro", "Arial", 원하는 폰트 이름
 		NULL,
-		DWRITE_FONT_WEIGHT_REGULAR,
+		DWRITE_FONT_WEIGHT_BOLD,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		32.0f,                      // 크기
-		L"ko-kr",
+		48.0f,  // 폰트 크기
+		L"en-us",
 		&pTextFormat
 	);
+
 
 	pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
@@ -63,7 +70,15 @@ HRESULT StartScene::Init(ID2D1HwndRenderTarget* renderTarget)
 	return S_OK;
 }
 
-void StartScene::Release() {}
+void StartScene::Release() 
+{
+	torchParticles.clear();
+	torchParticles.shrink_to_fit();
+
+	fumes.clear();
+	fumes.shrink_to_fit();
+
+}
 
 void StartScene::Update(float TimeDelta)
 {
@@ -81,7 +96,7 @@ void StartScene::Update(float TimeDelta)
 			isFadingOut = false;
 			opacity = 0.0f;
 
-			SceneManager::GetInstance()->ChangeScene("게임");
+			SceneManager::GetInstance()->ChangeScene("선택");
 		}
 	}
 
