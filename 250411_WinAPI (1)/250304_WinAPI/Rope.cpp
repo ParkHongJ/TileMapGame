@@ -7,6 +7,9 @@
 
 Rope::Rope()
 {
+    BoxCollider* col = new BoxCollider({ 0,0 }, { 64, 64 }, CollisionMaskType::ITEM, this);
+    interactState = INTERACTSTATE::INTERACT_ABLE;
+    objectName = OBJECTNAME::ROPE;
     objectScale = { GAME_TILE_SIZE / (ATLAS_TILE_SIZE * 1.25f), GAME_TILE_SIZE / (ATLAS_TILE_SIZE * 1.25f) };
 }
 

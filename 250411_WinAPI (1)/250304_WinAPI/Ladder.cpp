@@ -11,7 +11,7 @@ Ladder::Ladder()
 	image = ImageManager::GetInstance()->FindImage("floor_cave");
 	Pos = { 1100,150 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 100, 40}, CollisionMaskType::ITEM, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 100, 60}, CollisionMaskType::ITEM, this);
 	interactState = INTERACTSTATE::INTERACT_ABLE;
 	objectName = OBJECTNAME::LADDER;
 	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
