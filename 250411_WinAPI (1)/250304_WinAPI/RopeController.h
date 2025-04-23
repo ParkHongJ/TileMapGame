@@ -18,7 +18,6 @@ public:
 	void Shake(float TimeDelta);
 	void CreateRope();
 
-
 private:
 	class Image* image;
 	bool isMove = false;
@@ -30,6 +29,8 @@ private:
 	float downTime;
 	float downMaxTime;
 	int createCnt = 0;
+	float MaxDis = 450.f;
+	float SumDis = 0.f;
 	vector<Rope*> Ropes;
 };
 

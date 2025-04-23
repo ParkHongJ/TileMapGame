@@ -28,8 +28,6 @@ HRESULT Character::Init()
     state =  &Character::idleState;
     state->Enter(this);
 
-    objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
-  
     SetPos({ 200 / 2,0});
 
     // Stat

@@ -77,9 +77,12 @@ void RopeController::Shoot(FPOINT pos)
 void RopeController::UpMove(float TimeDelta)
 {
 	RaycastHit Up;
-	if (!CollisionManager::GetInstance()->RaycastType({ Pos, {0.f, -1.f} }, 10.f, Up, CollisionMaskType::TILE, true, 1.0f))
+	if (!CollisionManager::GetInstance()->RaycastType({ Pos, {0.f, -1.f} }, 10.f, Up, CollisionMaskType::TILE, true, 1.0f) && (SumDis < MaxDis))
 	{
 		Pos.y -= 500.f * TimeDelta;
+		SumDis += 500.f * TimeDelta;
+
+		return;
 	}
 
 	else
