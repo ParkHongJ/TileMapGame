@@ -1,30 +1,25 @@
 #include "pch.h"
 #include "GameOverUI.h"
 #include "Image.h"
-#include "JinScene.h"
 
-HRESULT GameOverUI::Init(ID2D1RenderTarget* renderTarget)
+GameOverUI::GameOverUI()
 {
-	tempChar = new JinScene();
-	tempChar->Init(renderTarget);
-
-	ImageManager::GetInstance()->AddImage("GameOver_journalRear", L"Textures/UI/Journal/journal_back.png", renderTarget);
 	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("GameOver_journalRear");
-	
-	ImageManager::GetInstance()->AddImage("GameOver_journalFront", L"Textures/UI/Journal/journal_top_gameover.png", renderTarget);
+
 	GameOver_journalFrontImage = ImageManager::GetInstance()->FindImage("GameOver_journalFront");
 
-	ImageManager::GetInstance()->AddImage("GameOver_journalSelectBox", L"Textures/UI/Journal/journal_select.png", renderTarget);
 	GameOver_journalSelectBox = ImageManager::GetInstance()->FindImage("GameOver_journalSelectBox");
 
-	ImageManager::GetInstance()->AddImage("GameOver_characterSticker", L"Textures/UI/Journal/journal_stickers/yellow.png", renderTarget);
 	GameOver_characterSticker = ImageManager::GetInstance()->FindImage("GameOver_characterSticker");
 
-	ImageManager::GetInstance()->AddImage("GameOver_journalBack", L"Textures/UI/journal/Journal_back.png", renderTarget);
 	GameOver_journalBackImage = ImageManager::GetInstance()->FindImage("GameOver_journalBack");
 
-	ImageManager::GetInstance()->AddImage("GameOver_journalClip", L"Textures/UI/Journal/journal_Clip.png", renderTarget);
 	GameOver_journalBackClipImage = ImageManager::GetInstance()->FindImage("GameOver_journalClip");
+}
+
+
+HRESULT GameOverUI::Init()
+{
 
 	GameOver_journalRearImagePos = { WINSIZE_X / 2, WINSIZE_Y / 2 };
 	GameOver_journalFrontImagePos = { GameOver_journalRearImagePos.x, GameOver_journalRearImagePos.y };
