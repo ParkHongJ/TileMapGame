@@ -5,7 +5,7 @@
 #include "Image.h"
 
 #define D3DX_PI 3.141592f
-HRESULT PlayerSelectScene::Init(ID2D1HwndRenderTarget* renderTarget)
+HRESULT PlayerSelectScene::Init(ID2D1RenderTarget* renderTarget)
 {
 
 
@@ -205,7 +205,7 @@ void PlayerSelectScene::LateUpdate(float TimeDelta)
 {
 }
 
-void PlayerSelectScene::Render(ID2D1HwndRenderTarget* renderTarget)
+void PlayerSelectScene::Render(ID2D1RenderTarget* renderTarget)
 {
     if (blackbg)
     {
