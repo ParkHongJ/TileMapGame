@@ -98,7 +98,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 
 
 
-    GameManager::GetInstance()->Init("hongScene");
+    //GameManager::GetInstance()->Init("hongScene");
 
 
     CameraManager::GetInstance()->Init();

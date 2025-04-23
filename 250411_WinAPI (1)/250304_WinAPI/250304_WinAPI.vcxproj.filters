@@ -374,6 +374,7 @@
     </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>MainGame\Scene</Filter>
+      </ClCompile>
     <ClCompile Include="ShopInteractUI.cpp">
       <Filter>MainGame\Scene\Jin\Shop</Filter>
     </ClCompile>
@@ -702,6 +703,7 @@
     </ClInclude>
     <ClInclude Include="StartScene.h">
       <Filter>MainGame\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="ShopInteractUI.h">
       <Filter>MainGame\Scene\Jin\Shop</Filter>
     </ClInclude>
