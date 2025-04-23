@@ -332,21 +332,6 @@ void SnakeMonster::Detect(GameObject* obj)
 	{
         
 	}
-
-    //if (playerPos.y + 128 == Pos.y - 128)
-    //{
-    //    if (auto player = obj->GetType<Character>())
-    //    {
-    //        // Equip(player->GetPlayerStatus());
-    //        SetDestroy();
-    //    }
-
-    //    else if (auto player = obj->GetType<Character>())
-    //    {
-
-    //    }
-    //   
-    //}
 }
 
 void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)

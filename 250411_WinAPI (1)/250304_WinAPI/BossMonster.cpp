@@ -30,7 +30,7 @@ HRESULT BossMonster::Init()
         CollisionMaskType::MONSTER, this);
 
     SetPos({ 300,270 });
-    monsterHP = 1;
+    monsterHP = 10;
     damage = 1;
     moveSpeed = 80.0f;
     monsterState = MonsterState::IDLE;
@@ -92,6 +92,42 @@ void BossMonster::Update(float TimeDelta)
     CheckTileCollision();
     CheckPlayerCollision();
     CheckItemCollision();
+
+	// 기본 move
+	// 벽 안 만났을 때 
+    if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom)
+    {
+        monsterState = MonsterState::MOVE;
+        meetPlayerLeft = false;
+        meetPlayerRight = false;
+        hasBottomTile = false;
+        Move();
+    }
+    //벽 만났을 때 Update
+    else if (isTileTouchingRight || isTileTouchingLeft)
+    {
+        monsterState = MonsterState::MOVE;
+        dir.x *= -1;
+        Move();
+    }
+
+    // 오른쪽으로 가는데 밑에 타일이 없을 때 
+    if (!isTileTouchingRightBottom && !hasBottomTile && dir.x > 0)
+    {
+        monsterState = MonsterState::MOVE;
+        dir.x *= -1;
+        hasBottomTile = true;
+        Move();
+    }
+
+    // 왼쪽으로 가는데 밑에 타일이 없을 때 
+    else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0)
+    {
+        monsterState = MonsterState::MOVE;
+        dir.x *= -1;
+        hasBottomTile = true;
+        Move();
+    }
 
     // 플레이어한테 attackMove (점프) 
 
@@ -207,13 +243,14 @@ void BossMonster::Detect(GameObject* obj)
 
         if (playerPosBottom < monsterPosTop)
         {
-            SetDestroy();
+            monsterHP--;
+            if (monsterHP == 0)
+            {
+                SetDestroy();
+            }
         }
-
-        // 타일과 비교해서 타일 setDestroy
-
     }
-
+    // 타일과 비교해서 타일 setDestroy
     else if (auto player = obj->GetType<Character>())
     {
 

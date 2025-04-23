@@ -3,6 +3,7 @@
 
 #include "ObjectFactory.h"
 #include "ArrowTrap.h"
+#include "BossMonster.h"
 #include "ChangeCobwebBomb.h"
 #include "Character.h"
 #include "DummyHongPlayer.h"
@@ -20,6 +21,7 @@
 #include "TreasureChest.h"
 
 REGISTER_OBJECT(ArrowTrap)
+REGISTER_OBJECT(BossMonster)
 REGISTER_OBJECT(ChangeCobwebBomb)
 REGISTER_OBJECT(Character)
 REGISTER_OBJECT(DummyHongPlayer)
