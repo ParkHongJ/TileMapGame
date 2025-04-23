@@ -169,7 +169,7 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			break;
 
 		case '1':
-			SceneManager::GetInstance()->ChangeScene("시작");
+			//SceneManager::GetInstance()->ChangeScene("시작");
 			break;
 		case '3':
 			SceneManager::GetInstance()->ChangeScene("홍준");
