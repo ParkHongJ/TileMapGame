@@ -57,7 +57,7 @@ HRESULT MainGame::Init()
 		"Hyo_BackGround", L"Image/bg_cave.bmp", m_pRenderTarget.Get());
 
 	ImageManager::GetInstance()->AddImage(
-		"Tae_Player", TEXT("Textures/char_white.png"), 16, 16, m_pRenderTarget.Get());
+		"Tae_Player", TEXT("Textures/char_yellow.png"), 16, 16, m_pRenderTarget.Get());
 
 
 
