@@ -148,6 +148,8 @@
     <ClCompile Include="AstarScene.cpp" />
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BossMonster.cpp" />
+    <ClCompile Include="Chicken.cpp" />
+    <ClCompile Include="IncreaseHP.cpp" />
     <ClCompile Include="IncreaseRopeCnt.cpp" />
     <ClCompile Include="PlayerSelectScene.cpp" />
     <ClCompile Include="Rope.cpp" />
@@ -245,6 +247,8 @@
     <ClInclude Include="AstarScene.h" />
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BossMonster.h" />
+    <ClInclude Include="Chicken.h" />
+    <ClInclude Include="IncreaseHP.h" />
     <ClInclude Include="IncreaseRopeCnt.h" />
     <ClInclude Include="PlayerSelectScene.h" />
     <ClInclude Include="Rope.h" />

@@ -32,6 +32,14 @@
         }
     },
     {
+        "name": "Chicken",
+        "atlasPath": "Textures / Entities / Mounts / turkey.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "DummyHongPlayer",
         "atlasPath": "Textures/char_lime.png",
         "cellSize": {
@@ -66,6 +74,14 @@
     {
         "name": "IncreaseGold",
         "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "IncreaseHP",
+        "atlasPath": "Textures / Entities / Mounts / turkey.png",
         "cellSize": {
             "x": 128,
             "y": 128

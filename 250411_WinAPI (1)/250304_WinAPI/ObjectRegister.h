@@ -6,11 +6,13 @@
 #include "BossMonster.h"
 #include "ChangeCobwebBomb.h"
 #include "Character.h"
+#include "Chicken.h"
 #include "DummyHongPlayer.h"
 #include "Gun.h"
 #include "HeavyBlock.h"
 #include "IncreaseBomb.h"
 #include "IncreaseGold.h"
+#include "IncreaseHP.h"
 #include "IncreaseRopeCnt.h"
 #include "Ladder1.h"
 #include "Ladder2.h"
@@ -26,11 +28,13 @@ REGISTER_OBJECT(ArrowTrap)
 REGISTER_OBJECT(BossMonster)
 REGISTER_OBJECT(ChangeCobwebBomb)
 REGISTER_OBJECT(Character)
+REGISTER_OBJECT(Chicken)
 REGISTER_OBJECT(DummyHongPlayer)
 REGISTER_OBJECT(Gun)
 REGISTER_OBJECT(HeavyBlock)
 REGISTER_OBJECT(IncreaseBomb)
 REGISTER_OBJECT(IncreaseGold)
+REGISTER_OBJECT(IncreaseHP)
 REGISTER_OBJECT(IncreaseRopeCnt)
 REGISTER_OBJECT(Ladder1)
 REGISTER_OBJECT(Ladder2)

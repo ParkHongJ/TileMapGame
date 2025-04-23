@@ -100,6 +100,8 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("Effect", L"Textures/fx_small.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Rubble", L"Textures/fx_rubble.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
+    ImageManager::GetInstance()->AddImage("turkey", L"Textures/Entities/Mounts/turkey.png", 8, 11, renderTarget);
+
 
     background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 

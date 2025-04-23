@@ -1,0 +1,6 @@
+#include "pch.h"
+#include "Chicken.h"
+#include "Image.h"
+#include "Collider.h"
+#include "PlayerStatus.h"
+#include "CameraManager.h"

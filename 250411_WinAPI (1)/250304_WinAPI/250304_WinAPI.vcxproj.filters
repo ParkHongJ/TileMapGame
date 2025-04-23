@@ -384,6 +384,12 @@
     <ClCompile Include="SkeletonItem.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Chicken.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseHP.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -717,6 +723,12 @@
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
     <ClInclude Include="SkeletonItem.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Chicken.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseHP.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
