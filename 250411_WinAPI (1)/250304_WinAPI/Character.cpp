@@ -1034,9 +1034,14 @@ void Character::JunUpdate(float TimeDelta)
 
     if (km->IsOnceKeyDown('I'))
     {
-        RopeController* temp = new RopeController();
-        ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
-        temp->Shoot(Pos);
+        if (0 < playerStatus->GetRopeCount())
+        {
+            RopeController* temp = new RopeController();
+            ObjectManager::GetInstance()->AddObject(RENDER_HOLD, temp);
+            temp->Shoot(Pos);
+            playerStatus->MinusRopeCount();
+        }
+
     }
 
     

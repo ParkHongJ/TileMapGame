@@ -7,6 +7,7 @@ PlayerStatus::PlayerStatus()
 	info.playerMaxHP = 4;
 	info.playerHP = 4;
 	info.bombCount = 3;
+	info.ropeCount = 5;
 }
 
 PlayerStatus::~PlayerStatus()

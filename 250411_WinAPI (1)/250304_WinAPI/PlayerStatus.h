@@ -6,7 +6,7 @@ struct PlayerStatusInfo
 	unsigned int bombCount;
 	unsigned int gold;
 	bool IsCobweb;
-	//unsigned int ropeCount;
+	unsigned int ropeCount;
 }typedef PLAYERSTATUSDESC;
 
 class PlayerStatus
@@ -40,8 +40,13 @@ public:
 		1 <= info.bombCount ? --info.bombCount  : info.bombCount = 0;
 	};
 
-	//inline const unsigned int GetRopeCount() const { return ropeCount; };
-	//inline void SetRopeCount(unsigned int cnt) { ropeCount = cnt; };
+	inline const unsigned int GetRopeCount() const { return info.ropeCount; };
+	inline void SetRopeCount(unsigned int cnt) { info.ropeCount = cnt; };
+
+	inline void MinusRopeCount()
+	{
+		1 <= info.ropeCount ? --info.ropeCount : info.ropeCount = 0;
+	};
 
 	inline const unsigned int GetGold() const { return info.gold; };
 	inline void SetGold(unsigned int gold) { info.gold = gold; };
