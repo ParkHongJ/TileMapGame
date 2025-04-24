@@ -58,6 +58,8 @@ public:
 	FPOINT ResolutionRatio(Image* image);
 	void MoveBox(float destY);
 
+	inline int GetSelectBoxIndex() const { return selectBoxIndex; };
+
 	GameOverUI() {};
 	GameOverUI(ID2D1RenderTarget* renderTarget);
 	virtual ~GameOverUI() {};
