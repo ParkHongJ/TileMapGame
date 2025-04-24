@@ -31,6 +31,11 @@ void playerBomb_UI::Update(float TimeDelta)
 {
 	UI::Update(TimeDelta);
 
+	if (playerStat->GetPlayerHP() <= 0)
+	{
+		playerBombImage = nullptr;
+	}
+
 	playerBomb_value = playerStat->GetBombCount();
 	//if(playerStat->pickedTheBomb || useTheBomb)
  	//if (KeyManager::GetInstance()->IsOnceKeyDown('B'))

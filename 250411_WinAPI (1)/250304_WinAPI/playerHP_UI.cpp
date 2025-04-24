@@ -20,7 +20,7 @@ HRESULT playerHP_UI::Init()
 	playerLifeRunsOutImage = ImageManager::GetInstance()->FindImage("playerLifeRunsOut");
 
 	playerStat = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus();
-	playerHP_value = playerStat->GetPlayerMaxHP();
+	playerHP_value = playerStat->GetPlayerHP();
 	pastHP_value = playerHP_value;
 	Pos = { WINSIZE_X * (1.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
 
@@ -34,7 +34,7 @@ void playerHP_UI::Update(float TimeDelta)
 	UI::Update(TimeDelta);
 
 	playerHP_value = playerStat->GetPlayerHP();
-	if (playerHP_value == 0)
+	if (playerHP_value <= 0)
 		isAlive = false;
 	
 	//if(playerStat->PicktheHP || LostTheHP)

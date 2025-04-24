@@ -40,6 +40,10 @@ void sandGlass_UI::Update(float TimeDelta)
 			playTimeMin++;
 		}
 	}
+	else
+	{
+		image = nullptr;
+	}
 }
 
 void sandGlass_UI::Render(ID2D1RenderTarget* renderTarget)

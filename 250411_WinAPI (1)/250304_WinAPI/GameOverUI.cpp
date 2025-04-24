@@ -140,7 +140,6 @@ void GameOverUI::Update(float TimeDelta)
 
 void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 {
-	//	뒷배경을 검정색으로 칠해야함
 	if (isGameOver)
 	{
 		blackBackgroundImage->Render(renderTarget, blackBackgroundImagePos.x, blackBackgroundImagePos.y);
