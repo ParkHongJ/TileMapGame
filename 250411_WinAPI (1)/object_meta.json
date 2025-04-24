@@ -11,8 +11,8 @@
         "name": "BossMonster",
         "atlasPath": "Textures/Monster/boss.png",
         "cellSize": {
-            "x": 128,
-            "y": 128
+            "x": 253,
+            "y": 253
         }
     },
     {
@@ -105,7 +105,7 @@
     },
     {
         "name": "IncreaseHP",
-        "atlasPath": "Textures / Entities / Mounts / turkey.png",
+        "atlasPath": "Textures/Entities/Mounts/turkey.png",
         "cellSize": {
             "x": 128,
             "y": 128
