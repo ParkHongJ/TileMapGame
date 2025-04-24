@@ -41,6 +41,12 @@ private:
 
 	Image* enter;
 
+	Image* torchEyeEffectLeft;
+	Image* torchEyeEffectRight;
+
+	int currTorchEyeInd;
+	float currTorchEyeTime;
+	
 
 	FPOINT menuTitlePos;
 	FPOINT menuTitleCharPos;
