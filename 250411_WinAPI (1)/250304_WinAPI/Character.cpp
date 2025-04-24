@@ -940,7 +940,7 @@ bool Character::CheckCanClimbLadder()
 
     if (!interActionPQ.empty())
     {
-        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER || interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
         {
             return true; 
         }
@@ -949,21 +949,21 @@ bool Character::CheckCanClimbLadder()
     return false;
 }
 
-//bool Character::CheckCanClimbRope()
-//{
-//    OutputDebugStringA("==================사다리 검사중=========================");
-//
-//    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
-//
-//    if (!interActionPQ.empty())
-//    {
-//        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
-//        {
-//            return true;
-//        }
-//        return false;
-//    }
-//}
+bool Character::CheckCanClimbRope()
+{
+    OutputDebugStringA("==================로프 검사중=========================");
+
+    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+
+    if (!interActionPQ.empty())
+    {
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+        {
+            return true;
+        }
+        return false;
+    }
+}
 
 void Character::CheckInterAction()
 {
@@ -979,6 +979,12 @@ void Character::CheckInterAction()
         {
             if ((CheckCanClimbLadder()))
             {
+                ChangeState(&interactionState);
+                return;
+            }
+            else if (CheckCanClimbRope())
+            {
+
                 ChangeState(&interactionState);
                 return;
             }
