@@ -372,30 +372,16 @@ bool Character::CheckAroundGate()
     interActionPQ = {};
     OutputDebugStringA("==================게이트 / 문 검사중=========================");
 
-    //CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, 5.f, interActionPQ);
+    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, 10.f, interActionPQ);
 
-    //if (!interActionPQ.empty())
-    //{
-    //    if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::GATE)
-    //    {
-    //        return true;
-    //    }
-    //}
-
-    //return false;
-
-    RaycastHit tmp;
-
-   
-    if (CollisionManager::GetInstance()->RaycastType({ Pos, {0.0f,-1.0f} }, 10.f, tmp, CollisionMaskType::TILE, this, false, 1.0f))
+    if (!interActionPQ.empty())
     {
-        GameObject* hitObject = tmp.collider->GetOwner();
-        if (hitObject->GetObjectName() == OBJECTNAME::GATE)
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::GATE)
         {
-            interactionObject = hitObject;
             return true;
         }
     }
+
     return false;
 }
 
@@ -406,8 +392,9 @@ void Character::Update(float TimeDelta)
 
     JunUpdate(TimeDelta);
 
-    if (playerStatus->GetPlayerHP() == 0)
+    if (playerStatus->GetPlayerHP() == 0 || isDead)
     {
+        playerStatus->SetPlayerHP(0);
         isDead = true;
         ChangeState(&interactionState); 
 
@@ -927,6 +914,7 @@ void Character::HandleInteractionLogic()
         break;
 
     case InteractionState::SubState::INTERACTION_IS_DEAD:
+        
         frameTime += deltaTime;
 
         currfaintTime += deltaTime;
@@ -1249,8 +1237,7 @@ void Character::CheckInterAction()
             if (CheckAroundGate())
             {
                isEnteringGate = true;
-               
-               Pos.x = interactionObject->GetPos().x;
+               Pos.x = interActionPQ.top().second->GetPos().x;
                ChangeState(&interactionState);
                return;
             }

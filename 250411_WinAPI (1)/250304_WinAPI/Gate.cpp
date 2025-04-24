@@ -13,7 +13,7 @@ HRESULT Gate::Init()
 
 	Pos.x = 216.f;
 	Pos.y = 216.f;
-	
+	interactState = INTERACTSTATE::INTERACT_ABLE;
 	objectName = OBJECTNAME::GATE;
 	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::WORLDOBJECT, this);
 	return S_OK;
