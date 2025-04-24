@@ -1577,13 +1577,12 @@ void Character::PlayAnimation()
                 currFrameInd.x = currFrameInfo.startFrame.x;
             break;
 
+        case AnimationMode::Hold:
         case AnimationMode::FreezeAtX:
         
             if (currFrameInd.x < currFrameInfo.endFrame.x)
                 currFrameInd.x++;
             break;
-        case AnimationMode::Hold:
-            currFrameInd.x = currFrameInfo.endFrame.x;
             break;
         }
     }
