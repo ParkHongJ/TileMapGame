@@ -36,6 +36,7 @@ struct InputIntent {
 	bool shift = false;
 	bool bomb = false;
 
+
 	bool hasMovement() const { return moveLeft || moveRight; }
 };
 
@@ -94,6 +95,8 @@ private:
 	bool					isFaint;
 	bool			isFallFromHeight;
 	bool					onNeedle;
+	bool				isEnteringGate;
+	bool				isExitingGate;
 
 	// For Camera
 	bool			   isLookUpLocked;
@@ -208,7 +211,8 @@ public:
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
 	bool GetIsDead() { return isDead; }
-
+	bool GetIsEnteringGate() { return isEnteringGate; }
+	bool GetIsExitingGate() { return isExitingGate; }
 	// HFSM
 	void HandleTransitions();
 
@@ -235,6 +239,9 @@ public:
 	// 
 	void OnDamageFly();
 
+	bool CheckOnMonster();
+
+	bool CheckAroundGate();
 
 
 

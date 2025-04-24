@@ -26,6 +26,17 @@ void InteractionState::Update()
         ChangeSubState(SubState::INTERACTION_ON_DAMAGE);
         return;
     }
+    else if (character->GetIsEnteringGate())
+    {
+
+        ChangeSubState(SubState::INTERACTION_ENTER_TUNNEL);
+        return;
+    }
+    else if (character->GetIsExitingGate())
+    {
+        ChangeSubState(SubState::INTERACTION_EXIT_TUNNEL);
+        return;
+    }
     else if (character->CheckHangOn())
     {
         ChangeSubState(SubState::INTERACTION_HANGON_TILE);
