@@ -105,7 +105,7 @@ void SkeletonMonster::Update(float TimeDelta)
 
 void SkeletonMonster::FrameUpdate(float TimeDelta)
 {
-    elipsedTime += TimeDelta;
+    elipsedTime += frameSpeed * TimeDelta;
 
     if (monsterState == MonsterState::MOVE || monsterState == MonsterState::IDLE)
     {
@@ -161,7 +161,7 @@ void SkeletonMonster::FrameUpdate(float TimeDelta)
     {
         currFrameInfo = deadFrameInfo;
 
-        if (elipsedTime > 0.05f)
+        if (elipsedTime > 0.1f)
         {
             if (currFrame.x > deadFrameInfo.endFrame.x)
             {
@@ -271,7 +271,11 @@ void SkeletonMonster::Move()
 void SkeletonMonster::ApplyGravity(float TimeDelta)
 {
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-        Pos.y += 200.f * TimeDelta;
+    {
+        //Pos.y += 200.f * TimeDelta;
+        Pos.y += 200.f * 0.016f;
+    }
+        
     else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
         Pos.y = Pos.y;
 }
@@ -301,6 +305,7 @@ void SkeletonMonster::Detect(GameObject* obj)
         {
             monsterState = MonsterState::DEAD;
             deadElipsedTime = 0.0f;
+            frameSpeed = 1.5f;
 
             //colliderSize = { 0.0f, 0.0f };
             if (!isChangeCol)
@@ -386,7 +391,6 @@ void SkeletonMonster::DeadEvent(float TimeDelta)
         {
             SetDestroy();           
         }
-            
     }
 }
 

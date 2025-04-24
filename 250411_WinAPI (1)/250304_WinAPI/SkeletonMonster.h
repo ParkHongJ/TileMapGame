@@ -26,6 +26,7 @@ public:
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 private:
+	float frameSpeed = 1.f;
 	Image* skeletonImage;
 	BoxCollider* skeletonCollider = nullptr;
 	FPOINT colliderSize;

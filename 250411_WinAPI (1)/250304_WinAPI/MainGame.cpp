@@ -343,8 +343,8 @@ void MainGame::Draw()
 	ObjectManager::GetInstance()->Render(pRT1);
 	ParticleManager::GetInstance()->Render(pRT1);
 
-	CollisionManager::GetInstance()->DebugRender(pRT1);
-	TimerManager::GetInstance()->Render(pRT1);
+	//CollisionManager::GetInstance()->DebugRender(pRT1);
+	//TimerManager::GetInstance()->Render(pRT1);
 
 }
 

@@ -72,7 +72,7 @@ void Gate::Render(ID2D1RenderTarget* renderTarget)
 
 	gateImage->Render(renderTarget, drawPos.x, drawPos.y - GAME_TILE_SIZE * 0.25f, objectScale, objectScale, 0, 0, 396, 396);
 
-	DrawCenteredRect(renderTarget, drawPos, { 20.f,20.f }, D2D1::ColorF::Red);
+	//DrawCenteredRect(renderTarget, drawPos, { 20.f,20.f }, D2D1::ColorF::Red);
 }
 
 void Gate::EnterGate()

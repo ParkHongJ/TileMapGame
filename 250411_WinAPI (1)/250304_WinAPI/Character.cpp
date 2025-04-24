@@ -12,6 +12,7 @@
 #include "BossMonster.h"
 #include "NiddleTrap.h"
 #include "Arrow.h"
+#include "Gate.h"
 
 // Add JunYong
 #include "PlayerStatus.h"
@@ -1239,6 +1240,7 @@ void Character::CheckInterAction()
                isEnteringGate = true;
                Pos.x = interActionPQ.top().second->GetPos().x;
                ChangeState(&interactionState);
+               dynamic_cast<Gate*>(interActionPQ.top().second)->EnterGate();
                return;
             }
            
@@ -1304,6 +1306,7 @@ void Character::Detect(GameObject* obj)
         if (CheckOnMonster())
         {
             Jump();
+            //dynamic_cast<Monster*>(obj)->SetMonsterHP(dynamic_cast<Monster*>(obj)->GetMonsterHP() - 1);
         }
         else
         {
@@ -1589,7 +1592,7 @@ void Character::Render(ID2D1RenderTarget* renderTarget)
     if (playerImage)
     {
         playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, objectScale.x, objectScale.y, isFlip);
-        collider->DebugRender(renderTarget);
+        //collider->DebugRender(renderTarget);
     }
     if (playerFaintEffect)
     {
