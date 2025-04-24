@@ -50,8 +50,8 @@
         "height": 128.0,
         "name": "IncreaseBomb",
         "width": 128.0,
-        "x": 1728.0,
-        "y": 704.0
+        "x": 3001.333251953125,
+        "y": 1080.6666259765625
     },
     {
         "atlas": "Textures/items.png",
@@ -105,6 +105,51 @@
         "name": "NiddleTrap",
         "width": 128.0,
         "x": 576.0,
+        "y": 1600.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SnakeMonster",
+        "width": 128.0,
+        "x": 1856.0,
+        "y": 1600.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonMonster",
+        "width": 128.0,
+        "x": 1728.0,
+        "y": 1600.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonMonster",
+        "width": 128.0,
+        "x": 1472.0,
+        "y": 1600.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SnakeMonster",
+        "width": 128.0,
+        "x": 1344.0,
+        "y": 1600.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonMonster",
+        "width": 128.0,
+        "x": 1216.0,
         "y": 1600.0
     }
 ]

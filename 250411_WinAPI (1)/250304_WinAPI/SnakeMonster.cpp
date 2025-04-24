@@ -338,19 +338,52 @@ void SnakeMonster::Detect(GameObject* obj)
         if (playerPosBottom < monsterPosTop)
         {
             SetDestroy();
+
+            for (int i = 0; i < 5; i++)
+            {
+                float radius = 30.f; // 원하는 반경
+
+                float angle = RandomRange(0.f, 360.f); // 또는 rand() % 360
+                float dist = RandomRange(0.f, radius); // 균일한 거리
+
+                // 라디안 변환
+                float rad = angle * (3.141592f / 180.f);
+
+                // 오프셋 계산
+                FPOINT offset = {
+                    cosf(rad) * dist,
+                    sinf(rad) * dist
+                };
+
+                FPOINT spawnPos = Pos + offset;
+
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", spawnPos, (rand() % 360), 35.f, 2.5f, 4, 1);
+                StarOption* starOp = new StarOption(30.f);
+
+                particle->AddParticleOption(starOp);
+
+                //3 6
+            }
+            {
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, (rand() % 360), 55.f, 2.5f, 3, 6);
+                StarOption* starOp = new StarOption(10.f);
+
+                particle->AddParticleOption(starOp);
+
+                //3 6
+            }
+
             for (int i = 0; i < 5; i++)
             {
                 FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
-                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 0.15f, 4, 1);
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 2.f, 0, 0);
 
                 PhysicsOption* physicsOp = new PhysicsOption;
                 SizeOption* sizeOp = new SizeOption(0.04f);
                 TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
 
-                //float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
-                float angleRad = RandomRange(0.0f, 3.141592f * 2.0f); // 0 ~ 360도
-                //float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
-                float speed = RandomRange(850.f, 1175.0f);            // 속도도 랜덤
+                float angleRad = RandomRange(3.141592f, 3.141592f * 2.0f);
+                float speed = RandomRange(350.f, 575.0f);            // 속도도 랜덤
 
                 velocity =
                 {
@@ -364,16 +397,6 @@ void SnakeMonster::Detect(GameObject* obj)
                 particle->AddParticleOption(physicsOp);
                 particle->AddParticleOption(sizeOp);
                 particle->AddParticleOption(trailOp);
-            }
-
-            {
-                float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
-                FPOINT randPos = { RandomRange(-100, 100.f), RandomRange(-100, 100.f) };
-
-                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, angleRad, 105.f, 1.f, 1, 2);
-
-                AlphaOption* alphaOp = new AlphaOption(5.0f);
-                particle->AddParticleOption(alphaOp);
             }
         }
        

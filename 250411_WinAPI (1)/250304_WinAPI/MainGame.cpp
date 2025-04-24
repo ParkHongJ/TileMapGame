@@ -33,6 +33,8 @@ HRESULT MainGame::Init()
 		return E_FAIL;
 
 	GameManager::GetInstance()->CreateCaveRendertarget(m_pIntermediateRT);
+	GameManager::GetInstance()->LoadScenes("hongScene");
+	GameManager::GetInstance()->LoadScenes("caveScene");
 
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
@@ -198,7 +200,9 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 			//SceneManager::GetInstance()->ChangeScene("시작");
 			break;
 		case '3':
-			SceneManager::GetInstance()->ChangeScene("홍준");
+			//SceneManager::GetInstance()->ChangeScene("홍준");
+
+			GameManager::GetInstance()->TravelToNextScene();
 			break;
 		case '4':
 			SceneManager::GetInstance()->ChangeScene("효진");

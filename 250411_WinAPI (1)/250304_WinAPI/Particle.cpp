@@ -15,7 +15,7 @@ void Particle::Init(string imageStr, FPOINT pos, float angle, float size, float 
 	
 	float randOffset = RandomRange(-0.3f, 0.3f); // ±0.3초
 	this->lifeTime = lifeTime + randOffset;
-
+	this->maxlifeTime = this->lifeTime;
 	this->size = size / ATLAS_TILE_SIZE;
 	
 	atlas = { atlasX, atlasY };
@@ -252,5 +252,34 @@ void TrailOption::Update(Particle& p, float dt)
 }
 
 void TrailOption::Render(Particle& p, ID2D1RenderTarget* rt)
+{
+}
+
+StarOption::StarOption(float speed)
+	: speed(speed), defaultMoveSpeed(speed)
+{
+	
+}
+
+void StarOption::Update(Particle& p, float dt)
+{
+	// 남은 수명 업데이트
+	p.lifeTime = max(p.lifeTime - dt, 0.0f);
+
+	// 수명 비율 계산
+	float lifeRatio = p.lifeTime / p.maxlifeTime;
+
+	// 크기 조정 (속도는 고정)
+	p.size = max(p.size * lifeRatio, 0.0f);
+
+	// 이동 연산 (moveSpeed는 변하지 않음)
+	float radianAngle = DEG_TO_RAD(p.angle);
+	float moveDist = defaultMoveSpeed * dt * lifeRatio; // 고정된 속도 사용
+
+	p.pos.x += cos(radianAngle) * moveDist;
+	p.pos.y -= sin(radianAngle) * moveDist;
+}
+
+void StarOption::Render(Particle& p, ID2D1RenderTarget* rt)
 {
 }

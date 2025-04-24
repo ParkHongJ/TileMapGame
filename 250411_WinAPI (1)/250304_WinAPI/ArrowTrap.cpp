@@ -6,6 +6,8 @@
 #include "Arrow.h"
 #include "ImageManager.h"
 #include "ObjectManager.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 HRESULT ArrowTrap::Init()
 {
@@ -47,6 +49,11 @@ void ArrowTrap::Update(float TimeDelta)
 		{
 			Fire();
 		}
+	}
+
+	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RETURN))
+	{
+		
 	}
 }
 

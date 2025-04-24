@@ -4,6 +4,7 @@
 #include "CameraManager.h"
 #include "ImageManager.h"
 #include "CommonFunction.h"
+#include "GameManager.h"
 HRESULT Gate::Init()
 {
 	gateImage = ImageManager::GetInstance()->FindImage("GateOpen");
@@ -11,6 +12,9 @@ HRESULT Gate::Init()
 
 	Pos.x = 216.f;
 	Pos.y = 216.f;
+	
+	objectName = OBJECTNAME::GATE;
+
 	return S_OK;
 }
 
@@ -58,4 +62,11 @@ void Gate::Render(ID2D1RenderTarget* renderTarget)
 	gateImage->Render(renderTarget, drawPos.x, drawPos.y - GAME_TILE_SIZE * 0.25f, objectScale, objectScale, 0, 0, 396, 396);
 
 	DrawCenteredRect(renderTarget, drawPos, { 20.f,20.f }, D2D1::ColorF::Red);
+}
+
+void Gate::EnterGate()
+{
+	//´ÙÀ½ ¾ÀÀ¸·Î °¡Áî¾Ñ
+
+	GameManager::GetInstance()->TravelToNextScene();
 }

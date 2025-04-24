@@ -36,6 +36,7 @@ public:
 	void UpdateAdjacentDecoTiles(int tileX, int tileY);
 	void CreateCaveRendertarget(ID2D1RenderTarget* mainRT);
 	void Init(const char* path);
+	void Init();
 	void GenerateCave(const char* path);
 	ID2D1BitmapRenderTarget* GetCaveRenderTarget();
 
@@ -48,6 +49,10 @@ public:
 	JumpNode* FindClosestJumpNode(const FPOINT& worldPos);
 
 	void UpdateNavMesh();
+
+	void TravelToNextScene();
+
+	void LoadScenes(const char* sceneName);
 private:
 	bool IsTileValid(int x, int y, bool isCave = false);
 	void BuildJumpNodesFromTileMap();
@@ -70,6 +75,9 @@ private:
 	Tile* caveTileMap[36][44];
 	ComPtr<ID2D1BitmapRenderTarget> caveRenderTarget;
 	string playerImageKey;
+	
+	vector<string> stageInfos;
+	int currentStateIndex = 0;
 
 	bool isTileChanged = false;
 	
