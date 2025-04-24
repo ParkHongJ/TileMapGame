@@ -22,8 +22,8 @@ HRESULT SkeletonMonster::Init()
     skeletonImage = ImageManager::GetInstance()->FindImage("Skeleton_Monster");
     player = new Character();
 
-    colliderSize = { 50.0f, 45.0f };
-    colliderOffsetY = 0.f;
+    colliderSize = { 50.0f, 40.0f };
+    colliderOffsetY = -10.f;
 
     skeletonCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -201,7 +201,7 @@ void SkeletonMonster::CheckTileCollision()
 
 void SkeletonMonster::CheckPlayerCollision()
 {
-    float maxDist = 20.0f;
+    float maxDist = 25.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -228,7 +228,7 @@ void SkeletonMonster::CheckPlayerCollision()
 
 void SkeletonMonster::CheckItemCollision()
 {
-    float maxDist = 10.0f;
+    float maxDist = 15.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -318,12 +318,12 @@ void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0)
             {
-                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0)
             {
-                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
 
@@ -331,12 +331,12 @@ void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0)
             {
-                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0)
             {
-                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
 
@@ -344,12 +344,12 @@ void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0)
             {
-                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0)
             {
-                skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                skeletonImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
     }

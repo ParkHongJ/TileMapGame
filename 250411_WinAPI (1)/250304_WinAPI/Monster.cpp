@@ -114,6 +114,11 @@ void Monster::Render(ID2D1RenderTarget* renderTarget)
 	
 }
 
+void Monster::Damaged()
+{
+	monsterHP -= 1;
+}
+
 void Monster::MoveJumpStart(float speed, float angle, float mass, FPOINT gravity)
 {
 	this->mass = mass;

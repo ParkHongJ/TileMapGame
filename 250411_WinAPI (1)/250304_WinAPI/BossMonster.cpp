@@ -12,7 +12,7 @@
 BossMonster::BossMonster()
 {
     // 확인 후 지워야함 
-    // objectScale = { GAME_TILE_SIZE / 253 , GAME_TILE_SIZE / 253 };
+    objectScale = { GAME_TILE_SIZE / 253 , GAME_TILE_SIZE / 253 };
 }
 
 BossMonster::~BossMonster()
@@ -33,10 +33,11 @@ HRESULT BossMonster::Init()
         { colliderSize.x, colliderSize.y },  // 
         CollisionMaskType::MONSTER, this);
 
-    SetPos({ 550,10 });
-    monsterHP = 10;
+    SetPos({ 550,200 });
+    monsterHP = 1000;
     damage = 1;
     moveSpeed = 55.0f;
+    heatCoolTime = 0.0f;
     monsterState = MonsterState::IDLE;
 
     currFrame = { 0,0 };
@@ -426,15 +427,22 @@ void BossMonster::Detect(GameObject* obj)
 {
     if (auto player = obj->GetType<Character>())
     {
+        float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
         playerPos = player->GetPos();
-        float playerPosBottom = playerPos.y + 20;
+        float playerPosBottom = playerPos.y + 40;
         float monsterPosTop = Pos.y;
 
         if (playerPosBottom < monsterPosTop)
         {
-            monsterHP--;
+            heatCoolTime += time;
             monsterState = MonsterState::ATTACK;
-           /* if (monsterHP == 0)
+     
+            if (heatCoolTime > 1.0f)
+            {
+                //monsterHP -= 1;
+                heatCoolTime = 0;               
+            }
+            /*if (monsterHP == 0)
             {
                 SetDestroy();
             }*/
