@@ -34,6 +34,8 @@ public:
 
 	virtual int GetDamage() { return damage; }
 	virtual void SetDamage(int damage) { this->damage = damage; }
+	virtual int GetMonsterHP() { return monsterHP; }
+	virtual void Damaged();
 
 public:
 	float RandomRange(float min, float max)
@@ -106,6 +108,7 @@ protected:
 	int damage;
 	int monsterHP;
 	float moveSpeed;
+	float heatCoolTime;
 	// float gravity = 1000.f; // 중력 가속도 (픽셀/sec^2)
 	float maxFallSpeed = 800.f; // 최대 낙하 속도
 	float deadElipsedTime = 0.0f;

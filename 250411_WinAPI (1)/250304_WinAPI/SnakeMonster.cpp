@@ -37,7 +37,7 @@ HRESULT SnakeMonster::Init()
     //);
 
     colliderSize = { 50.0f, 30.0f };
-    colliderOffsetY = 10.f;
+    colliderOffsetY = 5.f;
 
     snakeCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -216,7 +216,7 @@ void SnakeMonster::FrameUpdate(float TimeDelta)
 
 void SnakeMonster::CheckTileCollision()
 {
-    float maxDist = 10.0f;
+    float maxDist = 15.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -240,7 +240,7 @@ void SnakeMonster::CheckTileCollision()
 
 void SnakeMonster::CheckPlayerCollision()
 {
-    float maxDist = 5.0f;
+    float maxDist = 10.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -268,7 +268,7 @@ void SnakeMonster::CheckPlayerCollision()
 
 void SnakeMonster::CheckItemCollision()
 {
-    float maxDist = 10.0f;
+    float maxDist = 15.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -395,12 +395,12 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y,false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y,false);
             }
 
             if (dir.x < 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
 
@@ -408,12 +408,12 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0 && meetPlayerRight)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0 && meetPlayerLeft)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
     }
