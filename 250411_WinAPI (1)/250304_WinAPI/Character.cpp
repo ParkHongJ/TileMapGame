@@ -1298,7 +1298,8 @@ void Character::Detect(GameObject* obj)
     if (currHitTime > 0) return;
 
     if (dynamic_cast<SnakeMonster*>(obj) ||
-        dynamic_cast<SkeletonMonster*>(obj))
+        dynamic_cast<SkeletonMonster*>(obj) ||
+        dynamic_cast<BossMonster*>(obj))
     {
         if (CheckOnMonster())
         {
@@ -1318,23 +1319,6 @@ void Character::Detect(GameObject* obj)
 
             ChangeState(&interactionState);
         }
-
-      
-
-    }
-    else if (dynamic_cast<BossMonster*>(obj))
-    {
-        playerStatus->MinusPlayerHP();
-        currHitTime = hitCoolTime;
-        isFaint = true;
-
-        //  넉백 속도 적용
-        float knockbackX = isFlip ? 200.f : -200.0f;
-        float knockbackY = -250.0f; // 낮은 포물선을 위해 음수
-
-        velocity = { knockbackX, knockbackY };
-
-        ChangeState(&interactionState);
     }
     else if (dynamic_cast<Arrow*>(obj))
     {
