@@ -87,6 +87,9 @@ HRESULT Character::Init()
 	attackRate = 0.3f;
 
     isDead = false;
+    isEnteringGate = false;
+    isExitingGate= false;
+
 
     hitCoolTime = 1.0f;
     currHitTime = 0.0f;
@@ -304,6 +307,8 @@ void Character::HandleInput()
         currInput.interact = km->IsOnceKeyDown('A');
         currInput.bomb = km->IsOnceKeyDown('C');
         currInput.shift = km->IsStayKeyDown(VK_SHIFT);
+
+
     } 
     currInput.jump = km->IsOnceKeyDown('Z');
 }
@@ -337,6 +342,46 @@ void Character::OnDamageFly()
     Pos.x += moveDist;
 }
 
+bool Character::CheckOnMonster()
+{
+    float maxDist = 8.0f;
+    float debugTime = 1.0f;
+
+    // Collider 기준 
+   FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+
+    RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
+    RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
+
+    bool onDebug = true;
+
+    // RayAll -> RayType : 타일만 레이 쏘게 하는 코드로 변경
+
+    bool isTouchingBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::MONSTER, onDebug, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, CollisionMaskType::MONSTER, onDebug, debugTime);
+
+    return isTouchingBottom;
+}
+
+bool Character::CheckAroundGate()
+{
+    interActionPQ = {};
+    OutputDebugStringA("==================게이트 / 문 검사중=========================");
+
+    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, 5.f, interActionPQ);
+
+    if (!interActionPQ.empty())
+    {
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::DOOR)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 void Character::Update(float TimeDelta)
 {
@@ -360,7 +405,8 @@ void Character::Update(float TimeDelta)
 
 
         if (!(state == &interactionState &&
-            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE))
+            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE ||
+            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_ON_NIDDLE))
         {
 
             ApplyGravity(TimeDelta);
@@ -416,9 +462,9 @@ void Character::Update(float TimeDelta)
             Move();
 
         if (!(state == &interactionState &&
-            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE))
+            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE ||
+            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_ON_NIDDLE))
         {
-
             ApplyGravity(TimeDelta);
         }
 
@@ -798,30 +844,30 @@ void Character::HandleInteractionLogic()
 
     case  InteractionState::SubState::INTERACTION_ON_NIDDLE:
         
-    {
-        float dy = targetHangOnPos.y - Pos.y;
+    //{
+    //    float dy = targetHangOnPos.y - Pos.y;
 
 
-        // Y축 정렬
-        if (fabs(dy) > TOLERANCE)
-        {
-            float moveY = 70.f * deltaTime * (dy > 0 ? 1.0f : -1.0f);
-            Pos.y += moveY;
+    //    // Y축 정렬
+    //    if (fabs(dy) > TOLERANCE)
+    //    {
+    //        float moveY = 70.f * deltaTime * (dy > 0 ? 1.0f : -1.0f);
+    //        Pos.y += moveY;
 
-            if ((dy > 0 && Pos.y > targetHangOnPos.y) || (dy < 0 && Pos.y < targetHangOnPos.y))
-                Pos.y = targetHangOnPos.y;
-        }
-        else
-        {
-            // 목표 도착 시
-            //isFlip = !isFlip;
-            isMovingAuto = false;
+    //        if ((dy > 0 && Pos.y > targetHangOnPos.y) || (dy < 0 && Pos.y < targetHangOnPos.y))
+    //            Pos.y = targetHangOnPos.y;
+    //    }
+    //    else
+    //    {
+    //        // 목표 도착 시
+    //        //isFlip = !isFlip;
+    //        isMovingAuto = false;
 
-            playerStatus->SetPlayerHP(0);
-            isDead = true;
-            ChangeState(&interactionState);
-        }
-    }
+    //        playerStatus->SetPlayerHP(0);
+    //        isDead = true;
+    //        ChangeState(&interactionState);
+    //    }
+    //}
 
         break;
 
@@ -1178,6 +1224,14 @@ void Character::CheckInterAction()
 
     if (isTouchingBottom)
     {
+        if (CheckAroundGate() && currInput.interact)
+        {
+            isEnteringGate = true;
+            Pos.x = interActionPQ.top().second->GetPos().x;
+            ChangeState(&interactionState);
+            return;
+        }
+
         if (CheckCanPushTile() && (currInput.moveLeft || currInput.moveRight))
         {
             float timeDelta = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
@@ -1231,9 +1285,45 @@ void Character::Detect(GameObject* obj)
     if (currHitTime > 0) return;
 
     if (dynamic_cast<SnakeMonster*>(obj) ||
-        dynamic_cast<SkeletonMonster*>(obj) ||
-        dynamic_cast<BossMonster*>(obj) ||
-        dynamic_cast<Arrow*>(obj))
+        dynamic_cast<SkeletonMonster*>(obj))
+    {
+        if (CheckOnMonster())
+        {
+            Jump();
+        }
+        else
+        {
+            playerStatus->MinusPlayerHP();
+            currHitTime = hitCoolTime;
+            isFaint = true;
+
+            //  넉백 속도 적용
+            float knockbackX = isFlip ? 200.f : -200.0f;
+            float knockbackY = -250.0f; // 낮은 포물선을 위해 음수
+
+            velocity = { knockbackX, knockbackY };
+
+            ChangeState(&interactionState);
+        }
+
+      
+
+    }
+    else if (dynamic_cast<BossMonster*>(obj))
+    {
+        playerStatus->MinusPlayerHP();
+        currHitTime = hitCoolTime;
+        isFaint = true;
+
+        //  넉백 속도 적용
+        float knockbackX = isFlip ? 200.f : -200.0f;
+        float knockbackY = -250.0f; // 낮은 포물선을 위해 음수
+
+        velocity = { knockbackX, knockbackY };
+
+        ChangeState(&interactionState);
+    }
+    else if (dynamic_cast<Arrow*>(obj))
     {
         playerStatus->MinusPlayerHP();
         currHitTime = hitCoolTime;
@@ -1249,8 +1339,9 @@ void Character::Detect(GameObject* obj)
     }
     else if (dynamic_cast<NiddleTrap*>(obj))
     {
-        onNeedle = true;
-        targetHangOnPos = { Pos.x, Pos.y + 10.f };
+        onNeedle = true;/*
+        isMovingAuto = true;
+        targetHangOnPos = { Pos.x, Pos.y + 10.f };*/
         ChangeState(&interactionState);
     }
     
