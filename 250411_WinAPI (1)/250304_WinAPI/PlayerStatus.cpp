@@ -6,7 +6,7 @@ PlayerStatus::PlayerStatus()
 {
 	memset(&info, 0, sizeof(info));
 	info.playerMaxHP = 4;
-	info.playerHP = 2;
+	info.playerHP = info.playerMaxHP;
 	info.bombCount = 3;
 	info.ropeCount = 5;
 	info.deadTime = 3.f;

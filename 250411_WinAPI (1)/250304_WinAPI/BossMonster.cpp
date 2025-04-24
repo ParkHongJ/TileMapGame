@@ -25,7 +25,7 @@ HRESULT BossMonster::Init()
     player = new Character();
     tile = new Tile();
 
-    colliderSize = { 80.0f, 70.0f };
+    colliderSize = { 80.0f, 100.0f };
     colliderOffsetY = 5.f;
 
     bossCollider = new BoxCollider(
@@ -400,7 +400,11 @@ void BossMonster::ApplyGravity(float TimeDelta)
 {
     // 타일이 밑에 없을 때 떨어져요잇
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-        Pos.y += 200.f * TimeDelta;
+    {
+       // Pos.y += 200.f * TimeDelta;
+        Pos.y += 200.f * 0.016f;
+    }
+       
     //else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
     //{
     //    //Pos.y 
@@ -410,7 +414,11 @@ void BossMonster::ApplyGravity(float TimeDelta)
     if (monsterState == MonsterState::ATTACK)
     {
         if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-            Pos.y += 400.f * TimeDelta;
+        {
+            //Pos.y += 400.f * TimeDelta;
+            Pos.y += 400.f * 0.016f;
+        }
+            
         /*else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
         {
            
@@ -428,7 +436,6 @@ void BossMonster::Detect(GameObject* obj)
 {
     if (auto player = obj->GetType<Character>())
     {
-        float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
         playerPos = player->GetPos();
         float playerPosBottom = playerPos.y + 30;
         float monsterPosTop = Pos.y;
@@ -439,22 +446,20 @@ void BossMonster::Detect(GameObject* obj)
         }
     }
  
-    else if (auto player = obj->GetType<Character>())
-    {
-
-    }
     // 타일과 비교해서 타일 Destroy
     if (auto tile = obj->GetType<Tile>())
     {
         FPOINT tilePos = tile->GetPos(); 
-        float tileTop = tilePos.y - 20;
+        float tileTop = tilePos.y - 24;
+        float tileBottom = tilePos.y + 24;
+   
         float monsterPosBottom = Pos.y;
 
-        if (monsterState == MonsterState::ATTACK)
-        {
-            if(tilePos.y < monsterPosBottom + 10.f)
-                tile->Destruction();
-        }
+		if (monsterState == MonsterState::ATTACK)
+		{
+			if (tilePos.y < monsterPosBottom + 30.f)
+				tile->Destruction();
+		}
     }
 
 }

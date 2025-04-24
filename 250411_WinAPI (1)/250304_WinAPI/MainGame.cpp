@@ -242,6 +242,7 @@ MainGame::~MainGame()
 
 HRESULT MainGame::InitD2D()
 {
+	ShowCursor(false);
 	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 	// Factory »ý¼º
 	HRESULT hr = D2D1CreateFactory(
@@ -345,6 +346,7 @@ void MainGame::Draw()
 
 	//CollisionManager::GetInstance()->DebugRender(pRT1);
 	//TimerManager::GetInstance()->Render(pRT1);
+
 
 }
 
