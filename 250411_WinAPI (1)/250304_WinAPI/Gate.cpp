@@ -14,6 +14,7 @@ HRESULT Gate::Init()
 	Pos.y = 216.f;
 	
 	objectName = OBJECTNAME::GATE;
+	interactState = INTERACTSTATE::INTERACT_ABLE;
 
 	return S_OK;
 }

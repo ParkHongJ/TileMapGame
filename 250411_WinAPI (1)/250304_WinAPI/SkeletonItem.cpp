@@ -11,6 +11,7 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 #include "ImageManager.h"
+#include "Monster.h"
 
 SkeletonItem::SkeletonItem()
 {
@@ -83,6 +84,7 @@ void SkeletonItem::Equip(GameObject* owner)
 
 void SkeletonItem::UnEquip()
 {
+	__super::UnEquip();
 }
 
 void SkeletonItem::UnEquip(void* info)
@@ -108,6 +110,15 @@ void SkeletonItem::Detect(GameObject* obj)
 	if (auto temp = obj->GetType<Character>())
 	{
 		return;
+	}
+
+	if (auto monster = dynamic_cast<Monster*>(obj))
+	{
+		monster->SetMonsterHP(monster->GetMonsterHP() - 1);
+		if (0 >= monster->GetMonsterHP())
+		{
+			monster->SetDestroy();
+		}
 	}
 
 	DeadEvent();

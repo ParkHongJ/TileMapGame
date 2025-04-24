@@ -347,9 +347,7 @@ void SkeletonMonster::Detect(GameObject* obj)
                 particle->AddParticleOption(sizeOp);
                 particle->AddParticleOption(trailOp);
             }
-           
         }
-
     }
 
     else if (auto player = obj->GetType<Character>())
