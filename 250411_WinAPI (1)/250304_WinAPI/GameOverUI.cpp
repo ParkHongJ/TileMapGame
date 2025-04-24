@@ -19,6 +19,7 @@ GameOverUI::GameOverUI(ID2D1RenderTarget* renderTarget)
 
 HRESULT GameOverUI::Init()
 {
+	blackBackgroundImage = ImageManager::GetInstance()->FindImage("BlackBG");
 
 	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("GameOver_journalRear");
 
@@ -51,6 +52,8 @@ HRESULT GameOverUI::Init()
 	isBackPage = false;
 	selectBoxIndex = 1;
 	selectBoxMovefloat = 45.0f;
+
+	blackBackgroundImagePos = { WINSIZE_X / 2.0f, WINSIZE_Y / 2.0f };
 
 	text_gameoverPos = { GameOver_journalFrontImagePos.x + 150.0f,
 							   GameOver_journalFrontImagePos.y - 195.0f };
@@ -87,12 +90,13 @@ void GameOverUI::Release()
 
 void GameOverUI::Update(float TimeDelta)	
 {
-	/*if(!isGameOver)
+	if(!isGameOver)
 	{
-	}*/
 		gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGold();
 		playTimeMin = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime() / 60;
 		playTimeSec = int(ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime()) % 60;
+	}
+		
 		//playTimeSec = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime();
 		//if (playTimeSec >= 60)
 		//{
@@ -139,6 +143,8 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 	//	뒷배경을 검정색으로 칠해야함
 	if (isGameOver)
 	{
+		blackBackgroundImage->Render(renderTarget, blackBackgroundImagePos.x, blackBackgroundImagePos.y);
+
 		if(!isBackPage)
 		{
 			if (GameOver_journalRearImage)

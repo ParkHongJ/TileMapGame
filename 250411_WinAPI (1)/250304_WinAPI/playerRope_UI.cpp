@@ -20,7 +20,8 @@ HRESULT playerRope_UI::Init()
 	Pos = { WINSIZE_X * (5.0f / x_pos_divide_factor), WINSIZE_Y * (1.0f / 12.0f) };
 
 	playerStat = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus();
-	//playerRope_value = playerStat->GetRopeCount();
+	playerRope_value = playerStat->GetRopeCount();
+	pastRope_value = playerRope_value;
 
 	return S_OK;
 }
@@ -32,9 +33,12 @@ void playerRope_UI::Release()
 void playerRope_UI::Update(float TimeDelta)
 {
 	UI::Update(TimeDelta);
-	//playerRope_value = playerStat->GetRopeCount();
-	if (KeyManager::GetInstance()->IsOnceKeyDown('R'))
+	playerRope_value = playerStat->GetRopeCount();
+	if (pastRope_value != playerRope_value)
+	{
+		pastRope_value = playerRope_value;
 		RequestOpaqueChange();
+	}
 }
 
 void playerRope_UI::Render(ID2D1RenderTarget* renderTarget)
