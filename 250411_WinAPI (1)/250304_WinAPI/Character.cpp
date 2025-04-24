@@ -1432,7 +1432,7 @@ void Character::JunUpdate(float TimeDelta)
 
                 if (!currInput.moveDownReleased && !currInput.moveDown)
                 {
-                    holdItem->SetDrop(600.f, angle);
+                    holdItem->SetDrop(550.f, angle);
                 }
 
                 else

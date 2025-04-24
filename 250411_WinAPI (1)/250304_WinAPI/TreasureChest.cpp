@@ -37,7 +37,7 @@ HRESULT TreasureChest::Init()
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 0;
 
-	holdOffset = { 0.f, -10.f };
+	holdOffset = { 20.f, -10.f };
 	return S_OK;
 }
 
@@ -108,6 +108,11 @@ void TreasureChest::Detect(GameObject* obj)
 	}
 
 	if (auto temp = obj->GetType<Character>())
+	{
+		return;
+	}
+
+	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
 	{
 		return;
 	}
