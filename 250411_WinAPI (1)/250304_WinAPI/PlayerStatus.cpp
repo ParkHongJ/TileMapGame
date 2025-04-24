@@ -34,3 +34,15 @@ void PlayerStatus::Update(float TimeDelta)
 		info.GameTime += TimeDelta;
 	}
 }
+
+void PlayerStatus::SetGold(unsigned int gold)
+{
+	info.sumGold += max(0, gold - info.gold);
+	info.gold = gold;
+}
+
+void PlayerStatus::PlusGold(unsigned int gold)
+{
+	info.sumGold += gold;
+	info.gold += gold;
+}

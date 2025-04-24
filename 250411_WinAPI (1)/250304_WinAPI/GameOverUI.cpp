@@ -98,7 +98,7 @@ void GameOverUI::Update(float TimeDelta)
 	if (!isGameOver)
 	{
 	
-		gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGold();
+		gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetSumGold();
 		playTimeMin = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime() / 60;
 		playTimeSec = int(ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime()) % 60;
 	}
