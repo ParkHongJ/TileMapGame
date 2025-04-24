@@ -96,6 +96,8 @@ protected:
 protected:
 	OBJECTNAME objectName;
 
+	string playerKey;
+
 	// 좌우반전. 이게맞나?
 	bool bFlipX = false;
 public:
@@ -107,5 +109,8 @@ public:
 
 	OBJECTNAME GetObjectName() { return objectName; }
 	void SetObjectName(OBJECTNAME objectName) { this->objectName = objectName; }
+
+	void SetPlayerKey(string input) { this->playerKey = input;  }
+
 };
 

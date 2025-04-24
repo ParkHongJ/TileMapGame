@@ -55,7 +55,7 @@ HRESULT Character::Init()
 
 	// Collision
 	colliderSize = { 30.0f, 40.0f };
-	colliderOffsetY = 0.f;
+	colliderOffsetY = 15.f;
 	collider = new BoxCollider(
 		{ 0.0f , colliderOffsetY },     // Offset
 		{ colliderSize.x, colliderSize.y },  // 
