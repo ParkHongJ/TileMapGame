@@ -19,7 +19,8 @@ void InteractionState::Update()
     }
     if (character->GetOnNeedle())
     {
-        ChangeSubState(SubState::INTERACTION_ON_NIDDLE);
+        ChangeSubState(SubState::INTERACTION_IS_DEAD);
+        return;
     }
     else if (character->GetIsFaint())
     {
