@@ -2,7 +2,6 @@
 #include "UI.h"
 
 class Image;
-class sandGlass_UI;
 class GameOverUI : public UI
 {
 private:
@@ -39,11 +38,8 @@ private:
 	FPOINT returntocampPos;
 	FPOINT exittotitlePos;
 
-	sandGlass_UI* sandglass;
-
-	float playTimeSecond;
-	int playTimeMinute;
-	int playTime;
+	int playTimeSec;
+	int playTimeMin;
 	int gold;
 	int stageIndex_Outer;
 	int stageIndex_Inner;

@@ -58,7 +58,7 @@ public:
 
 	inline PLAYERSTATUSDESC* GetInfo() { return &info; };
 
-	inline const unsigned int GetGameTime() const { return info.GameTime; };
+	inline const float  GetGameTime() const { return info.GameTime; };
 
 private:
 	PLAYERSTATUSDESC info;

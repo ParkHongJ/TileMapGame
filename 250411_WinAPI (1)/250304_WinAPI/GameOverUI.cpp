@@ -4,8 +4,9 @@
 #include "PlayerStatus.h"
 #include "ObjectManager.h"
 #include "Character.h"
-#include "sandGlass_UI.h"
 #include "ImageManager.h"
+#include <iomanip>
+#include <sstream>
 
 GameOverUI::GameOverUI(ID2D1RenderTarget* renderTarget)
 {
@@ -18,7 +19,6 @@ GameOverUI::GameOverUI(ID2D1RenderTarget* renderTarget)
 
 HRESULT GameOverUI::Init()
 {
-	sandglass = new sandGlass_UI();
 
 	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("GameOver_journalRear");
 
@@ -42,10 +42,9 @@ HRESULT GameOverUI::Init()
 	GameOver_journalBackClipImagePos = { GameOver_journalBackImagePos.x - (GameOver_journalBackImagePos.x * 0.39f),
 		GameOver_journalBackImagePos.y - (GameOver_journalBackImagePos.y * 0.1f)};
 
-	playTimeSecond = sandglass->GetPlayTimeSec();
-	playTimeMinute = sandglass->GetPlayTimeMin();
-	//playTime = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->
-	gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGold();
+	playTimeSec = 0;
+	playTimeMin = 0;
+
 	stageIndex_Outer = 0;
 	stageIndex_Inner = 0;
 	isGameOver = false;
@@ -98,6 +97,19 @@ void GameOverUI::Release()
 
 void GameOverUI::Update(float TimeDelta)	
 {
+	/*if(!isGameOver)
+	{
+	}*/
+		gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGold();
+		playTimeMin = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime() / 60;
+		playTimeSec = int(ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime()) % 60;
+		//playTimeSec = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime();
+		//if (playTimeSec >= 60)
+		//{
+
+		//	//playTimeMin++;
+		//}
+
 	if (KeyManager::GetInstance()->IsOnceKeyDown('P'))
 		isGameOver = true;
 	if(isGameOver)
@@ -220,7 +232,7 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					int_moneyPos.x,
 					int_moneyPos.y,
 					1.0f
-					);
+				);
 				/*std::wstring timePrint = std::to_wstring(playTime);
 				RenderText(
 					renderTarget,
@@ -229,6 +241,17 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					int_timePos.y,
 					1.0f
 				);*/
+				std::wstringstream timeStream;
+				timeStream << std::setw(2) << std::setfill(L'0') << playTimeMin << L":"
+					<< std::setw(2) << std::setfill(L'0') << static_cast<int>(playTimeSec);
+				std::wstring timeText = timeStream.str();
+				RenderText(renderTarget,
+					timeText,
+					int_timePos.x,
+					int_timePos.y,
+					1.0f, D2D1::ColorF::White
+				);
+
 				RenderText(
 					renderTarget,
 					L"Quick Restart",
