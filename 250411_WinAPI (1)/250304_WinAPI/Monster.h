@@ -7,6 +7,7 @@ enum class MonsterState
 	MOVE,
 	ATTACKMOVE,
 	ATTACK,
+	WAITATTACK,
 	DEAD
 };
 class Character;
@@ -154,6 +155,7 @@ protected:
 	bool isItemTouchingTop;
 	bool isItemTouchingBottom;
 
+	bool isFight = false;
 	protected:
 
 	FPOINT velocity;
@@ -165,4 +167,7 @@ protected:
 	bool bPhysics = false;
 	FPOINT totalForce = { 0, 0 };
 	float bounciness = 0.4f;
+
+	float attackCool = 0.0f;
+	//float attackTime = 1.0f;
 };

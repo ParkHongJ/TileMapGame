@@ -1,6 +1,7 @@
 #pragma once
 #include "Monster.h"
 
+class Tile;
 class BoxCollider;
 class Image;
 class BossMonster : public Monster
@@ -28,6 +29,7 @@ public:
 private:
 	Image* bossImage;
 	BoxCollider* bossCollider = nullptr;
+	Tile* tile;
 	FPOINT colliderSize;
 	float colliderOffsetY;
 
@@ -41,5 +43,8 @@ private:
 	FPOINT monsterPosLeftTop;
 	FPOINT monsterPosRightTop;
 	float monsterPosTop;
+
+	float attackDuration = 0.f;
+	float attackTime = 0.5f;
 };
 
