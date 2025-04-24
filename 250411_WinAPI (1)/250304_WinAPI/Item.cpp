@@ -28,7 +28,7 @@ HRESULT Item::Init()
 	return S_OK;
 }
 
-void Item::SetImage(const char* input)
+void Item::SetImage(string input)
 {
 	holdImage= ImageManager::GetInstance()->FindImage(input);
 }

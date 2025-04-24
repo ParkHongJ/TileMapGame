@@ -141,9 +141,10 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new ShopInteractUI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_NPC, new ShopKeeper());
+    
+  
+    //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());+		[allocator]	allocator	std::_Compressed_pair<std::allocator<char>,std::_String_val<std::_Simple_types<char>>,1>
 
-
-    //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());

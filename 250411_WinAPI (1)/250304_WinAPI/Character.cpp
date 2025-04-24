@@ -114,7 +114,7 @@ HRESULT Character::Init()
 }
 
 
-void Character::InitCharacter(const char* input)
+void Character::InitCharacter(string input)
 {
     playerFaintEffect = playerImage = ImageManager::GetInstance()->FindImage(input);
     whip->SetImage(input);
