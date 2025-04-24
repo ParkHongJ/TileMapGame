@@ -79,6 +79,9 @@ void Monster::Update(float TimeDelta)
 {
 	Move();
 	FrameUpdate(TimeDelta);
+
+	// 아이템한테 피격당했을 때 쿨타임 빼기 
+	heatCoolTime -= TimeDelta;
 }
 
 void Monster::FrameUpdate(float TimeDelta)

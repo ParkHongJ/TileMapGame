@@ -34,7 +34,13 @@ public:
 
 	virtual int GetDamage() { return damage; }
 	virtual void SetDamage(int damage) { this->damage = damage; }
+
 	virtual int GetMonsterHP() { return monsterHP; }
+	virtual void SetMonsterHP(int monsterHP) { this->monsterHP = monsterHP; }
+
+	virtual float GetHeatCoolTime() { return heatCoolTime; }
+	virtual void SetHeatCoolTime(float heatCoolTime) { this->heatCoolTime = heatCoolTime; }
+
 	virtual void Damaged();
 
 public:
