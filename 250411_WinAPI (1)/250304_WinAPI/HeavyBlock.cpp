@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "GameManager.h"
 #include "ImageManager.h"
+#include "Monster.h"
 HRESULT HeavyBlock::Init()
 {
 	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
@@ -221,8 +222,15 @@ void HeavyBlock::Detect(GameObject* obj)
 {
 	if (velocity.y >= 50.f)
 	{
-		obj->SetDestroy();
+		
 		int a = 10;
+
+		if (auto monster = dynamic_cast<Monster*>(obj))
+		{
+			monster->DeadStarEffect();
+			
+		}
+		obj->SetDestroy();
 	}
 }
 

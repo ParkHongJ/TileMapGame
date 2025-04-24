@@ -5,8 +5,9 @@
 #include "CameraManager.h"
 #include "GhostJuwel.h"
 #include "ImageManager.h"
+#include "Monster.h"
 
-GhostJuwel::GhostJuwel() :gold(5000)
+GhostJuwel::GhostJuwel() :gold(3000)
 {
 
 }
@@ -86,6 +87,7 @@ void GhostJuwel::Detect(GameObject* obj)
 	{
 		Equip(player->GetPlayerStatus());
 		SetDestroy();
+		return;
 	}
 
 	else if (auto player = obj->GetType<Character>())

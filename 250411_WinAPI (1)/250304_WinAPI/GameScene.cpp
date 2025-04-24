@@ -112,6 +112,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 
 
     ImageManager::GetInstance()->AddImage("GateOpen", L"Textures/GateOpen.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("journalSum", L"Textures/UI/Journal/journalSum.png", renderTarget);
     background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
 

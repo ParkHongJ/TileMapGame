@@ -69,6 +69,9 @@ public:
 
 	bool ChangeMaskType(CollisionMaskType curMaskType, CollisionMaskType nextMaskType, GameObject* owner);
 
+	bool ChangeZ(CollisionMaskType curMaskType, ORDER_Z _order, GameObject* owner);
+
+
 
 private:
 	void DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length);

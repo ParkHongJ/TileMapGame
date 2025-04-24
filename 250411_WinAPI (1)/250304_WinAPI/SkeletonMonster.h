@@ -30,4 +30,5 @@ private:
 	BoxCollider* skeletonCollider = nullptr;
 	FPOINT colliderSize;
 	float colliderOffsetY;
+	bool isChangeCol = false;
 };

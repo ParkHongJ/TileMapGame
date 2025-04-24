@@ -19,11 +19,11 @@ GameOverUI::GameOverUI(ID2D1RenderTarget* renderTarget)
 
 HRESULT GameOverUI::Init()
 {
-	blackBackgroundImage = ImageManager::GetInstance()->FindImage("BlackBG");
+	//blackBackgroundImage = ImageManager::GetInstance()->FindImage("BlackBG");
 
-	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("GameOver_journalRear");
+	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("journalSum");
 
-	GameOver_journalFrontImage = ImageManager::GetInstance()->FindImage("GameOver_journalFront");
+	//GameOver_journalFrontImage = ImageManager::GetInstance()->FindImage("GameOver_journalFront");
 
 	GameOver_journalSelectBox = ImageManager::GetInstance()->FindImage("GameOver_journalSelectBox");
 
@@ -32,6 +32,9 @@ HRESULT GameOverUI::Init()
 	GameOver_journalBackImage = ImageManager::GetInstance()->FindImage("GameOver_journalBack");
 
 	GameOver_journalBackClipImage = ImageManager::GetInstance()->FindImage("GameOver_journalClip");
+
+	GameOver_journalBackClipImage = ImageManager::GetInstance()->FindImage("GameOver_journal");
+
 
 	GameOver_journalRearImagePos = { WINSIZE_X / 2, WINSIZE_Y / 2 };
 	GameOver_journalFrontImagePos = { GameOver_journalRearImagePos.x, GameOver_journalRearImagePos.y };
@@ -80,6 +83,7 @@ HRESULT GameOverUI::Init()
 
 	imageRatio = ResolutionRatio(GameOver_journalRearImage);
 
+
 	return S_OK;
 }
 
@@ -90,8 +94,10 @@ void GameOverUI::Release()
 
 void GameOverUI::Update(float TimeDelta)	
 {
-	if(!isGameOver)
+	isGameOver = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->IsEnd();
+	if (!isGameOver)
 	{
+	
 		gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGold();
 		playTimeMin = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime() / 60;
 		playTimeSec = int(ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGameTime()) % 60;
@@ -103,9 +109,8 @@ void GameOverUI::Update(float TimeDelta)
 
 		//	//playTimeMin++;
 		//}
-
-	if (KeyManager::GetInstance()->IsOnceKeyDown('P'))
-		isGameOver = true;
+	//if (KeyManager::GetInstance()->IsOnceKeyDown('P'))
+	//	isGameOver = true;
 	if(isGameOver)
 	{
 		if (KeyManager::GetInstance()->IsOnceKeyDown(VK_RIGHT))
@@ -142,7 +147,7 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 {
 	if (isGameOver)
 	{
-		blackBackgroundImage->Render(renderTarget, blackBackgroundImagePos.x, blackBackgroundImagePos.y);
+		//blackBackgroundImage->Render(renderTarget, blackBackgroundImagePos.x, blackBackgroundImagePos.y);
 
 		if(!isBackPage)
 		{

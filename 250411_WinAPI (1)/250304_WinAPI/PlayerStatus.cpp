@@ -24,6 +24,7 @@ void PlayerStatus::Update(float TimeDelta)
 		info.deadTime -= TimeDelta;
 		if (0.f >= info.deadTime)
 		{
+			info.IsEnd = true;
 			CameraManager::GetInstance()->SetDeadCam();
 		}
 	}

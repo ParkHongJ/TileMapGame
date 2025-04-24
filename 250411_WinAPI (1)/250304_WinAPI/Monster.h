@@ -43,6 +43,8 @@ public:
 
 	virtual void Damaged();
 
+	void DeadStarEffect();
+
 public:
 	float RandomRange(float min, float max)
 	{

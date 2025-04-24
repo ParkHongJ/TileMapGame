@@ -342,6 +342,22 @@ bool CollisionManager::ChangeMaskType(CollisionMaskType curMaskType, CollisionMa
 
 }
 
+bool CollisionManager::ChangeZ(CollisionMaskType curMaskType, ORDER_Z _order, GameObject* owner)
+{
+    for (auto& iter : layerCollisionMap[curMaskType]) // 비효율적
+    {
+        if (owner == iter->GetOwner())
+        {
+            iter->SetValueZ(_order);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
 void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length)
 {
     FPOINT end = {

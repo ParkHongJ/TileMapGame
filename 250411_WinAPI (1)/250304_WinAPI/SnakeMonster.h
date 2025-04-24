@@ -24,6 +24,7 @@ public :
 	virtual void Detect(GameObject* obj) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
+
 private: 
 	Image* snakeImage;
 	BoxCollider* snakeCollider = nullptr;
