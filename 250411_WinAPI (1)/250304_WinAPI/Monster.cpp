@@ -42,6 +42,8 @@ HRESULT Monster::Init()
 	isTileTouchingTop = false;
 	isTileTouchingLeftBottom = false;
 	isTileTouchingRightBottom = false;
+	isTileTouchingLeftCenter = false;
+	isTileTouchingRightCenter = false;
 
 	hasBottomTile = true;
 
@@ -95,7 +97,7 @@ void Monster::CheckItemCollision()
 {
 }
 
-void Monster::MeetPlayer()
+void Monster::MeetPlayer(float TimeDelta)
 {
 }
 
@@ -206,6 +208,10 @@ void Monster::MoveJump(float TimeDelta)
 				velocity = { 0.f, 0.f };
 				useGravity = false;
 				bPhysics = false;
+				if (monsterState == MonsterState::ATTACKMOVE)
+				{
+					monsterState = MonsterState::WAITATTACK;
+				}
 			}
 
 			// »ìÂ¦ ¹Ð±â (°ãÄ§ ¹æÁö)

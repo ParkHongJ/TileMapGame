@@ -19,7 +19,7 @@ public:
 	virtual void CheckTileCollision() override;
 	virtual void CheckPlayerCollision() override;
 	virtual void CheckItemCollision() override;
-	virtual void MeetPlayer() override;
+	virtual void MeetPlayer(float TimeDelta) override;
 	virtual void Move() override;
 	virtual void ApplyGravity(float TimeDelta) override;
 	virtual void ReverseMove();
@@ -44,6 +44,8 @@ private:
 	FPOINT monsterPosRightTop;
 	float monsterPosTop;
 
-
+	bool wasMove;
+	bool wasAttackMove;
+	bool wasAttack;
 };
 

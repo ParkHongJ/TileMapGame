@@ -10,7 +10,7 @@
 
 SkeletonMonster::SkeletonMonster()
 {
-    int i = 5;
+    //int i = 5;
 }
 
 SkeletonMonster::~SkeletonMonster()
@@ -22,7 +22,7 @@ HRESULT SkeletonMonster::Init()
     skeletonImage = ImageManager::GetInstance()->FindImage("Skeleton_Monster");
     player = new Character();
 
-    colliderSize = { 50.0f, 50.0f };
+    colliderSize = { 50.0f, 45.0f };
     colliderOffsetY = 0.f;
 
     skeletonCollider = new BoxCollider(
@@ -66,48 +66,26 @@ void SkeletonMonster::Update(float TimeDelta)
     if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom && monsterState != MonsterState::DEAD)
     {
         monsterState = MonsterState::MOVE;
-        meetPlayerLeft = false;
-        meetPlayerRight = false;
-        hasBottomTile = false;
-        Move();
     }
     //벽 만났을 때 Update
-    else if (isTileTouchingRight || isTileTouchingLeft && monsterState != MonsterState::DEAD)
+    if (isTileTouchingRight && dir.x > 0 && monsterState == MonsterState::MOVE)
     {
-        monsterState = MonsterState::MOVE;
         dir.x *= -1;
-        Move();
     }
-
-    //// 오른쪽으로 가는데 밑에 타일이 없을 때 
-    //if (!isTileTouchingRightBottom && !hasBottomTile && dir.x > 0 && monsterState != MonsterState::DEAD)
-    //{
-    //    monsterState = MonsterState::MOVE;
-    //    dir.x *= -1;
-    //    hasBottomTile = true;
-    //    Move();
-
-    //}
-    //// 왼쪽으로 가는데 밑에 타일이 없을 때 
-    //else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0 && monsterState != MonsterState::DEAD)
-    //{
-    //    monsterState = MonsterState::MOVE;
-    //    dir.x *= -1;
-    //    hasBottomTile = true;
-    //    Move();
-    //}
+    else if (isTileTouchingLeft && dir.x < 0 && monsterState == MonsterState::MOVE)
+    {
+        dir.x *= -1;
+    }
 
     // Player 만났을 때 Update , 데미지도 포함 
     if (dir.x < 0 && isPlayerTouchingLeft && monsterState != MonsterState::DEAD)
     {
-        monsterState = MonsterState::ATTACK;
-        meetPlayerLeft = true;
+        monsterState = MonsterState::ATTACK;     
     }
 
     if (dir.x > 0 && isPlayerTouchingRight)
     {
        monsterState = MonsterState::ATTACK;
-        meetPlayerRight = true;
     }
 
     if (monsterState == MonsterState::DEAD)
@@ -115,18 +93,7 @@ void SkeletonMonster::Update(float TimeDelta)
         DeadEvent(TimeDelta);
     }
 
-    //Player가 위에서 밟았을 때, 아이템과 충돌했을 때  데미지 닳기 
-   /* if (!isPlayerTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingBottom && isPlayerTouchingCenterTop)
-    {
-        monsterHP--;
-    }*/
-
-    /*if (monsterState == MonsterState::DEAD)
-    { 
-		SetDestroy();
-    }*/
-       
-
+    Move();
     FrameUpdate(TimeDelta);
  
 }
@@ -220,14 +187,14 @@ void SkeletonMonster::CheckTileCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isTileTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, true, debugTime)/* ||
+    isTileTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, false, debugTime)/* ||
        CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime)*/;
 
-    isTileTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, true, debugTime) /*||
+    isTileTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, false, debugTime) /*||
         CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime)*/;
 
-    isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, true, debugTime);
-    isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, true, debugTime);
+    isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
 }
 
 void SkeletonMonster::CheckPlayerCollision()
@@ -245,14 +212,14 @@ void SkeletonMonster::CheckPlayerCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, false, debugTime);
 
     isPlayerTouchingCenterTop = CollisionManager::GetInstance()->RaycastType({ centerTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, true, debugTime);
 }
@@ -271,14 +238,14 @@ void SkeletonMonster::CheckItemCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
 
-    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, CollisionMaskType::PLAYER, false, debugTime);
 
-    isPlayerTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, true, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, true, debugTime);
+    isPlayerTouchingTop = CollisionManager::GetInstance()->RaycastType({ leftTop, {0.f, -1.f} }, maxDist, hitTop1, CollisionMaskType::PLAYER, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastType({ rightTop, {0.f, -1.f} }, maxDist, hitTop2, CollisionMaskType::PLAYER, false, debugTime);
 }
 
 void SkeletonMonster::Move()
@@ -291,7 +258,7 @@ void SkeletonMonster::Move()
 void SkeletonMonster::ApplyGravity(float TimeDelta)
 {
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-        Pos.y += moveSpeed * TimeDelta;
+        Pos.y += 200.f * TimeDelta;
     else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
         Pos.y = Pos.y;
 }
@@ -312,7 +279,7 @@ void SkeletonMonster::Detect(GameObject* obj)
         float playerPosBottom = playerPos.y + 20;
         float monsterPosTop = Pos.y;
 
-        if (/*playerPosBottom < monsterPosTop &&*/ monsterState != MonsterState::DEAD)
+        if (playerPosBottom < monsterPosTop)
         {
             monsterState = MonsterState::DEAD;
             deadElipsedTime = 0.0f;
@@ -360,12 +327,12 @@ void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
 
         if (/*monsterHP == 1 &&*/ monsterState == MonsterState::ATTACK)
         {
-            if (dir.x > 0 && meetPlayerRight)
+            if (dir.x > 0)
             {
                 skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
-            if (dir.x < 0 && meetPlayerLeft)
+            if (dir.x < 0)
             {
                 skeletonImage->FrameRender(renderTarget, pos.x, pos.y, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }

@@ -25,7 +25,7 @@ public:
 	virtual void CheckTileCollision();
 	virtual void CheckPlayerCollision();
 	virtual void CheckItemCollision();
-	virtual void MeetPlayer();
+	virtual void MeetPlayer(float TimeDelta);
 	virtual void Move();
 	virtual void ApplyGravity(float TimeDelta);
 	virtual void Detect(GameObject* obj);
@@ -143,6 +143,8 @@ protected:
 	bool isTileTouchingTop;
 	bool isTileTouchingLeftBottom;
 	bool isTileTouchingRightBottom;
+	bool isTileTouchingLeftCenter;
+	bool isTileTouchingRightCenter;
 
 	bool isPlayerTouchingLeft;
 	bool isPlayerTouchingRight;
@@ -171,5 +173,6 @@ protected:
 
 	float attackCool = 0.0f;
 	float attackDuration = 0.f;	
-	float attackCoolTime = 1.5f;	// ÃÑ Äð Å¸ÀÓ
+	float attackCoolTime = 2.f;	// ÃÑ Äð Å¸ÀÓ
+	float rollingTime = 2.f; // ±¸´Â ½Ã°£ 
 };
