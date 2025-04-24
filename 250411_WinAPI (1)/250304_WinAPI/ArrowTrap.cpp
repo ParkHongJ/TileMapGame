@@ -45,7 +45,7 @@ void ArrowTrap::Update(float TimeDelta)
 		}
 
 		//Trigger On
-		if (CollisionManager::GetInstance()->RaycastMyType(ray, 200.f, out, CollisionMaskType::WORLDOBJECT, this))
+		if (CollisionManager::GetInstance()->RaycastMyType(ray, 300.f, out, CollisionMaskType::WORLDOBJECT, this))
 		{
 			Fire();
 		}

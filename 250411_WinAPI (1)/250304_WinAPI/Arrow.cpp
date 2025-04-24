@@ -147,5 +147,6 @@ void Arrow::Detect(GameObject* obj)
 {
 	//데미지 주기
 
-	SetActive(false);
+	//SetActive(false);
+	SetDestroy();
 }
