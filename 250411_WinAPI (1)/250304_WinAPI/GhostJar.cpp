@@ -113,6 +113,11 @@ void GhostJar::Detect(GameObject* obj)
 		return;
 	}
 
+	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
+	{
+		return;
+	}
+
 
 	if (auto monster = dynamic_cast<Monster*>(obj))
 	{

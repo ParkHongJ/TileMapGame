@@ -56,7 +56,7 @@ void IncreaseRopeCnt::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 2, objectScale.x, objectScale.y); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 6, objectScale.x, objectScale.y); // 임의값
 }
 
 void IncreaseRopeCnt::Release()
