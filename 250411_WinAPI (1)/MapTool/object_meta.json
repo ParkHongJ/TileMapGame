@@ -11,8 +11,8 @@
         "name": "BossMonster",
         "atlasPath": "Textures/Monster/boss.png",
         "cellSize": {
-            "x": 128,
-            "y": 128
+            "x": 253,
+            "y": 253
         }
     },
     {
@@ -39,13 +39,20 @@
             "y": 128
         }
     },
-    
     {
         "name": "DummyHongPlayer",
         "atlasPath": "Textures/char_lime.png",
         "cellSize": {
             "x": 128,
             "y": 128
+        }
+    },
+    {
+        "name": "Gate",
+        "atlasPath": "Textures/GateOpen.png",
+        "cellSize": {
+            "x": 396,
+            "y": 396
         }
     },
     {
@@ -98,7 +105,7 @@
     },
     {
         "name": "IncreaseHP",
-        "atlasPath": "Textures / Entities / Mounts / turkey.png",
+        "atlasPath": "Textures/Entities/Mounts/turkey.png",
         "cellSize": {
             "x": 128,
             "y": 128

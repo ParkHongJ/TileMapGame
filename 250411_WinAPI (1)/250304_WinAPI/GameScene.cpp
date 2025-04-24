@@ -89,7 +89,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("lightBulbImage", L"Textures/UI/Hud/lightBulb.png", renderTarget);
     ImageManager::GetInstance()->AddImage("shopDialogBox", L"Textures/UI/Menu/shopDialogBox.png", renderTarget);
     ImageManager::GetInstance()->AddImage("shopKeeper", L"Textures/Entities/People/shopkeeper.png", 6, 7, renderTarget);
-
+    
    // fx_big
     ImageManager::GetInstance()->AddImage("fx_big", L"Textures/fx_big.png", 4, 4, renderTarget);
 
@@ -110,7 +110,8 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("shopDialogBox", L"Textures/UI/Menu/shopDialogBox.png", renderTarget);
     ImageManager::GetInstance()->AddImage("currency_GameOver", L"Textures/UI/Hud/currency_GameOver.png", renderTarget);
 
-    
+
+    ImageManager::GetInstance()->AddImage("GateOpen", L"Textures/GateOpen.png", renderTarget);
     background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
 
