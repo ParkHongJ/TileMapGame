@@ -11,6 +11,7 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 #include "GhostJar.h"
+#include "ImageManager.h"
 
 GhostJar::GhostJar()
 {

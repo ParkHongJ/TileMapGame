@@ -5,6 +5,7 @@
 #include "GameManager.h"
 #include "CameraManager.h"
 #include "IncreaseGold.h"
+#include "ImageManager.h"
 
 HRESULT Tile::Init()
 {

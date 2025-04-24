@@ -4,6 +4,7 @@
 #include "image.h"
 #include "CollisionManager.h"
 #include "CameraManager.h"
+#include "ImageManager.h"
 
 
 HRESULT RopeController::Init()

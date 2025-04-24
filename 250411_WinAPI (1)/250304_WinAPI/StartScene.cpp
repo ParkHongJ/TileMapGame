@@ -3,6 +3,7 @@
 #include "ImageManager.h"
 #include "KeyManager.h"
 #include "Image.h"
+#include "SceneManager.h"
 #define D3DX_PI 3.141592f
 
 HRESULT StartScene::Init(ID2D1RenderTarget* renderTarget)

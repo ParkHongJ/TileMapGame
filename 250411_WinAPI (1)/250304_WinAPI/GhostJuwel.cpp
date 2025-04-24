@@ -4,6 +4,7 @@
 #include "Character.h"
 #include "CameraManager.h"
 #include "GhostJuwel.h"
+#include "ImageManager.h"
 
 GhostJuwel::GhostJuwel() :gold(5000)
 {

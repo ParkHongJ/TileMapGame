@@ -7,6 +7,7 @@
 #include "Monster.h"
 #include "ParticleManager.h"
 #include "Particle.h"
+#include "ImageManager.h"
 
 Whip::Whip()
 {

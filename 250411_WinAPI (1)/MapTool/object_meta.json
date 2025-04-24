@@ -8,6 +8,14 @@
         }
     },
     {
+        "name": "BossMonster",
+        "atlasPath": "Textures/Monster/boss.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "ChangeCobwebBomb",
         "atlasPath": "Textures/items.png",
         "cellSize": {
@@ -32,8 +40,24 @@
         }
     },
     {
+        "name": "Gate",
+        "atlasPath": "Textures/GateOpen.png",
+        "cellSize": {
+            "x": 396,
+            "y": 396
+        }
+    },
+    {
         "name": "Gun",
         "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "HeavyBlock",
+        "atlasPath": "Textures/floormisc.png",
         "cellSize": {
             "x": 128,
             "y": 128
@@ -49,6 +73,14 @@
     },
     {
         "name": "IncreaseGold",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "IncreaseRopeCnt",
         "atlasPath": "Textures/items.png",
         "cellSize": {
             "x": 128,
@@ -88,16 +120,32 @@
         }
     },
     {
-        "name": "SnakeMonster",
-        "atlasPath": "Textures/Monster/SnakeMonster.png",
+        "name": "NiddleTrap",
+        "atlasPath": "Textures/floor_cave.png",
         "cellSize": {
             "x": 128,
             "y": 128
         }
     },
     {
-        "name": "SpiderMonster",
-        "atlasPath": "Textures/Monster/SpiderMonster.png",
+        "name": "SkeletonItem",
+        "atlasPath": "Textures/items.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "SkeletonMonster",
+        "atlasPath": "Textures/Monster/monsters.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
+        "name": "SnakeMonster",
+        "atlasPath": "Textures/Monster/monsters.png",
         "cellSize": {
             "x": 128,
             "y": 128

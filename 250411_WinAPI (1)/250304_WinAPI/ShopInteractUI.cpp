@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ShopInteractUI.h"
 #include "Image.h"
+#include "ImageManager.h"
+
 
 ShopInteractUI::ShopInteractUI(ID2D1RenderTarget* renderTarget)
 {

@@ -20,6 +20,10 @@
 #include "ObjectRegister.h"
 #include "ParticleManager.h"
 #include "GameManager.h"
+#include "ImageManager.h"
+#include "SceneManager.h"
+#include "ObjectManager.h"
+
 
 HRESULT MainGame::Init()
 {

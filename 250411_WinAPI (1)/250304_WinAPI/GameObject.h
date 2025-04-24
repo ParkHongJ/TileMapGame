@@ -1,5 +1,6 @@
 #pragma once
 #include "config.h"
+#include "ObjectManager.h"
 
 enum class INTERACTSTATE
 {

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "goldBackground_UI.h"
 #include "Image.h"
+#include "ImageManager.h"
+
 
 HRESULT goldBackground_UI::Init()
 {

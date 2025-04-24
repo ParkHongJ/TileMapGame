@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "CameraManager.h"
 #include "Image.h"
+#include "ImageManager.h"
 HRESULT HongParticle::Init()
 {
 	float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);

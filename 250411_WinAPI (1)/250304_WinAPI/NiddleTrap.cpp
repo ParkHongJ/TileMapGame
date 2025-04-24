@@ -3,6 +3,7 @@
 #include "Collider.h"
 #include "Image.h"
 #include "CameraManager.h"
+#include "ImageManager.h"
 HRESULT NiddleTrap::Init()
 {
 	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;

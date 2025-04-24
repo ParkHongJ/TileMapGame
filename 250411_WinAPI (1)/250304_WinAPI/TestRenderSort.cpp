@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TestRenderSort.h"
 #include "Image.h"
+#include "ImageManager.h"
 
 HRESULT TestRenderSort::Init()
 {

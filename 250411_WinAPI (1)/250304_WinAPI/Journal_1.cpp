@@ -2,6 +2,7 @@
 #include "Journal_1.h"
 #include "Image.h"
 
+#include "ImageManager.h"
 HRESULT Journal_1::Init()
 {
     imageRatio = ResolutionRatio();

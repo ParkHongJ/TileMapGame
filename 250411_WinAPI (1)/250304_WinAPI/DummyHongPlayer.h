@@ -45,7 +45,7 @@ private:
 	float len2;
 	FPOINT targetPos; // 목표 지점
 
-	Image* img;
+	class Image* img;
 	bool bExplosion = false;
 	float CurrentFrame = 0.f;
 	int CurrentIndex = 0;

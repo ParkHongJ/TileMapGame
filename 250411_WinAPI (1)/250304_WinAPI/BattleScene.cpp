@@ -2,6 +2,7 @@
 #include "BattleScene.h"
 #include "Image.h"
 #include "CommonFunction.h"
+#include "ImageManager.h"
 
 HRESULT BattleScene::Init(ID2D1RenderTarget* renderTarget)
 {

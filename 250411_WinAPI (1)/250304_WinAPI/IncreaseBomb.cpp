@@ -4,6 +4,7 @@
 #include "IncreaseBomb.h"
 #include "Character.h"
 #include "CameraManager.h"
+#include "ImageManager.h"
 
 IncreaseBomb::IncreaseBomb()
 {

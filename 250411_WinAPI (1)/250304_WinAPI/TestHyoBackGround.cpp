@@ -4,6 +4,8 @@
 #include "CameraManager.h"
 #include "CommonFunction.h"
 #include "KeyManager.h"
+#include "ImageManager.h"
+
 
 //HRESULT TestHyoBackGround::Init()
 //{

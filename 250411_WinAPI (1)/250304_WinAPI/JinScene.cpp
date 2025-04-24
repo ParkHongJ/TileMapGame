@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "JinScene.h"
 #include "Image.h"
+#include "ImageManager.h"
 
 //테스트용 캐릭터 Colin
 HRESULT JinScene::Init(ID2D1RenderTarget* renderTarget)

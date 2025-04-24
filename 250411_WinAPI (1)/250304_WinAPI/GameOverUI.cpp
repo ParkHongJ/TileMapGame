@@ -5,6 +5,7 @@
 #include "ObjectManager.h"
 #include "Character.h"
 #include "sandGlass_UI.h"
+#include "ImageManager.h"
 
 GameOverUI::GameOverUI(ID2D1RenderTarget* renderTarget)
 {

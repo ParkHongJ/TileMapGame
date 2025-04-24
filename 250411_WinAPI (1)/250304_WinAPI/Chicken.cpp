@@ -5,6 +5,7 @@
 #include "PlayerStatus.h"
 #include "CameraManager.h"
 
+#include "ImageManager.h"
 Chicken::Chicken() : bulletCnt(5), fireCoolTime(0.f), fireMaxCoolTime(1.f), fireOffset({ 0.f, 0.f }), isFire(false), fireCurFrameX(0)
 {
 	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };

@@ -7,6 +7,7 @@
 #include "Image.h"
 #include "Character.h"
 #include "GameManager.h"
+#include "ImageManager.h"
 HRESULT HeavyBlock::Init()
 {
 	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;

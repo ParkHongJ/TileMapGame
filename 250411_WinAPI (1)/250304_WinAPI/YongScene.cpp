@@ -10,6 +10,7 @@
 #include "IncreaseBomb.h"
 #include "Rope.h"
 #include "RopeController.h"
+#include "ImageManager.h"
 
 HRESULT YongScene::Init(ID2D1RenderTarget* renderTarget)
 {

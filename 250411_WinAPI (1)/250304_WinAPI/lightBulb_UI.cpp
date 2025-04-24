@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "lightBulb_UI.h"
 #include "Image.h"
+#include "ImageManager.h"
 
 HRESULT lightBulb_UI::Init()
 {

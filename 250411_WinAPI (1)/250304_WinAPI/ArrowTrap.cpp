@@ -4,6 +4,9 @@
 #include "CameraManager.h"
 #include "CollisionManager.h"
 #include "Arrow.h"
+#include "ImageManager.h"
+#include "ObjectManager.h"
+
 HRESULT ArrowTrap::Init()
 {
 	trapImage = ImageManager::GetInstance()->FindImage("Trap");
@@ -40,7 +43,7 @@ void ArrowTrap::Update(float TimeDelta)
 		}
 
 		//Trigger On
-		if (CollisionManager::GetInstance()->RaycastMyType(ray, 200.f, out, CollisionMaskType::ITEM, true, 0.1f))
+		if (CollisionManager::GetInstance()->RaycastMyType(ray, 200.f, out, CollisionMaskType::ITEM, this))
 		{
 			Fire();
 		}

@@ -4,6 +4,7 @@
 #include "Character.h"
 #include "CameraManager.h"
 #include "IncreaseHP.h"
+#include "ImageManager.h"
 
 IncreaseHP::IncreaseHP()
 {

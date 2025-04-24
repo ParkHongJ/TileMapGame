@@ -4,6 +4,7 @@
 #include "PlayerStatus.h"
 #include "ObjectManager.h"
 #include "Character.h"
+#include "ImageManager.h"
 
 playerHP_UI::playerHP_UI(ID2D1RenderTarget* renderTarget)
 {

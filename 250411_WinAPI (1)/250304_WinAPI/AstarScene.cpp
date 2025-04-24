@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "AstarScene.h"
 #include <algorithm>
-
+#include "SceneManager.h"
 HRESULT AstarTile::Init()
 {
 	return E_NOTIMPL;

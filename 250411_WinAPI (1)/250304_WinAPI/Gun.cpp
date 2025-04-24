@@ -8,6 +8,7 @@
 #include "ItemDialog.h"
 #include "Character.h"
 
+#include "ImageManager.h"
 
 Gun::Gun() : bulletCnt(5), fireCoolTime(0.f), fireMaxCoolTime(1.f), fireOffset({0.f, 0.f}), isFire(false), fireCurFrameX(0)
 {

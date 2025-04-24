@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Rope.h"
 
+#include "ImageManager.h"
 Rope::Rope()
 {
     BoxCollider* col = new BoxCollider({ 0,0 }, { 64, 64 }, CollisionMaskType::ITEM, this);

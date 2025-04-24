@@ -4,6 +4,7 @@
 #include "Character.h"
 #include "CameraManager.h"
 #include "IncreaseGold.h"
+#include "ImageManager.h"
 
 IncreaseGold::IncreaseGold():gold(1000)
 {

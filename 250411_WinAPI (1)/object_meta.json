@@ -48,6 +48,14 @@
         }
     },
     {
+        "name": "Gate",
+        "atlasPath": "Textures/GateOpen.png",
+        "cellSize": {
+            "x": 396,
+            "y": 396
+        }
+    },
+    {
         "name": "GhostJar",
         "atlasPath": "Textures / items.png",
         "cellSize": {

@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "Chicken.h"
 #include "DummyHongPlayer.h"
+#include "Gate.h"
 #include "GhostJar.h"
 #include "GhostJuwel.h"
 #include "Gun.h"
@@ -32,6 +33,7 @@ REGISTER_OBJECT(ChangeCobwebBomb)
 REGISTER_OBJECT(Character)
 REGISTER_OBJECT(Chicken)
 REGISTER_OBJECT(DummyHongPlayer)
+REGISTER_OBJECT(Gate)
 REGISTER_OBJECT(GhostJar)
 REGISTER_OBJECT(GhostJuwel)
 REGISTER_OBJECT(Gun)

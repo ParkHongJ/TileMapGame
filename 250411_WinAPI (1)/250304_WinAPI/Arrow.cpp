@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "CameraManager.h"
 #include "CollisionManager.h"
+#include "ImageManager.h"
 
 HRESULT Arrow::Init()
 {

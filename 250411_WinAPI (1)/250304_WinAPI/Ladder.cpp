@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Ladder.h"
 
+#include "ImageManager.h"
 
 Ladder::Ladder()
 {
