@@ -11,7 +11,7 @@ HRESULT NiddleTrap::Init()
 	Pos.x = 650.f;
 	Pos.y = 230.f;
 
-	NiddleImage = ImageManager::GetInstance()->FindImage("Niddle");
+	NiddleImage = ImageManager::GetInstance()->FindImage("floor_cave");
 
 	return S_OK;
 }

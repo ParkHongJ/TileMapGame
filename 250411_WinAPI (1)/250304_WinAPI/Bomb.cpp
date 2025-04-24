@@ -134,94 +134,96 @@ void Bomb::Use()
 
 void Bomb::DropMove(float TimeDelta)
 {
-	__super::DropMove(TimeDelta);
-	//if (bPhysics)
-	//{
-	//	if (useGravity)
-	//	{
-	//		AddForce({ gravity.x * mass, gravity.y * mass });
-	//	}
+	//__super::DropMove(TimeDelta);
+	if (bPhysics)
+	{
+		if (useGravity)
+		{
+			AddForce({ gravity.x * mass, gravity.y * mass });
+		}
 
-	//	// force 제한
-	//	ClampVector(totalForce, 450.f);
+		// force 제한
+		ClampVector(totalForce, 450.f);
 
-	//	acceleration = totalForce / mass;
-	//	velocity += acceleration * TimeDelta;
+		acceleration = totalForce / mass;
+		velocity += acceleration * TimeDelta;
 
-	//	FPOINT moveVec = { velocity.x * TimeDelta, velocity.y * TimeDelta };
-	//	FPOINT nextPos = { Pos.x + moveVec.x, Pos.y + moveVec.y };
+		FPOINT moveVec = { velocity.x * TimeDelta, velocity.y * TimeDelta };
+		FPOINT nextPos = { Pos.x + moveVec.x, Pos.y + moveVec.y };
 
-	//	Ray ray;
-	//	ray.origin = Pos;
-	//	ray.direction = moveVec.Normalized();
+		FPOINT direction = moveVec.Normalized();
 
-	//	float moveLength = moveVec.Length();
-	//	float hitDistance;
-	//	FPOINT hitNormal;
+		Ray ray;
+		ray.origin = Pos + direction * radius;
+		ray.direction = moveVec.Normalized();
 
-	//	RaycastHit out;
+		float moveLength = moveVec.Length();
+		float hitDistance;
+		FPOINT hitNormal;
 
-	//	//if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
-	//	//if (CollisionManager::GetInstance()->RaycastMyType(ray, moveLength, out, CollisionMaskType::ITEM, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
-	//		if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
-	//	{
-	//		if (IsCobweb)
-	//		{
-	//			IsStop = true;
-	//			return;
-	//		}
-	//		hitDistance = out.distance;
+		RaycastHit out;
 
-	//		FPOINT colliderPos = out.collider->GetWorldPos();
-	//		FPOINT colliderScale = out.collider->GetScale();
+		//if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		//if (CollisionManager::GetInstance()->RaycastMyType(ray, moveLength, out, CollisionMaskType::ITEM, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		{
+			if (IsCobweb)
+			{
+				IsStop = true;
+				return;
+			}
+			hitDistance = out.distance;
 
-	//		// 2. 방향 벡터
-	//		FPOINT toHit = out.point - colliderPos;
+			FPOINT colliderPos = out.collider->GetWorldPos();
+			FPOINT colliderScale = out.collider->GetScale();
 
-	//		// 스케일 보정한 방향 추정
-	//		float xRatio = toHit.x / (colliderScale.x * 0.5f);
-	//		float yRatio = toHit.y / (colliderScale.y * 0.5f);
+			// 2. 방향 벡터
+			FPOINT toHit = out.point - colliderPos;
 
-	//		if (fabs(xRatio) > fabs(yRatio))
-	//			hitNormal = { (xRatio < 0 ? -1.f : 1.f), 0.f };
-	//		else
-	//			hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
+			// 스케일 보정한 방향 추정
+			float xRatio = toHit.x / (colliderScale.x * 0.5f);
+			float yRatio = toHit.y / (colliderScale.y * 0.5f);
 
-	//		FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
-	//		velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
+			if (fabs(xRatio) > fabs(yRatio))
+				hitNormal = { (xRatio < 0 ? -1.f : 1.f), 0.f };
+			else
+				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
-	//		velocity *= bounciness;
+			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
+			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
 
-	//		totalForce.x = 0.0f;
-	//		totalForce.y = 0.0f;
+			velocity *= bounciness;
 
-	//		const float STOP_THRESHOLD = 100.f;
-	//		if (fabs(velocity.x) < STOP_THRESHOLD)
-	//			velocity.x = 0.f;
-	//		if (fabs(velocity.y) < STOP_THRESHOLD)
-	//			velocity.y = 0.f;
+			totalForce.x = 0.0f;
+			totalForce.y = 0.0f;
 
-	//		// 보정 위치
-	//		Pos += ray.direction * hitDistance;
+			const float STOP_THRESHOLD = 100.f;
+			if (fabs(velocity.x) < STOP_THRESHOLD)
+				velocity.x = 0.f;
+			if (fabs(velocity.y) < STOP_THRESHOLD)
+				velocity.y = 0.f;
 
-	//		ClampVector(velocity, 350.f);
+			// 보정 위치
+			Pos += ray.direction * hitDistance;
 
-	//		if (velocity.Length() < 130.f)
-	//		{
-	//			velocity = { 0.f, 0.f };
-	//			useGravity = false;
-	//			bPhysics = false;
-	//		}
+			ClampVector(velocity, 350.f);
 
-	//		// 살짝 밀기 (겹침 방지)
+			if (velocity.Length() < 130.f)
+			{
+				velocity = { 0.f, 0.f };
+				useGravity = false;
+				bPhysics = false;
+			}
 
-	//		Pos = out.point + hitNormal * 0.5f;
-	//	}
-	//	else
-	//	{
-	//		Pos = nextPos;
-	//	}
-	//}
+			// 살짝 밀기 (겹침 방지)
+
+			Pos = out.point + hitNormal * 0.5f;
+		}
+		else
+		{
+			Pos = nextPos;
+		}
+	}
 }
 
 void Bomb::Detect(GameObject* obj)

@@ -18,7 +18,7 @@ HRESULT HongScene::Init(ID2D1RenderTarget* renderTarget)
 	ObjectManager::GetInstance()->ClearObjects();
 
 	ImageManager::GetInstance()->AddImage("CaveTile", L"Textures/CaveTile.png", renderTarget);
-	ImageManager::GetInstance()->AddImage("Niddle", L"Textures/floor_cave.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("floor_cave", L"Textures/floor_cave.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoDown", L"Textures/CaveDecoDown.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoTop", L"Textures/CaveDecoTop.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("CaveDecoRight", L"Textures/CaveDecoRight.png", renderTarget);

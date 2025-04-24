@@ -17,7 +17,7 @@ public:
 
 private:
 	GateState gateState;
-
+	class Image* gateImage;
 	float objectScale;
 };
 

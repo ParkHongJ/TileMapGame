@@ -3,6 +3,7 @@
 
 HRESULT Gate::Init()
 {
+	gateImage = ImageManager::GetInstance()->FindImage("floor_cave");
 	return S_OK;
 }
 
