@@ -97,7 +97,7 @@ void GameOverUI::Release()
 
 void GameOverUI::Update(float TimeDelta)	
 {
-	if (KeyManager::GetInstance()->IsOnceKeyDown('L'))
+	if (KeyManager::GetInstance()->IsOnceKeyDown('P'))
 		isGameOver = true;
 	if(isGameOver)
 	{
