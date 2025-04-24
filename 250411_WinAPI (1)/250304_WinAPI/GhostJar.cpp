@@ -113,6 +113,8 @@ void GhostJar::Detect(GameObject* obj)
 
 	DeadEvent();
 
+	//if(auto monster = dynamic_cast<Monster>)
+
 	// 플레이어 어택이나 WorldItem이면 부숴져라.
 	//if (auto player = obj->GetType<Character>() || auto worldItem = obj->GetType<Character>() )
 	//{

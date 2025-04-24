@@ -44,6 +44,7 @@ Particle* ParticleManager::GetParticle(string imageStr, FPOINT pos, float angle,
 
 		return particle;
 	}
+
 	else
 	{
 		Particle* particle = particlePool.back();

@@ -3,7 +3,10 @@
 #include "CameraManager.h"
 #include "CollisionManager.h"
 #include "GunBullet.h"
+#include "ParticleManager.h"
+#include "Particle.h"
 #include "ImageManager.h"
+
 GunBullet::GunBullet() : image(nullptr)
 {
 
@@ -46,6 +49,34 @@ void GunBullet::Release()
 void GunBullet::Detect(GameObject* obj)
 {
 	// 이펙트 필요
+	for (int i = 0; i < 10; i++)
+	{
+		FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
+		Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 0.15f, 5, 6);
+
+		PhysicsOption* physicsOp = new PhysicsOption;
+		SizeOption* sizeOp = new SizeOption(0.04f);
+		TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
+
+		//float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
+		float angleRad = RandomRange(0.0f, 3.141592f * 2.0f); // 0 ~ 360도
+		//float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
+		float speed = RandomRange(850.f, 1175.0f);            // 속도도 랜덤
+
+		velocity =
+		{
+			sinf(angleRad) * speed,
+			-cosf(angleRad) * speed  // 135도 (왼쪽 위)
+		};
+
+		physicsOp->Init(velocity, 0.3f);
+		//physicsOp->Init(velocity, 0.5f);
+
+		particle->AddParticleOption(physicsOp);
+		particle->AddParticleOption(sizeOp);
+		particle->AddParticleOption(trailOp);
+	}
+
 	if (false == IsDestroyed())
 	{
 		SetDestroy();
@@ -56,7 +87,6 @@ void GunBullet::Detect(GameObject* obj)
 		if (OBJECTNAME::TILE != obj->GetObjectName())
 		{
 			// 가라
-			
 			obj->SetDestroy();
 		}
 	}

@@ -80,6 +80,7 @@ HRESULT Character::Init()
 	targetHangOnPos = { 0.f, 0.f };
 	interActionPQ = {};
 	interactionRadius = 1.f;
+    interactionItemRadius = 30.f;
 	interactionOffset = 30.f;
 
 	// settings
@@ -1352,25 +1353,35 @@ void Character::JunUpdate(float TimeDelta)
             holdItemHitTime = holdItemHitMaxTime;
 		}
 
-            else
-            {
-                vector<GameObject*> inCircleObjects;
+		else 
+		{
+			vector<GameObject*> inCircleObjects;
 
-                FPOINT center = Pos;
-                CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionRadius, &inCircleObjects);
-                for (auto& iter : inCircleObjects)
-                {
-                    if (nullptr != dynamic_cast<Item*>(iter)) // Test
-                        //if (OBJECTNAME::GUN == (iter)->GetObjectName()) // Test
+			FPOINT center = Pos;
+			CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionItemRadius, &inCircleObjects);
+			for (auto& iter : inCircleObjects)
+			{
+				if (nullptr != dynamic_cast<Item*>(iter)) // Test
+					//if (OBJECTNAME::GUN == (iter)->GetObjectName()) // Test
+				{
+                    Item* temp = dynamic_cast<Item*>(iter);
+                    if (temp->GetPrice() <= playerStatus->GetGold())
                     {
-                        Item* temp = dynamic_cast<Item*>(iter);
-                        if (temp->GetPrice() <= playerStatus->GetGold())
+                        playerStatus->SetGold(playerStatus->GetGold() - temp->GetPrice());
+
+                        if (ItemType::TYPE_ONCE != temp->GetItemType())
                         {
-                            playerStatus->SetGold(playerStatus->GetGold() - temp->GetPrice());
+                            temp->Equip();
                             holdItem = temp;
-                            holdItem->Equip();
                         }
-                        break;
+
+                        else
+                        {
+                            temp->Equip(playerStatus);
+                        }
+
+                    }
+                    break;
 
                     }
                 }
@@ -1378,13 +1389,13 @@ void Character::JunUpdate(float TimeDelta)
 
         }
 
-        if (km->IsOnceKeyDown('V'))
-        {
-            if (holdItem)
-            {
-                holdItem->Use();
-            }
-        }
+	//if (km->IsOnceKeyDown('V'))
+	//{
+	//	if (holdItem)
+	//	{
+	//		holdItem->Use();
+	//	}
+	//}
 
         if (km->IsOnceKeyDown('I'))
         {

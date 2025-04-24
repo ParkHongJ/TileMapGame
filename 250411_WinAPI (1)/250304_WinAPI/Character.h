@@ -129,6 +129,7 @@ private:
 
 	priority_queue<pair<float, GameObject*>>        interActionPQ;
 	float								            interactionRadius;
+	float								            interactionItemRadius;
 	float							            	interactionOffset;
 
 
@@ -164,7 +165,7 @@ private:
 	Item* preHoldItem;
 
 	float holdItemHitTime = 0.f;
-	float holdItemHitMaxTime = 0.5f;
+	float holdItemHitMaxTime = 1.f;
 
 	// Add Hong
 	GameObject* interactionObject = nullptr;
