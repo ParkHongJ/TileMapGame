@@ -4,6 +4,7 @@
 class Image;
 class ShopKeeper : public GameObject
 {
+	GENERATE_BODY(Textures/Entities/People/shopkeeper.png, 128, 128)
 private:
 	Image* shopkeeprImage;
 	FPOINT playerPos;

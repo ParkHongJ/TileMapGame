@@ -41,7 +41,7 @@ void CollisionManager::Init()
 
     //Ray
     layerRayMaskMap[CollisionMaskType::WORLDOBJECT] = uint16_t(CollisionMaskType::PLAYER) |
-        uint16_t(CollisionMaskType::MONSTER) /*| uint16_t(CollisionMaskType::TILE)*/;
+        uint16_t(CollisionMaskType::MONSTER) | uint16_t(CollisionMaskType::TILE);
 
     layerRayMaskMap[CollisionMaskType::PLAYER] = 
         uint16_t(CollisionMaskType::ITEM) | uint16_t(CollisionMaskType::TILE); // Player로 테스트

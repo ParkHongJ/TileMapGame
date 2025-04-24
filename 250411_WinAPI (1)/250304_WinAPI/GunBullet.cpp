@@ -6,6 +6,7 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 #include "ImageManager.h"
+#include "Monster.h"
 
 GunBullet::GunBullet() : image(nullptr)
 {
@@ -49,7 +50,7 @@ void GunBullet::Release()
 void GunBullet::Detect(GameObject* obj)
 {
 	// 이펙트 필요
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
 		Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 0.15f, 5, 6);
@@ -61,7 +62,7 @@ void GunBullet::Detect(GameObject* obj)
 		//float angleRad = RandomRange(-3.141592 / 4.0f, 3.141592 / 4.0f);
 		float angleRad = RandomRange(0.0f, 3.141592f * 2.0f); // 0 ~ 360도
 		//float speed = RandomRange(350.f, 375.0f);            // 속도도 랜덤
-		float speed = RandomRange(850.f, 1175.0f);            // 속도도 랜덤
+		float speed = RandomRange(450.f, 575.0f);            // 속도도 랜덤
 
 		velocity =
 		{
@@ -87,7 +88,12 @@ void GunBullet::Detect(GameObject* obj)
 		if (OBJECTNAME::TILE != obj->GetObjectName())
 		{
 			// 가라
-			obj->SetDestroy();
+			
+			if (Monster* monster = dynamic_cast<Monster*>(obj))
+			{
+				monster->Damaged();
+			}
+			//obj->SetDestroy();
 		}
 	}
 }
