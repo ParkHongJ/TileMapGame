@@ -119,20 +119,20 @@ void BossMonster::Update(float TimeDelta)
     ApplyGravity(TimeDelta);
     MeetPlayer();
 
-    if (monsterState == MonsterState::ATTACKMOVE)
+    if (monsterState == MonsterState::ATTACKMOVE && !isInAir)
     {
         attackDuration += TimeDelta;
-        Move();
-        if (attackDuration > attackTime)
+        // Move();
+        if (attackDuration > attackCoolTime)
         {
             attackDuration = 0.f;
-            monsterState = MonsterState::WAITATTACK;
+            monsterState = MonsterState::ATTACK;
         }
     }
     else if (monsterState == MonsterState::WAITATTACK)
     {
-        attackCool += TimeDelta;
-        if (attackCool > attackTime)
+        attackDuration += TimeDelta;
+        if (attackDuration > attackCoolTime)
         {
             monsterState = MonsterState::ATTACK;
         }
@@ -142,16 +142,20 @@ void BossMonster::Update(float TimeDelta)
     {
         attackDuration += TimeDelta;
         Move();
-        if (attackDuration > attackTime)
+        if (attackDuration <= attackCoolTime)
+        {
+            monsterState == MonsterState::ATTACK;
+        }
+        else if (attackDuration > attackCoolTime)
         {
             attackDuration = 0.f;
-            monsterState = MonsterState::WAITATTACK;
+            monsterState = MonsterState::MOVE;
         }
     }
     else if (monsterState == MonsterState::WAITATTACK)
     {
-        attackCool += TimeDelta;
-        if (attackCool > attackTime)
+        attackDuration += TimeDelta;
+        if (attackDuration > attackCoolTime)
         {
             monsterState = MonsterState::MOVE;
         }
@@ -279,37 +283,39 @@ void BossMonster::CheckItemCollision()
 
 void BossMonster::MeetPlayer()
 {
-    bool isInAir = bPhysics || velocity.y != 0.f;
+    bool isOnGround = isTileTouchingLeftBottom || isTileTouchingRightBottom;
+   /* if (monsterState == MonsterState::ATTACK || monsterState == MonsterState::ATTACKMOVE || monsterState == MonsterState::WAITATTACK)
+        return;*/
 
-    if (monsterState == MonsterState::ATTACK || monsterState == MonsterState::ATTACKMOVE || monsterState == MonsterState::WAITATTACK)
-        return;
-
-    if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0) )
+    if (((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0)) && isOnGround )
     {
         monsterState = MonsterState::MOVE;
         Move();
-        return;
+        //return;
     }
 
-    if (monsterState == MonsterState::MOVE && !isInAir)
+    if (monsterState == MonsterState::MOVE && !isInAir || isOnGround)
     {
         // MOVE 상태일 때 attackMove로 상태 변환
         if (isPlayerTouchingLeft && dir.x < 0 )
         {
-            monsterState = MonsterState::ATTACKMOVE;
             MoveJumpStart(300.f, 120.f);
+            monsterState = MonsterState::ATTACKMOVE;           
         }
         else if (isPlayerTouchingRight && dir.x > 0)
         {
-            monsterState = MonsterState::ATTACKMOVE;
             MoveJumpStart(300.f, 60.f);
+            monsterState = MonsterState::ATTACKMOVE;            
         }
     }
 
     //AttackMove(점프)를 한 후 플레이어가 아직 레이 범위 안에 있을 때 
     if (monsterState == MonsterState::ATTACKMOVE)
     {
-        if (!isInAir)
+        if (isInAir || !isOnGround)
+            monsterState == MonsterState::ATTACKMOVE;
+
+        else if (!isInAir || isOnGround)
         {
             if ((isPlayerTouchingLeft && dir.x < 0) || (isPlayerTouchingRight && dir.x > 0))
             {
@@ -317,12 +323,19 @@ void BossMonster::MeetPlayer()
                 //return;
                 //meetPlayer = true;
             }
-            else
+            else if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0))
+            {
                 monsterState = MonsterState::MOVE;
+                Move();
+            }
         }
-        else if (isInAir)
-            monsterState == MonsterState::ATTACKMOVE;
-       
+       /* else if (isInAir)
+            monsterState == MonsterState::ATTACKMOVE;*/
+    }
+
+    if (monsterState == MonsterState::ATTACK)
+    {
+        
     }
 }
 
@@ -400,7 +413,7 @@ void BossMonster::Render(ID2D1RenderTarget* renderTarget)
             }
         }
         
-        if (monsterState == MonsterState::ATTACKMOVE)
+        if (monsterState == MonsterState::ATTACKMOVE && isInAir)
         {
             if (dir.x > 0)
             {

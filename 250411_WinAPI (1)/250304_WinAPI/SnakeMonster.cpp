@@ -111,7 +111,10 @@ void SnakeMonster::Update(float TimeDelta)
     CheckTileCollision();
     CheckPlayerCollision();
     CheckItemCollision();
-   
+    ApplyGravity(TimeDelta);
+    if (monsterState == MonsterState::IDLE)
+        monsterState = MonsterState::MOVE;
+
     // 벽 안 만났을 때 
     if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom)
     {
@@ -294,6 +297,14 @@ void SnakeMonster::Move()
         Pos.x += dir.x * moveSpeed * time;
 }
 
+void SnakeMonster::ApplyGravity(float TimeDelta)
+{
+    if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
+        Pos.y += moveSpeed * TimeDelta;
+    else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
+        Pos.y = Pos.y;
+}
+
 void SnakeMonster::ReverseMove()
 {
     float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
@@ -380,7 +391,7 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
 
     if (snakeImage)
     {
-        if (/*monsterHP == 1 && */monsterState == MonsterState::MOVE)
+        if (/*monsterHP == 1 && */monsterState == MonsterState::MOVE || monsterState == MonsterState::IDLE)
         {
             if (dir.x > 0)
             {

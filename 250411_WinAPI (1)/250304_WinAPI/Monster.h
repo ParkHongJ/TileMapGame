@@ -167,7 +167,9 @@ protected:
 	bool bPhysics = false;
 	FPOINT totalForce = { 0, 0 };
 	float bounciness = 0.4f;
+	bool isInAir = bPhysics || velocity.y != 0.f;
 
 	float attackCool = 0.0f;
-	//float attackTime = 1.0f;
+	float attackDuration = 0.f;	
+	float attackCoolTime = 1.5f;	// ÃÑ Äð Å¸ÀÓ
 };
