@@ -38,11 +38,7 @@ void InteractionState::Update()
         ChangeSubState(SubState::INTERACTION_EXIT_TUNNEL);
         return;
     }
-    else if (character->CheckHangOn())
-    {
-        ChangeSubState(SubState::INTERACTION_HANGON_TILE);
-        return;
-    }
+ 
     else if (character->CheckCanClimbLadder())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
@@ -51,6 +47,11 @@ void InteractionState::Update()
     else if (character->CheckCanClimbRope())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
+        return;
+    }
+    else if (character->CheckHangOn())
+    {
+        ChangeSubState(SubState::INTERACTION_HANGON_TILE);
         return;
     }
     else if (character->CheckCanPushTile())
