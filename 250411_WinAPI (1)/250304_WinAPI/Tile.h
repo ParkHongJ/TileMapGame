@@ -61,7 +61,7 @@ private:
 	TileType tileType;
 	TileInfo tileInfo;
 	Image* tileImage;
-
+	Image* goldImage;
 	BoxCollider* collider;
 
 	vector<DecoInfo*> decos;

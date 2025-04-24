@@ -34,6 +34,7 @@ private:
 	bool IsCobweb = false;
 	bool IsStop = false;
 
+	float explosionRadius = 100.f;
 	// »ç¿ë
 };
 

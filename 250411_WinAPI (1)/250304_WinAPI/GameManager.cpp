@@ -273,6 +273,8 @@ void GameManager::Init(const char* path)
 
 	GenerateDecoTile();
 	GenerateBorderTile();
+
+
 	BuildJumpNodesFromTileMap();
 	LinkWalkableNeighbors();
 	LinkJumpableNeighbors();
@@ -308,6 +310,8 @@ void GameManager::DestructionTile(const FPOINT& tilePos)
 	tileMap[tileIndexY][tileIndexX]->SetValid(false);
 	
 	UpdateAdjacentDecoTiles(tileIndexX, tileIndexY);
+
+	isTileChanged = true;
 }
 
 bool GameManager::HasTile(int x, int y)
@@ -410,6 +414,20 @@ JumpNode* GameManager::FindClosestJumpNode(const FPOINT& worldPos)
 	return closest;
 }
 
+void GameManager::UpdateNavMesh()
+{
+	//Update에서 타일이 바뀌지 않았다면
+	if (isTileChanged == false)
+		return;
+
+	BuildJumpNodesFromTileMap();
+	LinkWalkableNeighbors();
+	LinkJumpableNeighbors();
+	LinkFallNeighbors();
+
+	isTileChanged = false;
+}
+
 bool GameManager::IsTileValid(int x, int y, bool isCave)
 {
 	if (x < 0 || x >= 40 || y < 0 || y >= 32)
@@ -433,6 +451,10 @@ bool GameManager::IsTileValid(int x, int y, bool isCave)
 
 void GameManager::BuildJumpNodesFromTileMap()
 {
+	for (int i = 0; i < jumpNodes.size(); i++)
+	{
+		delete jumpNodes[i];
+	}
 	jumpNodes.clear();
 
 	for (int y = 1; y < 32; ++y)
@@ -509,7 +531,7 @@ bool GameManager::IsWalkableBetween(int x1, int y1, int x2, int y2)
 
 void GameManager::LinkFallNeighbors()
 {
-	constexpr int MaxFallRange = 10;
+	constexpr int MaxFallRange = 5;
 
 	for (JumpNode* from : jumpNodes)
 	{
@@ -520,10 +542,11 @@ void GameManager::LinkFallNeighbors()
 		for (int dx = -1; dx <= 1; dx += 2) // -1, +1
 		{
 			int fallX = tx + dx;
+			//범위체크
 			if (fallX < 0 || fallX >= 40)
 				continue;
 
-			for (int dy = 1; dy <= MaxFallRange; ++dy)
+			for (int dy = 0; dy <= MaxFallRange; ++dy)
 			{
 				int fallY = ty + dy;
 				if (fallY >= 32)
@@ -563,7 +586,7 @@ void GameManager::LinkFallNeighbors()
 
 void GameManager::LinkJumpableNeighbors()
 {
-	constexpr float MaxJumpHeight = 48.f;  // 최대 점프 높이 (예: 2.5타일)
+	constexpr float MaxJumpHeight = 144.f;  // 최대 점프 높이 (예: 2.5타일)
 	constexpr float MaxJumpDistance = 96.f; // 최대 점프 수평 거리 (예: 4타일)
 
 	for (JumpNode* from : jumpNodes)
@@ -572,6 +595,7 @@ void GameManager::LinkJumpableNeighbors()
 		{
 			if (from == to)
 				continue;
+
 
 			FPOINT diff = to->worldPos - from->worldPos;
 

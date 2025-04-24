@@ -4,6 +4,7 @@
 #include "Collider.h"
 #include "GameManager.h"
 #include "CameraManager.h"
+#include "IncreaseGold.h"
 
 HRESULT Tile::Init()
 {
@@ -12,7 +13,7 @@ HRESULT Tile::Init()
 	decos.resize((int)DecoDirection::RIGHT);
 	objectName = OBJECTNAME::TILE;
 	interactState = INTERACTSTATE::INTERACT_UNABLE;
-
+	
 	return S_OK;
 }
 
@@ -64,6 +65,10 @@ void Tile::Render(ID2D1RenderTarget* renderTarget)
 		//collider->DebugRender(renderTarget);
 		FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
 		tileImage->Render(renderTarget, floor(cameraPos.x), floor(cameraPos.y), tileScale, tileScale, tileInfo.atlasX, tileInfo.atlasY, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+		if (goldImage)
+		{
+			goldImage->Render(renderTarget, floor(cameraPos.x), floor(cameraPos.y), tileScale, tileScale, 11, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
+		}
 		RenderDeco(renderTarget);
 	}
 }
@@ -108,6 +113,12 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType typ
 		collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
 
 		tileImage = ImageManager::GetInstance()->FindImage("CaveTile");
+
+
+		if (rand() % 10 < 1)
+		{
+			goldImage = ImageManager::GetInstance()->FindImage("items");
+		}
 	}
 	else
 	{
@@ -117,6 +128,10 @@ void Tile::InitTile(int atlasX, int atlasY, bool valid, FPOINT pos, TileType typ
 
 void Tile::CreateDecoTile(DecoDirection dir, bool hasTileAbove)
 {
+	//나무타일은 데코가 필요없다.
+	if (tileInfo.atlasX >= 4)
+		return;
+
 	DecoInfo* decoInfo = new DecoInfo;
 
 	int decoIndex = (int)dir - 1;
@@ -166,6 +181,14 @@ void Tile::Destruction()
 		return;
 
 	GameManager::GetInstance()->DestructionTile(Pos);
+
+	if (goldImage)
+	{
+		IncreaseGold* goldItem = new IncreaseGold();
+		ObjectManager::GetInstance()->AddObject(RENDER_ITEM, goldItem);
+		goldItem->SetPos(Pos);
+		goldItem->SetDrop(300.f, 90.f, 0.3f, { 0,400.f });
+	}
 
 	SetDestroy();
 }

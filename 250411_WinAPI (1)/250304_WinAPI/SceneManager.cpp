@@ -82,6 +82,12 @@ HRESULT SceneManager::ChangeScene(string akey)
 
 	if (iter->second == currentScene)
 	{
+		if (currentScene)
+		{
+			currentScene->Release();
+		}
+		currentScene->Init(renderTarget.Get());
+
 		return S_OK;
 	}
 

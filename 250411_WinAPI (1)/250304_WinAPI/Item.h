@@ -162,6 +162,7 @@ protected:
 	FPOINT totalForce = { 0, 0 };
 	float bounciness = 0.4f;
 
+	float radius = 10.f;
 
 };
 
