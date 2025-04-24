@@ -2,7 +2,7 @@
 #include "UI.h"
 
 class Image;
-
+class sandGlass_UI;
 class GameOverUI : public UI
 {
 private:
@@ -25,8 +25,25 @@ private:
 
 	FPOINT imageRatio;
 
-	int playTime;
-	int currency;
+	FPOINT text_gameoverPos;
+	FPOINT text_levelPos;
+	FPOINT text_moneyPos;
+	FPOINT text_timePos;
+
+	FPOINT int_levelPos;
+	FPOINT int_moneyPos;
+	FPOINT int_timePos;
+
+	FPOINT quickRestartPos;
+	FPOINT characterselectPos;
+	FPOINT returntocampPos;
+	FPOINT exittotitlePos;
+
+	sandGlass_UI* sandglass;
+
+	float playTimeSecond;
+	int playTimeMinute;
+	int gold;
 	int stageIndex_Outer;
 	int stageIndex_Inner;
 	bool isGameOver;
@@ -44,7 +61,8 @@ public:
 	FPOINT ResolutionRatio(Image* image);
 	void MoveBox(float destY);
 
-	GameOverUI();
+	GameOverUI() {};
+	GameOverUI(ID2D1RenderTarget* renderTarget);
 	virtual ~GameOverUI() {};
 };
 

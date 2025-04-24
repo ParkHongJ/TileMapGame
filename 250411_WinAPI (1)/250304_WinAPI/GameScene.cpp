@@ -40,6 +40,7 @@
 #include "ShopInteractUI.h"
 #include "ShopKeeper.h"
 #include "SkeletonItem.h"
+#include "GameOverUI.h"
 
 HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 {
@@ -144,6 +145,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     
   
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());+		[allocator]	allocator	std::_Compressed_pair<std::allocator<char>,std::_String_val<std::_Simple_types<char>>,1>
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new GameOverUI(renderTarget));
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
