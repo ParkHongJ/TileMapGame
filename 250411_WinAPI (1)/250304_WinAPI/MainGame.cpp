@@ -33,8 +33,8 @@ HRESULT MainGame::Init()
 		return E_FAIL;
 
 	GameManager::GetInstance()->CreateCaveRendertarget(m_pIntermediateRT);
-	GameManager::GetInstance()->LoadScenes("hongScene");
 	GameManager::GetInstance()->LoadScenes("caveScene");
+	GameManager::GetInstance()->LoadScenes("hongScene");
 
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();

@@ -57,7 +57,7 @@
     },
     {
         "name": "GhostJar",
-        "atlasPath": "Textures / items.png",
+        "atlasPath": "Textures/items.png",
         "cellSize": {
             "x": 128,
             "y": 128
@@ -160,6 +160,14 @@
         }
     },
     {
+        "name": "ShopKeeper",
+        "atlasPath": "Textures/Entities/People/shopkeeper.png",
+        "cellSize": {
+            "x": 128,
+            "y": 128
+        }
+    },
+    {
         "name": "SkeletonItem",
         "atlasPath": "Textures/items.png",
         "cellSize": {
@@ -169,7 +177,7 @@
     },
     {
         "name": "SkeletonMonster",
-        "atlasPath": "Textures/Monster/monsters.png",
+        "atlasPath": "Textures/Monster/SkeletonMonster.png",
         "cellSize": {
             "x": 128,
             "y": 128
@@ -177,7 +185,7 @@
     },
     {
         "name": "SnakeMonster",
-        "atlasPath": "Textures/Monster/monsters.png",
+        "atlasPath": "Textures/Monster/SnakeMonster.png",
         "cellSize": {
             "x": 128,
             "y": 128

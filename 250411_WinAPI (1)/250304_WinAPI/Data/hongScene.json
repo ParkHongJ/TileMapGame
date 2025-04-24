@@ -1,21 +1,48 @@
 [
     {
+        "atlas": "Textures/Monster/boss.png",
+        "flipX": false,
+        "height": 253.0,
+        "name": "BossMonster",
+        "width": 253.0,
+        "x": 2357.0,
+        "y": 2494.0
+    },
+    {
         "atlas": "Textures/char_yellow.png",
         "flipX": false,
         "height": 128.0,
         "name": "Character",
         "width": 128.0,
-        "x": 1216.0,
-        "y": 448.0
+        "x": 819.9999389648438,
+        "y": 1334.9998779296875
     },
     {
-        "atlas": "Textures/Monster/SnakeMonster.png",
+        "atlas": "Textures/Entities/People/shopkeeper.png",
         "flipX": false,
         "height": 128.0,
-        "name": "SnakeMonster",
+        "name": "ShopKeeper",
         "width": 128.0,
-        "x": 1600.0,
-        "y": 576.0
+        "x": 4829.0,
+        "y": 1430.0
+    },
+    {
+        "atlas": "Textures/Entities/Mounts/turkey.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "IncreaseHP",
+        "width": 128.0,
+        "x": 4565.0,
+        "y": 1478.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "IncreaseRopeCnt",
+        "width": 128.0,
+        "x": 4416.0,
+        "y": 1472.0
     },
     {
         "atlas": "Textures/items.png",
@@ -23,79 +50,16 @@
         "height": 128.0,
         "name": "Gun",
         "width": 128.0,
-        "x": 1344.0,
-        "y": 576.0
+        "x": 4288.0,
+        "y": 1472.0
     },
     {
         "atlas": "Textures/items.png",
         "flipX": false,
         "height": 128.0,
-        "name": "ChangeCobwebBomb",
+        "name": "GhostJar",
         "width": 128.0,
-        "x": 1472.0,
-        "y": 576.0
-    },
-    {
-        "atlas": "Textures/items.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "IncreaseBomb",
-        "width": 128.0,
-        "x": 1856.0,
-        "y": 576.0
-    },
-    {
-        "atlas": "Textures/items.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "IncreaseGold",
-        "width": 128.0,
-        "x": 1984.0,
-        "y": 576.0
-    },
-    {
-        "atlas": "Textures/CaveTile.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "Ladder1",
-        "width": 128.0,
-        "x": 1088.0,
-        "y": 448.0
-    },
-    {
-        "atlas": "Textures/CaveTile.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "Ladder2",
-        "width": 128.0,
-        "x": 1088.0,
-        "y": 576.0
-    },
-    {
-        "atlas": "Textures/CaveTile.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "Ladder3",
-        "width": 128.0,
-        "x": 1088.0,
-        "y": 704.0
-    },
-    {
-        "atlas": "Textures/CaveTile.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "Ladder4",
-        "width": 128.0,
-        "x": 1088.0,
-        "y": 832.0
-    },
-    {
-        "atlas": "Textures/Monster/SpiderMonster.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "SpiderMonster",
-        "width": 128.0,
-        "x": 2240.0,
-        "y": 576.0
+        "x": 4032.0,
+        "y": 1472.0
     }
 ]

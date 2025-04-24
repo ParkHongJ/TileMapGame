@@ -29,6 +29,8 @@ HRESULT GhostJuwel::Init()
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
+
+	gold = 10000;
 	return S_OK;
 }
 
