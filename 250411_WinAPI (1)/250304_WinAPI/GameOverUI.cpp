@@ -57,33 +57,23 @@ HRESULT GameOverUI::Init()
 
 	text_levelPos = {text_gameoverPos.x - 17, text_gameoverPos.y + 50};
 
-
 	text_moneyPos = {text_gameoverPos.x - 35, text_levelPos.y + 37};
-
 
 	text_timePos = { text_gameoverPos.x - 16, text_moneyPos.y + 36 };
 
-
 	int_levelPos = { text_levelPos.x + 140, text_levelPos.y + 5};
-
 
 	int_moneyPos = { text_moneyPos.x + 140, text_moneyPos.y + 5};
 
-
 	int_timePos = { text_timePos.x + 140, text_timePos.y };
-
 
 	quickRestartPos = { 670, 260};
 
+	characterselectPos = {quickRestartPos.x, quickRestartPos.y + 45};
 
-	characterselectPos = {quickRestartPos.x, quickRestartPos.y + 50};
+	returntocampPos = {quickRestartPos.x, characterselectPos.y + 45};
 
-
-	returntocampPos = {quickRestartPos.x, characterselectPos.y + 50};
-
-
-	exittotitlePos = {quickRestartPos.x, returntocampPos.y + 50};
-
+	exittotitlePos = {quickRestartPos.x, returntocampPos.y + 45};
 
 	imageRatio = ResolutionRatio(GameOver_journalRearImage);
 
