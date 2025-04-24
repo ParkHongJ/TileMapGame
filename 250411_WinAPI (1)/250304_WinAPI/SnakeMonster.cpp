@@ -332,7 +332,7 @@ void SnakeMonster::Detect(GameObject* obj)
     if (auto player = obj->GetType<Character>())
 	{
         playerPos = player->GetPos();
-        float playerPosBottom = playerPos.y + 20;
+        float playerPosBottom = playerPos.y + 30;
         float monsterPosTop = Pos.y;
 
         if (playerPosBottom < monsterPosTop)

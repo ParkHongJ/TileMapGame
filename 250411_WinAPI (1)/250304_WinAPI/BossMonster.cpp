@@ -26,7 +26,7 @@ HRESULT BossMonster::Init()
     tile = new Tile();
 
     colliderSize = { 80.0f, 70.0f };
-    colliderOffsetY = 0.f;
+    colliderOffsetY = 5.f;
 
     bossCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -188,7 +188,7 @@ void BossMonster::FrameUpdate(float TimeDelta)
 
 void BossMonster::CheckTileCollision()
 {
-    float maxDist = 20.0f;
+    float maxDist = 10.0f;
     float debugTime = 1.0f;
 
     // Collider ±‚¡ÿ 
@@ -399,23 +399,23 @@ void BossMonster::Move()
 void BossMonster::ApplyGravity(float TimeDelta)
 {
     // ≈∏¿œ¿Ã πÿø° æ¯¿ª ∂ß ∂≥æÓ¡Æø‰¿’
-    if (!isTileTouchingLeftBottom || !isTileTouchingRightBottom)
+    if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
         Pos.y += 200.f * TimeDelta;
-    else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
-    {
-        //Pos.y 
-        Move();
-    }
+    //else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+    //{
+    //    //Pos.y 
+    //    Move();
+    //}
      
     if (monsterState == MonsterState::ATTACK)
     {
-        if (!isTileTouchingLeftBottom || !isTileTouchingRightBottom)
+        if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
             Pos.y += 400.f * TimeDelta;
-        else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+        /*else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
         {
            
             Move();
-        }
+        }*/
     }
         //monsterState = MonsterState::MOVE;
 }
