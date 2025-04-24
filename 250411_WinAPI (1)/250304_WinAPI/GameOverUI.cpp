@@ -19,7 +19,7 @@ GameOverUI::GameOverUI(ID2D1RenderTarget* renderTarget)
 
 HRESULT GameOverUI::Init()
 {
-	blackBackgroundImage = ImageManager::GetInstance()->FindImage("blackBackground");
+	blackBackgroundImage = ImageManager::GetInstance()->FindImage("BlackBG");
 
 	GameOver_journalRearImage = ImageManager::GetInstance()->FindImage("GameOver_journalRear");
 

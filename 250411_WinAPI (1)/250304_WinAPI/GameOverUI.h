@@ -57,7 +57,7 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
-	inline void SetDrawGameOverUI(bool setValue) { isGameOver = setValue; };
+	inline void SetGameOverUIDraw(bool setValue) { isGameOver = setValue; };
 	FPOINT ResolutionRatio(Image* image);
 	void MoveBox(float destY);
 
