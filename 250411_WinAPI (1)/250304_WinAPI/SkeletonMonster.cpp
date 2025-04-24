@@ -47,6 +47,8 @@ HRESULT SkeletonMonster::Init()
     dir = { 1,1 };
     currFrameInfo = { {0,0},{0,0} };
 
+    MoveJumpStart(200, 90);
+
     return S_OK;
 }
 
@@ -276,7 +278,7 @@ void SkeletonMonster::Detect(GameObject* obj)
     {
 
         playerPos = player->GetPos();
-        float playerPosBottom = playerPos.y + 20;
+        float playerPosBottom = playerPos.y + 30;
         float monsterPosTop = Pos.y;
 
         if (playerPosBottom < monsterPosTop)

@@ -96,7 +96,7 @@ HRESULT SnakeMonster::Init()
 	monsterPosLeftTop = { Pos.x - 128 / 2,monsterPosTop };
 	monsterPosRightTop = { Pos.x + 128 / 2, monsterPosTop };
    
-
+    MoveJumpStart(200, 90);
     return S_OK;
 }
 
