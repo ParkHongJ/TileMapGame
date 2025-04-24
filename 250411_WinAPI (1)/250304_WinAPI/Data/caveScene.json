@@ -1,1 +1,29 @@
-[]
+[
+    {
+        "atlas": "Textures/char_yellow.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "Character",
+        "width": 128.0,
+        "x": 704.0,
+        "y": 704.0
+    },
+    {
+        "atlas": "Textures/Monster/SnakeMonster.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SnakeMonster",
+        "width": 128.0,
+        "x": 1088.0,
+        "y": 576.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "ArrowTrap",
+        "width": 128.0,
+        "x": 320.0,
+        "y": 576.0
+    }
+]

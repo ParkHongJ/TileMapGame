@@ -55,8 +55,8 @@ private:
     const int tileSize = 128;
 
     float scale = 0.5f;         // 확대 배율 (UI 보기 편하게)
-    int atlasWidth = 512;   // 이미지 원본 해상도 (px)
-    int atlasHeight = 896;
+    int atlasWidth = 1024;   // 이미지 원본 해상도 (px)
+    int atlasHeight = 1024;
     int selectedTileX = -1, selectedTileY = -1;
 
     float zoom = 0.3f;

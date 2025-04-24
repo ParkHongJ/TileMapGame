@@ -384,6 +384,9 @@
     <ClCompile Include="SkeletonItem.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Gate.cpp">
+      <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
@@ -718,6 +721,9 @@
     </ClInclude>
     <ClInclude Include="SkeletonItem.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Gate.h">
+      <Filter>MainGame\Scene\Hong</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,7 @@ HRESULT HongScene::Init(ID2D1RenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("items", L"Textures/items.png", renderTarget);
 	background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
-	GameManager::GetInstance()->Init("hongScene");
+	GameManager::GetInstance()->Init("caveScene");
 
 	//ObjectManager::GetInstance()->AddObject(RENDERORDER::RENDER_PLAYER, new DummyHongPlayer);
 

@@ -166,7 +166,6 @@ void Item::DropMove(float TimeDelta)
 
 		FPOINT direction = moveVec.Normalized();
 
-		float radius = 50.f;
 		Ray ray;
 		ray.origin = Pos + direction * radius;
 		ray.direction = moveVec.Normalized();

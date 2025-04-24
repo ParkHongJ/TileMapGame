@@ -45,6 +45,8 @@ public:
 	vector<JumpNode*> FindPath(JumpNode* start, JumpNode* goal);
 
 	JumpNode* FindClosestJumpNode(const FPOINT& worldPos);
+
+	void UpdateNavMesh();
 private:
 	bool IsTileValid(int x, int y, bool isCave = false);
 	void BuildJumpNodesFromTileMap();
@@ -67,6 +69,7 @@ private:
 	Tile* caveTileMap[36][44];
 	ComPtr<ID2D1BitmapRenderTarget> caveRenderTarget;
 
+	bool isTileChanged = false;
 	
 };
 
