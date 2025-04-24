@@ -346,12 +346,13 @@ void Character::OnDamageFly()
 
 bool Character::CheckOnMonster()
 {
-    float maxDist = 8.0f;
+    float maxDist = 5.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
-   FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
-    FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+   FPOINT leftBottom = { Pos.x , Pos.y + colliderSize.y  + colliderOffsetY };
+   //FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+ //   FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -360,8 +361,8 @@ bool Character::CheckOnMonster()
 
     // RayAll -> RayType : 타일만 레이 쏘게 하는 코드로 변경
 
-    bool isTouchingBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::MONSTER, onDebug, debugTime) ||
-        CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, CollisionMaskType::MONSTER, onDebug, debugTime);
+    bool isTouchingBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::MONSTER, onDebug, debugTime); //||
+        //CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom2, CollisionMaskType::MONSTER, onDebug, debugTime);
 
     return isTouchingBottom;
 }
@@ -371,16 +372,30 @@ bool Character::CheckAroundGate()
     interActionPQ = {};
     OutputDebugStringA("==================게이트 / 문 검사중=========================");
 
-    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, 5.f, interActionPQ);
+    //CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, 5.f, interActionPQ);
 
-    if (!interActionPQ.empty())
+    //if (!interActionPQ.empty())
+    //{
+    //    if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::GATE)
+    //    {
+    //        return true;
+    //    }
+    //}
+
+    //return false;
+
+    RaycastHit tmp;
+
+   
+    if (CollisionManager::GetInstance()->RaycastType({ Pos, {0.0f,-1.0f} }, 10.f, tmp, CollisionMaskType::TILE, this, false, 1.0f))
     {
-        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::DOOR)
+        GameObject* hitObject = tmp.collider->GetOwner();
+        if (hitObject->GetObjectName() == OBJECTNAME::GATE)
         {
+            interactionObject = hitObject;
             return true;
         }
     }
-
     return false;
 }
 
@@ -396,7 +411,6 @@ void Character::Update(float TimeDelta)
         isDead = true;
         ChangeState(&interactionState); 
 
-
         if (state)
             state->Update();
 
@@ -405,19 +419,17 @@ void Character::Update(float TimeDelta)
         // Collision 검사 후 공중에 있는지 판단
         CheckTileCollision();
 
-
         if (!(state == &interactionState &&
             interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE ||
-            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_ON_NIDDLE))
+            interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_IS_DEAD))
         {
-
             ApplyGravity(TimeDelta);
         }
 
         PlayAnimation();
         
+        return;
     }
-
 
     if (!isDead)
     {
@@ -441,7 +453,7 @@ void Character::Update(float TimeDelta)
             return;
         }
 
-        if (!isDead && !isFaint)
+        if (!isDead && !isFaint && !onNeedle)
             HandleInput();
 
         // 상태 전이 판단
@@ -460,7 +472,7 @@ void Character::Update(float TimeDelta)
         // Collision 검사 후 공중에 있는지 판단
         CheckTileCollision();
 
-        if (!isMovingAuto)
+        if (!isMovingAuto && !onNeedle)
             Move();
 
         if (!(state == &interactionState &&
@@ -470,11 +482,8 @@ void Character::Update(float TimeDelta)
             ApplyGravity(TimeDelta);
         }
 
-
-
-
         // 공중 점프 애니메이션 처리
-        if (IsAirborne() && !isFaint && state != &attackState)
+        if (IsAirborne() && !isFaint && state != &attackState && !onNeedle)
         {
             HandleAirAnimation();
         }
@@ -854,7 +863,7 @@ void Character::HandleInteractionLogic()
         break;
 
     case  InteractionState::SubState::INTERACTION_ON_NIDDLE:
-        
+      
     //{
     //    float dy = targetHangOnPos.y - Pos.y;
 
@@ -1235,12 +1244,18 @@ void Character::CheckInterAction()
 
     if (isTouchingBottom)
     {
-        if (CheckAroundGate() && currInput.interact)
+        if ( currInput.interact)
         {
-            isEnteringGate = true;
-            Pos.x = interActionPQ.top().second->GetPos().x;
-            ChangeState(&interactionState);
-            return;
+            if (CheckAroundGate())
+            {
+               isEnteringGate = true;
+               
+               Pos.x = interactionObject->GetPos().x;
+               ChangeState(&interactionState);
+               return;
+            }
+           
+            
         }
 
         if (CheckCanPushTile() && (currInput.moveLeft || currInput.moveRight))
@@ -1350,9 +1365,7 @@ void Character::Detect(GameObject* obj)
     }
     else if (dynamic_cast<NiddleTrap*>(obj))
     {
-        onNeedle = true;/*
-        isMovingAuto = true;
-        targetHangOnPos = { Pos.x, Pos.y + 10.f };*/
+        isDead = true;
         ChangeState(&interactionState);
     }
     
@@ -1376,8 +1389,9 @@ void Character::JunUpdate(float TimeDelta)
     }
 	// Add JunYong
 
-    if (!isDead)
+    if (!isDead && !onNeedle)
     {
+
 
         if (km->IsOnceKeyDown('F'))
         {
@@ -1577,9 +1591,12 @@ void Character::PlayAnimation()
             break;
 
         case AnimationMode::FreezeAtX:
-        case AnimationMode::Hold:
+        
             if (currFrameInd.x < currFrameInfo.endFrame.x)
                 currFrameInd.x++;
+            break;
+        case AnimationMode::Hold:
+            currFrameInd.x = currFrameInfo.endFrame.x;
             break;
         }
     }
@@ -1589,8 +1606,7 @@ void Character::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT pos = Pos + CameraManager::GetInstance()->GetPos();
 
-    if (state)
-    {
+  
         char buf[256];
         sprintf_s(buf,
             "▶ Render Frame: (%d,%d)\n▶ State: %s  \n isFallFromHeight : %d isFaint: %d currfaintTime : %f Velocity : x = %f y = %f",
@@ -1598,7 +1614,7 @@ void Character::Render(ID2D1RenderTarget* renderTarget)
             );
 
 		OutputDebugStringA(buf);
-	}
+	
 
     if (playerImage)
     {
