@@ -12,7 +12,7 @@
 BossMonster::BossMonster()
 {
     // 확인 후 지워야함 
-    objectScale = { GAME_TILE_SIZE / 253 , GAME_TILE_SIZE / 253 };
+    // objectScale = { GAME_TILE_SIZE / 253 , GAME_TILE_SIZE / 253 };
 }
 
 BossMonster::~BossMonster()
@@ -33,7 +33,7 @@ HRESULT BossMonster::Init()
         { colliderSize.x, colliderSize.y },  // 
         CollisionMaskType::MONSTER, this);
 
-    SetPos({ 550,210 });
+    SetPos({ 550,10 });
     monsterHP = 10;
     damage = 1;
     moveSpeed = 55.0f;
@@ -75,6 +75,10 @@ HRESULT BossMonster::Init()
     meetPlayerLeft = false;
     meetPlayerRight = false;
 
+    wasMove = false;
+    wasAttackMove = false;
+    wasAttack = false;
+
     playerPos = player->GetPos();
     playerPosBottom = playerPos.y + 128 / 2;
     playerPosLeftBottom = { playerPos.x - 128 / 2, playerPosBottom };
@@ -83,6 +87,7 @@ HRESULT BossMonster::Init()
     monsterPosTop = Pos.y - 128 / 2;
     monsterPosLeftTop = { Pos.x - 128 / 2,monsterPosTop };
     monsterPosRightTop = { Pos.x + 128 / 2, monsterPosTop };
+    MoveJumpStart(200,90);
 	return S_OK;
 }
 
@@ -96,79 +101,38 @@ void BossMonster::Update(float TimeDelta)
     CheckTileCollision();
     CheckPlayerCollision();
     CheckItemCollision();
-
+    ApplyGravity(TimeDelta);
+    isInAir = bPhysics || velocity.y != 0.f;
 	// 기본 move
 	// 벽 안 만났을 때 
-    if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom)
+    if (monsterState != MonsterState::ATTACK && !isTileTouchingRight && !isTileTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom && !isPlayerTouchingLeft && !isPlayerTouchingRight)
     {
         monsterState = MonsterState::MOVE;
-        meetPlayerLeft = false;
-        meetPlayerRight = false;
-        //hasBottomTile = false;
-        ApplyGravity(TimeDelta);
-        Move();
     }
     //벽 만났을 때 Update
-    else if ((isTileTouchingRight || isTileTouchingLeft) && (monsterState == MonsterState::ATTACKMOVE || monsterState == MonsterState::MOVE))
+    if (isTileTouchingRight && dir.x > 0 && monsterState == MonsterState::MOVE)
     {
-        //monsterState = MonsterState::MOVE;
         dir.x *= -1;
-        Move();
+    }
+    else if (isTileTouchingLeft && dir.x < 0 && monsterState == MonsterState::MOVE)
+    {
+        dir.x *= -1;
     }
 
-    ApplyGravity(TimeDelta);
-    MeetPlayer();
-
-    if (monsterState == MonsterState::ATTACKMOVE && !isInAir)
-    {
-        attackDuration += TimeDelta;
-        // Move();
-        if (attackDuration > attackCoolTime)
-        {
-            attackDuration = 0.f;
-            monsterState = MonsterState::ATTACK;
-        }
-    }
-    else if (monsterState == MonsterState::WAITATTACK)
-    {
-        attackDuration += TimeDelta;
-        if (attackDuration > attackCoolTime)
-        {
-            monsterState = MonsterState::ATTACK;
-        }
-    }
-
-    if (monsterState == MonsterState::ATTACK)
-    {
-        attackDuration += TimeDelta;
-        Move();
-        if (attackDuration <= attackCoolTime)
-        {
-            monsterState == MonsterState::ATTACK;
-        }
-        else if (attackDuration > attackCoolTime)
-        {
-            attackDuration = 0.f;
-            monsterState = MonsterState::MOVE;
-        }
-    }
-    else if (monsterState == MonsterState::WAITATTACK)
-    {
-        attackDuration += TimeDelta;
-        if (attackDuration > attackCoolTime)
-        {
-            monsterState = MonsterState::MOVE;
-        }
-    }
-
+    //rolling 중에 바닥이 없으면 ApplyGravity 
+    //rolling 중에 바닥이 있으면 구르면서 앞으로 
+    MeetPlayer(TimeDelta);
     MoveJump(TimeDelta);
+    
+    Move();
     FrameUpdate(TimeDelta);
+   
 }
 
 void BossMonster::FrameUpdate(float TimeDelta)
 {
     elipsedTime += TimeDelta;
-    if (monsterState == MonsterState::MOVE || monsterState == MonsterState::WAITATTACK)
+    if (monsterState == MonsterState::MOVE || monsterState == MonsterState::WAITATTACK || monsterState == MonsterState::IDLE)
     {
         currFrameInfo = moveFrameInfo;
 
@@ -223,7 +187,7 @@ void BossMonster::FrameUpdate(float TimeDelta)
 
 void BossMonster::CheckTileCollision()
 {
-    float maxDist = 10.0f;
+    float maxDist = 20.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -238,19 +202,24 @@ void BossMonster::CheckTileCollision()
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
     // To do 가운데 레이선 추가 벽 뿌수는용 
-    isTileTouchingLeft = CollisionManager::GetInstance()->RaycastType({ centerLeft, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, false, debugTime)/* ||
-       CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime)*/;
+    isTileTouchingLeft = CollisionManager::GetInstance()->RaycastType({ leftTop, {-1.f, 0.f} }, maxDist, hitLeft1, CollisionMaskType::TILE, false, debugTime) ||
+       CollisionManager::GetInstance()->RaycastAll({ leftBottom, {-1.f, 0.f} }, maxDist, hitLeft2, true, debugTime);
 
-    isTileTouchingRight = CollisionManager::GetInstance()->RaycastType({ centerRight, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, false, debugTime) /*||
-        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime)*/;
+    isTileTouchingRight = CollisionManager::GetInstance()->RaycastType({ rightTop, {1.f, 0.f} }, maxDist, hitRight1, CollisionMaskType::TILE, false, debugTime) ||
+        CollisionManager::GetInstance()->RaycastAll({ rightBottom, {1.f, 0.f} }, maxDist, hitRight2, true, debugTime);
 
     isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
     isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+
+    isTileTouchingLeftCenter = CollisionManager::GetInstance()->RaycastType({ centerLeft, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingRightCenter = CollisionManager::GetInstance()->RaycastType({ centerRight, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+
+
 }
 
 void BossMonster::CheckPlayerCollision()
 {
-    float maxDist = 200.0f;
+    float maxDist = 150.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -281,78 +250,171 @@ void BossMonster::CheckItemCollision()
 {
 }
 
-void BossMonster::MeetPlayer()
+void BossMonster::MeetPlayer(float TimeDelta)
 {
     bool isOnGround = isTileTouchingLeftBottom || isTileTouchingRightBottom;
    /* if (monsterState == MonsterState::ATTACK || monsterState == MonsterState::ATTACKMOVE || monsterState == MonsterState::WAITATTACK)
         return;*/
 
-    if (((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0)) && isOnGround )
+    if (monsterState == MonsterState::IDLE && ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0)) && isOnGround)
     {
         monsterState = MonsterState::MOVE;
-        Move();
+        //Move();
         //return;
     }
 
-    if (monsterState == MonsterState::MOVE && !isInAir || isOnGround)
+    if (monsterState == MonsterState::MOVE && isOnGround)
     {
         // MOVE 상태일 때 attackMove로 상태 변환
         if (isPlayerTouchingLeft && dir.x < 0 )
-        {
-            MoveJumpStart(300.f, 120.f);
-            monsterState = MonsterState::ATTACKMOVE;           
+        {    
+            monsterState = MonsterState::ATTACKMOVE;  
+            MoveJumpStart(450.f, 100.f);
         }
         else if (isPlayerTouchingRight && dir.x > 0)
-        {
-            MoveJumpStart(300.f, 60.f);
-            monsterState = MonsterState::ATTACKMOVE;            
+        {            
+            monsterState = MonsterState::ATTACKMOVE;  
+            MoveJumpStart(450.f, 70.f);
         }
     }
 
-    //AttackMove(점프)를 한 후 플레이어가 아직 레이 범위 안에 있을 때 
+
     if (monsterState == MonsterState::ATTACKMOVE)
-    {
-        if (isInAir || !isOnGround)
-            monsterState == MonsterState::ATTACKMOVE;
-
-        else if (!isInAir || isOnGround)
-        {
-            if ((isPlayerTouchingLeft && dir.x < 0) || (isPlayerTouchingRight && dir.x > 0))
-            {
-                monsterState = MonsterState::ATTACK;
-                //return;
-                //meetPlayer = true;
-            }
-            else if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0))
-            {
-                monsterState = MonsterState::MOVE;
-                Move();
-            }
-        }
-       /* else if (isInAir)
-            monsterState == MonsterState::ATTACKMOVE;*/
+    {        
+        //attackDuration += TimeDelta;
+        //wasMove = false;
+        //// Move();
+        ///*if (!isOnGround)
+        //    return;
+        //else*/
+        //if (attackDuration > attackCoolTime)
+        //{
+        //    attackDuration = 0.f;
+        //    monsterState = MonsterState::WAITATTACK;
+        //}
+        wasAttackMove = true;
     }
+
+    if (monsterState == MonsterState::WAITATTACK && wasAttackMove && isOnGround)
+    {
+        //if (dir.x < 0)
+        //{
+        //   // if (isPlayerTouchingLeft)
+        //    monsterState = MonsterState::ATTACK;
+        //}
+        //else if (dir.x > 0)
+        //{
+        //   // if (isPlayerTouchingRight)
+        //        monsterState = MonsterState::ATTACK;
+        //}
+       /* if (((isPlayerTouchingLeft && dir.x < 0) || (isPlayerTouchingRight && dir.x > 0)) && isOnGround)
+        {
+            monsterState = MonsterState::ATTACK;
+        }
+        else if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0))
+        {
+            monsterState = MonsterState::MOVE;
+        }*/
+         if ((dir.x < 0|| dir.x > 0) && isOnGround)
+        {
+            monsterState = MonsterState::ATTACK;
+        }
+        else if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0))
+        {
+            monsterState = MonsterState::MOVE;
+        }
+    }
+
 
     if (monsterState == MonsterState::ATTACK)
     {
-        
+        attackDuration += TimeDelta;
+        wasAttackMove = false;
+        //Move();
+        if (attackDuration <= rollingTime)
+            Move();
+        else if (attackDuration > rollingTime)
+        {
+            attackDuration = 0.f;
+            monsterState = MonsterState::WAITATTACK;
+        }
+        wasAttack = true;
     }
+    else if (monsterState == MonsterState::WAITATTACK && wasAttack)
+    {
+        monsterState = MonsterState::MOVE;
+        wasAttack = false;
+    }
+
+
+    //AttackMove(점프)를 한 후 플레이어가 아직 레이 범위 안에 있을 때 
+    //if (monsterState == MonsterState::ATTACKMOVE)
+    //{
+    //    if (isInAir || !isOnGround)
+    //        monsterState == MonsterState::ATTACKMOVE;
+
+    //    else if (!isInAir || isOnGround)
+    //    {
+    //        if ((isPlayerTouchingLeft && dir.x < 0) || (isPlayerTouchingRight && dir.x > 0))
+    //        {
+    //            monsterState = MonsterState::ATTACK;
+    //            //return;
+    //            //meetPlayer = true;
+    //        }
+    //        else if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0))
+    //        {
+    //            monsterState = MonsterState::MOVE;
+    //            Move();
+    //        }
+    //    }
+    //   /* else if (isInAir)
+    //        monsterState == MonsterState::ATTACKMOVE;*/
+    //}
+
+    //if (monsterState == MonsterState::ATTACK)
+    //{
+    //    
+    //}
 }
 
 void BossMonster::Move()
 {
     float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
-    if (monsterState == MonsterState::MOVE || monsterState == MonsterState::ATTACK)
+    if (monsterState == MonsterState::MOVE)
+    {
+        moveSpeed = 55.f;
         Pos.x += dir.x * moveSpeed * time;
+    }
+    if (monsterState == MonsterState::ATTACK)
+    {
+        moveSpeed = 80.f;
+        Pos.x += dir.x * moveSpeed * time;
+    }
+   /* if (monsterState == MonsterState::MOVE || monsterState == MonsterState::ATTACK)
+        Pos.x += dir.x * moveSpeed * time;*/
 }
 
 void BossMonster::ApplyGravity(float TimeDelta)
 {
     // 타일이 밑에 없을 때 떨어져요잇
-    if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-        Pos.y += moveSpeed * TimeDelta;
-    else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
-        Pos.y = Pos.y;
+    if (!isTileTouchingLeftBottom || !isTileTouchingRightBottom)
+        Pos.y += 200.f * TimeDelta;
+    else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+    {
+        //Pos.y 
+        Move();
+    }
+     
+    if (monsterState == MonsterState::ATTACK)
+    {
+        if (!isTileTouchingLeftBottom || !isTileTouchingRightBottom)
+            Pos.y += 400.f * TimeDelta;
+        else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+        {
+           
+            Move();
+        }
+    }
         //monsterState = MonsterState::MOVE;
 }
 
@@ -372,23 +434,28 @@ void BossMonster::Detect(GameObject* obj)
         {
             monsterHP--;
             monsterState = MonsterState::ATTACK;
-            /*if (monsterHP == 0)
+           /* if (monsterHP == 0)
             {
                 SetDestroy();
             }*/
         }
     }
-    // 타일과 비교해서 타일 setDestroy
+ 
     else if (auto player = obj->GetType<Character>())
     {
 
     }
-
+    // 타일과 비교해서 타일 Destroy
     if (auto tile = obj->GetType<Tile>())
     {
-        if (monsterState == MonsterState::ATTACK/* && (isTileTouchingLeft || isTileTouchingRight)*/)
+        FPOINT tilePos = tile->GetPos(); 
+        float tileTop = tilePos.y - 20;
+        float monsterPosBottom = Pos.y;
+
+        if (monsterState == MonsterState::ATTACK)
         {
-            tile->Destruction();
+            if(tilePos.y < monsterPosBottom + 20.f)
+                tile->Destruction();
         }
     }
 
@@ -413,7 +480,7 @@ void BossMonster::Render(ID2D1RenderTarget* renderTarget)
             }
         }
         
-        if (monsterState == MonsterState::ATTACKMOVE && isInAir)
+        if (monsterState == MonsterState::ATTACKMOVE)
         {
             if (dir.x > 0)
             {
