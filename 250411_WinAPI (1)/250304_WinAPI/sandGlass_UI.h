@@ -17,7 +17,8 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
-	inline float GetPlayTime() const { return playTimeSec; };
+	inline float GetPlayTimeSec() const { return playTimeSec; }
+	inline int GetPlayTimeMin() const { return playTimeMin; }
 
 	sandGlass_UI() {};
 	sandGlass_UI(ID2D1RenderTarget* renderTarget);

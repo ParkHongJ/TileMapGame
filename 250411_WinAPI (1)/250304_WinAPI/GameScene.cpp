@@ -38,6 +38,7 @@
 #include "dialogUI.h"
 #include "ShopInteractUI.h"
 #include "ShopKeeper.h"
+#include "GameOverUI.h"
 
 HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 {
@@ -134,6 +135,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new ShopInteractUI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_NPC, new ShopKeeper());
+    ObjectManager::GetInstance()->AddObject(RENDER_UI, new GameOverUI(renderTarget));
 
 
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());
