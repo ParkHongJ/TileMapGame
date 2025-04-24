@@ -44,7 +44,7 @@ HRESULT GameOverUI::Init()
 
 	playTimeSecond = sandglass->GetPlayTimeSec();
 	playTimeMinute = sandglass->GetPlayTimeMin();
-
+	//playTime = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->
 	gold = ObjectManager::GetInstance()->GetPlayer()->GetPlayerStatus()->GetGold();
 	stageIndex_Outer = 0;
 	stageIndex_Inner = 0;
@@ -56,34 +56,34 @@ HRESULT GameOverUI::Init()
 	text_gameoverPos = { GameOver_journalFrontImagePos.x + 150.0f,
 							   GameOver_journalFrontImagePos.y - 195.0f };
 
-	text_levelPos = {text_gameoverPos.x + 10, text_gameoverPos.y + 50};
+	text_levelPos = {text_gameoverPos.x - 17, text_gameoverPos.y + 50};
 
 
-	text_moneyPos = {text_levelPos.x + 50, text_levelPos.y - 10};
+	text_moneyPos = {text_gameoverPos.x - 35, text_levelPos.y + 37};
 
 
-	text_timePos = {text_moneyPos.x + 20, text_moneyPos.y +30};
+	text_timePos = { text_gameoverPos.x - 16, text_moneyPos.y + 36 };
 
 
-	int_levelPos = {};
+	int_levelPos = { text_levelPos.x + 140, text_levelPos.y + 5};
 
 
-	int_moneyPos = {};
+	int_moneyPos = { text_moneyPos.x + 140, text_moneyPos.y + 5};
 
 
-	int_timePos = {};
+	int_timePos = { text_timePos.x + 140, text_timePos.y };
 
 
-	quickRestartPos = {};
+	quickRestartPos = { 670, 260};
 
 
-	characterselectPos = {};
+	characterselectPos = {quickRestartPos.x, quickRestartPos.y + 50};
 
 
-	returntocampPos = {};
+	returntocampPos = {quickRestartPos.x, characterselectPos.y + 50};
 
 
-	exittotitlePos = {};
+	exittotitlePos = {quickRestartPos.x, returntocampPos.y + 50};
 
 
 	imageRatio = ResolutionRatio(GameOver_journalRearImage);
@@ -106,6 +106,7 @@ void GameOverUI::Update(float TimeDelta)
 			isBackPage = true;
 		else if (KeyManager::GetInstance()->IsOnceKeyDown(VK_LEFT))
 			isBackPage = false;
+
 		if (KeyManager::GetInstance()->IsOnceKeyDown(VK_UP))
 		{
 			if (selectBoxIndex <= 1)
@@ -147,7 +148,7 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					imageRatio.x, imageRatio.y
 				);
 			}
-
+	
 			if (GameOver_journalFrontImage)
 			{
 				GameOver_journalFrontImage->Render(
@@ -156,6 +157,27 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					GameOver_journalFrontImagePos.y,
 					imageRatio.x, imageRatio.y
 				);
+				}
+	
+			if (GameOver_journalSelectBox)
+			{
+				GameOver_journalSelectBox->Render(
+					renderTarget,
+					GameOver_journalSelectBoxPos.x,
+					GameOver_journalSelectBoxPos.y,
+					imageRatio.x, imageRatio.y
+				);
+			}
+	
+			if (GameOver_characterSticker)
+			{
+				GameOver_characterSticker->Render(
+					renderTarget,
+					GameOver_journalSelectBoxPos.x - (GameOver_journalSelectBoxPos.x * 0.185f),
+					GameOver_journalSelectBoxPos.y,
+					imageRatio.x, imageRatio.y
+				);
+			}
 				RenderText(
 					renderTarget,
 					L"Game Over",
@@ -168,7 +190,7 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					L"Level:",
 					text_levelPos.x,
 					text_levelPos.y,
-					1.0f
+					1.0f, D2D1::ColorF::Black
 				);
 				RenderText(
 					renderTarget,
@@ -182,21 +204,21 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					L"Money:",
 					text_moneyPos.x,
 					text_moneyPos.y,
-					1.0f
+					1.0f, D2D1::ColorF::Black
 				);
 				RenderText(
 					renderTarget,
 					L"Time:",
 					text_timePos.x,
 					text_timePos.y,
-					1.0f
+					1.0f, D2D1::ColorF::Black
 				);
 				std::wstring goldPrint = std::to_wstring(gold);
 				RenderText(
 					renderTarget,
 					goldPrint,
-					text_moneyPos.x,
-					text_moneyPos.y,
+					int_moneyPos.x,
+					int_moneyPos.y,
 					1.0f
 					);
 				/*std::wstring timePrint = std::to_wstring(playTime);
@@ -212,52 +234,30 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					L"Quick Restart",
 					quickRestartPos.x,
 					quickRestartPos.y,
-					1.0f
+					1.0f, D2D1::ColorF::Black
 				);
 				RenderText(
 					renderTarget,
 					L"Character Select",
 					characterselectPos.x,
 					characterselectPos.y,
-					1.0f
+					1.0f, D2D1::ColorF::Black
 				);
 				RenderText(
 					renderTarget,
 					L"Return To Camp",
-					returntocampPos.y,
 					returntocampPos.x,
-					1.0f
+					returntocampPos.y,
+					1.0f, D2D1::ColorF::Black
 				);
 				RenderText(
 					renderTarget,
 					L"Exit To Title",
 					exittotitlePos.x,
 					exittotitlePos.y,
-					1.0f
+					1.0f, D2D1::ColorF::Black
 				);
 			}
-
-			if (GameOver_journalSelectBox)
-			{
-				GameOver_journalSelectBox->Render(
-					renderTarget,
-					GameOver_journalSelectBoxPos.x,
-					GameOver_journalSelectBoxPos.y,
-					imageRatio.x, imageRatio.y
-				);
-			}
-
-			if (GameOver_characterSticker)
-			{
-				GameOver_characterSticker->Render(
-					renderTarget,
-					GameOver_journalSelectBoxPos.x - (GameOver_journalSelectBoxPos.x * 0.185f),
-					GameOver_journalSelectBoxPos.y,
-					imageRatio.x, imageRatio.y
-				);
-			}
-		}
-
 		if(isBackPage)
 		{
 			if (GameOver_journalBackImage)
@@ -270,7 +270,7 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 					);
 				}
 			}
-
+	
 			if (GameOver_journalBackClipImage)
 			{
 				GameOver_journalBackClipImage->Render(renderTarget,
@@ -280,7 +280,7 @@ void GameOverUI::Render(ID2D1RenderTarget* renderTarget)
 				);
 			}
 		}
-
+	
 	}
 }
 

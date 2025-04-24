@@ -43,6 +43,7 @@ private:
 
 	float playTimeSecond;
 	int playTimeMinute;
+	int playTime;
 	int gold;
 	int stageIndex_Outer;
 	int stageIndex_Inner;
