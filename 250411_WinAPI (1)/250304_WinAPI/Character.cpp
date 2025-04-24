@@ -22,7 +22,6 @@ InteractionState Character::interactionState(InteractionState::SubState::NONE);
 
 HRESULT Character::Init()
 {
-    playerFaintEffect = playerImage = ImageManager::GetInstance()->FindImage("Tae_Player");
     objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 
     state =  &Character::idleState;
@@ -55,8 +54,8 @@ HRESULT Character::Init()
     maxFaintTime = 5.0f;
 
 	// Collision
-	colliderSize = { 30.0f, 40.0f };
-	colliderOffsetY = 15.f;
+	colliderSize = { 30.0f, 30.0f };
+	colliderOffsetY = 25.f;
 	collider = new BoxCollider(
 		{ 0.0f , colliderOffsetY },     // Offset
 		{ colliderSize.x, colliderSize.y },  // 
@@ -71,8 +70,8 @@ HRESULT Character::Init()
 	bottomHitDist = 10000.0f;
 
 	// Interaction
-	leftHandPos = { Pos.x - colliderSize.x / 2, Pos.y };
-	rightHandPos = { Pos.x + colliderSize.x / 2, Pos.y };
+	leftHandPos = { Pos.x - colliderSize.x / 2 - 30.f, Pos.y  - colliderSize.y/2 - 8.f};
+	rightHandPos = { Pos.x + colliderSize.x / 2 + 30.f, Pos.y - colliderSize.y/2 - 8.f };
 	targetHangOnPos = { 0.f, 0.f };
 	interActionPQ = {};
 	interactionRadius = 1.f;
@@ -264,23 +263,29 @@ void Character::HandleInput()
 	KeyManager* km = KeyManager::GetInstance();
 
 	currInput = {};
-	currInput.moveLeft = km->IsStayKeyDown(VK_LEFT);
-	currInput.moveLeftReleased = km->IsOnceKeyUp(VK_LEFT);
 
-	currInput.moveRight = km->IsStayKeyDown(VK_RIGHT);
-	currInput.moveRightReleased = km->IsOnceKeyUp(VK_RIGHT);
+    if (!(state == &interactionState &&
+        interactionState.GetCurrentSubState() == InteractionState::SubState::INTERACTION_HANGON_TILE))
+    {
 
-	currInput.moveUp = km->IsStayKeyDown(VK_UP);
-	currInput.moveUpReleased = km->IsOnceKeyUp(VK_UP);
+        currInput.moveLeft = km->IsStayKeyDown(VK_LEFT);
+        currInput.moveLeftReleased = km->IsOnceKeyUp(VK_LEFT);
 
-	currInput.moveDown = km->IsStayKeyDown(VK_DOWN);
-	currInput.moveDownReleased = km->IsOnceKeyUp(VK_DOWN);
+        currInput.moveRight = km->IsStayKeyDown(VK_RIGHT);
+        currInput.moveRightReleased = km->IsOnceKeyUp(VK_RIGHT);
 
+        currInput.moveUp = km->IsStayKeyDown(VK_UP);
+        currInput.moveUpReleased = km->IsOnceKeyUp(VK_UP);
+
+        currInput.moveDown = km->IsStayKeyDown(VK_DOWN);
+        currInput.moveDownReleased = km->IsOnceKeyUp(VK_DOWN);
+
+        currInput.attack = km->IsOnceKeyDown('X');
+        currInput.interact = km->IsOnceKeyDown('A');
+        currInput.bomb = km->IsOnceKeyDown('C');
+        currInput.shift = km->IsStayKeyDown(VK_SHIFT);
+    }
     currInput.jump = km->IsOnceKeyDown('Z');
-    currInput.attack = km->IsOnceKeyDown('X');
-    currInput.interact = km->IsOnceKeyDown('A');
-    currInput.bomb = km->IsOnceKeyDown('C');
-    currInput.shift = km->IsStayKeyDown(VK_SHIFT);
 }
 
 
@@ -357,8 +362,6 @@ void Character::HandleTransitions()
         return;
     }
 
-    // [3] 상호작용
-    CheckInterAction();
 
     if (currInput.jump && !IsAirborne())
     {
@@ -366,6 +369,13 @@ void Character::HandleTransitions()
         Jump();
         return;
     }
+
+    
+    // [3] 상호작용
+    CheckInterAction();
+
+
+
 
     // [1] 매달림 상태
     if (state == &interactionState &&
@@ -627,7 +637,7 @@ void Character::HandleMoveLogic() {
         else
         {
             // 목표 도착 시
-            isFlip = !isFlip;
+            //isFlip = !isFlip;
             isMovingAuto = false;
             isCrouching = false;
             ChangeState(&interactionState);
@@ -818,25 +828,49 @@ bool Character::CheckHangOn()
     float debugTime = 1.0f;
     bool debugDraw = true;
 
-	RaycastHit hitLeft, hitRight;
-	bool leftHang = false, rightHang = false;
+	RaycastHit hitLeft, hitRight, hitLeftShort, hitRightShort, hitUp;
+	bool leftHang = false, rightHang = false, leftHangShort = false, rightHangShort = false, upBlocked = false;
 
-    leftHandPos = { Pos.x - colliderSize.x - 10.f , Pos.y - colliderSize.y / 2 + 5.f };
-    rightHandPos = { Pos.x + colliderSize.x + 10.f , Pos.y - colliderSize.y /2 + 5.f };
+    leftHandPos = { Pos.x - colliderSize.x / 2 - 20.f, Pos.y - colliderSize.y / 2 - 0.f };
+    rightHandPos = { Pos.x + colliderSize.x / 2 + 20.f, Pos.y - colliderSize.y / 2 - 0.f };
+
+    //FPOINT hitUpPos = {};
+
+    //if (isFlip)
+    //{
+    //    hitUpPos = { Pos.x - colliderSize.x - 20.f, Pos.y - 5.f  };
+    //    if (CollisionManager::GetInstance()->RaycastType({ hitUpPos,{0.f, -1.f} }, 5.f, hitLeft, CollisionMaskType::TILE, debugDraw, debugTime))
+    //    {
+    //        upBlocked = true;
+    //    }
+    //    else upBlocked = false;
+    //}
+    //else
+    //{
+    //    hitUpPos = { Pos.x + colliderSize.x  + 20.f , Pos.y - 5.f };
+
+    //    if (CollisionManager::GetInstance()->RaycastType({ hitUpPos,{0.f, -1.f} }, 5.f, hitLeft, CollisionMaskType::TILE, debugDraw, debugTime))
+    //    {
+    //        upBlocked = true;
+    //    }
+    //    else upBlocked = false;
+    //}
+
+  
 
     Ray leftRay = { leftHandPos, { 0.f, 1.f } };
-    if (CollisionManager::GetInstance()->RaycastType(leftRay, maxHangDist, hitLeft, CollisionMaskType::TILE,debugDraw, debugTime))
+    if (CollisionManager::GetInstance()->RaycastType(leftRay, maxHangDist, hitLeft, CollisionMaskType::TILE, debugDraw, debugTime))
     {
         if (hitLeft.hit && isFlip)
         {
             // 손이 타일보다 위에 있을 때만 매달림
-            if (leftHandPos.y < hitLeft.point.y - 1.0f) // -1.0f는 여유
+            if (leftHandPos.y < hitLeft.point.y - 1.0f)
                 leftHang = true;
         }
     }
 
     Ray rightRay = { rightHandPos, { 0.f, 1.f } };
-    if (CollisionManager::GetInstance()->RaycastType(rightRay, maxHangDist, hitRight,CollisionMaskType::TILE, debugDraw, debugTime))
+    if (CollisionManager::GetInstance()->RaycastType(rightRay, maxHangDist, hitRight, CollisionMaskType::TILE, debugDraw, debugTime))
     {
         if (hitRight.hit && !isFlip)
         {
@@ -845,7 +879,29 @@ bool Character::CheckHangOn()
         }
     }
 
-	return leftHang || rightHang;
+
+    if (CollisionManager::GetInstance()->RaycastType({ leftHandPos, { 0.f, 1.f } }, maxHangDist / 2, hitLeft, CollisionMaskType::TILE, debugDraw, debugTime))
+    {
+        if (hitLeftShort.hit && isFlip)
+        {
+            // 손이 타일보다 위에 있을 때만 매달림
+            if (leftHandPos.y < hitLeftShort.point.y - 1.0f)
+                leftHangShort = true;
+        }
+    }
+
+
+    if (CollisionManager::GetInstance()->RaycastType({ rightHandPos, { 0.f, 1.f } }, maxHangDist / 2, hitRight, CollisionMaskType::TILE, debugDraw, debugTime))
+    {
+        if (hitRightShort.hit && !isFlip)
+        {
+            if (rightHandPos.y < hitRightShort.point.y - 1.0f)
+                rightHangShort = true;
+        }
+    }
+
+
+	return  leftHang || rightHang || leftHangShort || rightHangShort;
 }
 
 bool Character::CheckCanPushTile()
@@ -894,7 +950,7 @@ bool Character::CheckCanClimbLadder()
 
     if (!interActionPQ.empty())
     {
-        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER || interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::LADDER)
         {
             return true; 
         }
@@ -903,21 +959,21 @@ bool Character::CheckCanClimbLadder()
     return false;
 }
 
-//bool Character::CheckCanClimbRope()
-//{
-//    OutputDebugStringA("==================사다리 검사중=========================");
-//
-//    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
-//
-//    if (!interActionPQ.empty())
-//    {
-//        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
-//        {
-//            return true;
-//        }
-//        return false;
-//    }
-//}
+bool Character::CheckCanClimbRope()
+{
+    OutputDebugStringA("==================로프 검사중=========================");
+
+    CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
+
+    if (!interActionPQ.empty())
+    {
+        if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::ROPE)
+        {
+            return true;
+        }
+        return false;
+    }
+}
 
 void Character::CheckInterAction()
 {
@@ -936,11 +992,12 @@ void Character::CheckInterAction()
                 ChangeState(&interactionState);
                 return;
             }
-        /*    else if (CheckCanClimbRope())
+            else if (CheckCanClimbRope())
             {
+
                 ChangeState(&interactionState);
                 return;
-            }*/
+            }
             else
             {
                 ChangeState(&idleState);
@@ -948,19 +1005,7 @@ void Character::CheckInterAction()
             }
         }        
     }
-   /* else if (currInput.interact)
-    {
-        CollisionManager::GetInstance()->GetInteractObjectsInCircle(this, interactionRadius, interActionPQ);
-        if (!interActionPQ.empty())
-        {
-            if (interActionPQ.top().second->GetObjectName() == OBJECTNAME::DOOR)
-            {
-            
-                ChangeState(&interactionState);
-                return;
-            }
-        }
-    }*/
+ 
 
     if (isTouchingBottom)
     {
@@ -1254,6 +1299,7 @@ void Character::Render(ID2D1RenderTarget* renderTarget)
     if (playerImage)
     {
         playerImage->FrameRender(renderTarget, pos.x, pos.y, currFrameInd.x, currFrameInd.y, objectScale.x, objectScale.y, isFlip);
+        collider->DebugRender(renderTarget);
     }
     if (playerFaintEffect)
     {
