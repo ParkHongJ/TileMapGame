@@ -260,7 +260,7 @@ public:
 	void  SetCurrLockTime(float lockTime) { this->currLockTime = lockTime; }
 	float GetlookUpLockTime() { return this->lookUpLockTime; }
 	float GetlookDownLockTime() { return this->lookDownLockTime; }
-	bool GetFallFromHeight() { return isFallFromHeight; }
+	bool  GetFallFromHeight() { return isFallFromHeight; }
 	
 	
 	float GetVelocitySize();

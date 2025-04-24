@@ -1226,7 +1226,7 @@ void Character::CheckInterAction()
                 ChangeState(&idleState);
                 return;
             }
-        }        
+        }
     }
  
 
