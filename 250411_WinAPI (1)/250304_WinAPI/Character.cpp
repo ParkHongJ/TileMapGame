@@ -108,6 +108,7 @@ HRESULT Character::Init()
     ObjectManager::GetInstance()->SetPlayer(this);
     objectRenderId = RENDER_PLAYER;
     //objectName = OBJECTNAME::PLAYER;
+    InitCharacter(playerKey);
 
 	return S_OK;
 }
