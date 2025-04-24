@@ -121,7 +121,7 @@ void PlayerSelectScene::Update(float TimeDelta)
             // key 값 전달
             GameManager::GetInstance()->SetPlayerImageKey(characterKeys[selectedNum]);
             SceneManager::GetInstance()->ChangeScene("게임");
-
+            //GameManager::GetInstance()->TravelToNextScene();
         }
     }
 

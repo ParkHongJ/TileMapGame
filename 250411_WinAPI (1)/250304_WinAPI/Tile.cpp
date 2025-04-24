@@ -6,6 +6,8 @@
 #include "CameraManager.h"
 #include "IncreaseGold.h"
 #include "ImageManager.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 HRESULT Tile::Init()
 {
@@ -189,6 +191,30 @@ void Tile::Destruction()
 		ObjectManager::GetInstance()->AddObject(RENDER_ITEM, goldItem);
 		goldItem->SetPos(Pos);
 		goldItem->SetDrop(300.f, 90.f, 0.3f, { 0,400.f });
+	}
+
+	for (int i = 0; i < 7; i++)
+	{
+		float radius = 30.f; // 원하는 반경
+
+		float angle = RandomRange(0.f, 360.f); // 또는 rand() % 360
+		float dist = RandomRange(0.f, radius); // 균일한 거리
+
+		// 라디안 변환
+		float rad = angle * (3.141592f / 180.f);
+
+		// 오프셋 계산
+		FPOINT offset = {
+			cosf(rad) * dist,
+			sinf(rad) * dist
+		};
+
+		FPOINT spawnPos = Pos + offset;
+
+		Particle* particle = ParticleManager::GetInstance()->GetParticle("Rubble", spawnPos, (rand() % 360), 35.f, 2.5f, 0, 0);
+		StarOption* starOp = new StarOption(30.f);
+
+		particle->AddParticleOption(starOp);
 	}
 
 	SetDestroy();

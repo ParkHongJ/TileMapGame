@@ -139,7 +139,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
 
-    GameManager::GetInstance()->Init("hongScene");
+    GameManager::GetInstance()->Init();
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI(renderTarget));
    // ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());
@@ -158,8 +158,8 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new Journal_1());
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SnakeMonster());
-    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
-    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new BossMonster());
+    /*ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
+    ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new BossMonster());*/
 
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new SkeletonItem());
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Chicken());
@@ -181,9 +181,9 @@ void GameScene::Release()
     //    delete yellow;
     //    yellow = nullptr;
     //}
-    //ObjectManager::GetInstance()->Release();
+    ObjectManager::GetInstance()->Release();
 
-    //CollisionManager::GetInstance()->Release();
+    CollisionManager::GetInstance()->Release();
 }
 
 void GameScene::Update(float TimeDelta)

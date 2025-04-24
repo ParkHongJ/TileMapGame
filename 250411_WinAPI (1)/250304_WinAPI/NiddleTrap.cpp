@@ -47,10 +47,12 @@ void NiddleTrap::CheckCulling()
 void NiddleTrap::Detect(GameObject* obj)
 {
 	FPOINT objectVelocity = obj->GetVelocity();
-
-	if (objectVelocity.y >= 200.f)
+	if (obj->GetObjectName() == OBJECTNAME::PLAYER)
 	{
-		int a = 10;
-		bHit = true;
+		if (objectVelocity.y >= 200.f)
+		{
+			bHit = true;
+			//TODO
+		}
 	}
 }

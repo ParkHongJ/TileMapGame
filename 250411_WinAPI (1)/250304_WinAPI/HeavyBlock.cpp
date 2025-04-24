@@ -14,10 +14,10 @@ HRESULT HeavyBlock::Init()
 
 	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::TILE, this);
 	heavyBlockImage = ImageManager::GetInstance()->FindImage("Trap");
-	Pos.x = 650.f;
+	Pos.x = 1050.f;
 	Pos.y = 200.f;
 
-	bPhysics = false;
+	bPhysics = true;
 	useGravity = true;
 
 	objectRenderId = RENDERORDER::RENDER_TILE;
@@ -33,87 +33,90 @@ void HeavyBlock::Release()
 
 void HeavyBlock::Update(float TimeDelta)
 {
-	if (KeyManager::GetInstance()->IsOnceKeyDown(VK_ADD))
-	{
-		paths.clear();
-		if (bPhysics != true)
-		{
-			bPhysics = true;
-		}
-		//bPhysics = !bPhysics;
-		totalForce = { 0.f,0.f };
-		acceleration = { 0.f,0.f };
-		start = GameManager::GetInstance()->FindClosestJumpNode(Pos);
-		Character* player = ObjectManager::GetInstance()->GetPlayer();
+	//if (KeyManager::GetInstance()->IsOnceKeyDown(VK_ADD))
+	//{
+	//	paths.clear();
+	//	if (bPhysics != true)
+	//	{
+	//		bPhysics = true;
+	//	}
+	//	//bPhysics = !bPhysics;
+	//	totalForce = { 0.f,0.f };
+	//	acceleration = { 0.f,0.f };
+	//	start = GameManager::GetInstance()->FindClosestJumpNode(Pos);
+	//	Character* player = ObjectManager::GetInstance()->GetPlayer();
 
-		end = GameManager::GetInstance()->FindClosestJumpNode(player->GetPos());
-		paths = GameManager::GetInstance()->FindPath(start, end);
-	}
+	//	end = GameManager::GetInstance()->FindClosestJumpNode(player->GetPos());
+	//	paths = GameManager::GetInstance()->FindPath(start, end);
+	//}
 
-	if (paths.empty()) return;
+	/*if (paths.empty()) return;
 	if (pathIndex >= paths.size()) 
 	{ 
 		paths.clear();
 		pathIndex = 0;
 		return; 
-	}
+	}*/
 
-	FPOINT targetPos = paths[pathIndex]->worldPos;
-
-	JumpNode* target = paths[pathIndex];
-
-	FPOINT to = target->worldPos;
-	FPOINT dir = to - Pos;
-	float dist = dir.Length();
-	
-	if (dist < 4.f)  // 도달했으면 다음 노드
 	{
-		pathIndex++;
-		return;
+		//FPOINT targetPos = paths[pathIndex]->worldPos;
+
+		//JumpNode* target = paths[pathIndex];
+
+		//FPOINT to = target->worldPos;
+		//FPOINT dir = to - Pos;
+		//float dist = dir.Length();
+
+		//if (dist < 4.f)  // 도달했으면 다음 노드
+		//{
+		//	pathIndex++;
+		//	return;
+		//}
+
+		//bool needToFall = (to.y > Pos.y + 4.f);    // 목표가 아래쪽이다 → 낙하 상황
+		//bool needToJump = (to.y < Pos.y - 4.f);    // 목표가 위쪽이다 → 점프 상황
+		//bool isSameX = fabs(Pos.x - to.x) < 4.f;   // 목표 X까지 정렬됐는가?
+
+		//// ============================
+		//// [1] 낙하 처리
+		//// ============================
+		//if (needToFall)
+		//{
+		//	if (!isSameX)
+		//	{
+		//		// 아직 X 정렬 안 됨 → X 정렬만 수행
+		//		velocity.x = (to.x > Pos.x ? 1.f : -1.f) * speed;
+		//		velocity.y = 0.f; // Y는 움직이지 않음 (중력만 적용)
+		//	}
+		//	else
+		//	{
+		//		// 정렬 완료 → 자연 낙하 허용
+		//		Pos.x = floorf(Pos.x);
+		//		velocity.x = 0.f;
+		//		// 중력은 아래 elsewhere 적용
+		//	}
+		//}
+
+		//// ============================
+		//// [2] 점프
+		//// ============================
+		//else if (needToJump && bGround)
+		//{
+		//	bJumping = true;
+		//	velocity.y = jumpPower;
+		//	velocity.x = (to.x > Pos.x ? 1.f : -1.f) * speed;
+		//}
+
+		//// ============================
+		//// [3] 같은 높이 → 걷기
+		//// ============================
+		//else
+		//{
+		//	velocity.y = 0.f;
+		//	velocity.x = (to.x > Pos.x ? 1.f : -1.f) * speed;
+		//}
 	}
 
-	bool needToFall = (to.y > Pos.y + 4.f);    // 목표가 아래쪽이다 → 낙하 상황
-	bool needToJump = (to.y < Pos.y - 4.f);    // 목표가 위쪽이다 → 점프 상황
-	bool isSameX = fabs(Pos.x - to.x) < 4.f;   // 목표 X까지 정렬됐는가?
-
-	// ============================
-	// [1] 낙하 처리
-	// ============================
-	if (needToFall)
-	{
-		if (!isSameX)
-		{
-			// 아직 X 정렬 안 됨 → X 정렬만 수행
-			velocity.x = (to.x > Pos.x ? 1.f : -1.f) * speed;
-			velocity.y = 0.f; // Y는 움직이지 않음 (중력만 적용)
-		}
-		else
-		{
-			// 정렬 완료 → 자연 낙하 허용
-			Pos.x = floorf(Pos.x);
-			velocity.x = 0.f;
-			// 중력은 아래 elsewhere 적용
-		}
-	}
-
-	// ============================
-	// [2] 점프
-	// ============================
-	else if (needToJump && bGround)
-	{
-		bJumping = true;
-		velocity.y = jumpPower;
-		velocity.x = (to.x > Pos.x ? 1.f : -1.f) * speed;
-	}
-
-	// ============================
-	// [3] 같은 높이 → 걷기
-	// ============================
-	else
-	{
-		velocity.y = 0.f;
-		velocity.x = (to.x > Pos.x ? 1.f : -1.f) * speed;
-	}
 	//FPOINT dir = targetPos - Pos;
 
 	//float dist = dir.Length();

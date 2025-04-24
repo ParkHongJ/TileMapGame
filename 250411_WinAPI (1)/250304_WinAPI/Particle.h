@@ -16,6 +16,7 @@ public:
 	float size;
 	float angle;
 	float lifeTime;
+	float maxlifeTime;
 	float elapsedTime;
 	bool isEnd;
 	float alpha;
@@ -139,6 +140,24 @@ class TrailOption : public IParticleOption
 
 public:
 	TrailOption(string trailStr, float interval, float lifeTime);
+
+	bool HandlesRender() const override { return false; }
+	void Update(Particle& p, float dt) override;
+
+	void Render(Particle& p, ID2D1RenderTarget* rt) override;
+};
+
+
+class StarOption : public IParticleOption
+{
+
+
+	float speed;
+
+
+	float defaultMoveSpeed;
+public:
+	StarOption(float speed);
 
 	bool HandlesRender() const override { return false; }
 	void Update(Particle& p, float dt) override;

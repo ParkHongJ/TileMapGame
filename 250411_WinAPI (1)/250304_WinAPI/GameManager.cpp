@@ -6,6 +6,7 @@
 #include "Tile.h"
 #include "ObjectManager.h"
 #include "ObjectFactory.h"
+#include "SceneManager.h"
 
 using json = nlohmann::json;
 
@@ -286,6 +287,34 @@ void GameManager::Init(const char* path)
 	LinkFallNeighbors();
 }
 
+void GameManager::Init()
+{
+	if (currentStateIndex > stageInfos.size() - 1)
+		return;
+
+	string path = stageInfos[currentStateIndex++];
+
+	//default key
+	string scenePath = "Data/" + string(path);
+
+	string tilePath = scenePath + ".tilemap";
+	string objectPath = scenePath + ".json";
+
+	LoadTile(tilePath.c_str());
+	//TODO 임시
+	LoadObject(objectPath.c_str());
+	//GenerateCave(path);
+
+	GenerateDecoTile();
+	GenerateBorderTile();
+
+
+	BuildJumpNodesFromTileMap();
+	LinkWalkableNeighbors();
+	LinkJumpableNeighbors();
+	LinkFallNeighbors();
+}
+
 void GameManager::GenerateCave(const char* path)
 {
 	string scenePath = "Data/" + /*string(path)*/ string("caveScene");
@@ -431,6 +460,16 @@ void GameManager::UpdateNavMesh()
 	LinkFallNeighbors();
 
 	isTileChanged = false;
+}
+
+void GameManager::TravelToNextScene()
+{
+	SceneManager::GetInstance()->ChangeScene("게임");
+}
+
+void GameManager::LoadScenes(const char* sceneName)
+{
+	stageInfos.push_back(sceneName);
 }
 
 bool GameManager::IsTileValid(int x, int y, bool isCave)

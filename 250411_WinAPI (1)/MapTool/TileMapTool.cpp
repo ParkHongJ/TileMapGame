@@ -198,6 +198,12 @@ void TileMapTool::DrawPaletteUI()
         selectedTileY = -1;
     }
 
+    if (ImGui::Checkbox("DestroyTile", &bDestroy))
+    {
+        selectedTileX = -1;
+        selectedTileY = -1;
+    }
+
     if (ImGui::Button("Save TileMap"))
     {
         SaveTileMapToFile("../250304_WinAPI/Data/caveScene.tilemap");
@@ -316,8 +322,29 @@ void TileMapTool::DrawTileMap()
     }
 
     // 클릭해서 타일 배치
-    if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left) &&
-        selectedTileX >= 0 && selectedTileY >= 0)
+    if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left))
+    {
+        ImVec2 mouse = io.MousePos;
+        ImVec2 local = (mouse - origin) / zoom;
+
+        int tx = (int)floorf(local.x / tileSize);
+        int ty = (int)floorf(local.y / tileSize);
+
+        if (selectedTileX >= 0 && selectedTileY >= 0)
+        {
+            if (tx >= 0 && tx < mapWidth && ty >= 0 && ty < mapHeight) {
+                tileMap[ty][tx] = { selectedTileX, selectedTileY, true, { (float)tx, (float)ty} };
+            }
+        }
+        else if (bDestroy)
+        {
+            if (tx >= 0 && tx < mapWidth && ty >= 0 && ty < mapHeight) {
+                tileMap[ty][tx] = { -1, -1, false, { 0.f, 0.f } };
+            }
+        }
+    }
+
+    /*if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left))
     {
         ImVec2 mouse = io.MousePos;
         ImVec2 local = (mouse - origin) / zoom;
@@ -326,9 +353,9 @@ void TileMapTool::DrawTileMap()
         int ty = (int)floorf(local.y / tileSize);
 
         if (tx >= 0 && tx < mapWidth && ty >= 0 && ty < mapHeight) {
-            tileMap[ty][tx] = { selectedTileX, selectedTileY, true, { (float)tx, (float)ty} };
+            tileMap[ty][tx] = { -1, -1, false, { 0.f, 0.f } };
         }
-    }
+    }*/
 
     int objId = 0;
     for (ToolGameObject* obj : g_PlacedObjects)

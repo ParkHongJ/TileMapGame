@@ -7,6 +7,8 @@
 #include "Collider.h"
 #include "TimerManager.h"
 #include "Character.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 SkeletonMonster::SkeletonMonster()
 {
@@ -316,6 +318,67 @@ void SkeletonMonster::Detect(GameObject* obj)
         {
             monsterState = MonsterState::DEAD;
             deadElipsedTime = 0.0f;
+
+            for (int i = 0; i < 5; i++)
+            {
+                float radius = 30.f; // 원하는 반경
+
+                float angle = RandomRange(0.f, 360.f); // 또는 rand() % 360
+                float dist = RandomRange(0.f, radius); // 균일한 거리
+
+                // 라디안 변환
+                float rad = angle * (3.141592f / 180.f);
+
+                // 오프셋 계산
+                FPOINT offset = {
+                    cosf(rad) * dist,
+                    sinf(rad) * dist
+                };
+
+                FPOINT spawnPos = Pos + offset;
+
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", spawnPos, (rand() % 360), 35.f, 2.5f, 4, 1);
+                StarOption* starOp = new StarOption(30.f);
+
+                particle->AddParticleOption(starOp);
+
+                //3 6
+            }
+            {
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, (rand() % 360), 55.f, 2.5f, 3, 6);
+                StarOption* starOp = new StarOption(10.f);
+
+                particle->AddParticleOption(starOp);
+
+                //3 6
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
+                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 2.f, 0, 0);
+
+                PhysicsOption* physicsOp = new PhysicsOption;
+                SizeOption* sizeOp = new SizeOption(0.04f);
+                TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
+
+                float angleRad = RandomRange(3.141592f, 3.141592f * 2.0f);
+                float speed = RandomRange(350.f, 575.0f);            // 속도도 랜덤
+
+                velocity =
+                {
+                    sinf(angleRad) * speed,
+                    -cosf(angleRad) * speed * 1.5f  // 135도 (왼쪽 위)
+                };
+
+                physicsOp->Init(velocity, 0.3f);
+                //physicsOp->Init(velocity, 0.5f);
+
+                particle->AddParticleOption(physicsOp);
+                particle->AddParticleOption(sizeOp);
+                particle->AddParticleOption(trailOp);
+            }
+           
         }
 
     }
@@ -334,6 +397,7 @@ void SkeletonMonster::DeadEvent(float TimeDelta)
         if (deadElipsedTime > 2.0f)
         {
             SetDestroy();
+            
         }
             
     }
