@@ -44,7 +44,6 @@ private:
 	FPOINT monsterPosRightTop;
 	float monsterPosTop;
 
-	float attackDuration = 0.f;
-	float attackTime = 0.5f;
+
 };
 
