@@ -68,6 +68,7 @@ private:
 	float						speed;
 	float				  attackSpeed;
 	float				   attackRate;
+	bool						isDead;
 
 
 	// Render
@@ -92,6 +93,7 @@ private:
 	bool			      isCrouching;
 	bool					isFaint;
 	bool			isFallFromHeight;
+	bool					onNeedle;
 
 	// For Camera
 	bool			   isLookUpLocked;
@@ -104,6 +106,11 @@ private:
 	float			 lookDownLockTime;
 	float				currfaintTime;
 	float				 maxFaintTime;
+
+	float				hitCoolTime;
+	float				currHitTime;
+
+
 
 	// RayCast
 	FPOINT                leftHandPos;
@@ -199,6 +206,7 @@ public:
 
 	POINT GetCurrFrameInd() const;
 	FrameInfo GetCurrFrameInfo() const;
+	bool GetIsDead() { return isDead; }
 
 	// HFSM
 	void HandleTransitions();
@@ -209,7 +217,7 @@ public:
 	void HandleInteractionLogic();
 
 	void ChangeState(CharacterState* newState);
-
+	bool GetOnNeedle() { return onNeedle; }
 
 	// Gravity
 	bool IsAirborne() const;
@@ -224,7 +232,7 @@ public:
 	void HandleInput();
 	
 	// 
-	void OnDamage();
+	void OnDamageFly();
 
 
 

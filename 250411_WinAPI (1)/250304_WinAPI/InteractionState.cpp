@@ -12,7 +12,21 @@ void InteractionState::Enter(Character* character)
 void InteractionState::Update()
 {
 
-    if (character->CheckHangOn())
+    if (character->GetIsDead())
+    {
+        ChangeSubState(SubState::INTERACTION_IS_DEAD);
+        return;
+    }
+    if (character->GetOnNeedle())
+    {
+        ChangeSubState(SubState::INTERACTION_ON_NIDDLE);
+    }
+    else if (character->GetIsFaint())
+    {
+        ChangeSubState(SubState::INTERACTION_ON_DAMAGE);
+        return;
+    }
+    else if (character->CheckHangOn())
     {
         ChangeSubState(SubState::INTERACTION_HANGON_TILE);
         return;
@@ -32,7 +46,13 @@ void InteractionState::Update()
         ChangeSubState(SubState::INTERACTION_PUSH_TILE);
         return;
     }
-    
+    /*else if (character->)
+    {
+
+
+        return;
+    }
+    */
 
 
 
@@ -62,5 +82,8 @@ const char* InteractionState::GetSubStateName() const {
     case SubState::INTERACTION_HOLD_ITEM:    return "INTERACTION_HOLD_ITEM";
     case SubState::INTERACTION_PUSH_TILE:    return "INTERACTION_PUSH_ITEM";
     case SubState::INTERACTION_HANGON_TILE:    return "INTERACTION_HANGON_TILE";
+    case SubState::INTERACTION_ON_NIDDLE: return "INTERACTION_ON_NIDDLE";
+    case SubState::INTERACTION_ON_DAMAGE: return "INTERACTION_ON_DAMAGE";
+    case SubState::INTERACTION_IS_DEAD: return "INTERACTION_IS_DEAD";
     }
 }

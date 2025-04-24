@@ -37,11 +37,11 @@ void IdleState::Update() {
         return;
     }
 
-    if (character->GetIsFaint())
-    {
-        ChangeSubState(SubState::IDLE_FAINT);
-        return;
-    }
+    //if (character->GetIsFaint())
+    //{
+    //    ChangeSubState(SubState::IDLE_FAINT);
+    //    return;
+    //}
 
 
     if (character->CheckAlmostFall()) {
