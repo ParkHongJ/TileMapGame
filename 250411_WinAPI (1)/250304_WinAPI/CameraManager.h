@@ -29,10 +29,21 @@ private:
 	float currYOffset;
 	float yOffsetSpeed;
 
+	bool isShake = false;
+	float shakeTime = 0.f;
+	float shakePower = 1.f;
+	float shakeX = 1.f;
+	float shakeY = 1.f;
+
+	FPOINT curPos;
+	FPOINT curOffset;
+	bool isPlayerDead = false;
+
 public: 
 	HRESULT Init();
 	void Release();
-	void Update( float TimeDelta);
+	void Update(float TimeDelta);
+	void ShakeUpdate( float TimeDelta);
 
 	Viewport& GetInRect() { return ViewPort; }
 
@@ -43,5 +54,7 @@ public:
 	void SetLookingState(bool isLookUp, bool isLookDown) { this->isLookUp = isLookUp; this->isLookDown = isLookDown; }
 
 	void SetTargetPos(FPOINT input) { this->target = input; }
+	void CameraShake(float time, float power);
+	void SetDeadCam();
 };
 

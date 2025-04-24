@@ -5,6 +5,10 @@
 #include "PlayerStatus.h"
 #include "GunBullet.h"
 #include "CameraManager.h"
+#include "ItemDialog.h"
+#include "Character.h"
+
+
 Gun::Gun() : bulletCnt(5), fireCoolTime(0.f), fireMaxCoolTime(1.f), fireOffset({0.f, 0.f}), isFire(false), fireCurFrameX(0)
 {
 	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
@@ -47,11 +51,29 @@ HRESULT Gun::Init()
 	bPhysics = true;
 	holdOffset = { 20.f, 20.f };
 	objectName = OBJECTNAME::GUN;
+
+	price = 3000;
+	if (0 < price)
+	{
+		dialog = new ItemDialog();
+		ObjectManager::GetInstance()->AddObject(RENDER_UI, dialog);
+		dialog->SetPrice(price);
+		dialog->SetPos(Pos);
+	}
+
+
 	return S_OK;
 }
 
 void Gun::Update(float TimeDelta)
 {
+	if (dialog)
+	{
+		dialog->SetPos(Pos);
+		dialog->SetCol(isDialogCol);
+		isDialogCol = false;
+	}
+
 	fireCoolTime -= TimeDelta;
 	if (fireCoolTime <= 0.f)
 	{
@@ -155,6 +177,12 @@ void Gun::Use(void* info)
 
 void Gun::Detect(GameObject* obj)
 {
+	if (auto player = dynamic_cast<Character*>(obj) && nullptr != dialog && 0 < price)
+	{
+		isDialogCol = true;
+		//dialog->SetCol(isDialogCol);
+	}
+
 	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
 	{
 		return;

@@ -32,10 +32,10 @@ void CameraManager::Release()
 void CameraManager::Update( float TimeDelta)
 {
 	//target = playerPos;
+
 	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
 
-
-
+	ShakeUpdate(TimeDelta);
 
 	if (isLookUp && !isLookDown)
 	{
@@ -65,6 +65,9 @@ void CameraManager::Update( float TimeDelta)
 
 	pos.x = -(target.x) + offset.x;
 	pos.y = -(target.y) + offset.y + currYOffset;
+
+
+	offset = curOffset;
 
 	float mapWidth = 44 * GAME_TILE_SIZE;   // 2112
 	float mapHeight = 36 * GAME_TILE_SIZE;  // 1728
@@ -102,6 +105,40 @@ void CameraManager::Update( float TimeDelta)
 	ViewPort.top = -(pos.y - 50);
 	ViewPort.right = ViewPort.left + WINSIZE_X - 100;
 	ViewPort.bottom = ViewPort.top + WINSIZE_Y - 100;
+}
+
+void CameraManager::ShakeUpdate(float TimeDelta)
+{
+	float offsetX = ((rand() % 200) / 100.0f - 1.0f) * shakePower;
+	float offsetY = ((rand() % 200) / 100.0f - 1.0f) * shakePower;
+	
+	curOffset = offset;
+
+	if (shakeTime > 0.0f)
+	{
+		offset += {offsetX, offsetY};
+		shakeTime -= TimeDelta;
+	}
+
+	else
+	{
+		isShake = false;
+		shakeTime = 0.f;
+	}
+}
+
+void CameraManager::CameraShake(float time, float power)
+{
+	isShake = true;
+	shakeTime = time;
+	shakePower = power;
+}
+
+void CameraManager::SetDeadCam()
+{
+	isPlayerDead = true;
+	offset.x = 200; // 이미지 보고 수치 조절
+	offset.y = 100;
 }
 
 //Viewport CameraManager::GetInRect()

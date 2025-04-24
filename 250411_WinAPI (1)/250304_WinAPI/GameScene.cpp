@@ -40,6 +40,10 @@
 #include "ShopInteractUI.h"
 #include "ShopKeeper.h"
 #include "SkeletonItem.h"
+#include "Chicken.h"
+#include "IncreaseHP.h"
+#include "ItemDialog.h"
+#include "GhostJar.h"
 #include "GameOverUI.h"
 
 HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
@@ -101,7 +105,12 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("Effect", L"Textures/fx_small.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Rubble", L"Textures/fx_rubble.png", renderTarget);
     ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
+    ImageManager::GetInstance()->AddImage("turkey", L"Textures/Entities/Mounts/turkey.png", 8, 11, renderTarget);
 
+    ImageManager::GetInstance()->AddImage("shopDialogBox", L"Textures/UI/Menu/shopDialogBox.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("currency_GameOver", L"Textures/UI/Hud/currency_GameOver.png", renderTarget);
+
+    
     background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
 
@@ -153,6 +162,10 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new BossMonster());
 
     ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new SkeletonItem());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Chicken());
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseHP());
+
+    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new GhostJar());
 
 
    // GameManager::GetInstance()->Init("hongScene");

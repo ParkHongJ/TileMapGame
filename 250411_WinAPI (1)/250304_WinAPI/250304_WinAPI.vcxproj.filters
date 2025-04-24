@@ -91,6 +91,9 @@
     <Filter Include="MainGame\Scene\Yong\Rope">
       <UniqueIdentifier>{40dbf96b-8dec-44b7-9059-c3b15f5ef844}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\UI">
+      <UniqueIdentifier>{ede8c852-1ba1-47d6-9d33-954fdad41bec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -384,8 +387,23 @@
     <ClCompile Include="SkeletonItem.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Chicken.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="IncreaseHP.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDialog.cpp">
+      <Filter>MainGame\Scene\Yong\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Gate.cpp">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostJar.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostJuwel.cpp">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -722,8 +740,23 @@
     <ClInclude Include="SkeletonItem.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
+    <ClInclude Include="Chicken.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="IncreaseHP.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDialog.h">
+      <Filter>MainGame\Scene\Yong\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Gate.h">
       <Filter>MainGame\Scene\Hong</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostJar.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostJuwel.h">
+      <Filter>MainGame\Scene\Yong\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

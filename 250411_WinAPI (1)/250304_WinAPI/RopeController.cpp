@@ -28,7 +28,7 @@ HRESULT RopeController::Init()
 	//}
 	objectScale = { GAME_TILE_SIZE / (ATLAS_TILE_SIZE * 1.25f), GAME_TILE_SIZE / (ATLAS_TILE_SIZE * 1.25f) };
 	image = ImageManager::GetInstance()->FindImage("Tae_Player");
-	objectRenderId = RENDER_ITEM;
+	objectRenderId = RENDER_NPC;
 	curFrameX = 12;
 	curFrameY = 9;
 	return S_OK;
@@ -77,9 +77,12 @@ void RopeController::Shoot(FPOINT pos)
 void RopeController::UpMove(float TimeDelta)
 {
 	RaycastHit Up;
-	if (!CollisionManager::GetInstance()->RaycastType({ Pos, {0.f, -1.f} }, 10.f, Up, CollisionMaskType::TILE, true, 1.0f))
+	if (!CollisionManager::GetInstance()->RaycastType({ Pos, {0.f, -1.f} }, 10.f, Up, CollisionMaskType::TILE, true, 1.0f) && (SumDis < MaxDis))
 	{
-		Pos.y -= 500.f * TimeDelta;
+		Pos.y -= 800.f * TimeDelta;
+		SumDis += 800.f * TimeDelta;
+
+		return;
 	}
 
 	else
@@ -127,7 +130,7 @@ void RopeController::CreateRope()
 	{
 		temp->SetFrame(1, 12);
 		temp->SetPos(Pos);
-		temp->SetObjectRenderId(RENDER_HOLD);
+		temp->SetObjectRenderId(RENDER_NPC);
 	}
 
 	else

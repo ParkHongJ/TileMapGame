@@ -7,6 +7,7 @@ struct PlayerStatusInfo
 	unsigned int gold;
 	bool IsCobweb;
 	unsigned int ropeCount;
+	float deadTime;
 }typedef PLAYERSTATUSDESC;
 
 class PlayerStatus
@@ -17,6 +18,8 @@ public:
 	PlayerStatus();
 	virtual ~PlayerStatus();
 
+public:
+	void Update(float TimeDelta);
 public:
 	inline const unsigned int GetPlayerHP() const { return info.playerHP; };
 	inline void SetPlayerHP(unsigned int hp) 

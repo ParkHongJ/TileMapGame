@@ -27,8 +27,6 @@ HRESULT Character::Init()
     state =  &Character::idleState;
     state->Enter(this);
 
-    objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
-  
     SetPos({ 200 / 2,0});
 
     // Stat
@@ -109,6 +107,7 @@ HRESULT Character::Init()
 
     ObjectManager::GetInstance()->SetPlayer(this);
     objectRenderId = RENDER_PLAYER;
+    //objectName = OBJECTNAME::PLAYER;
 
 	return S_OK;
 }
@@ -1014,11 +1013,22 @@ void Character::Detect(GameObject* obj)
 
 void Character::JunUpdate(float TimeDelta)
 {
+    playerStatus->Update(TimeDelta);
 	auto km = KeyManager::GetInstance();
 
+    if (preHoldItem)
+    {
+        holdItemHitTime -= TimeDelta;
+        if (0.f >= holdItemHitTime)
+        {
+            preHoldItem = nullptr;
+
+        }
+    }
 	// Add JunYong
 	if (km->IsOnceKeyDown('F'))
 	{
+       // CameraManager::GetInstance()->SetDeadCam();
 		if (0 < playerStatus->GetBombCount())
 		{
 			FPOINT offset = { 50,0 };
@@ -1091,8 +1101,15 @@ void Character::JunUpdate(float TimeDelta)
 				if (nullptr != dynamic_cast<Item*>(iter)) // Test
 					//if (OBJECTNAME::GUN == (iter)->GetObjectName()) // Test
 				{
-					holdItem = dynamic_cast<Item*>(iter);
-					holdItem->Equip();
+                    Item* temp = dynamic_cast<Item*>(iter);
+                    if (temp->GetPrice() <= playerStatus->GetGold())
+                    {
+                        playerStatus->SetGold(playerStatus->GetGold() - temp->GetPrice());
+                        holdItem = temp;
+                        holdItem->Equip();
+                    }
+                    break;
+
 				}
 			}
 		}
@@ -1117,7 +1134,7 @@ void Character::JunUpdate(float TimeDelta)
             playerStatus->MinusRopeCount();
         }
     }
-    
+
 	if (holdItem)
 	{
 		holdItem->SetHoldItemPos(Pos, isFlip);

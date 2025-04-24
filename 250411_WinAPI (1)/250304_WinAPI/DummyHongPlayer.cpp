@@ -18,7 +18,7 @@ HRESULT DummyHongPlayer::Init()
 	img = ImageManager::GetInstance()->FindImage("Explosion");
 
 	collider = new BoxCollider({ 0.f,0.f }, { 100.f, 100.f }, CollisionMaskType::PLAYER, this);
-
+	objectScale = { GAME_TILE_SIZE / ATLAS_TILE_SIZE, GAME_TILE_SIZE / ATLAS_TILE_SIZE };
 	return S_OK;
 }
 
