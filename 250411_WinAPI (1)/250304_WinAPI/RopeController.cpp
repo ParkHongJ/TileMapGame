@@ -116,7 +116,14 @@ void RopeController::CreateRope()
 	FPOINT newPos = Pos;
 	newPos.y += createCnt * 64;
 
-	if (CollisionManager::GetInstance()->RaycastType({ newPos, {0.f, 1.f} }, 30.f, Down, CollisionMaskType::TILE, true, 1.0f))
+	FPOINT leftPos = newPos;
+	leftPos.x -= GAME_TILE_SIZE / 2;
+
+	FPOINT RightPos = newPos;
+	RightPos.x += GAME_TILE_SIZE / 2;
+
+	if (CollisionManager::GetInstance()->RaycastType({ leftPos, {0.f, 1.f} }, 30.f, Down, CollisionMaskType::TILE, true, 1.0f) || 
+	CollisionManager::GetInstance()->RaycastType({ RightPos, {0.f, 1.f} }, 30.f, Down, CollisionMaskType::TILE, true, 1.0f))
 	{
 		isMove = false;
 		isLanch = false;
@@ -124,6 +131,7 @@ void RopeController::CreateRope()
 	}
 
 	Rope* temp = new Rope();
+
 	ObjectManager::GetInstance()->AddObject(RENDER_ITEM, temp);
 
 	if (0 >= createCnt)

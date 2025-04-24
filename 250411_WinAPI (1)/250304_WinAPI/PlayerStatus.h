@@ -8,12 +8,11 @@ struct PlayerStatusInfo
 	bool IsCobweb;
 	unsigned int ropeCount;
 	float deadTime;
+	float GameTime;
 }typedef PLAYERSTATUSDESC;
 
 class PlayerStatus
 {
-
-
 public:
 	PlayerStatus();
 	virtual ~PlayerStatus();
@@ -58,6 +57,8 @@ public:
 
 
 	inline PLAYERSTATUSDESC* GetInfo() { return &info; };
+
+	inline const unsigned int GetGameTime() const { return info.GameTime; };
 
 private:
 	PLAYERSTATUSDESC info;

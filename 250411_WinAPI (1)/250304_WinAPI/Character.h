@@ -157,7 +157,7 @@ private:
 	Item* preHoldItem;
 
 	float holdItemHitTime = 0.f;
-	float holdItemHitMaxTime = 0.2f;
+	float holdItemHitMaxTime = 0.5f;
 
 	// Add Hong
 	GameObject* interactionObject = nullptr;

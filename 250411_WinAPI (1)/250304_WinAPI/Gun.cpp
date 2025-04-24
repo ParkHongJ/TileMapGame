@@ -124,6 +124,12 @@ void Gun::Render(ID2D1RenderTarget* renderTarget)
 
 void Gun::Release()
 {
+	//if (dialog)
+	//{
+	//	//dialog->SetPos(Pos);
+	//	dialog->SetCol(false);
+	//	//isDialogCol = false;
+	//}
 }
 
 void Gun::Equip()

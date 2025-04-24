@@ -160,6 +160,8 @@ void ObjectManager::LateUpdate(float TimeDelta)
 	{
 		if (true == obj->second->IsDestroyed())
 		{
+			//obj->second->Release();
+			//delete obj->second;
 			obj = objects.erase(obj);
 		}
 

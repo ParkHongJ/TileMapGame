@@ -7,7 +7,7 @@ HRESULT CameraManager::Init()
 	target = { 0,0 };
 	mapSize = { 0,0 };
 	offset = { WINSIZE_X / 2,WINSIZE_Y / 2 };
-
+	curOffset = offset;
 	mapHeight = 0.0f;
 	mapWidth = 0.0f;
 
@@ -19,6 +19,8 @@ HRESULT CameraManager::Init()
 	yOffset = 0.0f;
 	currYOffset = 0.0f;
 	yOffsetSpeed = 5.0f;
+
+	deadOffset = { 320 , 180 };
 
 	isLookUp = false;
 	isLookDown = false;
@@ -32,9 +34,17 @@ void CameraManager::Release()
 void CameraManager::Update( float TimeDelta)
 {
 	//target = playerPos;
+	if (isPlayerDead)
+	{
+		pos.x = -(target.x) + deadOffset.x;
+		pos.y = -(target.y) + deadOffset.y;
+
+		return;
+	}
 
 	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
 
+	curOffset = offset;
 	ShakeUpdate(TimeDelta);
 
 	if (isLookUp && !isLookDown)
@@ -81,11 +91,15 @@ void CameraManager::Update( float TimeDelta)
 	float minY = -(mapHeight - halfViewH); // -1478
 	float maxY = 0.0f;
 
-	if (pos.x < minX) pos.x = minX;
-	if (pos.x > maxX) pos.x = maxX;
+	if (false == isShake)
+	{
+		if (pos.x < minX) pos.x = minX;
+		if (pos.x > maxX) pos.x = maxX;
 
-	if (pos.y < minY) pos.y = minY;
-	if (pos.y > maxY) pos.y = maxY;
+		if (pos.y < minY) pos.y = minY;
+		if (pos.y > maxY) pos.y = maxY;
+	}
+
 
 	/*float x = -(TILEMAPTOOL_X - WINSIZE_X);
 	float y = -(TILEMAPTOOL_Y - WINSIZE_Y);
@@ -112,8 +126,6 @@ void CameraManager::ShakeUpdate(float TimeDelta)
 	float offsetX = ((rand() % 200) / 100.0f - 1.0f) * shakePower;
 	float offsetY = ((rand() % 200) / 100.0f - 1.0f) * shakePower;
 	
-	curOffset = offset;
-
 	if (shakeTime > 0.0f)
 	{
 		offset += {offsetX, offsetY};
@@ -137,8 +149,6 @@ void CameraManager::CameraShake(float time, float power)
 void CameraManager::SetDeadCam()
 {
 	isPlayerDead = true;
-	offset.x = 200; // 이미지 보고 수치 조절
-	offset.y = 100;
 }
 
 //Viewport CameraManager::GetInRect()
