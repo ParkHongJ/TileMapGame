@@ -72,11 +72,11 @@ void SkeletonMonster::Update(float TimeDelta)
         monsterState = MonsterState::MOVE;
     }
     //벽 만났을 때 Update
-    if (isTileTouchingRight && dir.x > 0 && monsterState == MonsterState::MOVE)
+    if ((isTileTouchingRight || isTileTouchingRightCenter) && dir.x > 0 && monsterState == MonsterState::MOVE)
     {
         dir.x *= -1;
     }
-    else if (isTileTouchingLeft && dir.x < 0 && monsterState == MonsterState::MOVE)
+    else if ((isTileTouchingLeft || isTileTouchingLeftCenter) && dir.x < 0 && monsterState == MonsterState::MOVE)
     {
         dir.x *= -1;
     }
@@ -106,7 +106,7 @@ void SkeletonMonster::FrameUpdate(float TimeDelta)
 {
     elipsedTime += TimeDelta;
 
-    if (monsterState == MonsterState::MOVE)
+    if (monsterState == MonsterState::MOVE || monsterState == MonsterState::IDLE)
     {
         currFrameInfo = moveFrameInfo;
 
@@ -185,8 +185,12 @@ void SkeletonMonster::CheckTileCollision()
     // Collider 기준 
     FPOINT leftTop = { Pos.x - colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightTop = { Pos.x + colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
-    FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
-    FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT leftBottom = { Pos.x - colliderSize.x / 2 + 5, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT rightBottom = { Pos.x + colliderSize.x / 2 - 5, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY + 15 };
+    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 15 };
+    FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerBottom = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -199,6 +203,10 @@ void SkeletonMonster::CheckTileCollision()
 
     isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
     isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingLeftCenter = CollisionManager::GetInstance()->RaycastType({ centerLeft, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingRightCenter = CollisionManager::GetInstance()->RaycastType({ centerRight, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+
+
 }
 
 void SkeletonMonster::CheckPlayerCollision()
@@ -288,6 +296,9 @@ void SkeletonMonster::Detect(GameObject* obj)
             monsterState = MonsterState::DEAD;
             deadElipsedTime = 0.0f;
 
+            //colliderSize = { 0.0f, 0.0f };
+            CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::MONSTER, CollisionMaskType::EFFECT, this);
+
             for (int i = 0; i < 5; i++)
             {
                 float radius = 30.f; // 원하는 반경
@@ -365,8 +376,7 @@ void SkeletonMonster::DeadEvent(float TimeDelta)
     {
         if (deadElipsedTime > 2.0f)
         {
-            SetDestroy();
-            
+            SetDestroy();           
         }
             
     }

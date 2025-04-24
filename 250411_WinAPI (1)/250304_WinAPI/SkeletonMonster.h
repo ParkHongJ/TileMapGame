@@ -5,7 +5,7 @@ class BoxCollider;
 class Image;
 class SkeletonMonster : public Monster
 {
-	GENERATE_BODY(Textures/Monster/monsters.png, 128, 128)
+	GENERATE_BODY(Textures/Monster/SkeletonMonster.png, 128, 128)
 
 public:
 	SkeletonMonster();

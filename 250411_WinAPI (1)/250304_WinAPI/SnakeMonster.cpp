@@ -222,8 +222,8 @@ void SnakeMonster::CheckTileCollision()
     // Collider ±‚¡ÿ 
     FPOINT leftTop = { Pos.x - colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightTop = { Pos.x + colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
-    FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
-    FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT leftBottom = { Pos.x - colliderSize.x / 2 + 5, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT rightBottom = { Pos.x + colliderSize.x / 2 - 5, Pos.y + colliderSize.y / 2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
