@@ -7,6 +7,7 @@
 #include "Item.h"
 #include "Image.h"
 #include "Bomb.h"
+#include "ImageManager.h"
 
 TestAnimationObject::TestAnimationObject()
 {

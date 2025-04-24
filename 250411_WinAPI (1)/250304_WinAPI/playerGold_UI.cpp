@@ -4,6 +4,7 @@
 #include "PlayerStatus.h"
 #include "ObjectManager.h"
 #include "Character.h"
+#include "ImageManager.h"
 
 playerGold_UI::playerGold_UI(ID2D1RenderTarget* renderTarget)
 {

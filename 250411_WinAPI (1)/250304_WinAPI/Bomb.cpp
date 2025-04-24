@@ -8,6 +8,7 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 #include "Tile.h"
+#include "ImageManager.h"
 
 Bomb::Bomb()
 {
@@ -49,6 +50,15 @@ void Bomb::Update(float TimeDelta)
 	if (!IsStop)
 	{
 		DropMove(TimeDelta);
+		float angleSpeed = 300.f;
+		if (velocity.x > 0.f)
+		{
+			angle += TimeDelta * angleSpeed;
+		}
+		else if (velocity.x < 0.f)
+		{
+			angle -= TimeDelta * angleSpeed;
+		}
 	}
 	
 	explosionTime -= TimeDelta;
@@ -74,7 +84,7 @@ void Bomb::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	holdImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, curFrameIndexX, curFrameIndexY, objectScale.x, objectScale.y);
+	holdImage->FrameRender(renderTarget, cameraPos, curFrameIndexX, curFrameIndexY, objectScale.x, objectScale.y, angle);
 
 	//if (ItemState::STATE_EQUIP == itemState)
 	//{
@@ -165,7 +175,7 @@ void Bomb::DropMove(float TimeDelta)
 
 		//if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
 		//if (CollisionManager::GetInstance()->RaycastMyType(ray, moveLength, out, CollisionMaskType::ITEM, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
-			if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
+		if (CollisionManager::GetInstance()->RaycastType(ray, moveLength, out, CollisionMaskType::TILE, true, 1.f))//RayTileCheck(ray, moveLength, tiles, hitNormal, hitDistance))
 		{
 			if (IsCobweb)
 			{
@@ -189,8 +199,7 @@ void Bomb::DropMove(float TimeDelta)
 			else
 				hitNormal = { 0.f, (yRatio < 0 ? -1.f : 1.f) };
 
-			FPOINT perturbedNormal = RotateVector(hitNormal, RandomRange(-50.f, 50.f));
-			velocity = Reflect(velocity, /*perturbedNormal.Normalized()*/hitNormal.Normalized());
+			velocity = Reflect(velocity, hitNormal.Normalized());
 
 			velocity *= bounciness;
 
@@ -198,13 +207,8 @@ void Bomb::DropMove(float TimeDelta)
 			totalForce.y = 0.0f;
 
 			const float STOP_THRESHOLD = 100.f;
-			if (fabs(velocity.x) < STOP_THRESHOLD)
-				velocity.x = 0.f;
 			if (fabs(velocity.y) < STOP_THRESHOLD)
 				velocity.y = 0.f;
-
-			// 보정 위치
-			Pos += ray.direction * hitDistance;
 
 			ClampVector(velocity, 350.f);
 
@@ -216,8 +220,7 @@ void Bomb::DropMove(float TimeDelta)
 			}
 
 			// 살짝 밀기 (겹침 방지)
-
-			Pos = out.point + hitNormal * 0.5f;
+			Pos = out.point - direction * radius;
 		}
 		else
 		{
@@ -234,7 +237,6 @@ void Bomb::Detect(GameObject* obj)
 
 void Bomb::FrameUpdate(float TimeDelta)
 {
-
 	elipsedTime += frameSpeed * TimeDelta;
 	curFrameIndexX = int(elipsedTime);
 	if (IsCobweb)

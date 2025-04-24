@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "UI.h"
 #include "Image.h"
+#include "ImageManager.h"
 
 HRESULT UI::Init()
 {

@@ -40,6 +40,14 @@
         }
     },
     {
+        "name": "Gate",
+        "atlasPath": "Textures/GateOpen.png",
+        "cellSize": {
+            "x": 396,
+            "y": 396
+        }
+    },
+    {
         "name": "Gun",
         "atlasPath": "Textures/items.png",
         "cellSize": {

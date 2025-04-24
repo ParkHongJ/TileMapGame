@@ -542,6 +542,11 @@ bool CollisionManager::RaycastMyType(const Ray& ray, float maxDist, RaycastHit& 
                     continue;
                 }
 
+                if (iter->GetOwner() == obj)
+                {
+                    continue;
+                }
+
 				if (iter->Raycast(ray, maxDist, temp))
 				{
 					if (temp.distance < closestHit.distance)

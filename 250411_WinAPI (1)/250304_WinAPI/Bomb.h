@@ -25,7 +25,6 @@ public:
 	virtual void FrameUpdate(float TimeDelta) override;
 
 	void Explosion();
-
 private:
 	//float gravity = 5.f;
 	float explosionTime = 3.f;
@@ -36,5 +35,6 @@ private:
 
 	float explosionRadius = 100.f;
 	// »ç¿ë
+	float angle;
 };
 

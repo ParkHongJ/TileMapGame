@@ -10,6 +10,8 @@
 #include "Particle.h"
 #include "Image.h"
 #include "GameManager.h"
+#include "ImageManager.h"
+
 HRESULT DummyHongPlayer::Init()
 {
 	len1 = elbow.Length();

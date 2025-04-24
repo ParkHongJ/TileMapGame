@@ -7,6 +7,7 @@
 #include "ChangeCobwebBomb.h"
 #include "Character.h"
 #include "DummyHongPlayer.h"
+#include "Gate.h"
 #include "Gun.h"
 #include "HeavyBlock.h"
 #include "IncreaseBomb.h"
@@ -27,6 +28,7 @@ REGISTER_OBJECT(BossMonster)
 REGISTER_OBJECT(ChangeCobwebBomb)
 REGISTER_OBJECT(Character)
 REGISTER_OBJECT(DummyHongPlayer)
+REGISTER_OBJECT(Gate)
 REGISTER_OBJECT(Gun)
 REGISTER_OBJECT(HeavyBlock)
 REGISTER_OBJECT(IncreaseBomb)

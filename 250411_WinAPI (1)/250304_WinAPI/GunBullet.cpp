@@ -3,7 +3,7 @@
 #include "CameraManager.h"
 #include "CollisionManager.h"
 #include "GunBullet.h"
-
+#include "ImageManager.h"
 GunBullet::GunBullet() : image(nullptr)
 {
 

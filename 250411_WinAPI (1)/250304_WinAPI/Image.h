@@ -91,6 +91,7 @@ public:
 
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, bool isFlip = false);
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, float scaleX, float scaleY, bool isFlip = false);
+	void FrameRender(ID2D1RenderTarget* renderTarget, FPOINT pos, int frameX, int frameY, float scaleX, float scaleY, float angle = 0.0f);
 	void FrameRender(ID2D1RenderTarget* renderTarget, float x, float y, int frameX, int frameY, float scaleX, float scaleY, float opacity, bool isFlip = false);
 	void Release();
 

@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "CharacterState.h"
 #include "CameraManager.h"
+#include "ObjectManager.h"
 #include "Collider.h"
 
 // Add JunYong

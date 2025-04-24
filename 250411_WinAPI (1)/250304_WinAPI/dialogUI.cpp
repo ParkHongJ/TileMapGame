@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "dialogUI.h"
 #include "Image.h"
+#include "ImageManager.h"
 
 HRESULT dialogUI::Init()
 {

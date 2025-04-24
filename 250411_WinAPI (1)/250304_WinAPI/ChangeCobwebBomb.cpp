@@ -4,6 +4,8 @@
 #include "ChangeCobwebBomb.h"
 #include "Character.h"
 #include "CameraManager.h"
+#include "ImageManager.h"
+
 ChangeCobwebBomb::ChangeCobwebBomb()
 {
 	

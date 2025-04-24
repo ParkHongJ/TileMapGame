@@ -9,6 +9,8 @@
 #include "ArrowTrap.h"
 #include "NiddleTrap.h"
 #include "HeavyBlock.h"
+#include "ImageManager.h"
+#include "Gate.h"
 
 HRESULT HongScene::Init(ID2D1RenderTarget* renderTarget)
 {
@@ -28,6 +30,7 @@ HRESULT HongScene::Init(ID2D1RenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("Explosion", L"Textures/fx_Explosion.png", 4, 4, renderTarget);
 	ImageManager::GetInstance()->AddImage("Trap", L"Textures/floormisc.png", renderTarget);
 	ImageManager::GetInstance()->AddImage("items", L"Textures/items.png", renderTarget);
+	ImageManager::GetInstance()->AddImage("GateOpen", L"Textures/GateOpen.png", renderTarget);
 	background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
 	GameManager::GetInstance()->Init("caveScene");
@@ -36,6 +39,7 @@ HRESULT HongScene::Init(ID2D1RenderTarget* renderTarget)
 
 	//ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new NiddleTrap);
 	ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new HeavyBlock);
+	ObjectManager::GetInstance()->AddObject(RENDER_PLAYER, new Gate);
 	return S_OK;
 }
 
@@ -75,9 +79,9 @@ void HongScene::Render(ID2D1RenderTarget* renderTarget)
 	int tilesX = static_cast<int>(ceil((40 * GAME_TILE_SIZE) / tileDrawSize)); // 1920 / 192 = 10
 	int tilesY = static_cast<int>(ceil((32 * GAME_TILE_SIZE) / tileDrawSize)); // 1536 / 192 = 8
 
-	for (int y = 0; y < 32; ++y)
+	for (int y = 0; y < 16; ++y)
 	{
-		for (int x = 0; x < 40; ++x)
+		for (int x = 0; x < 20; ++x)
 		{
 			float drawX = x * tileDrawSize * 0.5f;
 			float drawY = y * tileDrawSize * 0.5f;

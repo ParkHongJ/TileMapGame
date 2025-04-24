@@ -6,8 +6,11 @@ enum class GateState
 	OPEN,
 	BLOCK
 };
+
+//
 class Gate : public GameObject
 {
+	GENERATE_BODY(Textures/GateOpen.png,396,396)
 public:
 	virtual HRESULT Init();		// 멤버 변수의 초기화, 메모리 할당
 	virtual void Release();		// 메모리 해제
@@ -19,5 +22,8 @@ private:
 	GateState gateState;
 	class Image* gateImage;
 	float objectScale;
+	
+	int frameX;
+	int frameY;
 };
 

@@ -4,7 +4,7 @@
 #include "Character.h"
 #include "CollisionManager.h"
 #include "CommonFunction.h"
-
+#include "ImageManager.h"
 
 Item::Item() : 
 price(0), holdImage(nullptr), 

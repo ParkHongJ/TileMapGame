@@ -3,6 +3,8 @@
 #include "Image.h"
 #include "PlayerStatus.h"
 #include "Character.h"
+#include "ImageManager.h"
+
 #include <iomanip>
 #include <sstream>
 

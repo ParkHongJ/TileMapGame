@@ -19,7 +19,7 @@ public:
 	FPOINT totalForce = { 0, 0 };
 	float bounciness = 0.55f;
 
-	Image* blood = nullptr;
+	class Image* blood = nullptr;
 	float lifeTime = 1.5f;
 	FPOINT scale;
 

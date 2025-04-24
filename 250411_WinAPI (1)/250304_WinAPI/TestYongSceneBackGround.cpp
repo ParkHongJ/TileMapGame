@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TestYongSceneBackGround.h"
 #include "Image.h"
+#include "ImageManager.h"
+
 
 TestYongSceneBackGround::TestYongSceneBackGround()
 {

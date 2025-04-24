@@ -3,6 +3,7 @@
 #include "Image.h"
 #include "CameraManager.h"
 #include "Character.h"
+#include "ImageManager.h"
 
 HRESULT ShopKeeper::Init()
 {

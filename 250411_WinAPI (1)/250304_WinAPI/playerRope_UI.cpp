@@ -4,6 +4,8 @@
 #include "PlayerStatus.h"
 #include "ObjectManager.h"
 #include "Character.h"
+#include "ImageManager.h"
+
 
 playerRope_UI::playerRope_UI(ID2D1RenderTarget* renderTarget)
 {

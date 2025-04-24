@@ -197,9 +197,9 @@ void GameScene::RenderBackground(ID2D1RenderTarget* rt)
     int tilesX = static_cast<int>(ceil((40 * GAME_TILE_SIZE) / tileDrawSize)); // 1920 / 192 = 10
     int tilesY = static_cast<int>(ceil((32 * GAME_TILE_SIZE) / tileDrawSize)); // 1536 / 192 = 8
 
-    for (int y = 0; y < 32; ++y)
+    for (int y = 0; y < 16; ++y)
     {
-        for (int x = 0; x < 40; ++x)
+        for (int x = 0; x < 20; ++x)
         {
             float drawX = x * tileDrawSize * 0.5f;
             float drawY = y * tileDrawSize * 0.5f;

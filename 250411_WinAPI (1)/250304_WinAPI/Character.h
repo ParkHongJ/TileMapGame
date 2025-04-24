@@ -13,7 +13,7 @@
 class BoxCollider;
 class PlayerStatus;
 class Item;
-
+class Image;
 enum class SubAnim {
 	NONE,
 	JUMP_UP,

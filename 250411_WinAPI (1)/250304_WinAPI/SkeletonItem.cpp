@@ -10,6 +10,7 @@
 #include "Character.h"
 #include "ParticleManager.h"
 #include "Particle.h"
+#include "ImageManager.h"
 
 SkeletonItem::SkeletonItem()
 {
