@@ -22,7 +22,7 @@ Whip::~Whip()
 HRESULT Whip::Init()
 {
 	//dropImage = ImageManager::GetInstance()->FindImage("Tae_Player");
-	holdImage = ImageManager::GetInstance()->FindImage("Tae_Player");
+	//holdImage = ImageManager::GetInstance()->FindImage("Tae_Player");
 	Pos = { 300, 100 };
 
 	//col = new BoxCollider({ 0,0 }, { 200,200 }, CollisionMaskType::PLAYERATTACK, this);

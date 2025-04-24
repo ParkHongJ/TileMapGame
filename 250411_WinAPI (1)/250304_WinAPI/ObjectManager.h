@@ -37,7 +37,7 @@ public:
     GameObject* FindAbleInteractObject(GameObject* obj);
 
 private:
-    unordered_map<unsigned int, GameObject*> objects;
+    map<unsigned int, GameObject*> objects;
     Character* player;
     //unordered_map<unsigned int, GameObject*> tiles;
     //unordered_map<unsigned int, InteractObject*> interactObjects;

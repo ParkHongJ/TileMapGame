@@ -37,6 +37,7 @@ HRESULT Item::Init()
 void Item::SetImage(string input)
 {
 	holdImage= ImageManager::GetInstance()->FindImage(input);
+	int i = 5;
 }
 
 void Item::Update(float TimeDelta)
