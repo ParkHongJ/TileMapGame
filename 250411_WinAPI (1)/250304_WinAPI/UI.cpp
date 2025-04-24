@@ -92,19 +92,39 @@ HRESULT UI::InitTextRenderer(ID2D1RenderTarget* renderTarget, const wchar_t* fon
 	return hr;
 }
 
-void UI::RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, float x, float y, float opacity)
+void UI::RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, float x, float y, float opacity, D2D1::ColorF color)
 {
-	if (renderTarget && textFormat && textColorBrush)
+	//if (renderTarget && textFormat && textColorBrush)
+	//{
+	//	textColorBrush->SetOpacity(opacity);
+	//	D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 200.0f, y + 50.0f); // 텍스트 영역 설정
+	//	renderTarget->DrawText(
+	//		text.c_str(),
+	//		text.length(),
+	//		textFormat.Get(),
+	//		layoutRect,
+	//		textColorBrush.Get()
+	//	);
+	//}
+	if (renderTarget && textFormat)
 	{
-		textColorBrush->SetOpacity(opacity);
-		D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 200.0f, y + 50.0f); // 텍스트 영역 설정
-		renderTarget->DrawText(
-			text.c_str(),
-			text.length(),
-			textFormat.Get(),
-			layoutRect,
-			textColorBrush.Get()
+		ComPtr<ID2D1SolidColorBrush> localTextColorBrush;
+		HRESULT hr = renderTarget->CreateSolidColorBrush(
+			color, // 인자로 받은 색상 사용
+			&localTextColorBrush
 		);
+		if (SUCCEEDED(hr))
+		{
+			localTextColorBrush->SetOpacity(opacity);
+			D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 200.0f, y + 50.0f); // 텍스트 영역 설정
+			renderTarget->DrawText(
+				text.c_str(),
+				text.length(),
+				textFormat.Get(),
+				layoutRect,
+				localTextColorBrush.Get()
+			);
+		}
 	}
 }
 

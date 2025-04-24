@@ -41,7 +41,7 @@ public:
 	FPOINT ResolutionRatio();
 
 	HRESULT InitTextRenderer(ID2D1RenderTarget* renderTarget, const wchar_t* fontFamily, float fontSize, D2D1::ColorF color);
-	void RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, float x, float y, float opacity = 0.5f);
+	void RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, float x, float y, float opacity = 0.5f, D2D1::ColorF color = D2D1::ColorF::White);
 	void RenderText(ID2D1RenderTarget* renderTarget, const std::wstring& text, D2D1_RECT_F layoutRect);
 
 	UI();
