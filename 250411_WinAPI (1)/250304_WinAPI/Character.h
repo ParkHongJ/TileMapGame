@@ -122,6 +122,7 @@ private:
 
 	priority_queue<pair<float, GameObject*>>        interActionPQ;
 	float								            interactionRadius;
+	float								            interactionItemRadius;
 	float							            	interactionOffset;
 
 

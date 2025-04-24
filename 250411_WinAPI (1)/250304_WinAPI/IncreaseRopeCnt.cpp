@@ -4,7 +4,7 @@
 #include "IncreaseRopeCnt.h"
 #include "Character.h"
 #include "CameraManager.h"
-
+#include "ItemDialog.h"
 #include "ImageManager.h"
 IncreaseRopeCnt::IncreaseRopeCnt()
 {
@@ -29,11 +29,26 @@ HRESULT IncreaseRopeCnt::Init()
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
 	interactState = INTERACTSTATE::INTERACT_UNABLE;
+	price = 2000;
+	if (0 < price)
+	{
+		dialog = new ItemDialog();
+		ObjectManager::GetInstance()->AddObject(RENDER_UI, dialog);
+		dialog->SetPrice(price);
+		dialog->SetPos(Pos);
+	}
 	return S_OK;
 }
 
 void IncreaseRopeCnt::Update(float TimeDelta)
 {
+	if (dialog)
+	{
+		dialog->SetPos(Pos);
+		dialog->SetCol(isDialogCol);
+		isDialogCol = false;
+	}
+	bPhysics = true;
 	DropMove(TimeDelta);
 }
 
@@ -54,9 +69,16 @@ void IncreaseRopeCnt::Equip()
 
 void IncreaseRopeCnt::Equip(void* info)
 {
+	//itemState = ItemState::STATE_EQUIP;
+	//PlayerStatus* desc = (PlayerStatus*)info;
+	//desc->GetInfo()->ropeCount += 5;
+
 	itemState = ItemState::STATE_EQUIP;
 	PlayerStatus* desc = (PlayerStatus*)info;
-	desc->GetInfo()->ropeCount += 5;
+	desc->SetRopeCount(desc->GetRopeCount() + 5);
+	price = 0;
+	isDialogCol = false;
+	dialog->SetCol(isDialogCol);
 }
 
 void IncreaseRopeCnt::UnEquip()
@@ -83,9 +105,12 @@ void IncreaseRopeCnt::Detect(GameObject* obj)
 {
 	if (auto player = obj->GetType<Character>())
 	{
-		// 상점일 경우 추가 분기 필요
-		Equip(player->GetPlayerStatus());
-		SetDestroy();
+		isDialogCol = true;
+		if (0 >= price)
+		{
+			//Equip(player->GetPlayerStatus());
+			SetDestroy();
+		}
 	}
 
 	else if (auto player = obj->GetType<Character>())

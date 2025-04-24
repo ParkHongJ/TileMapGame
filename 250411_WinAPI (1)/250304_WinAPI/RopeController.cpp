@@ -118,10 +118,10 @@ void RopeController::CreateRope()
 	newPos.y += createCnt * 64;
 
 	FPOINT leftPos = newPos;
-	leftPos.x -= GAME_TILE_SIZE / 2;
+	leftPos.x -= GAME_TILE_SIZE / 4;
 
 	FPOINT RightPos = newPos;
-	RightPos.x += GAME_TILE_SIZE / 2;
+	RightPos.x += GAME_TILE_SIZE / 4;
 
 	if (CollisionManager::GetInstance()->RaycastType({ leftPos, {0.f, 1.f} }, 30.f, Down, CollisionMaskType::TILE, true, 1.0f) || 
 	CollisionManager::GetInstance()->RaycastType({ RightPos, {0.f, 1.f} }, 30.f, Down, CollisionMaskType::TILE, true, 1.0f))

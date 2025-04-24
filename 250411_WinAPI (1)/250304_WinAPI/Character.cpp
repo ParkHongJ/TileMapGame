@@ -76,6 +76,7 @@ HRESULT Character::Init()
 	targetHangOnPos = { 0.f, 0.f };
 	interActionPQ = {};
 	interactionRadius = 1.f;
+    interactionItemRadius = 30.f;
 	interactionOffset = 30.f;
 
 	// settings
@@ -1106,12 +1107,12 @@ void Character::JunUpdate(float TimeDelta)
             holdItemHitTime = holdItemHitMaxTime;
 		}
 
-		else
+		else 
 		{
 			vector<GameObject*> inCircleObjects;
 
 			FPOINT center = Pos;
-			CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionRadius, &inCircleObjects);
+			CollisionManager::GetInstance()->GetObjectsInCircle(center, interactionItemRadius, &inCircleObjects);
 			for (auto& iter : inCircleObjects)
 			{
 				if (nullptr != dynamic_cast<Item*>(iter)) // Test
@@ -1121,8 +1122,18 @@ void Character::JunUpdate(float TimeDelta)
                     if (temp->GetPrice() <= playerStatus->GetGold())
                     {
                         playerStatus->SetGold(playerStatus->GetGold() - temp->GetPrice());
-                        holdItem = temp;
-                        holdItem->Equip();
+
+                        if (ItemType::TYPE_ONCE != temp->GetItemType())
+                        {
+                            temp->Equip();
+                            holdItem = temp;
+                        }
+
+                        else
+                        {
+                            temp->Equip(playerStatus);
+                        }
+
                     }
                     break;
 
@@ -1132,13 +1143,13 @@ void Character::JunUpdate(float TimeDelta)
 
 	}
 
-	if (km->IsOnceKeyDown('V'))
-	{
-		if (holdItem)
-		{
-			holdItem->Use();
-		}
-	}
+	//if (km->IsOnceKeyDown('V'))
+	//{
+	//	if (holdItem)
+	//	{
+	//		holdItem->Use();
+	//	}
+	//}
 
     if (km->IsOnceKeyDown('I'))
     {

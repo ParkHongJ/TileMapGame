@@ -5,6 +5,7 @@
 #include "CameraManager.h"
 #include "IncreaseHP.h"
 #include "ImageManager.h"
+#include "ItemDialog.h";
 
 IncreaseHP::IncreaseHP()
 {
@@ -23,16 +24,34 @@ HRESULT IncreaseHP::Init()
 
 	Pos = { 800, 200 };
 
-	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 20 }, CollisionMaskType::ITEM, this);
+	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 50 }, CollisionMaskType::ITEM, this);
 
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
+
+	price = 1000;
+	if (0 < price)
+	{
+		dialog = new ItemDialog();
+		ObjectManager::GetInstance()->AddObject(RENDER_UI, dialog);
+		dialog->SetPrice(price);
+		dialog->SetPos(Pos);
+	}
+
 	return S_OK;
 }
 
 void IncreaseHP::Update(float TimeDelta)
 {
+	if (dialog)
+	{
+		dialog->SetPos(Pos);
+		dialog->SetCol(isDialogCol);
+		isDialogCol = false;
+	}
+
+	bPhysics = true;
 	DropMove(TimeDelta);
 }
 
@@ -40,7 +59,7 @@ void IncreaseHP::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 10, objectScale.x * 0.5f, objectScale.y * 0.5f); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 9, objectScale.x * 0.5f, objectScale.y * 0.5f); // 임의값
 }
 
 void IncreaseHP::Release()
@@ -57,7 +76,10 @@ void IncreaseHP::Equip(void* info)
 {
 	itemState = ItemState::STATE_EQUIP;
 	PlayerStatus* desc = (PlayerStatus*)info;
-	desc->PlusPlayerHP(1);
+	desc->PlusPlayerHP(1);;
+	price = 0;
+	isDialogCol = false;
+	dialog->SetCol(isDialogCol);
 }
 
 void IncreaseHP::UnEquip()
@@ -84,8 +106,12 @@ void IncreaseHP::Detect(GameObject* obj)
 {
 	if (auto player = obj->GetType<Character>())
 	{
-		Equip(player->GetPlayerStatus());
-		SetDestroy();
+		isDialogCol = true;
+		if (0 >= price)
+		{
+			//Equip(player->GetPlayerStatus());
+			SetDestroy();
+		}
 	}
 
 	else if (auto player = obj->GetType<Character>())

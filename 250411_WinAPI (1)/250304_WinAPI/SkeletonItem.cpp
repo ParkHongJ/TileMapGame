@@ -255,8 +255,10 @@ void SkeletonItem::DropMove(float TimeDelta)
 
 void SkeletonItem::DropMoveX(float TimeDelta)
 {
+
 }
 
 void SkeletonItem::DropMoveY(float TimeDelta)
 {
+
 }
