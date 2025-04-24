@@ -126,7 +126,7 @@ UI::UI()
 {
 	x_pos_divide_factor = 25.0f;
 
-	defaultOpacity = 0.5f;		//기본 반투명
+	defaultOpacity = 0.7f;		//기본 반투명
 	opacityDuration = 3.0f;		//3초간 또렷해짐
 	opacityTimer = 0.0f;		//3초 카운트용 변수
 	isOpaque = false;			//기본적으로 반투명
