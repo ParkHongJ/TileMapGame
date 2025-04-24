@@ -123,7 +123,7 @@ void SkeletonItem::DeadEvent()
 	for (int i = 0; i < 5; i++)
 	{
 		FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
-		Particle* particle = ParticleManager::GetInstance()->GetParticle("Rubble", Pos + randPos, 0.f, 30.f, 0.15f, 6, 1);
+		Particle* particle = ParticleManager::GetInstance()->GetParticle("Rubble", Pos + randPos, 0.f, 30.f, 0.15f, 6, 0);
 
 		PhysicsOption* physicsOp = new PhysicsOption;
 		SizeOption* sizeOp = new SizeOption(0.04f);

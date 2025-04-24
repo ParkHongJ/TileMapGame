@@ -8,6 +8,8 @@
 #include "Character.h"
 #include "Chicken.h"
 #include "DummyHongPlayer.h"
+#include "GhostJar.h"
+#include "GhostJuwel.h"
 #include "Gun.h"
 #include "HeavyBlock.h"
 #include "IncreaseBomb.h"
@@ -30,6 +32,8 @@ REGISTER_OBJECT(ChangeCobwebBomb)
 REGISTER_OBJECT(Character)
 REGISTER_OBJECT(Chicken)
 REGISTER_OBJECT(DummyHongPlayer)
+REGISTER_OBJECT(GhostJar)
+REGISTER_OBJECT(GhostJuwel)
 REGISTER_OBJECT(Gun)
 REGISTER_OBJECT(HeavyBlock)
 REGISTER_OBJECT(IncreaseBomb)

@@ -108,6 +108,7 @@ HRESULT Character::Init()
 
     ObjectManager::GetInstance()->SetPlayer(this);
     objectRenderId = RENDER_PLAYER;
+    //objectName = OBJECTNAME::PLAYER;
 
 	return S_OK;
 }
@@ -941,11 +942,22 @@ void Character::Detect(GameObject* obj)
 
 void Character::JunUpdate(float TimeDelta)
 {
+    playerStatus->Update(TimeDelta);
 	auto km = KeyManager::GetInstance();
 
+    if (preHoldItem)
+    {
+        holdItemHitTime -= TimeDelta;
+        if (0.f >= holdItemHitTime)
+        {
+            preHoldItem = nullptr;
+
+        }
+    }
 	// Add JunYong
 	if (km->IsOnceKeyDown('F'))
 	{
+       // CameraManager::GetInstance()->SetDeadCam();
 		if (0 < playerStatus->GetBombCount())
 		{
 			FPOINT offset = { 50,0 };
@@ -1018,8 +1030,15 @@ void Character::JunUpdate(float TimeDelta)
 				if (nullptr != dynamic_cast<Item*>(iter)) // Test
 					//if (OBJECTNAME::GUN == (iter)->GetObjectName()) // Test
 				{
-					holdItem = dynamic_cast<Item*>(iter);
-					holdItem->Equip();
+                    Item* temp = dynamic_cast<Item*>(iter);
+                    if (temp->GetPrice() <= playerStatus->GetGold())
+                    {
+                        playerStatus->SetGold(playerStatus->GetGold() - temp->GetPrice());
+                        holdItem = temp;
+                        holdItem->Equip();
+                    }
+                    break;
+
 				}
 			}
 		}

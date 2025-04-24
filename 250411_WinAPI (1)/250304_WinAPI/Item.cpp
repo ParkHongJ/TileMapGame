@@ -59,7 +59,8 @@ void Item::Equip()
 	ChangeState(ItemState::STATE_EQUIP);
 	objectRenderId = RENDER_HOLD;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM,this);
-
+	bPhysics = false;
+	price = 0;
 }
 
 void Item::Equip(void* info)
@@ -68,6 +69,7 @@ void Item::Equip(void* info)
 	objectRenderId = RENDER_HOLD;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM, this);
 	bPhysics = false;
+	price = 0;
 }
 
 void Item::Equip(GameObject* owner)
@@ -76,6 +78,7 @@ void Item::Equip(GameObject* owner)
 	objectRenderId = RENDER_HOLD;
 	CollisionManager::GetInstance()->ChangeMaskType(CollisionMaskType::WORLDOBJECT, CollisionMaskType::ITEM, this);
 	bPhysics = false;
+	price = 0;
 }
 
 void Item::UnEquip()

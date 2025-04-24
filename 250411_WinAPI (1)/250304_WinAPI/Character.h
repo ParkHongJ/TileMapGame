@@ -157,7 +157,7 @@ private:
 	Item* preHoldItem;
 
 	float holdItemHitTime = 0.f;
-	float holdItemHitMaxTime = 0.1f;
+	float holdItemHitMaxTime = 0.2f;
 
 public:
 	inline Item* GetPreHoldItem() { return preHoldItem; };

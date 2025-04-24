@@ -32,6 +32,7 @@ void CameraManager::Release()
 void CameraManager::Update( float TimeDelta)
 {
 	//target = playerPos;
+
 	currYOffset += (yOffset - currYOffset) * yOffsetSpeed * TimeDelta;
 
 	ShakeUpdate(TimeDelta);
@@ -115,6 +116,13 @@ void CameraManager::CameraShake(float time, float power)
 	isShake = true;
 	shakeTime = time;
 	shakePower = power;
+}
+
+void CameraManager::SetDeadCam()
+{
+	isPlayerDead = true;
+	offset.x = 200; // 이미지 보고 수치 조절
+	offset.y = 100;
 }
 
 //Viewport CameraManager::GetInRect()

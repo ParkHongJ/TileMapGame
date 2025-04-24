@@ -20,7 +20,7 @@ HRESULT IncreaseHP::Init()
 	dropImage = ImageManager::GetInstance()->FindImage("turkey");
 	holdImage = ImageManager::GetInstance()->FindImage("turkey");
 
-	Pos = { 800, 100 };
+	Pos = { 800, 200 };
 
 	BoxCollider* col = new BoxCollider({ 0,0 }, { 50, 20 }, CollisionMaskType::ITEM, this);
 
@@ -39,7 +39,7 @@ void IncreaseHP::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 0, objectScale.x * 0.5f, objectScale.y * 0.5f); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 0, 10, objectScale.x * 0.5f, objectScale.y * 0.5f); // 임의값
 }
 
 void IncreaseHP::Release()

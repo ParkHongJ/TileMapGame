@@ -1,12 +1,13 @@
 #pragma once
+
 #include "Item.h"
-class Chicken : public Item
+class GhostJar : public Item
 {
-	GENERATE_BODY(Textures / Entities / Mounts / turkey.png, 128, 128)
+	GENERATE_BODY(Textures / items.png, 128, 128)
 
 public:
-	Chicken();
-	virtual ~Chicken();
+	GhostJar();
+	virtual ~GhostJar();
 
 public:
 	virtual HRESULT Init() override;
@@ -26,26 +27,10 @@ public:
 	virtual void Use() override; // 사용
 	virtual void Use(void* info) override;
 	virtual void Detect(GameObject* obj) override;
-
-	virtual void FrameUpdate(float TimeDelta) override;
-
-	void Fire();
-
+	virtual void DeadEvent();
 
 	// 던지거나 죽으면서 뱉으면 DropMove로 움직여보자.
 	virtual void DropMove(float TimeDelta) override;
 	virtual void DropMoveX(float TimeDelta) override;
 	virtual void DropMoveY(float TimeDelta) override;
-
-private:
-	int bulletCnt;
-	float fireCoolTime;
-	float fireMaxCoolTime;
-	bool isFire;
-
-	int fireCurFrameX;
-
-	Image* fireImage;
-	FPOINT fireOffset;
 };
-

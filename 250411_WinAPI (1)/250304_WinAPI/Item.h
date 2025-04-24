@@ -114,8 +114,12 @@ public:
 	void SetHoldItemPos(FPOINT pos, bool isFlip);
 
 	bool IsPlayerDropItem(GameObject* player);
+	void DeleteDialog() { dialog = nullptr; };
+
 protected:
-	unsigned int price;
+	unsigned int price = 0;
+	class ItemDialog* dialog = nullptr;
+	bool isDialogCol = false;
 
 	float RayDis;  // Ray 활용 타일과 튕기기 테스트
 

@@ -149,8 +149,11 @@
     <ClCompile Include="AttackState.cpp" />
     <ClCompile Include="BossMonster.cpp" />
     <ClCompile Include="Chicken.cpp" />
+    <ClCompile Include="GhostJar.cpp" />
+    <ClCompile Include="GhostJuwel.cpp" />
     <ClCompile Include="IncreaseHP.cpp" />
     <ClCompile Include="IncreaseRopeCnt.cpp" />
+    <ClCompile Include="ItemDialog.cpp" />
     <ClCompile Include="PlayerSelectScene.cpp" />
     <ClCompile Include="Rope.cpp" />
     <ClCompile Include="RopeController.cpp" />
@@ -248,8 +251,11 @@
     <ClInclude Include="AttackState.h" />
     <ClInclude Include="BossMonster.h" />
     <ClInclude Include="Chicken.h" />
+    <ClInclude Include="GhostJar.h" />
+    <ClInclude Include="GhostJuwel.h" />
     <ClInclude Include="IncreaseHP.h" />
     <ClInclude Include="IncreaseRopeCnt.h" />
+    <ClInclude Include="ItemDialog.h" />
     <ClInclude Include="PlayerSelectScene.h" />
     <ClInclude Include="Rope.h" />
     <ClInclude Include="RopeController.h" />

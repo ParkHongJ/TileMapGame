@@ -37,6 +37,7 @@ private:
 
 	FPOINT curPos;
 	FPOINT curOffset;
+	bool isPlayerDead = false;
 
 public: 
 	HRESULT Init();
@@ -54,5 +55,6 @@ public:
 
 	void SetTargetPos(FPOINT input) { this->target = input; }
 	void CameraShake(float time, float power);
+	void SetDeadCam();
 };
 

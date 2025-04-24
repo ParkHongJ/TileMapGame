@@ -91,6 +91,9 @@
     <Filter Include="MainGame\Scene\Yong\Rope">
       <UniqueIdentifier>{40dbf96b-8dec-44b7-9059-c3b15f5ef844}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainGame\Scene\Yong\UI">
+      <UniqueIdentifier>{ede8c852-1ba1-47d6-9d33-954fdad41bec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -389,6 +392,15 @@
     </ClCompile>
     <ClCompile Include="IncreaseHP.cpp">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDialog.cpp">
+      <Filter>MainGame\Scene\Yong\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostJar.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostJuwel.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -730,6 +742,15 @@
     </ClInclude>
     <ClInclude Include="IncreaseHP.h">
       <Filter>MainGame\Scene\Yong\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDialog.h">
+      <Filter>MainGame\Scene\Yong\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostJar.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostJuwel.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
