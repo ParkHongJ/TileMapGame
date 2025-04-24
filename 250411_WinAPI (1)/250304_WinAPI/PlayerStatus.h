@@ -6,6 +6,7 @@ struct PlayerStatusInfo
 	unsigned int bombCount;
 	unsigned int gold;
 	bool IsCobweb;
+	bool IsEnd;
 	unsigned int ropeCount;
 	float deadTime;
 	float GameTime;
@@ -65,6 +66,9 @@ public:
 	inline PLAYERSTATUSDESC* GetInfo() { return &info; };
 
 	inline const float  GetGameTime() const { return info.GameTime; };
+
+	inline const bool IsEnd() const { return info.IsEnd; };
+
 
 private:
 	PLAYERSTATUSDESC info;

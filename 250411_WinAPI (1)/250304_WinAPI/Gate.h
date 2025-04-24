@@ -24,6 +24,7 @@ private:
 	GateState gateState;
 	class Image* gateImage;
 	float objectScale;
+	class Collider* collider;
 	
 	int frameX;
 	int frameY;

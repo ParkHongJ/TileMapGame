@@ -37,7 +37,7 @@ HRESULT SkeletonItem::Init()
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 0;
 
-	holdOffset = { 50.f, 0.f };
+	holdOffset = { 35.f, 5.f };
 	return S_OK;
 }
 
@@ -60,7 +60,7 @@ void SkeletonItem::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 3, objectScale.x, objectScale.y, isFlip); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 3, objectScale.x , objectScale.y, isFlip); // 임의값
 }
 
 void SkeletonItem::Release()

@@ -10,6 +10,7 @@
 #include "Particle.h"
 #include "ParticleManager.h"
 
+
 SkeletonMonster::SkeletonMonster()
 {
     //int i = 5;
@@ -273,6 +274,11 @@ void SkeletonMonster::ReverseMove()
 
 void SkeletonMonster::Detect(GameObject* obj)
 {
+    //if (isChangeCol)
+    //{
+    //    return;
+    //}
+
     FPOINT playerPos = player->GetPos();
     
 
@@ -288,6 +294,13 @@ void SkeletonMonster::Detect(GameObject* obj)
             monsterState = MonsterState::DEAD;
             deadElipsedTime = 0.0f;
 
+            //colliderSize = { 0.0f, 0.0f };
+            if (!isChangeCol)
+            {
+                CollisionManager::GetInstance()->ChangeZ(CollisionMaskType::MONSTER, ORDER_Z::Z_CAVE, this);
+                isChangeCol = true;
+            }
+           
             for (int i = 0; i < 5; i++)
             {
                 float radius = 30.f; // 원하는 반경

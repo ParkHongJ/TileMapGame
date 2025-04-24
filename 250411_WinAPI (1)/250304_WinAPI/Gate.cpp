@@ -5,6 +5,8 @@
 #include "ImageManager.h"
 #include "CommonFunction.h"
 #include "GameManager.h"
+#include "Collider.h"
+
 HRESULT Gate::Init()
 {
 	gateImage = ImageManager::GetInstance()->FindImage("GateOpen");
@@ -16,6 +18,7 @@ HRESULT Gate::Init()
 	objectName = OBJECTNAME::GATE;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
 
+	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::WORLDOBJECT, this);
 	return S_OK;
 }
 
