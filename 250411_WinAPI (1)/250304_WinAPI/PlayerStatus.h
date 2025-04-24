@@ -32,6 +32,12 @@ public:
 		info.playerHP + hp < info.playerMaxHP ? info.playerHP += hp : info.playerHP = info.playerMaxHP;
 	};
 
+
+	inline void MinusPlayerHP()
+	{
+		1 <= info.playerHP ? --info.playerHP : info.playerHP = 0;
+	};
+
 	inline const unsigned int GetPlayerMaxHP() const { return info.playerMaxHP; };
 	inline void SetPlayerMaxHP(unsigned int hp) { info.playerMaxHP = hp; };
 

@@ -21,6 +21,7 @@ public:
         IDLE_FALL_ALMOST,
         IDLE_FALL_FROM_HEIGHT,
         IDLE_FAINT,
+        IDLE_ONDAMAGE,
         IDLE_DIE
     };
 
