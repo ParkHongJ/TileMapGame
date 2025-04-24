@@ -204,8 +204,8 @@ void Monster::MoveJump(float TimeDelta)
 			if (velocity.Length() < 130.f)
 			{
 				velocity = { 0.f, 0.f };
-				//useGravity = false;
-				//bPhysics = false;
+				useGravity = false;
+				bPhysics = false;
 			}
 
 			// »ìÂ¦ ¹Ð±â (°ãÄ§ ¹æÁö)
