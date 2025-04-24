@@ -2,7 +2,7 @@
 #include "Item.h"
 class IncreaseHP : public Item
 {
-	GENERATE_BODY(Textures / Entities / Mounts / turkey.png, 128, 128)
+	GENERATE_BODY(Textures/Entities/Mounts/turkey.png, 128, 128)
 public:
 	IncreaseHP();
 	virtual ~IncreaseHP();
