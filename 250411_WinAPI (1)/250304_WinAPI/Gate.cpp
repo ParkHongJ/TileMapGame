@@ -5,6 +5,7 @@
 #include "ImageManager.h"
 #include "CommonFunction.h"
 #include "GameManager.h"
+#include "Collider.h"
 HRESULT Gate::Init()
 {
 	gateImage = ImageManager::GetInstance()->FindImage("GateOpen");
@@ -14,7 +15,7 @@ HRESULT Gate::Init()
 	Pos.y = 216.f;
 	
 	objectName = OBJECTNAME::GATE;
-
+	collider = new BoxCollider({ 0.f,0.f }, { GAME_TILE_SIZE, GAME_TILE_SIZE }, CollisionMaskType::WORLDOBJECT, this);
 	return S_OK;
 }
 
@@ -24,6 +25,14 @@ void Gate::Release()
 
 void Gate::Update(float TimeDelta)
 {
+	if (bNextStage)
+	{
+		nextStageDelay -= TimeDelta;
+		if (nextStageDelay <= 0.f)
+		{
+			GameManager::GetInstance()->TravelToNextScene();
+		}
+	}
 }
 
 void Gate::LateUpdate(float TimeDelta)
@@ -68,5 +77,8 @@ void Gate::EnterGate()
 {
 	//´ÙÀ½ ¾ÀÀ¸·Î °¡Áî¾Ñ
 
-	GameManager::GetInstance()->TravelToNextScene();
+	if (bNextStage == false)
+	{
+		bNextStage = true;
+	}
 }

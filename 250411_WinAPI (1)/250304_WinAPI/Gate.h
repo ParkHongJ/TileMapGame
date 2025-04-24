@@ -27,5 +27,10 @@ private:
 	
 	int frameX;
 	int frameY;
+
+	class BoxCollider* collider;
+
+	float nextStageDelay = 2.f;
+	bool bNextStage = false;
 };
 

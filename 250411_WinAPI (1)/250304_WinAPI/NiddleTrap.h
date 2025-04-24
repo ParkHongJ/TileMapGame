@@ -20,5 +20,9 @@ private:
 	class Image* NiddleImage;
 
 	bool bHit = false;
+
+	GameObject* cachedTrappedObject;
+
+	float downTime = 1.f;
 };
 

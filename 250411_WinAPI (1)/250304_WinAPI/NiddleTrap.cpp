@@ -23,6 +23,16 @@ void NiddleTrap::Release()
 
 void NiddleTrap::Update(float TimeDelta)
 {
+	if (cachedTrappedObject)
+	{
+		downTime -= TimeDelta;
+		if (downTime > 0.f)
+		{
+			FPOINT targetPos = cachedTrappedObject->GetPos();
+			targetPos.y += TimeDelta * 15.f;
+			cachedTrappedObject->SetPos(targetPos);
+		}
+	}
 }
 
 void NiddleTrap::LateUpdate(float TimeDelta)
@@ -54,6 +64,11 @@ void NiddleTrap::Detect(GameObject* obj)
 		{
 			bHit = true;
 			//TODO
+			if (cachedTrappedObject == nullptr)
+			{
+				cachedTrappedObject = obj;
+
+			}
 		}
 	}
 }
