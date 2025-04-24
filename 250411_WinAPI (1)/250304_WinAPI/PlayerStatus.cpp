@@ -27,4 +27,9 @@ void PlayerStatus::Update(float TimeDelta)
 			CameraManager::GetInstance()->SetDeadCam();
 		}
 	}
+
+	else
+	{
+		info.GameTime += TimeDelta;
+	}
 }

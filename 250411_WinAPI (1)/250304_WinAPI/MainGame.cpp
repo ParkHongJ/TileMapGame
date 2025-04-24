@@ -162,6 +162,7 @@ void MainGame::Update()
 void MainGame::LateUpdate()
 {
 	float deltaTime = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+	//CollisionManager::GetInstance()->LateUpdate(deltaTime);
 	ObjectManager::GetInstance()->LateUpdate(deltaTime);
 	GameManager::GetInstance()->UpdateNavMesh();
 }

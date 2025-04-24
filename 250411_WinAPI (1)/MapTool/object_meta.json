@@ -39,20 +39,13 @@
             "y": 128
         }
     },
+    
     {
         "name": "DummyHongPlayer",
         "atlasPath": "Textures/char_lime.png",
         "cellSize": {
             "x": 128,
             "y": 128
-        }
-    },
-    {
-        "name": "Gate",
-        "atlasPath": "Textures/GateOpen.png",
-        "cellSize": {
-            "x": 396,
-            "y": 396
         }
     },
     {

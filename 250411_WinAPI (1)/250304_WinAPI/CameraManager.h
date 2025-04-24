@@ -38,6 +38,7 @@ private:
 	FPOINT curPos;
 	FPOINT curOffset;
 	bool isPlayerDead = false;
+	FPOINT deadOffset;
 
 public: 
 	HRESULT Init();

@@ -140,6 +140,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     //ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
 
     GameManager::GetInstance()->Init("hongScene");
+    //GameManager::GetInstance()->Init("caveScene");
 
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerHP_UI(renderTarget));
    // ObjectManager::GetInstance()->AddObject(RENDER_UI, new goldBackground_UI());

@@ -4,6 +4,7 @@
 #include "Character.h"
 #include "CollisionManager.h"
 #include "CommonFunction.h"
+#include "ItemDialog.h"
 #include "ImageManager.h"
 
 Item::Item() : 
@@ -20,7 +21,12 @@ itemState(ItemState::STATE_UNEQUIP), startFrameIndexX(0), startFrameIndexY(0), e
 
 Item::~Item()
 {
-	
+	if (dialog)
+	{
+		//dialog->SetPos(Pos);
+		dialog->SetCol(false);
+		//isDialogCol = false;
+	}
 }
 
 HRESULT Item::Init()
@@ -381,7 +387,12 @@ bool Item::IsPlayerDropItem(GameObject* player)
 {
 	if (nullptr != dynamic_cast<Character*>(player))
 	{
-		return this == dynamic_cast<Character*>(player)->GetPreHoldItem();
+		if (this == dynamic_cast<Character*>(player)->GetPreHoldItem())
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	return false;

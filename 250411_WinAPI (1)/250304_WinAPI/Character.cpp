@@ -646,6 +646,15 @@ void Character::HandleAttackLogic() {
     switch (attack->GetCurrentSubState()) {
     case AttackState::SubState::ATTACK_WHIP:
         // TODO : 애니메이션 프레임별로 collision 검사, 채찍 아이템 render
+
+        if (holdItem)
+        {
+            holdItem->Use();
+            isAttacking = false;
+            ChangeState(&idleState);
+            return;
+        }
+
         whip->SetHoldItemPos(Pos, isFlip);
         whip->Use(&currFrameInd.x);
         
@@ -1024,13 +1033,17 @@ void Character::JunUpdate(float TimeDelta)
         if (0.f >= holdItemHitTime)
         {
             preHoldItem = nullptr;
-
         }
     }
 	// Add JunYong
+    if (km->IsOnceKeyDown('T')) // Test
+    {
+        CameraManager::GetInstance()->SetDeadCam();
+    }
+
 	if (km->IsOnceKeyDown('F'))
 	{
-       // CameraManager::GetInstance()->SetDeadCam();
+      
 		if (0 < playerStatus->GetBombCount())
 		{
 			FPOINT offset = { 50,0 };
@@ -1090,6 +1103,7 @@ void Character::JunUpdate(float TimeDelta)
 
 			preHoldItem = holdItem;
 			holdItem = nullptr;
+            holdItemHitTime = holdItemHitMaxTime;
 		}
 
 		else

@@ -89,8 +89,29 @@ void CollisionManager::Update(float TimeDelta)
             ++i;
     }
 
-    //BoxAll();
     ColMaskAABB();
+    //BoxAll();
+ 
+}
+
+void CollisionManager::LateUpdate(float TimeDelta)
+{
+    //for (auto& test : layerCollisionMap)
+    //{
+    //    for (auto iter = test.second.begin(); iter != test.second.end();)
+    //    {
+    //        if (true == (*iter)->GetOwner()->IsDestroyed())
+    //        {
+    //            iter = test.second.erase(iter);
+    //        }
+
+    //        else
+    //        {
+    //            //(*iter)->Update(TimeDelta);
+    //            ++iter;
+    //        }
+    //    }
+    //}
 }
 
 void CollisionManager::Release()
@@ -118,7 +139,7 @@ void CollisionManager::Clear()
 void CollisionManager::DebugRender(ID2D1RenderTarget* renderTarget)
 {
 #ifdef _DEBUG
-	/*for (auto& collider : colliders)
+	for (auto& collider : colliders)
 	{
 		collider->DebugRender(renderTarget);
 	}
@@ -129,7 +150,7 @@ void CollisionManager::DebugRender(ID2D1RenderTarget* renderTarget)
         {
             iter->DebugRender(renderTarget);
         }
-    }*/
+    }
 
     // Debug Ray ½Ã°¢È­
     for (const auto& ray : debugRays)
