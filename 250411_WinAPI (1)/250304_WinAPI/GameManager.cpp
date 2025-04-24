@@ -259,6 +259,8 @@ void GameManager::CreateCaveRendertarget(ID2D1RenderTarget* mainRT)
 
 void GameManager::Init(const char* path)
 {
+	//default key
+	playerImageKey = "char_yellow";
 	string scenePath = "Data/" + string(path);
 
 	string tilePath = scenePath + ".tilemap";
@@ -314,6 +316,11 @@ bool GameManager::HasTile(int x, int y)
 		return false;
 
 	return tileMap[y][x]->IsValid();
+}
+
+void GameManager::SetPlayerImageKey(string key)
+{
+	playerImageKey = key;
 }
 
 vector<JumpNode*> GameManager::FindPath(JumpNode* start, JumpNode* goal)

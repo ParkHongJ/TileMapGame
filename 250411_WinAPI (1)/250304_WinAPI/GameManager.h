@@ -41,6 +41,7 @@ public:
 
 	void DestructionTile(const FPOINT& tilePos);
 	bool HasTile(int x, int y);
+	void SetPlayerImageKey(string key);
 	static vector<JumpNode*> jumpNodes;
 	vector<JumpNode*> FindPath(JumpNode* start, JumpNode* goal);
 
@@ -66,6 +67,7 @@ private:
 	Tile* tileMap[36][44];
 	Tile* caveTileMap[36][44];
 	ComPtr<ID2D1BitmapRenderTarget> caveRenderTarget;
+	string playerImageKey;
 
 	
 };
