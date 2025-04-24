@@ -35,7 +35,7 @@ HRESULT BossMonster::Init()
 
     SetPos({ 550,200 });
     monsterHP = 1000;
-    damage = 1;
+    damage = 2;
     moveSpeed = 55.0f;
     heatCoolTime = 0.0f;
     monsterState = MonsterState::IDLE;
@@ -434,18 +434,7 @@ void BossMonster::Detect(GameObject* obj)
 
         if (playerPosBottom < monsterPosTop)
         {
-            heatCoolTime += time;
-            monsterState = MonsterState::ATTACK;
-     
-            if (heatCoolTime > 1.0f)
-            {
-                //monsterHP -= 1;
-                heatCoolTime = 0;               
-            }
-            /*if (monsterHP == 0)
-            {
-                SetDestroy();
-            }*/
+            monsterState = MonsterState::ATTACK;      
         }
     }
  
