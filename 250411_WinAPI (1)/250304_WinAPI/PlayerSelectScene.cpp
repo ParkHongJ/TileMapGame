@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PlayerSelectScene.h"
+#include "GameManager.h"
 #include "ImageManager.h"
 #include "KeyManager.h"
 #include "Image.h"
@@ -117,7 +118,10 @@ void PlayerSelectScene::Update(float TimeDelta)
             isFadingOut = false;
             sceneOpacity = 0.0f;
 
+            // key 값 전달
+            GameManager::GetInstance()->SetPlayerImageKey(characterKeys[selectedNum]);
             SceneManager::GetInstance()->ChangeScene("게임");
+
         }
     }
 
@@ -128,12 +132,11 @@ void PlayerSelectScene::Update(float TimeDelta)
 
 
 
-    if (currSelectBuffTime <= 0.0f && !isSwitchingCharacter)
+    if (currSelectBuffTime <= 0.0f && !isSwitchingCharacter && !isFadingOut)
     {
         if (km->IsOnceKeyDown(VK_LEFT))
         {
-            selectedNum = (selectedNum + 1) % characterKeys.size();
-            displayCharacter = ImageManager::GetInstance()->FindImage(characterKeys[selectedNum]);
+            selectedNum = (selectedNum - 1 + characterKeys.size()) % characterKeys.size();
             isSwitchingCharacter = true;
             switchToLeft = true;
             currCharInd = { 1, 0 }; // 달리기 시작 프레임
@@ -142,13 +145,16 @@ void PlayerSelectScene::Update(float TimeDelta)
             selectButtonLeftOffset = -selectButtonInputAmplitude;
             selectButtonInputTimerL = selectButtonInputDuration;
             currSelectBuffTime = charSelectBuffTime;  // 쿨타임 리셋
+
+            wchar_t debugMsg[128];
+            swprintf_s(debugMsg, L"[VK_LEFT] selectedNum: %d (%s)\n", selectedNum, characterKeys[selectedNum]);
+            OutputDebugStringW(debugMsg);
         }
 
         if (km->IsOnceKeyDown(VK_RIGHT))
         {
-            selectedNum = (selectedNum - 1 + characterKeys.size()) % characterKeys.size();
-            displayCharacter = ImageManager::GetInstance()->FindImage(characterKeys[selectedNum]);
-            isSwitchingCharacter = true;
+            selectedNum = (selectedNum + 1 + characterKeys.size()) % characterKeys.size();
+             isSwitchingCharacter = true;
             switchToLeft = false;
             currCharInd = { 1, 0 }; // 달리기 시작 프레임
             runAnimTimer = 0.0f;
@@ -156,6 +162,9 @@ void PlayerSelectScene::Update(float TimeDelta)
             selectButtonRightOffset = +selectButtonInputAmplitude;
             selectButtonInputTimerR = selectButtonInputDuration;
             currSelectBuffTime = charSelectBuffTime;  // 쿨타임 리셋
+            wchar_t debugMsg[128];
+            swprintf_s(debugMsg, L"[VK_LEFT] selectedNum: %d (%s)\n", selectedNum, characterKeys[selectedNum]);
+            OutputDebugStringW(debugMsg);
         }
     }
 
@@ -185,9 +194,6 @@ void PlayerSelectScene::Update(float TimeDelta)
             currCharInd.x++;
 
             if (currCharInd.x == 4) {
-                selectedNum = switchToLeft ?
-                    (selectedNum + 1) % characterKeys.size() :
-                    (selectedNum - 1 + characterKeys.size()) % characterKeys.size();
 
                 displayCharacter = ImageManager::GetInstance()->FindImage(characterKeys[selectedNum]);
                 newCharCome = true;
@@ -334,8 +340,8 @@ void PlayerSelectScene::Render(ID2D1RenderTarget* renderTarget)
     }
     if (!buttonZ && displayCharacter)
     {
-
-        displayCharacter->FrameRender(renderTarget, displayCharacterPos.x, displayCharacterPos.y, currCharInd.x, currCharInd.y, 0.4f, 0.4f, currFilp);
+         
+        displayCharacter->FrameRender(renderTarget, displayCharacterPos.x, displayCharacterPos.y, currCharInd.x, currCharInd.y, 0.4f, 0.4f,sceneOpacity, currFilp);
         charMenu->Render(renderTarget, charMenuPos.x, charMenuPos.y, screencharMenuScale.x, screencharMenuScale.y, sceneOpacity);
 
     }
