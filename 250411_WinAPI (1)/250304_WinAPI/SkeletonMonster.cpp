@@ -60,6 +60,7 @@ void SkeletonMonster::Update(float TimeDelta)
     CheckTileCollision();
     CheckPlayerCollision();
     CheckItemCollision();
+    ApplyGravity(TimeDelta);
 
     // 벽 안 만났을 때 
     if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom && monsterState != MonsterState::DEAD)
@@ -78,23 +79,23 @@ void SkeletonMonster::Update(float TimeDelta)
         Move();
     }
 
-    // 오른쪽으로 가는데 밑에 타일이 없을 때 
-    if (!isTileTouchingRightBottom && !hasBottomTile && dir.x > 0 && monsterState != MonsterState::DEAD)
-    {
-        monsterState = MonsterState::MOVE;
-        dir.x *= -1;
-        hasBottomTile = true;
-        Move();
+    //// 오른쪽으로 가는데 밑에 타일이 없을 때 
+    //if (!isTileTouchingRightBottom && !hasBottomTile && dir.x > 0 && monsterState != MonsterState::DEAD)
+    //{
+    //    monsterState = MonsterState::MOVE;
+    //    dir.x *= -1;
+    //    hasBottomTile = true;
+    //    Move();
 
-    }
-    // 왼쪽으로 가는데 밑에 타일이 없을 때 
-    else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0 && monsterState != MonsterState::DEAD)
-    {
-        monsterState = MonsterState::MOVE;
-        dir.x *= -1;
-        hasBottomTile = true;
-        Move();
-    }
+    //}
+    //// 왼쪽으로 가는데 밑에 타일이 없을 때 
+    //else if (!isTileTouchingLeftBottom && !hasBottomTile && dir.x < 0 && monsterState != MonsterState::DEAD)
+    //{
+    //    monsterState = MonsterState::MOVE;
+    //    dir.x *= -1;
+    //    hasBottomTile = true;
+    //    Move();
+    //}
 
     // Player 만났을 때 Update , 데미지도 포함 
     if (dir.x < 0 && isPlayerTouchingLeft && monsterState != MonsterState::DEAD)
@@ -287,6 +288,14 @@ void SkeletonMonster::Move()
         Pos.x += dir.x * moveSpeed * time;
 }
 
+void SkeletonMonster::ApplyGravity(float TimeDelta)
+{
+    if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
+        Pos.y += moveSpeed * TimeDelta;
+    else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
+        Pos.y = Pos.y;
+}
+
 void SkeletonMonster::ReverseMove()
 {
 }
@@ -336,7 +345,7 @@ void SkeletonMonster::Render(ID2D1RenderTarget* renderTarget)
 
     if (skeletonImage)
     {
-        if (/*monsterHP == 1 && */monsterState == MonsterState::MOVE)
+        if (/*monsterHP == 1 && */monsterState == MonsterState::MOVE || monsterState == MonsterState::IDLE)
         {
             if (dir.x > 0)
             {

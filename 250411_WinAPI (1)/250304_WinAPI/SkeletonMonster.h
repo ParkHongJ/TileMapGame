@@ -19,6 +19,7 @@ public:
 	virtual void CheckPlayerCollision() override;
 	virtual void CheckItemCollision() override;
 	virtual void Move() override;
+	virtual void ApplyGravity(float TimeDelta) override;
 	virtual void ReverseMove();
 	virtual void Detect(GameObject* obj) override;
 	virtual void DeadEvent(float TimeDelta) override;
