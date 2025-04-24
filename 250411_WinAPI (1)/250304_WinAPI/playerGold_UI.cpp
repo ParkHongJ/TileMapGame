@@ -34,6 +34,9 @@ void playerGold_UI::Release()
 void playerGold_UI::Update(float TimeDelta)
 {
 	UI::Update(TimeDelta);
+	if (playerStat->GetPlayerHP() <= 0)
+		playerGoldImage = nullptr;
+
 	playerGold_value = playerStat->GetGold();
 	//if (KeyManager::GetInstance()->IsOnceKeyDown('G'))
 	if(pastGold_value != playerGold_value)

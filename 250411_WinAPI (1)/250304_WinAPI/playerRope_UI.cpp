@@ -33,6 +33,12 @@ void playerRope_UI::Release()
 void playerRope_UI::Update(float TimeDelta)
 {
 	UI::Update(TimeDelta);
+
+	if (playerStat->GetPlayerHP() <= 0)
+	{
+		playerRopeImage = nullptr;
+	}
+
 	playerRope_value = playerStat->GetRopeCount();
 	if (pastRope_value != playerRope_value)
 	{
