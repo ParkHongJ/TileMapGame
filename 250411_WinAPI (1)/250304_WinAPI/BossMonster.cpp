@@ -25,8 +25,8 @@ HRESULT BossMonster::Init()
     player = new Character();
     tile = new Tile();
 
-    colliderSize = { 80.0f, 80.0f };
-    colliderOffsetY = 10.f;
+    colliderSize = { 80.0f, 70.0f };
+    colliderOffsetY = 0.f;
 
     bossCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -111,11 +111,11 @@ void BossMonster::Update(float TimeDelta)
         monsterState = MonsterState::MOVE;
     }
     //º® ¸¸³µÀ» ¶§ Update
-    if (isTileTouchingRight && dir.x > 0 && monsterState == MonsterState::MOVE)
+    if ((isTileTouchingRight || isTileTouchingRightCenter) && dir.x > 0 && monsterState == MonsterState::MOVE)
     {
         dir.x *= -1;
     }
-    else if (isTileTouchingLeft && dir.x < 0 && monsterState == MonsterState::MOVE)
+    else if ((isTileTouchingLeft || isTileTouchingLeftCenter) && dir.x < 0 && monsterState == MonsterState::MOVE)
     {
         dir.x *= -1;
     }
@@ -196,9 +196,10 @@ void BossMonster::CheckTileCollision()
     FPOINT rightTop = { Pos.x + colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
     FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
-    FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY };
-    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY };
+    FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY + 15};
+    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 15};
     FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerBottom = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -451,7 +452,7 @@ void BossMonster::Detect(GameObject* obj)
 
         if (monsterState == MonsterState::ATTACK)
         {
-            if(tilePos.y < monsterPosBottom + 20.f)
+            if(tilePos.y < monsterPosBottom + 10.f)
                 tile->Destruction();
         }
     }
