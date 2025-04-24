@@ -161,7 +161,7 @@ void SkeletonMonster::FrameUpdate(float TimeDelta)
     {
         currFrameInfo = deadFrameInfo;
 
-        if (elipsedTime > 0.1f)
+        if (elipsedTime > 0.05f)
         {
             if (currFrame.x > deadFrameInfo.endFrame.x)
             {

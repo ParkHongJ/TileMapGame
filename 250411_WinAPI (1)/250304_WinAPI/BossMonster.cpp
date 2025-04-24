@@ -430,7 +430,7 @@ void BossMonster::Detect(GameObject* obj)
     {
         float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
         playerPos = player->GetPos();
-        float playerPosBottom = playerPos.y + 40;
+        float playerPosBottom = playerPos.y + 30;
         float monsterPosTop = Pos.y;
 
         if (playerPosBottom < monsterPosTop)
