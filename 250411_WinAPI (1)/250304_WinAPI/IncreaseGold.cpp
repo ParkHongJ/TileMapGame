@@ -57,7 +57,8 @@ void IncreaseGold::Equip(void* info)
 {
 	itemState = ItemState::STATE_EQUIP;
 	PlayerStatus* desc = (PlayerStatus*)info;
-	desc->GetInfo()->gold += gold;
+	//desc->GetInfo()->gold += gold;
+	desc->PlusGold(gold);
 }
 
 void IncreaseGold::UnEquip()

@@ -7,7 +7,7 @@
 #include "CameraManager.h"
 #include "ItemDialog.h"
 #include "Character.h"
-
+#include "Monster.h"
 #include "ImageManager.h"
 
 Gun::Gun() : bulletCnt(5), fireCoolTime(0.f), fireMaxCoolTime(1.f), fireOffset({0.f, 0.f}), isFire(false), fireCurFrameX(0)
@@ -200,7 +200,17 @@ void Gun::Detect(GameObject* obj)
 		return;
 	}
 
-	obj->SetDestroy();
+	if (auto monster = dynamic_cast<Monster*>(obj))
+	{
+		monster->SetMonsterHP(monster->GetMonsterHP() - 1);
+		if (0 >= monster->GetMonsterHP())
+		{
+			monster->SetDestroy();
+			monster->DeadStarEffect();
+		}
+	}
+
+	//obj->SetDestroy();
 }
 
 void Gun::FrameUpdate(float TimeDelta)

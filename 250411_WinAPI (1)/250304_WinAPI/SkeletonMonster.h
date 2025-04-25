@@ -5,7 +5,7 @@ class BoxCollider;
 class Image;
 class SkeletonMonster : public Monster
 {
-	GENERATE_BODY(Textures/Monster/monsters.png, 128, 128)
+	GENERATE_BODY(Textures/Monster/SkeletonMonster.png, 128, 128)
 
 public:
 	SkeletonMonster();
@@ -26,8 +26,10 @@ public:
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
 private:
+	float frameSpeed = 1.f;
 	Image* skeletonImage;
 	BoxCollider* skeletonCollider = nullptr;
 	FPOINT colliderSize;
 	float colliderOffsetY;
+	bool isChangeCol = false;
 };

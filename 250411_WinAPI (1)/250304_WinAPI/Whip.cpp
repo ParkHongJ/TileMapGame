@@ -22,7 +22,7 @@ Whip::~Whip()
 HRESULT Whip::Init()
 {
 	//dropImage = ImageManager::GetInstance()->FindImage("Tae_Player");
-	holdImage = ImageManager::GetInstance()->FindImage("Tae_Player");
+	//holdImage = ImageManager::GetInstance()->FindImage("Tae_Player");
 	Pos = { 300, 100 };
 
 	//col = new BoxCollider({ 0,0 }, { 200,200 }, CollisionMaskType::PLAYERATTACK, this);
@@ -237,9 +237,17 @@ void Whip::Detect(GameObject* obj)
 {
 	//objectRenderId = RENDER_HOLD;
 	//interactState = INTERACTSTATE::INTERACT_UNABLE;
-	if (nullptr != dynamic_cast<Monster*>(obj))
+	if (auto monster = dynamic_cast<Monster*>(obj))
 	{
-		obj->SetDestroy();
+		//monster->SetDestroy();
+		monster->SetMonsterHP(monster->GetMonsterHP() - 1);
+		monster->SetHeatCoolTime(0.2f);
+
+		if (0 >= monster->GetMonsterHP())
+		{
+			monster->DeadStarEffect();
+			monster->SetDestroy();
+		}
 		// 몬스터 피 깎기;
 		//if (0) //피 0이면 destroy까지 하기.
 		//{

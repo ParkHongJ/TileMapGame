@@ -772,5 +772,6 @@
     <ClInclude Include="UI.h">
       <Filter>MainGame\Scene\Jin</Filter>
     </ClInclude>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

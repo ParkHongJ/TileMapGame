@@ -41,7 +41,7 @@ void CollisionManager::Init()
 
     //Ray
     layerRayMaskMap[CollisionMaskType::WORLDOBJECT] = uint16_t(CollisionMaskType::PLAYER) |
-        uint16_t(CollisionMaskType::MONSTER) /*| uint16_t(CollisionMaskType::TILE)*/;
+        uint16_t(CollisionMaskType::MONSTER) | uint16_t(CollisionMaskType::TILE);
 
     layerRayMaskMap[CollisionMaskType::PLAYER] = 
         uint16_t(CollisionMaskType::ITEM) | uint16_t(CollisionMaskType::TILE); // Player로 테스트
@@ -341,6 +341,22 @@ bool CollisionManager::ChangeMaskType(CollisionMaskType curMaskType, CollisionMa
     return false;
 
 }
+
+bool CollisionManager::ChangeZ(CollisionMaskType curMaskType, ORDER_Z _order, GameObject* owner)
+{
+    for (auto& iter : layerCollisionMap[curMaskType]) // 비효율적
+    {
+        if (owner == iter->GetOwner())
+        {
+            iter->SetValueZ(_order);
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
 
 void CollisionManager::DrawRay(ID2D1RenderTarget* rt, FPOINT start, FPOINT dir, float length)
 {

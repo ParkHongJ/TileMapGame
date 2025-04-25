@@ -25,8 +25,8 @@ HRESULT BossMonster::Init()
     player = new Character();
     tile = new Tile();
 
-    colliderSize = { 80.0f, 80.0f };
-    colliderOffsetY = 10.f;
+    colliderSize = { 80.0f, 100.0f };
+    colliderOffsetY = 5.f;
 
     bossCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -111,11 +111,11 @@ void BossMonster::Update(float TimeDelta)
         monsterState = MonsterState::MOVE;
     }
     //벽 만났을 때 Update
-    if (isTileTouchingRight && dir.x > 0 && monsterState == MonsterState::MOVE)
+    if ((isTileTouchingRight || isTileTouchingRightCenter) && dir.x > 0 && monsterState == MonsterState::MOVE)
     {
         dir.x *= -1;
     }
-    else if (isTileTouchingLeft && dir.x < 0 && monsterState == MonsterState::MOVE)
+    else if ((isTileTouchingLeft || isTileTouchingLeftCenter) && dir.x < 0 && monsterState == MonsterState::MOVE)
     {
         dir.x *= -1;
     }
@@ -188,7 +188,7 @@ void BossMonster::FrameUpdate(float TimeDelta)
 
 void BossMonster::CheckTileCollision()
 {
-    float maxDist = 20.0f;
+    float maxDist = 10.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -196,9 +196,10 @@ void BossMonster::CheckTileCollision()
     FPOINT rightTop = { Pos.x + colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
     FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
-    FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY };
-    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY };
+    FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY + 15};
+    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 15};
     FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerBottom = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -229,8 +230,8 @@ void BossMonster::CheckPlayerCollision()
     FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY };
-    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY };
-    FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 10};
+    FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY + 10};
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -398,23 +399,31 @@ void BossMonster::Move()
 void BossMonster::ApplyGravity(float TimeDelta)
 {
     // 타일이 밑에 없을 때 떨어져요잇
-    if (!isTileTouchingLeftBottom || !isTileTouchingRightBottom)
-        Pos.y += 200.f * TimeDelta;
-    else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+    if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
     {
-        //Pos.y 
-        Move();
+       // Pos.y += 200.f * TimeDelta;
+        Pos.y += 200.f * 0.016f;
     }
+       
+    //else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+    //{
+    //    //Pos.y 
+    //    Move();
+    //}
      
     if (monsterState == MonsterState::ATTACK)
     {
-        if (!isTileTouchingLeftBottom || !isTileTouchingRightBottom)
-            Pos.y += 400.f * TimeDelta;
-        else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
+        if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
+        {
+            //Pos.y += 400.f * TimeDelta;
+            Pos.y += 400.f * 0.016f;
+        }
+            
+        /*else if (isTileTouchingLeftBottom || isTileTouchingRightBottom)
         {
            
             Move();
-        }
+        }*/
     }
         //monsterState = MonsterState::MOVE;
 }
@@ -427,9 +436,8 @@ void BossMonster::Detect(GameObject* obj)
 {
     if (auto player = obj->GetType<Character>())
     {
-        float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
         playerPos = player->GetPos();
-        float playerPosBottom = playerPos.y + 40;
+        float playerPosBottom = playerPos.y + 30;
         float monsterPosTop = Pos.y;
 
         if (playerPosBottom < monsterPosTop)
@@ -438,22 +446,20 @@ void BossMonster::Detect(GameObject* obj)
         }
     }
  
-    else if (auto player = obj->GetType<Character>())
-    {
-
-    }
     // 타일과 비교해서 타일 Destroy
     if (auto tile = obj->GetType<Tile>())
     {
         FPOINT tilePos = tile->GetPos(); 
-        float tileTop = tilePos.y - 20;
+        float tileTop = tilePos.y - 24;
+        float tileBottom = tilePos.y + 24;
+   
         float monsterPosBottom = Pos.y;
 
-        if (monsterState == MonsterState::ATTACK)
-        {
-            if(tilePos.y < monsterPosBottom + 20.f)
-                tile->Destruction();
-        }
+		if (monsterState == MonsterState::ATTACK)
+		{
+			if (tilePos.y < monsterPosBottom + 30.f)
+				tile->Destruction();
+		}
     }
 
 }

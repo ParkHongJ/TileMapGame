@@ -5,6 +5,7 @@ class Image;
 class GameOverUI : public UI
 {
 private:
+	Image* blackBackgroundImage;
 	Image* GameOver_journalRearImage;
 	Image* GameOver_journalFrontImage;
 	Image* GameOver_journalSelectBox;
@@ -18,6 +19,8 @@ private:
 	FPOINT GameOver_characterStickerPos;
 	FPOINT GameOver_journalBackImagePos;
 	FPOINT GameOver_journalBackClipImagePos;
+
+	FPOINT blackBackgroundImagePos;
 
 	FPOINT selectBoxPos;
 	FPOINT stickerPos;
@@ -54,7 +57,7 @@ public:
 	virtual void Update(float TimeDelta) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
 
-	inline void SetDrawGameOverUI(bool setValue) { isGameOver = setValue; };
+	inline void SetGameOverUIDraw(bool setValue) { isGameOver = setValue; };
 	FPOINT ResolutionRatio(Image* image);
 	void MoveBox(float destY);
 

@@ -22,6 +22,7 @@
 #include "Ladder3.h"
 #include "Ladder4.h"
 #include "NiddleTrap.h"
+#include "ShopKeeper.h"
 #include "SkeletonItem.h"
 #include "SkeletonMonster.h"
 #include "SnakeMonster.h"
@@ -47,6 +48,7 @@ REGISTER_OBJECT(Ladder2)
 REGISTER_OBJECT(Ladder3)
 REGISTER_OBJECT(Ladder4)
 REGISTER_OBJECT(NiddleTrap)
+REGISTER_OBJECT(ShopKeeper)
 REGISTER_OBJECT(SkeletonItem)
 REGISTER_OBJECT(SkeletonMonster)
 REGISTER_OBJECT(SnakeMonster)

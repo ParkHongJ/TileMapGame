@@ -5,7 +5,7 @@ class BoxCollider;
 class Image;
 class SnakeMonster : public Monster
 {
-	GENERATE_BODY(Textures/Monster/monsters.png, 128, 128)
+	GENERATE_BODY(Textures/Monster/SnakeMonster.png, 128, 128)
 		
 public : 
 	SnakeMonster();
@@ -23,6 +23,7 @@ public :
 	virtual void ReverseMove();
 	virtual void Detect(GameObject* obj) override;
 	virtual void Render(ID2D1RenderTarget* renderTarget) override;
+
 
 private: 
 	Image* snakeImage;

@@ -9,6 +9,7 @@ private :
 	Image* playerRopeImage;
 	PlayerStatus* playerStat;
 	int playerRope_value;
+	int pastRope_value;
 public:
 	virtual HRESULT Init();
 	virtual void Release() override;

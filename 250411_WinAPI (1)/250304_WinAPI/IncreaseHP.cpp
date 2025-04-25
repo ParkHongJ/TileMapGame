@@ -5,7 +5,7 @@
 #include "CameraManager.h"
 #include "IncreaseHP.h"
 #include "ImageManager.h"
-#include "ItemDialog.h";
+#include "ItemDialog.h"
 
 IncreaseHP::IncreaseHP()
 {

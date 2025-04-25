@@ -33,8 +33,8 @@ HRESULT MainGame::Init()
 		return E_FAIL;
 
 	GameManager::GetInstance()->CreateCaveRendertarget(m_pIntermediateRT);
-	GameManager::GetInstance()->LoadScenes("hongScene");
 	GameManager::GetInstance()->LoadScenes("caveScene");
+	GameManager::GetInstance()->LoadScenes("hongScene");
 
 	ImageManager::GetInstance()->Init();
 	KeyManager::GetInstance()->Init();
@@ -242,6 +242,7 @@ MainGame::~MainGame()
 
 HRESULT MainGame::InitD2D()
 {
+	ShowCursor(false);
 	CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
 	// Factory »ý¼º
 	HRESULT hr = D2D1CreateFactory(
@@ -343,8 +344,9 @@ void MainGame::Draw()
 	ObjectManager::GetInstance()->Render(pRT1);
 	ParticleManager::GetInstance()->Render(pRT1);
 
-	CollisionManager::GetInstance()->DebugRender(pRT1);
-	TimerManager::GetInstance()->Render(pRT1);
+	//CollisionManager::GetInstance()->DebugRender(pRT1);
+	//TimerManager::GetInstance()->Render(pRT1);
+
 
 }
 

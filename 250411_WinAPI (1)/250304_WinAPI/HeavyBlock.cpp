@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "GameManager.h"
 #include "ImageManager.h"
+#include "Monster.h"
 HRESULT HeavyBlock::Init()
 {
 	objectScale = GAME_TILE_SIZE / ATLAS_TILE_SIZE;
@@ -170,7 +171,7 @@ void HeavyBlock::Render(ID2D1RenderTarget* renderTarget)
 	FPOINT cameraPos = Pos + CameraManager::GetInstance()->GetPos();
 	heavyBlockImage->Render(renderTarget, cameraPos.x, cameraPos.y, objectScale, objectScale, 0, 0, ATLAS_TILE_SIZE, ATLAS_TILE_SIZE);
 
-	for (int i = 0; i < GameManager::jumpNodes.size(); ++i)
+	/*for (int i = 0; i < GameManager::jumpNodes.size(); ++i)
 	{
 		FPOINT nodePos = GameManager::jumpNodes[i]->worldPos;
 
@@ -214,15 +215,22 @@ void HeavyBlock::Render(ID2D1RenderTarget* renderTarget)
 			DrawCenteredRect(renderTarget, cameraPos, 15.f, D2D1::ColorF::Yellow);
 		}
 
-	}
+	}*/
 }
 
 void HeavyBlock::Detect(GameObject* obj)
 {
 	if (velocity.y >= 50.f)
 	{
-		obj->SetDestroy();
+		
 		int a = 10;
+
+		if (auto monster = dynamic_cast<Monster*>(obj))
+		{
+			monster->DeadStarEffect();
+			
+		}
+		obj->SetDestroy();
 	}
 }
 

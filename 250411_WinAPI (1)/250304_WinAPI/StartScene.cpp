@@ -20,13 +20,11 @@ HRESULT StartScene::Init(ID2D1RenderTarget* renderTarget)
 	ImageManager::GetInstance()->AddImage("Char_Menu_Door", L"Textures/menu_chardoor.png",2,2, renderTarget);
 	ImageManager::GetInstance()->AddImage("Char_Button", L"Textures/char_button.png",1,1, renderTarget);
 
-
-
 	
 	menu_title = ImageManager::GetInstance()->FindImage("Menu_Title");
 	menu_title_char = ImageManager::GetInstance()->FindImage("Menu_Title_Char");
 	blackbg = ImageManager::GetInstance()->FindImage("BlackBG");
-	torchEffectBack = ImageManager::GetInstance()->FindImage("TorchEffect");
+	torchEyeEffectRight = torchEyeEffectLeft = torchEffectBack = ImageManager::GetInstance()->FindImage("TorchEffect");
 	torchEffectFront = ImageManager::GetInstance()->FindImage("TorchEffect");
 	fumeEffect = ImageManager::GetInstance()->FindImage("FumeEffect");
 	enter = ImageManager::GetInstance()->FindImage("Buttons");
@@ -44,7 +42,8 @@ HRESULT StartScene::Init(ID2D1RenderTarget* renderTarget)
 	fadeTimer = 0.0f;
 	opacity = 1.0f;
 	flameFrameIndex = 1;
-
+	currTorchEyeInd = 5;
+	currTorchEyeTime = 0.f;
 
 
 	DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(&pDWriteFactory));
@@ -103,9 +102,24 @@ void StartScene::Update(float TimeDelta)
 
 	globalTime += TimeDelta;
 	fumeSpawnTimer += TimeDelta;
+	currTorchEyeTime += TimeDelta;
+
+	int torchEyeAnim[] = { 5, 6, 7 };
+	static int torchEyeFrameIdx = 0;
+
+	currTorchEyeTime += TimeDelta;
+	if (currTorchEyeTime > 0.1f) {
+		currTorchEyeTime = 0.0f;
+		torchEyeFrameIdx = (torchEyeFrameIdx + 1) % 3;
+		currTorchEyeInd = torchEyeAnim[torchEyeFrameIdx];
+	}
+	char debug[64];
+	sprintf_s(debug, "currTorchEyeTime: %.3f, currTorchEyeInd: %d\n", currTorchEyeTime, currTorchEyeInd);
+	OutputDebugStringA(debug);
+
 	if (fumeSpawnTimer >= FUME_SPAWN_INTERVAL) {
 		fumeSpawnTimer = 0.0f;
-
+		
 		// Torch: 생성 수 줄임
 		int torchCount = 2 + rand() % 2;
 		for (int i = 0; i < 5; ++i) {
@@ -208,6 +222,15 @@ void StartScene::Render(ID2D1RenderTarget* renderTarget)
 		}
 	}
 
+	if (torchEyeEffectLeft)
+	{
+		torchEyeEffectLeft->FrameRender(renderTarget,  111,183  , currTorchEyeInd,0, 0.05f,0.05f,opacity, false);
+	}
+	if (torchEyeEffectRight)
+	{
+		torchEyeEffectRight->FrameRender(renderTarget, 169, 178, currTorchEyeInd, 0, 0.05f,0.05f,opacity, false);
+	}
+
 	const wchar_t* text = L"Press      to Begin";
 
 	float alpha = 0.5f + 0.5f * sin(globalTime * 2.0f); // 0 ~ 1 사이 반짝임
@@ -230,7 +253,7 @@ void StartScene::Render(ID2D1RenderTarget* renderTarget)
 
 	if (enter)
 	{
-		enter->FrameRender(renderTarget, 677, 430, 1, 9, 0.15f, 0.15f, alpha);
+		enter->FrameRender(renderTarget, 667, 430, 1, 9, 0.15f, 0.15f, alpha);
 	}
 
 

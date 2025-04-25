@@ -12,6 +12,7 @@
 #include "Particle.h"
 #include "GhostJar.h"
 #include "ImageManager.h"
+#include "Monster.h"
 
 GhostJar::GhostJar()
 {
@@ -84,6 +85,7 @@ void GhostJar::Equip(GameObject* owner)
 
 void GhostJar::UnEquip()
 {
+	__super::UnEquip();
 }
 
 void GhostJar::UnEquip(void* info)
@@ -111,9 +113,22 @@ void GhostJar::Detect(GameObject* obj)
 		return;
 	}
 
-	DeadEvent();
+	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
+	{
+		return;
+	}
 
-	//if(auto monster = dynamic_cast<Monster>)
+
+	if (auto monster = dynamic_cast<Monster*>(obj))
+	{
+		monster->SetMonsterHP(monster->GetMonsterHP() - 1);
+		if (0 >= monster->GetMonsterHP())
+		{
+			monster->SetDestroy();
+		}
+	}
+
+	DeadEvent();
 
 	// 플레이어 어택이나 WorldItem이면 부숴져라.
 	//if (auto player = obj->GetType<Character>() || auto worldItem = obj->GetType<Character>() )

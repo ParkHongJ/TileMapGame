@@ -89,7 +89,7 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("lightBulbImage", L"Textures/UI/Hud/lightBulb.png", renderTarget);
     ImageManager::GetInstance()->AddImage("shopDialogBox", L"Textures/UI/Menu/shopDialogBox.png", renderTarget);
     ImageManager::GetInstance()->AddImage("shopKeeper", L"Textures/Entities/People/shopkeeper.png", 6, 7, renderTarget);
-
+    
    // fx_big
     ImageManager::GetInstance()->AddImage("fx_big", L"Textures/fx_big.png", 4, 4, renderTarget);
 
@@ -110,7 +110,9 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ImageManager::GetInstance()->AddImage("shopDialogBox", L"Textures/UI/Menu/shopDialogBox.png", renderTarget);
     ImageManager::GetInstance()->AddImage("currency_GameOver", L"Textures/UI/Hud/currency_GameOver.png", renderTarget);
 
-    
+
+    ImageManager::GetInstance()->AddImage("GateOpen", L"Textures/GateOpen.png", renderTarget);
+    ImageManager::GetInstance()->AddImage("journalSum", L"Textures/UI/Journal/journalSum.png", renderTarget);
     background = ImageManager::GetInstance()->AddImage("background", L"Textures/deco_cosmic.png", renderTarget);
 
 
@@ -148,9 +150,9 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new lightBulb_UI());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerRope_UI(renderTarget));
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new playerBomb_UI(renderTarget));
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseBomb());
     ObjectManager::GetInstance()->AddObject(RENDER_UI, new ShopInteractUI(renderTarget));
-    ObjectManager::GetInstance()->AddObject(RENDER_NPC, new ShopKeeper());
+   // ObjectManager::GetInstance()->AddObject(RENDER_NPC, new ShopKeeper());
     
   
     //ObjectManager::GetInstance()->AddObject(RENDER_UI, new dialogUI());+		[allocator]	allocator	std::_Compressed_pair<std::allocator<char>,std::_String_val<std::_Simple_types<char>>,1>
@@ -161,11 +163,11 @@ HRESULT GameScene::Init(ID2D1RenderTarget* renderTarget)
     /*ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new SkeletonMonster());
     ObjectManager::GetInstance()->AddObject(RENDER_MONSTER, new BossMonster());*/
 
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new SkeletonItem());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new SkeletonItem());
     //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new Chicken());
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseHP());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new IncreaseHP());
 
-    ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new GhostJar());
+    //ObjectManager::GetInstance()->AddObject(RENDER_ITEM, new GhostJar());
 
 
    // GameManager::GetInstance()->Init("hongScene");

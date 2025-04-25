@@ -11,6 +11,7 @@
 #include "ParticleManager.h"
 #include "Particle.h"
 #include "ImageManager.h"
+#include "Monster.h"
 
 SkeletonItem::SkeletonItem()
 {
@@ -36,7 +37,7 @@ HRESULT SkeletonItem::Init()
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 0;
 
-	holdOffset = { 50.f, 0.f };
+	holdOffset = { 35.f, 5.f };
 	return S_OK;
 }
 
@@ -59,7 +60,7 @@ void SkeletonItem::Render(ID2D1RenderTarget* renderTarget)
 {
 	FPOINT cameraPos = CameraManager::GetInstance()->GetPos() + Pos;
 
-	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 3, objectScale.x, objectScale.y, isFlip); // 임의값
+	dropImage->FrameRender(renderTarget, cameraPos.x, cameraPos.y, 15, 3, objectScale.x , objectScale.y, isFlip); // 임의값
 }
 
 void SkeletonItem::Release()
@@ -83,6 +84,7 @@ void SkeletonItem::Equip(GameObject* owner)
 
 void SkeletonItem::UnEquip()
 {
+	__super::UnEquip();
 }
 
 void SkeletonItem::UnEquip(void* info)
@@ -108,6 +110,20 @@ void SkeletonItem::Detect(GameObject* obj)
 	if (auto temp = obj->GetType<Character>())
 	{
 		return;
+	}
+
+	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
+	{
+		return;
+	}
+
+	if (auto monster = dynamic_cast<Monster*>(obj))
+	{
+		monster->SetMonsterHP(monster->GetMonsterHP() - 1);
+		if (0 >= monster->GetMonsterHP())
+		{
+			monster->SetDestroy();
+		}
 	}
 
 	DeadEvent();

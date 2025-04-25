@@ -5,8 +5,9 @@
 #include "CameraManager.h"
 #include "GhostJuwel.h"
 #include "ImageManager.h"
+#include "Monster.h"
 
-GhostJuwel::GhostJuwel() :gold(5000)
+GhostJuwel::GhostJuwel() :gold(3000)
 {
 
 }
@@ -28,6 +29,8 @@ HRESULT GhostJuwel::Init()
 	itemState = ItemState::STATE_UNEQUIP;
 	itemType = ItemType::TYPE_ONCE;
 	interactState = INTERACTSTATE::INTERACT_ABLE;
+
+	gold = 10000;
 	return S_OK;
 }
 
@@ -57,7 +60,7 @@ void GhostJuwel::Equip(void* info)
 {
 	itemState = ItemState::STATE_EQUIP;
 	PlayerStatus* desc = (PlayerStatus*)info;
-	desc->GetInfo()->gold += gold;
+	desc->PlusGold(gold);
 }
 
 void GhostJuwel::UnEquip()
@@ -86,6 +89,7 @@ void GhostJuwel::Detect(GameObject* obj)
 	{
 		Equip(player->GetPlayerStatus());
 		SetDestroy();
+		return;
 	}
 
 	else if (auto player = obj->GetType<Character>())

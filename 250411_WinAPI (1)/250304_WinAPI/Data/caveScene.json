@@ -1,12 +1,21 @@
 [
     {
+        "atlas": "Textures/GateOpen.png",
+        "flipX": false,
+        "height": 396.0,
+        "name": "Gate",
+        "width": 396.0,
+        "x": 2127.0,
+        "y": 3628.0
+    },
+    {
         "atlas": "Textures/char_yellow.png",
         "flipX": false,
         "height": 128.0,
         "name": "Character",
         "width": 128.0,
-        "x": 960.0,
-        "y": 448.0
+        "x": 3141.0,
+        "y": 1033.0
     },
     {
         "atlas": "Textures/floormisc.png",
@@ -14,26 +23,8 @@
         "height": 128.0,
         "name": "HeavyBlock",
         "width": 128.0,
-        "x": 1472.0,
-        "y": 832.0
-    },
-    {
-        "atlas": "Textures/floormisc.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "ArrowTrap",
-        "width": 128.0,
-        "x": 2496.0,
-        "y": 960.0
-    },
-    {
-        "atlas": "Textures/Monster/monsters.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "SkeletonMonster",
-        "width": 128.0,
-        "x": 1600.0,
-        "y": 1600.0
+        "x": 4416.0,
+        "y": 1088.0
     },
     {
         "atlas": "Textures/Monster/monsters.png",
@@ -41,62 +32,89 @@
         "height": 128.0,
         "name": "SnakeMonster",
         "width": 128.0,
+        "x": 3800.0,
+        "y": 1052.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonMonster",
+        "width": 128.0,
+        "x": 1214.0,
+        "y": 901.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SnakeMonster",
+        "width": 128.0,
+        "x": 4156.0,
+        "y": 2446.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SnakeMonster",
+        "width": 128.0,
+        "x": 3008.0,
+        "y": 2310.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 1600.0,
+        "y": 960.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 1728.0,
+        "y": 320.0
+    },
+    {
+        "atlas": "Textures/floor_cave.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "NiddleTrap",
+        "width": 128.0,
+        "x": 192.0,
+        "y": 1984.0
+    },
+    {
+        "atlas": "Textures/floor_cave.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "NiddleTrap",
+        "width": 128.0,
+        "x": 192.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floor_cave.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "NiddleTrap",
+        "width": 128.0,
+        "x": 320.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floor_cave.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "NiddleTrap",
+        "width": 128.0,
         "x": 448.0,
-        "y": 576.0
-    },
-    {
-        "atlas": "Textures/items.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "IncreaseBomb",
-        "width": 128.0,
-        "x": 3001.333251953125,
-        "y": 1080.6666259765625
-    },
-    {
-        "atlas": "Textures/items.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "IncreaseBomb",
-        "width": 128.0,
-        "x": 1216.0,
-        "y": 448.0
-    },
-    {
-        "atlas": "Textures/floor_cave.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "NiddleTrap",
-        "width": 128.0,
-        "x": 1088.0,
-        "y": 1600.0
-    },
-    {
-        "atlas": "Textures/floor_cave.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "NiddleTrap",
-        "width": 128.0,
-        "x": 960.0,
-        "y": 1600.0
-    },
-    {
-        "atlas": "Textures/floor_cave.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "NiddleTrap",
-        "width": 128.0,
-        "x": 832.0,
-        "y": 1600.0
-    },
-    {
-        "atlas": "Textures/floor_cave.png",
-        "flipX": false,
-        "height": 128.0,
-        "name": "NiddleTrap",
-        "width": 128.0,
-        "x": 704.0,
-        "y": 1600.0
+        "y": 3904.0
     },
     {
         "atlas": "Textures/floor_cave.png",
@@ -105,51 +123,195 @@
         "name": "NiddleTrap",
         "width": 128.0,
         "x": 576.0,
-        "y": 1600.0
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floor_cave.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "NiddleTrap",
+        "width": 128.0,
+        "x": 704.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floor_cave.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "NiddleTrap",
+        "width": 128.0,
+        "x": 832.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 3392.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": true,
+        "height": 128.0,
+        "name": "ArrowTrap",
+        "width": 128.0,
+        "x": 3904.0,
+        "y": 3264.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonMonster",
+        "width": 128.0,
+        "x": 4066.0,
+        "y": 3863.0
     },
     {
         "atlas": "Textures/Monster/monsters.png",
         "flipX": false,
         "height": 128.0,
         "name": "SnakeMonster",
+        "width": 128.0,
+        "x": 1667.1429443359375,
+        "y": 2303.0
+    },
+    {
+        "atlas": "Textures/Monster/monsters.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonMonster",
+        "width": 128.0,
+        "x": 1505.71435546875,
+        "y": 3721.71435546875
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 2240.0,
+        "y": 2368.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 1984.0,
+        "y": 2368.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": true,
+        "height": 128.0,
+        "name": "ArrowTrap",
+        "width": 128.0,
+        "x": 1600.0,
+        "y": 2112.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 4928.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 3776.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "HeavyBlock",
+        "width": 128.0,
+        "x": 2624.0,
+        "y": 3904.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "ArrowTrap",
+        "width": 128.0,
+        "x": 2496.0,
+        "y": 3264.0
+    },
+    {
+        "atlas": "Textures/floormisc.png",
+        "flipX": true,
+        "height": 128.0,
+        "name": "ArrowTrap",
         "width": 128.0,
         "x": 1856.0,
-        "y": 1600.0
+        "y": 3264.0
     },
     {
-        "atlas": "Textures/Monster/monsters.png",
+        "atlas": "Textures/floormisc.png",
         "flipX": false,
         "height": 128.0,
-        "name": "SkeletonMonster",
+        "name": "HeavyBlock",
         "width": 128.0,
-        "x": 1728.0,
-        "y": 1600.0
+        "x": 832.0,
+        "y": 2624.0
     },
     {
-        "atlas": "Textures/Monster/monsters.png",
+        "atlas": "Textures/items.png",
         "flipX": false,
         "height": 128.0,
-        "name": "SkeletonMonster",
+        "name": "SkeletonItem",
         "width": 128.0,
-        "x": 1472.0,
-        "y": 1600.0
+        "x": 2624.0,
+        "y": 1088.0
     },
     {
-        "atlas": "Textures/Monster/monsters.png",
+        "atlas": "Textures/items.png",
         "flipX": false,
         "height": 128.0,
-        "name": "SnakeMonster",
+        "name": "SkeletonItem",
         "width": 128.0,
-        "x": 1344.0,
-        "y": 1600.0
+        "x": 4160.0,
+        "y": 832.0
     },
     {
-        "atlas": "Textures/Monster/monsters.png",
+        "atlas": "Textures/items.png",
         "flipX": false,
         "height": 128.0,
-        "name": "SkeletonMonster",
+        "name": "SkeletonItem",
         "width": 128.0,
-        "x": 1216.0,
-        "y": 1600.0
+        "x": 4672.0,
+        "y": 2112.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonItem",
+        "width": 128.0,
+        "x": 1088.0,
+        "y": 2880.0
+    },
+    {
+        "atlas": "Textures/items.png",
+        "flipX": false,
+        "height": 128.0,
+        "name": "SkeletonItem",
+        "width": 128.0,
+        "x": 2368.0,
+        "y": 3648.0
     }
 ]

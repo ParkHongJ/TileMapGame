@@ -5,6 +5,8 @@
 #include "CameraManager.h"
 #include "CollisionManager.h"
 #include "ImageManager.h"
+#include "Particle.h"
+#include "ParticleManager.h"
 
 HRESULT Arrow::Init()
 {
@@ -145,7 +147,45 @@ void Arrow::Drop(float timeDelta)
 
 void Arrow::Detect(GameObject* obj)
 {
+	if (bDrop)
+		return;
+
 	//데미지 주기
 
-	SetActive(false);
+	//SetActive(false);
+
+	for (int i = 0; i < 5; i++)
+	{
+		float radius = 30.f; // 원하는 반경
+
+		float angle = RandomRange(0.f, 360.f); // 또는 rand() % 360
+		float dist = RandomRange(0.f, radius); // 균일한 거리
+
+		// 라디안 변환
+		float rad = angle * (3.141592f / 180.f);
+
+		// 오프셋 계산
+		FPOINT offset = {
+			cosf(rad) * dist,
+			sinf(rad) * dist
+		};
+
+		FPOINT spawnPos = Pos + offset;
+
+		Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", spawnPos, (rand() % 360), 55.f, 2.5f, 4, 1);
+		StarOption* starOp = new StarOption(30.f);
+
+		particle->AddParticleOption(starOp);
+
+		//3 6
+	}
+	{
+		Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, (rand() % 360), 85.f, 3.5f, 3, 6);
+		StarOption* starOp = new StarOption(10.f);
+
+		particle->AddParticleOption(starOp);
+
+		//3 6
+	}
+	SetDestroy();
 }

@@ -19,7 +19,8 @@ void InteractionState::Update()
     }
     if (character->GetOnNeedle())
     {
-        ChangeSubState(SubState::INTERACTION_ON_NIDDLE);
+        ChangeSubState(SubState::INTERACTION_IS_DEAD);
+        return;
     }
     else if (character->GetIsFaint())
     {
@@ -37,11 +38,7 @@ void InteractionState::Update()
         ChangeSubState(SubState::INTERACTION_EXIT_TUNNEL);
         return;
     }
-    else if (character->CheckHangOn())
-    {
-        ChangeSubState(SubState::INTERACTION_HANGON_TILE);
-        return;
-    }
+ 
     else if (character->CheckCanClimbLadder())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_LADDER);
@@ -50,6 +47,11 @@ void InteractionState::Update()
     else if (character->CheckCanClimbRope())
     {
         ChangeSubState(SubState::INTERACTION_CLIMB_ROPE);
+        return;
+    }
+    else if (character->CheckHangOn())
+    {
+        ChangeSubState(SubState::INTERACTION_HANGON_TILE);
         return;
     }
     else if (character->CheckCanPushTile())

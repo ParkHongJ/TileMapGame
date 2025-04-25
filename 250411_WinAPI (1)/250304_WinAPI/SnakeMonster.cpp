@@ -36,8 +36,8 @@ HRESULT SnakeMonster::Init()
     //    CollisionMaskType::MONSTER,this
     //);
 
-    colliderSize = { 50.0f, 30.0f };
-    colliderOffsetY = 5.f;
+    colliderSize = { 50.0f, 50.0f };
+    colliderOffsetY = -10.f;
 
     snakeCollider = new BoxCollider(
         { 0.0f , colliderOffsetY },     // Offset
@@ -119,17 +119,15 @@ void SnakeMonster::Update(float TimeDelta)
     if (!isTileTouchingRight && !isTileTouchingLeft && !isPlayerTouchingRight && !isPlayerTouchingLeft && isTileTouchingRightBottom && isTileTouchingLeftBottom)
     {
         monsterState = MonsterState::MOVE;
-        meetPlayerLeft = false;
-        meetPlayerRight = false;
-        hasBottomTile = false;
-        Move();
     }
     //벽 만났을 때 Update
-    else if (isTileTouchingRight || isTileTouchingLeft )
+    if ((isTileTouchingRight || isTileTouchingRightCenter) && dir.x > 0 && monsterState == MonsterState::MOVE)
     {
-        monsterState = MonsterState::MOVE;
         dir.x *= -1;
-        Move();
+    }
+    else if ((isTileTouchingLeft || isTileTouchingLeftCenter) && dir.x < 0 && monsterState == MonsterState::MOVE)
+    {
+        dir.x *= -1;
     }
 
     // 오른쪽으로 가는데 밑에 타일이 없을 때 
@@ -138,7 +136,7 @@ void SnakeMonster::Update(float TimeDelta)
         monsterState = MonsterState::MOVE;
         dir.x *= -1;
         hasBottomTile = true;
-        Move();
+        //Move();
     }
 
     // 왼쪽으로 가는데 밑에 타일이 없을 때 
@@ -147,7 +145,7 @@ void SnakeMonster::Update(float TimeDelta)
         monsterState = MonsterState::MOVE;
         dir.x *= -1;
         hasBottomTile = true;
-        Move();
+        //Move();
     }
 
     // Player 만났을 때 Update , 데미지도 포함 
@@ -171,7 +169,7 @@ void SnakeMonster::Update(float TimeDelta)
 
     if (monsterHP == 0)
         monsterState = MonsterState::DEAD;
-   
+    Move();
     FrameUpdate(TimeDelta);
 }
 
@@ -222,8 +220,12 @@ void SnakeMonster::CheckTileCollision()
     // Collider 기준 
     FPOINT leftTop = { Pos.x - colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightTop = { Pos.x + colliderSize.x / 2, Pos.y - colliderSize.y / 2 + colliderOffsetY };
-    FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
-    FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT leftBottom = { Pos.x - colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT rightBottom = { Pos.x + colliderSize.x / 2 , Pos.y + colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY + 15 };
+    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 15 };
+    FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY };
+    FPOINT centerBottom = { Pos.x , Pos.y + colliderSize.y / 2 + colliderOffsetY };
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -236,6 +238,9 @@ void SnakeMonster::CheckTileCollision()
 
     isTileTouchingLeftBottom = CollisionManager::GetInstance()->RaycastType({ leftBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
     isTileTouchingRightBottom = CollisionManager::GetInstance()->RaycastType({ rightBottom, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingLeftCenter = CollisionManager::GetInstance()->RaycastType({ centerLeft, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+    isTileTouchingRightCenter = CollisionManager::GetInstance()->RaycastType({ centerRight, {0.f, 1.f} }, maxDist, hitBottom1, CollisionMaskType::TILE, false, debugTime);
+
 }
 
 void SnakeMonster::CheckPlayerCollision()
@@ -300,7 +305,10 @@ void SnakeMonster::Move()
 void SnakeMonster::ApplyGravity(float TimeDelta)
 {
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-        Pos.y += moveSpeed * TimeDelta;
+    {
+        // Pos.y += moveSpeed * TimeDelta;
+        Pos.y += moveSpeed * 0.016f;
+    }
     else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
         Pos.y = Pos.y;
 }
@@ -332,72 +340,13 @@ void SnakeMonster::Detect(GameObject* obj)
     if (auto player = obj->GetType<Character>())
 	{
         playerPos = player->GetPos();
-        float playerPosBottom = playerPos.y + 20;
+        float playerPosBottom = playerPos.y + 30;
         float monsterPosTop = Pos.y;
 
         if (playerPosBottom < monsterPosTop)
         {
+            DeadStarEffect();
             SetDestroy();
-
-            for (int i = 0; i < 5; i++)
-            {
-                float radius = 30.f; // 원하는 반경
-
-                float angle = RandomRange(0.f, 360.f); // 또는 rand() % 360
-                float dist = RandomRange(0.f, radius); // 균일한 거리
-
-                // 라디안 변환
-                float rad = angle * (3.141592f / 180.f);
-
-                // 오프셋 계산
-                FPOINT offset = {
-                    cosf(rad) * dist,
-                    sinf(rad) * dist
-                };
-
-                FPOINT spawnPos = Pos + offset;
-
-                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", spawnPos, (rand() % 360), 35.f, 2.5f, 4, 1);
-                StarOption* starOp = new StarOption(30.f);
-
-                particle->AddParticleOption(starOp);
-
-                //3 6
-            }
-            {
-                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos, (rand() % 360), 55.f, 2.5f, 3, 6);
-                StarOption* starOp = new StarOption(10.f);
-
-                particle->AddParticleOption(starOp);
-
-                //3 6
-            }
-
-            for (int i = 0; i < 5; i++)
-            {
-                FPOINT randPos = { RandomRange(-10, 10.f), RandomRange(-10, 10.f) };
-                Particle* particle = ParticleManager::GetInstance()->GetParticle("Effect", Pos + randPos, 0.f, 30.f, 2.f, 0, 0);
-
-                PhysicsOption* physicsOp = new PhysicsOption;
-                SizeOption* sizeOp = new SizeOption(0.04f);
-                TrailOption* trailOp = new TrailOption("Effect", 0.02f, 0.2f);
-
-                float angleRad = RandomRange(3.141592f, 3.141592f * 2.0f);
-                float speed = RandomRange(350.f, 575.0f);            // 속도도 랜덤
-
-                velocity =
-                {
-                    sinf(angleRad) * speed,
-                    -cosf(angleRad) * speed  // 135도 (왼쪽 위)
-                };
-
-                physicsOp->Init(velocity, 0.3f);
-                //physicsOp->Init(velocity, 0.5f);
-
-                particle->AddParticleOption(physicsOp);
-                particle->AddParticleOption(sizeOp);
-                particle->AddParticleOption(trailOp);
-            }
         }
        
 	}
@@ -418,12 +367,12 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y,false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 10, currFrame.x, currFrame.y, objectScale.x, objectScale.y,false);
             }
 
             if (dir.x < 0)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 10, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
 
@@ -431,14 +380,15 @@ void SnakeMonster::Render(ID2D1RenderTarget* renderTarget)
         {
             if (dir.x > 0 && meetPlayerRight)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 10, currFrame.x, currFrame.y, objectScale.x, objectScale.y, false);
             }
 
             if (dir.x < 0 && meetPlayerLeft)
             {
-                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 25, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
+                snakeImage->FrameRender(renderTarget, pos.x, pos.y - 10, currFrame.x, currFrame.y, objectScale.x, objectScale.y, true);
             }
         }
     }
 }
+
 

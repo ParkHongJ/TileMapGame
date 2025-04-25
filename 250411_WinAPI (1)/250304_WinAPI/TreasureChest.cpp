@@ -10,6 +10,7 @@
 #include "Character.h"
 #include "ParticleManager.h"
 #include "Particle.h"
+#include "Monster.h"
 #include "ImageManager.h"
 
 TreasureChest::TreasureChest()
@@ -36,7 +37,7 @@ HRESULT TreasureChest::Init()
 	endFrameIndexX = startFrameIndexX = curFrameIndexX = 0;
 	endFrameIndexY = startFrameIndexY = curFrameIndexY = 0;
 
-	holdOffset = { 0.f, -10.f };
+	holdOffset = { 20.f, -10.f };
 	return S_OK;
 }
 
@@ -83,6 +84,7 @@ void TreasureChest::Equip(GameObject* owner)
 
 void TreasureChest::UnEquip()
 {
+	__super::UnEquip();
 }
 
 void TreasureChest::UnEquip(void* info)
@@ -108,6 +110,20 @@ void TreasureChest::Detect(GameObject* obj)
 	if (auto temp = obj->GetType<Character>())
 	{
 		return;
+	}
+
+	if (IsPlayerDropItem(obj) || 0.f == velocity.x || 0.f == velocity.y)
+	{
+		return;
+	}
+
+	if (auto monster = dynamic_cast<Monster*>(obj))
+	{
+		monster->SetMonsterHP(monster->GetMonsterHP() - 1);
+		if (0 >= monster->GetMonsterHP())
+		{
+			monster->SetDestroy();
+		}
 	}
 
 	DeadEvent();
