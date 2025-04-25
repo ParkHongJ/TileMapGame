@@ -206,13 +206,13 @@ void TileMapTool::DrawPaletteUI()
 
     if (ImGui::Button("Save TileMap"))
     {
-        SaveTileMapToFile("../250304_WinAPI/Data/hongScene.tilemap");
-        SavePlacedObjectToJson("../250304_WinAPI/Data/hongScene.json");
+        SaveTileMapToFile("../250304_WinAPI/Data/caveScene.tilemap");
+        SavePlacedObjectToJson("../250304_WinAPI/Data/caveScene.json");
     }
     if (ImGui::Button("Load TileMap"))
     {
-        LoadTileMapFromFile("../250304_WinAPI/Data/hongScene.tilemap");
-        LoadPlacedObjectsFromJson("../250304_WinAPI/Data/hongScene.json");
+        LoadTileMapFromFile("../250304_WinAPI/Data/caveScene.tilemap");
+        LoadPlacedObjectsFromJson("../250304_WinAPI/Data/caveScene.json");
     }
 
     ImGui::End();

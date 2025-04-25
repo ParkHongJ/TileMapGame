@@ -306,7 +306,7 @@ void SnakeMonster::ApplyGravity(float TimeDelta)
 {
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
     {
-        // Pos.y += moveSpeed * TimeDelta;
+        //Pos.y += moveSpeed * TimeDelta;
         Pos.y += moveSpeed * 0.016f;
     }
     else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
