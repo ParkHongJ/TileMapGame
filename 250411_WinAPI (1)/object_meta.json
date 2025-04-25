@@ -33,7 +33,7 @@
     },
     {
         "name": "Chicken",
-        "atlasPath": "Textures / Entities / Mounts / turkey.png",
+        "atlasPath": "Textures/Entities/Mounts/turkey.png",
         "cellSize": {
             "x": 128,
             "y": 128
@@ -65,7 +65,7 @@
     },
     {
         "name": "GhostJuwel",
-        "atlasPath": "Textures / items.png",
+        "atlasPath": "Textures/items.png",
         "cellSize": {
             "x": 128,
             "y": 128

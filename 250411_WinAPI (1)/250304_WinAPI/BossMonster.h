@@ -36,6 +36,8 @@ private:
 	GunBullet* bullet;
 	FPOINT colliderSize;
 	float colliderOffsetY;
+	float moveStopTime = 0.f;
+	float moveStopMaxTime = 0.2f;
 
 
 	FPOINT playerPos;

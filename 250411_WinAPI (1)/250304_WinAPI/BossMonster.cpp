@@ -124,6 +124,7 @@ void BossMonster::Update(float TimeDelta)
         dir.x *= -1;
     }
 
+
     //rolling 중에 바닥이 없으면 ApplyGravity 
     //rolling 중에 바닥이 있으면 구르면서 앞으로 
     MeetPlayer(TimeDelta);
@@ -283,14 +284,14 @@ void BossMonster::MeetPlayer(float TimeDelta)
         if (isPlayerTouchingLeft && dir.x < 0 )
         {    
            
-            MoveJumpStart(550.f, 100.f);
+            MoveJumpStart(500.f, 100.f);
             wasMove = true;
             monsterState = MonsterState::ATTACKMOVE;
         }
         else if (isPlayerTouchingRight && dir.x > 0)
         {            
              
-            MoveJumpStart(550.f, 70.f);
+            MoveJumpStart(500.f, 70.f);
             wasMove = true;
             monsterState = MonsterState::ATTACKMOVE;
         }
@@ -424,6 +425,12 @@ void BossMonster::MeetPlayer(float TimeDelta)
 void BossMonster::Move()
 {
     float time = TimerManager::GetInstance()->GetDeltaTime(L"60Frame");
+    moveStopTime -= time;
+    if (moveStopTime > 0.f)
+    {
+        return;
+    }
+
     if (monsterState == MonsterState::MOVE)
     {
         moveSpeed = 55.f;
@@ -441,6 +448,11 @@ void BossMonster::Move()
 void BossMonster::ApplyGravity(float TimeDelta)
 {
     // 타일이 밑에 없을 때 떨어져요잇
+    if (moveStopTime > 0.f)
+    {
+        return;
+    }
+
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
     {
        // Pos.y += 200.f * TimeDelta;
@@ -537,7 +549,7 @@ void BossMonster::Detect(GameObject* obj)
 
         if (bulletRight > Pos.x - 20)
         {
-            MoveJumpStart(250.f, 70.f);
+            MoveJumpStart(350.f, 70.f);
             /*if (dir.x > 0)
             {
                 dir.x *= -1;
@@ -545,12 +557,14 @@ void BossMonster::Detect(GameObject* obj)
         }
         else if (bulletLeft < Pos.x + 20)
         {
-            MoveJumpStart(250.f, 110.f);
+            MoveJumpStart(350.f, 110.f);
             /*if (dir.x < 0)
             {
                 dir.x *= -1;
             }*/
         }
+
+        moveStopTime = moveStopMaxTime;
     }
 }
 
