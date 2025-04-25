@@ -8,6 +8,8 @@
 #include "TimerManager.h"
 #include "Character.h"
 #include "Tile.h"
+#include "Item.h"
+#include "GunBullet.h"
 
 BossMonster::BossMonster()
 {
@@ -24,6 +26,8 @@ HRESULT BossMonster::Init()
     bossImage = ImageManager::GetInstance()->FindImage("Boss_Monster");
     player = new Character();
     tile = new Tile();
+    items = new Item();
+    bullet = new GunBullet();
 
     colliderSize = { 80.0f, 70.0f };
     colliderOffsetY = 5.f;
@@ -221,7 +225,7 @@ void BossMonster::CheckTileCollision()
 
 void BossMonster::CheckPlayerCollision()
 {
-    float maxDist = 150.0f;
+    float maxDist = 200.0f;
     float debugTime = 1.0f;
 
     // Collider 기준 
@@ -230,8 +234,8 @@ void BossMonster::CheckPlayerCollision()
     FPOINT leftBottom = { Pos.x - colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     FPOINT rightBottom = { Pos.x + colliderSize.x / 2, Pos.y + colliderSize.y / 2 + colliderOffsetY };
     FPOINT centerLeft = { Pos.x - colliderSize.x / 2, Pos.y + colliderOffsetY };
-    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 10};
-    FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY + 10};
+    FPOINT centerRight = { Pos.x + colliderSize.x / 2, Pos.y + colliderOffsetY + 20};
+    FPOINT centerTop = { Pos.x , Pos.y - colliderSize.y / 2 + colliderOffsetY + 20};
 
     RaycastHit hitLeft1, hitLeft2, hitRight1, hitRight2;
     RaycastHit hitTop1, hitTop2, hitBottom1, hitBottom2;
@@ -267,24 +271,36 @@ void BossMonster::MeetPlayer(float TimeDelta)
 
     if (monsterState == MonsterState::MOVE && isOnGround)
     {
+        if (isPlayerTouchingLeft && dir.x > 0)
+        {
+            dir.x *= -1;
+        }
+        else if (isPlayerTouchingRight && dir.x < 0)
+        {
+            dir.x *= -1;
+        }
         // MOVE 상태일 때 attackMove로 상태 변환
         if (isPlayerTouchingLeft && dir.x < 0 )
         {    
-            monsterState = MonsterState::ATTACKMOVE;  
-            MoveJumpStart(450.f, 100.f);
+           
+            MoveJumpStart(550.f, 100.f);
+            wasMove = true;
+            monsterState = MonsterState::ATTACKMOVE;
         }
         else if (isPlayerTouchingRight && dir.x > 0)
         {            
-            monsterState = MonsterState::ATTACKMOVE;  
-            MoveJumpStart(450.f, 70.f);
+             
+            MoveJumpStart(550.f, 70.f);
+            wasMove = true;
+            monsterState = MonsterState::ATTACKMOVE;
         }
     }
 
 
-    if (monsterState == MonsterState::ATTACKMOVE)
-    {        
+    if (monsterState == MonsterState::ATTACKMOVE && wasMove && isOnGround)
+    {           
         //attackDuration += TimeDelta;
-        //wasMove = false;
+        wasMove = false;
         //// Move();
         ///*if (!isOnGround)
         //    return;
@@ -294,6 +310,7 @@ void BossMonster::MeetPlayer(float TimeDelta)
         //    attackDuration = 0.f;
         //    monsterState = MonsterState::WAITATTACK;
         //}
+        monsterState == MonsterState::WAITATTACK;
         wasAttackMove = true;
     }
 
@@ -317,10 +334,35 @@ void BossMonster::MeetPlayer(float TimeDelta)
         {
             monsterState = MonsterState::MOVE;
         }*/
-         if ((dir.x < 0|| dir.x > 0) && isOnGround)
+        if (dir.x > 0)
+        {
+            if ((isPlayerTouchingRight) && isOnGround)
+            {
+                monsterState = MonsterState::ATTACK;
+            }
+            else if ((isPlayerTouchingLeft) && isOnGround)
+            {
+                dir.x = 1;
+                monsterState = MonsterState::ATTACK;
+            }
+        }
+        if (dir.x < 0)
+        {
+            if ((isPlayerTouchingLeft) && isOnGround)
+            {
+                monsterState = MonsterState::ATTACK;
+            }
+            else if ((isPlayerTouchingRight) && isOnGround)
+            {
+                dir.x = -1;
+                monsterState = MonsterState::ATTACK;
+            }
+        }
+
+        /* if ((isPlayerTouchingRight && dir.x > 0) || (isPlayerTouchingLeft && dir.x < 0) && isOnGround)
         {
             monsterState = MonsterState::ATTACK;
-        }
+        }*/
         else if ((isPlayerTouchingLeft && dir.x > 0) || (isPlayerTouchingRight && dir.x < 0))
         {
             monsterState = MonsterState::MOVE;
@@ -435,6 +477,7 @@ void BossMonster::Detect(GameObject* obj)
 
         if (playerPosBottom < monsterPosTop)
         {
+            MoveJumpStart(200.f, 90.f);
             monsterState = MonsterState::ATTACK;      
         }
     }
@@ -452,11 +495,58 @@ void BossMonster::Detect(GameObject* obj)
 
         if (monsterState == MonsterState::ATTACK)
         {
-            if(tilePos.y < monsterPosBottom + 10.f)
+            if(tilePos.y < monsterPosBottom + 30.f)
                 tile->Destruction();
         }
     }
 
+    if (auto items = obj->GetType<Item>())
+    {
+        FPOINT itemsPos = items->GetPos();
+        float itemsRight = itemsPos.x + 5;
+        float itemsLeft = itemsPos.y - 5;
+        
+        if (itemsRight > Pos.x - 20)
+        {
+            MoveJumpStart(250.f, 70.f);
+            if (dir.x > 0)
+            {
+                dir.x *= -1;
+            }
+        }
+        else if (itemsLeft < Pos.x + 20)
+        {
+            MoveJumpStart(250.f, 110.f);
+            if (dir.x < 0)
+            {
+                dir.x *= -1;
+            }
+        }
+    }
+
+    if (auto gunBullet = obj->GetType<GunBullet>())
+    {
+        FPOINT bulletPos = bullet->GetPos();
+        float bulletRight = bulletPos.x + 5;
+        float bulletLeft = bulletPos.y - 5;
+
+        if (bulletRight > Pos.x - 20)
+        {
+            MoveJumpStart(250.f, 70.f);
+            /*if (dir.x > 0)
+            {
+                dir.x *= -1;
+            }*/
+        }
+        else if (bulletLeft < Pos.x + 20)
+        {
+            MoveJumpStart(250.f, 110.f);
+            /*if (dir.x < 0)
+            {
+                dir.x *= -1;
+            }*/
+        }
+    }
 }
 
 void BossMonster::Render(ID2D1RenderTarget* renderTarget)

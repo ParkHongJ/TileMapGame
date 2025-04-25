@@ -271,7 +271,7 @@ void SkeletonMonster::Move()
 void SkeletonMonster::ApplyGravity(float TimeDelta)
 {
     if (!isTileTouchingLeftBottom && !isTileTouchingRightBottom)
-        Pos.y += 200.f * TimeDelta;
+        Pos.y += 200.f * 0.016;
     else if (isTileTouchingLeftBottom && isTileTouchingRightBottom)
         Pos.y = Pos.y;
 }

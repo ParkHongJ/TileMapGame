@@ -1,6 +1,8 @@
 #pragma once
 #include "Monster.h"
 
+class GunBullet;
+class Item;
 class Tile;
 class BoxCollider;
 class Image;
@@ -30,6 +32,8 @@ private:
 	Image* bossImage;
 	BoxCollider* bossCollider = nullptr;
 	Tile* tile;
+	Item* items;
+	GunBullet* bullet;
 	FPOINT colliderSize;
 	float colliderOffsetY;
 
