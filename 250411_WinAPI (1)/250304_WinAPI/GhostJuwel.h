@@ -2,7 +2,7 @@
 #include "Item.h"
 class GhostJuwel : public Item
 {
-	GENERATE_BODY(Textures / items.png, 128, 128)
+	GENERATE_BODY(Textures/items.png, 128, 128)
 
 public:
 	GhostJuwel();
